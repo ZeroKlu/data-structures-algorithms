@@ -43,7 +43,12 @@
             A priority queue uses a heap under the hood to always remove the highest-priority item first.
         </p>
 
-        <h2>6.1 What Is a Priority Queue?</h2>
+        <h2>
+            6.1 What Is a Priority Queue?
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s6-priority-queue">
+                Dig deeper
+            </button>
+        </h2>
         <p>
             A <strong>priority queue</strong> is an abstract data type that stores items each with a priority,
             and supports operations like:
@@ -62,7 +67,12 @@
             <li><strong>O(1)</strong> peek</li>
         </ul>
 
-        <h2>6.2 Binary Heap Basics</h2>
+        <h2>
+            6.2 Binary Heap Basics
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s6-binary-heap">
+                Dig deeper
+            </button>
+        </h2>
         <p>
             A <strong>binary heap</strong> is a complete binary tree stored in an array, such that:
         </p>
@@ -84,7 +94,7 @@
         <div class="theme-picker">
             <label for="theme-select">Syntax theme:</label>
             <select id="theme-select">
-                <option value="atom-one-dark">Dark</option>
+                <option value="atom-one-dark" selected>Dark</option>
                 <option value="far">Blue</option>
                 <option value="atom-one-light">Light</option>
             </select>
@@ -93,7 +103,12 @@
         <hr>
 
         <!-- ======================= Example 1 ======================= -->
-        <h3>6.4 Example 1 - Min-Heap Insert (Heapify Up)</h3>
+        <h3>
+            6.4 Example 1 - Min-Heap Insert (Heapify Up)
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s6-ex1">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             We will implement a simple array-based <strong>min-heap</strong> supporting insertion. After
             we place the new element at the end, we "heapify up" by swapping with its parent while the
@@ -273,7 +288,12 @@ class MinHeap:
         </div>
 
         <!-- ======================= Example 2 ======================= -->
-        <h3>6.5 Example 2 - Extract-Min (Heapify Down)</h3>
+        <h3>
+            6.5 Example 2 - Extract-Min (Heapify Down)
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s6-ex2">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             To remove the minimum from a min-heap, we swap the root with the last element,
             shrink the heap size, and "heapify down" by swapping the new root with its smaller child
@@ -583,7 +603,12 @@ class MinHeapWithExtract:
         </div>
 
         <!-- ======================= Example 3 ======================= -->
-        <h3>6.6 Example 3 - Build Heap from Array (Heapify)</h3>
+        <h3>
+            6.6 Example 3 - Build Heap from Array (Heapify)
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s6-ex3">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             Given an array of <code>n</code> elements, we can turn it into a heap in
             <strong>O(n)</strong> time by calling heapify-down from the last parent downward.
@@ -758,7 +783,12 @@ def build_min_heap(a: list[int]) -&gt; None:
         </div>
 
         <!-- ======================= Example 4 ======================= -->
-        <h3>6.7 Example 4 - Heapsort (Concept)</h3>
+        <h3>
+            6.7 Example 4 - Heapsort (Concept)
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s6-ex4">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             Heapsort uses a heap to sort an array in-place:
         </p>
@@ -942,6 +972,156 @@ def heapsort_desc_minheap(a: list[int]) -&gt; None:
                 Next: Section 7 — Hash Tables →
             </a>
         </div>
+
+        <!-- ======================= Deep dive templates ======================= -->
+
+        <div class="deep-dive-template" id="deep-dive-s6-priority-queue"
+            data-title="How priority queues differ from regular queues" hidden>
+            <p>
+                A regular queue is strictly first-in, first-out: the oldest item is always removed next.
+                A <strong>priority queue</strong> instead removes the item with the <em>best</em> priority:
+                often the smallest number (min-heap) or the largest number (max-heap).
+            </p>
+            <p>
+                Common use cases:
+            </p>
+            <ul>
+                <li><strong>Scheduling:</strong> run the task with the earliest deadline or highest priority first.</li>
+                <li><strong>Graph algorithms:</strong> Dijkstra's shortest path, Prim's MST, A* search.</li>
+                <li><strong>Streaming problems:</strong> maintain the top-k or bottom-k elements seen so far.</li>
+            </ul>
+            <p>
+                In many languages, the “priority queue” library class is actually a binary heap under the hood,
+                which is why the standard operations have <strong>O(log n)</strong> cost.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s6-binary-heap"
+            data-title="Binary heaps and their array layout" hidden>
+            <p>
+                The key trick with binary heaps is that you do not store explicit left/right pointers:
+                the tree structure is <strong>implicit</strong> in the array indices.
+            </p>
+            <ul>
+                <li>Index <code>0</code> is the root.</li>
+                <li>Children of <code>i</code> are <code>2i + 1</code> (left) and <code>2i + 2</code> (right).</li>
+                <li>The parent of <code>i</code> is <code>(i - 1) / 2</code> (integer division).</li>
+            </ul>
+            <p>
+                Because the tree is <strong>complete</strong> (filled level by level), the array has no gaps
+                and the height is <code>O(log n)</code>. That is why heapify-up and heapify-down only need a
+                logarithmic number of steps.
+            </p>
+            <p>
+                This layout is cache-friendly and simple to store, which makes binary heaps both fast and easy
+                to implement in practice compared to pointer-heavy tree structures.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s6-ex1"
+            data-title="Reasoning about heapify up" hidden>
+            <p>
+                The heapify-up (percolate-up) operation maintains one crucial invariant:
+            </p>
+            <ul>
+                <li>Before we insert the new element, the array already represents a valid heap.</li>
+                <li>After placing the new element at the end, the heap property might be violated only
+                    along the path from that index up to the root.</li>
+            </ul>
+            <p>
+                So we repeatedly:
+            </p>
+            <ol>
+                <li>Compare the node with its parent.</li>
+                <li>If the node is “better” (smaller for a min-heap), swap them.</li>
+                <li>Move the index up to the parent and continue.</li>
+            </ol>
+            <p>
+                Once the parent is no longer worse than the child (or we reach the root), the heap property is
+                restored everywhere, because all other parts of the tree were unchanged and already valid.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s6-ex2"
+            data-title="Reasoning about heapify down" hidden>
+            <p>
+                Heapify-down is the mirror image of heapify-up:
+            </p>
+            <ul>
+                <li>We start with a possible violation at the root (after swapping in the last element).</li>
+                <li>Everywhere else below is still a valid heap.</li>
+            </ul>
+            <p>
+                The repair strategy:
+            </p>
+            <ol>
+                <li>Look at the node and its children.</li>
+                <li>Swap with the “better” child (smaller for min-heap) if needed.</li>
+                <li>Move down to that child and continue.</li>
+            </ol>
+            <p>
+                Because we always push a too-large root downwards, and subtrees are already heaps, the violation
+                can only move down one path, giving the <code>O(log n)</code> bound.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s6-ex3"
+            data-title="Why bottom-up heap construction is O(n)" hidden>
+            <p>
+                At first glance, calling heapify-down on about <code>n/2</code> nodes might look like
+                <code>O(n log n)</code>, but most of those calls are on nodes near the leaves and have
+                very shallow subtrees.
+            </p>
+            <p>
+                Intuitively:
+            </p>
+            <ul>
+                <li>Half the nodes are leaves and need <strong>O(1)</strong> work.</li>
+                <li>A quarter of the nodes are one level up and might move down at most one step.</li>
+                <li>An eighth are two levels up, and so on.</li>
+            </ul>
+            <p>
+                If you sum “number of nodes at height h × cost O(h)”, the series converges to a linear amount
+                of work, giving the <strong>O(n)</strong> build time that makes heaps very efficient to initialize.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s6-ex4"
+            data-title="Heapsort vs. other O(n log n) sorts" hidden>
+            <p>
+                Heapsort has a few notable properties:
+            </p>
+            <ul>
+                <li><strong>Time:</strong> <code>O(n log n)</code> in the worst case (no bad pivot cases like naive quicksort).</li>
+                <li><strong>Space:</strong> in-place <code>O(1)</code> extra memory.</li>
+                <li><strong>Not stable:</strong> equal elements may change relative order.</li>
+            </ul>
+            <p>
+                Compared to other popular algorithms:
+            </p>
+            <ul>
+                <li><strong>Mergesort:</strong> also <code>O(n log n)</code>, stable, but typically needs
+                    <code>O(n)</code> extra space.</li>
+                <li><strong>Quicksort:</strong> excellent average performance and cache behavior, but has a
+                    worst case worse than heapsort unless carefully implemented.</li>
+            </ul>
+            <p>
+                In interviews, understanding heapsort reinforces your intuition about heaps: every extraction
+                pulls off the next smallest (or largest) element, and the array gradually divides into a heap
+                prefix and a sorted suffix.
+            </p>
+        </div>
+
+        <!-- ======================= Deep dive modal shell ======================= -->
+
+        <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title"></h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
     </main>
 </body>
 

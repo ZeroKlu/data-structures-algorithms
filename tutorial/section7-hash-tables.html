@@ -43,7 +43,12 @@
             They are the backbone of dictionaries, maps, and sets in most languages.
         </p>
 
-        <h2>7.1 What Is a Hash Table?</h2>
+        <h2>
+            7.1 What Is a Hash Table?
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s7-what-is-ht">
+                Dig deeper
+            </button>
+        </h2>
         <p>
             A <strong>hash table</strong> (or hash map) stores key-value pairs and lets you:
         </p>
@@ -60,7 +65,12 @@
             <li>An underlying <strong>array of buckets</strong> where the data is stored.</li>
         </ul>
 
-        <h2>7.2 Hash Functions and Collisions</h2>
+        <h2>
+            7.2 Hash Functions and Collisions
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s7-hash-functions">
+                Dig deeper
+            </button>
+        </h2>
         <p>
             A <strong>hash function</strong> <code>h(key)</code> maps a key to an index in the range
             <code>0 ... capacity - 1</code>. A good hash function tries to:
@@ -79,7 +89,12 @@
             <li><strong>Open addressing</strong> - if a bucket is full, probe other buckets (linear, quadratic, etc.).</li>
         </ul>
 
-        <h2>7.3 Performance and Load Factor</h2>
+        <h2>
+            7.3 Performance and Load Factor
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s7-performance">
+                Dig deeper
+            </button>
+        </h2>
         <p>
             Let <code>n</code> be the number of stored keys and <code>m</code> be the number of buckets.
             The <strong>load factor</strong> is <code>α = n / m</code>.
@@ -108,7 +123,12 @@
         <hr>
 
         <!-- ======================= Example 1 ======================= -->
-        <h3>7.5 Example 1 - Simple String Hash (Chaining)</h3>
+        <h3>
+            7.5 Example 1 - Simple String Hash (Chaining)
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s7-ex1">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             We will implement a tiny hash table for mapping strings to integers using chaining.
             This is educational, not production quality, but it shows the core mechanics.
@@ -264,7 +284,12 @@ def demo_hash() -&gt; None:
         </div>
 
         <!-- ======================= Example 2 ======================= -->
-        <h3>7.6 Example 2 - Count Frequencies (Word Count)</h3>
+        <h3>
+            7.6 Example 2 - Count Frequencies (Word Count)
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s7-ex2">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             Hash tables are perfect for counting how many times each item appears (frequencies).
             This pattern shows up constantly in interviews.
@@ -376,7 +401,12 @@ def count_words(words: Iterable[str]) -&gt; dict[str, int]:
         </div>
 
         <!-- ======================= Example 3 ======================= -->
-        <h3>7.7 Example 3 - Detect First Duplicate (Hash Set)</h3>
+        <h3>
+            7.7 Example 3 - Detect First Duplicate (Hash Set)
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s7-ex3">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             We can detect the first duplicate value in an array by inserting elements into a hash set
             and checking whether we have seen each element before.
@@ -517,7 +547,12 @@ def first_duplicate(arr: Iterable[int]) -&gt; Optional[int]:
         </div>
 
         <!-- ======================= Example 4 ======================= -->
-        <h3>7.8 Example 4 - Two-Sum with a Hash Map</h3>
+        <h3>
+            7.8 Example 4 - Two-Sum with a Hash Map
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s7-ex4">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             Given an array and a target value, find two indices <code>i</code> and <code>j</code>
             such that <code>arr[i] + arr[j] == target</code>. The hash table stores
@@ -733,6 +768,190 @@ def two_sum(nums: List[int], target: int) -&gt; Tuple[int, int]:
                 Next: Section 8 — Dynamic Programming →
             </a>
         </div>
+
+        <!-- ======================= Deep dive templates ======================= -->
+
+        <div class="deep-dive-template" id="deep-dive-s7-what-is-ht"
+            data-title="How a hash table really stores your data" hidden>
+            <p>
+                Conceptually, a hash table is just an array of buckets plus a rule for which bucket
+                each key should go into.
+            </p>
+            <ul>
+                <li><strong>Array of buckets:</strong> an indexable block of memory, size <code>m</code>.</li>
+                <li><strong>Hash function:</strong> takes a key (string, int, etc.) and returns an integer
+                    which we reduce mod <code>m</code> to get a bucket index.</li>
+                <li><strong>Bucket contents:</strong> usually a small list or chain of key-value pairs that
+                    hashed to the same index.</li>
+            </ul>
+            <p>
+                Basic operations follow the same pattern:
+            </p>
+            <ul>
+                <li><strong>Insert:</strong> hash the key, go to that bucket, add or update the key-value entry.</li>
+                <li><strong>Lookup:</strong> hash the key, scan that bucket for the matching key.</li>
+                <li><strong>Delete:</strong> hash the key, find the entry in the bucket, remove it.</li>
+            </ul>
+            <p>
+                The power comes from the fact that the bucket scan is usually very short,
+                so we get <strong>amortized O(1)</strong> behavior even with collisions.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s7-hash-functions"
+            data-title="Designing hash functions and handling collisions" hidden>
+            <p>
+                Real-world hash functions balance <strong>speed</strong> and <strong>distribution quality</strong>.
+                The goal is that every bucket is about equally likely for the keys you care about.
+            </p>
+            <ul>
+                <li><strong>Integers:</strong> often a mix of multiplying by a large odd constant and bit shifts
+                    before taking mod capacity.</li>
+                <li><strong>Strings:</strong> accumulate characters with a rolling formula like
+                    <code>h = h * base + c</code> and then take mod at the end.</li>
+                <li><strong>Composite keys:</strong> hash each field and combine (for example, XOR or pair hashing).</li>
+            </ul>
+            <p>
+                Collisions are inevitable, so we need a strategy:
+            </p>
+            <ul>
+                <li><strong>Chaining:</strong> each bucket holds a dynamic list of entries. Simple and flexible,
+                    works well when load factor is kept under control.</li>
+                <li><strong>Open addressing:</strong> all entries live directly in the array; on collision we probe
+                    other indices (linear, quadratic, or using a second hash function).</li>
+            </ul>
+            <p>
+                Interview takeaway: you usually don&apos;t implement the hash function from scratch, but you
+                <strong>should</strong> understand that collisions are normal and must be handled correctly.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s7-performance"
+            data-title="Load factor, resizing, and real hash table costs" hidden>
+            <p>
+                The <strong>load factor</strong> <code>α = n / m</code> controls performance:
+            </p>
+            <ul>
+                <li>As <code>α</code> grows, buckets get longer (chaining) or probes get longer (open addressing).</li>
+                <li>Most implementations keep <code>α</code> below a threshold like 0.7–0.9 by resizing.</li>
+            </ul>
+            <p>
+                When the table resizes:
+            </p>
+            <ul>
+                <li>A new, larger bucket array is allocated (often ~2× size).</li>
+                <li>All existing entries are rehashed into the new table.</li>
+                <li>This single operation is <strong>O(n)</strong>, but happens rarely.</li>
+            </ul>
+            <p>
+                Amortized analysis says that if we double the table when it&apos;s “too full”, the average
+                cost per insert still stays <strong>O(1)</strong> over many operations.
+                That&apos;s why hash tables feel constant-time in practice.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s7-ex1"
+            data-title="Walking through a chained hash table insert" hidden>
+            <p>
+                In the chained C example, insertion into the table looks like this:
+            </p>
+            <ol>
+                <li>Compute <code>h = hash_str(key)</code>.</li>
+                <li>Reduce to a bucket index via <code>idx = h % TABLE_SIZE</code>.</li>
+                <li>Walk the linked list at <code>buckets[idx]</code> looking for an existing key.</li>
+                <li>If found, update its value; otherwise allocate a new <code>Entry</code> and
+                    push it onto the front of the list.</li>
+            </ol>
+            <p>
+                A few practical notes:
+            </p>
+            <ul>
+                <li>Storing a <strong>copy</strong> of the key (with <code>strdup</code>) avoids dangling pointers.</li>
+                <li>In a production implementation you&apos;d also provide a way to free all entries and keys.</li>
+                <li>Collision handling is entirely local to the bucket; other buckets are unaffected.</li>
+            </ul>
+            <p>
+                Higher-level languages hide all of this plumbing, but conceptually they are doing
+                something very similar under the hood.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s7-ex2"
+            data-title="Frequency counting patterns and variations" hidden>
+            <p>
+                Frequency maps show up constantly in interview problems:
+            </p>
+            <ul>
+                <li>Finding the most common element.</li>
+                <li>Checking if two strings are anagrams.</li>
+                <li>Comparing two collections by their contents rather than order.</li>
+            </ul>
+            <p>
+                The pattern is almost always:
+            </p>
+            <ol>
+                <li>Initialize an empty map from item → count.</li>
+                <li>Loop through the data and increment the count for each item.</li>
+                <li>Optionally, do a second pass over the map (or original data) to answer a specific question.</li>
+            </ol>
+            <p>
+                Many languages provide helpers (like Python&apos;s <code>Counter</code>) that are just
+                convenience layers over this exact idea.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s7-ex3"
+            data-title="Why the first-duplicate hash set trick is O(n)" hidden>
+            <p>
+                The first-duplicate algorithm relies on two facts:
+            </p>
+            <ul>
+                <li>Set membership checks (<code>x in set</code>) are average <strong>O(1)</strong>.</li>
+                <li>Each element is inserted into the set at most once.</li>
+            </ul>
+            <p>
+                As we scan from left to right:
+            </p>
+            <ol>
+                <li>If we haven&apos;t seen <code>x</code> before, we add it to the set.</li>
+                <li>If we <em>have</em> seen <code>x</code> before, we immediately return it as the first duplicate
+                    in scan order.</li>
+            </ol>
+            <p>
+                That&apos;s why the time is <strong>O(n)</strong> and we don&apos;t need to compare every pair
+                of elements (which would be <strong>O(n²)</strong>).
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s7-ex4"
+            data-title="Reasoning about two-sum with a hash map" hidden>
+            <p>
+                The two-sum hash map approach replaces a quadratic nested loop with a linear pass:
+            </p>
+            <ol>
+                <li>We scan the array once from left to right.</li>
+                <li>For the current value <code>x</code>, we compute <code>need = target - x</code>.</li>
+                <li>If we&apos;ve seen <code>need</code> before, we already know the index of the matching value,
+                    so we can return the pair immediately.</li>
+                <li>Otherwise we store <code>x</code> → current index in the map and continue.</li>
+            </ol>
+            <p>
+                This works because by the time we&apos;re at position <code>i</code>, every earlier index
+                is already recorded in the map, so if a solution uses <code>i</code>, we&apos;ll discover it
+                when we reach the second element of the pair.
+            </p>
+        </div>
+
+        <!-- ======================= Deep dive modal shell ======================= -->
+
+        <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title"></h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
     </main>
 </body>
 

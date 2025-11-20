@@ -43,7 +43,12 @@
             They show up in parsing, search, scheduling, and a huge number of interview problems.
         </p>
 
-        <h2>4.1 What Is a Stack?</h2>
+        <h2>
+            4.1 What Is a Stack?
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s4-stack">
+                Dig deeper
+            </button>
+        </h2>
         <p>
             A <strong>stack</strong> is a LIFO structure: last in, first out. You can think of it like a
             stack of plates on a table.
@@ -58,7 +63,12 @@
             a dynamic array or linked list.
         </p>
 
-        <h2>4.2 What Is a Queue?</h2>
+        <h2>
+            4.2 What Is a Queue?
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s4-queue">
+                Dig deeper
+            </button>
+        </h2>
         <p>
             A <strong>queue</strong> is a FIFO structure: first in, first out. Think of a line of people
             waiting to check out.
@@ -72,7 +82,12 @@
             With a linked list or circular buffer, enqueue and dequeue can both be <strong>O(1)</strong>.
         </p>
 
-        <h2>4.3 Typical Use Cases</h2>
+        <h2>
+            4.3 Typical Use Cases
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s4-use-cases">
+                Dig deeper
+            </button>
+        </h2>
         <ul>
             <li><strong>Stacks</strong>: undo history, call stack, depth-first search (DFS), expression parsing.</li>
             <li><strong>Queues</strong>: breadth-first search (BFS), task scheduling, producer/consumer patterns.</li>
@@ -96,7 +111,12 @@
         <hr>
 
         <!-- ======================= Example 1 ======================= -->
-        <h3>4.5 Example 1 - Stack Push and Pop</h3>
+        <h3>
+            4.5 Example 1 - Stack Push and Pop
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s4-ex1">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             This example shows a minimal integer stack interface backed by an array or list. We focus
             on <code>push</code> and <code>pop</code> and ignore resizing details in lower-level languages.
@@ -278,7 +298,12 @@ class IntStack:
         </div>
 
         <!-- ======================= Example 2 ======================= -->
-        <h3>4.6 Example 2 - Queue Enqueue and Dequeue</h3>
+        <h3>
+            4.6 Example 2 - Queue Enqueue and Dequeue
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s4-ex2">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             Here we implement a queue of integers. In the higher-level languages we use built-in
             collections. In C, we show a simple circular buffer.
@@ -344,6 +369,7 @@ bool queue_dequeue(IntQueue* q, int* out) {
             <div class="code-panel" data-lang-panel="cpp">
                 <pre><code class="language-cpp">// C++
 #include &lt;queue&gt;
+#include &lt;stdexcept&gt;
 
 class IntQueue {
 public:
@@ -468,7 +494,12 @@ class IntQueue:
         </div>
 
         <!-- ======================= Example 3 ======================= -->
-        <h3>4.7 Example 3 - Valid Parentheses Using a Stack</h3>
+        <h3>
+            4.7 Example 3 - Valid Parentheses Using a Stack
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s4-ex3">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             Given a string containing parentheses like <code>"()[]{}"</code>, determine if the
             parentheses are balanced. This is a classic stack problem.
@@ -647,7 +678,12 @@ def is_valid_parentheses(s: str) -&gt; bool:
         </div>
 
         <!-- ======================= Example 4 ======================= -->
-        <h3>4.8 Example 4 - Breadth-First Traversal Using a Queue</h3>
+        <h3>
+            4.8 Example 4 - Breadth-First Traversal Using a Queue
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s4-ex4">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             A queue is the core of breadth-first search (BFS). Here we show BFS on a simple graph
             represented as an adjacency list.
@@ -884,7 +920,7 @@ def bfs(start: int, graph: List[List[int]]) -&gt; None:
                 </details>
             </li>
         </ol>
-        
+
         <div class="top-nav">
             <a href="problems-section4-stacks-queues.html">
                 Problem Set for Section 4 Stacks &amp; Queues →
@@ -899,6 +935,222 @@ def bfs(start: int, graph: List[List[int]]) -&gt; None:
                 Next: Section 5 — Trees &amp; Graphs →
             </a>
         </div>
+
+        <!-- ======================= Deep dive templates ======================= -->
+
+        <div class="deep-dive-template" id="deep-dive-s4-stack"
+            data-title="How stacks are implemented under the hood" hidden>
+            <p>
+                A stack is usually not a magical built-in thing; it is a thin abstraction over an array or linked list.
+            </p>
+            <ul>
+                <li><strong>Array-backed stack:</strong> values live in a contiguous array and a
+                    <code>top</code> index tracks the next free slot. Pushing writes to <code>data[top]</code> and
+                    increments <code>top</code>; popping decrements <code>top</code> and reads the element.</li>
+                <li><strong>Linked-list stack:</strong> each push creates a new node whose next pointer points
+                    at the old head; the head pointer is updated to the new node. Popping moves the head pointer
+                    forward and frees the old node.</li>
+            </ul>
+            <p>
+                Real runtimes also maintain a <strong>call stack</strong> that behaves like a stack:
+                each function call pushes a frame, and returning from the function pops that frame.
+            </p>
+            <p>
+                In practice:
+            </p>
+            <ul>
+                <li>Languages like C++/Java/JavaScript/C#/Python all provide some kind of growable array type
+                    (vector, ArrayList, list, etc.) that works well as a stack.</li>
+                <li>Array-backed stacks are cache-friendly and typically faster than linked-list stacks, unless
+                    you have very specific allocation constraints.</li>
+                <li>Overflow and underflow are logical conditions: trying to pop an empty stack or pushing past
+                    a fixed capacity are errors you must handle explicitly in low-level code.</li>
+            </ul>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s4-queue"
+            data-title="Queues, circular buffers, and head/tail pointers" hidden>
+            <p>
+                A queue needs to support fast insertion at the back and fast removal at the front.
+                A simple growable array supports fast appends, but removing from the front requires shifting
+                everything left, which is O(n).
+            </p>
+            <p>
+                Two common solutions:
+            </p>
+            <ul>
+                <li><strong>Circular buffer:</strong> store elements in a fixed-size array and use
+                    <code>head</code> and <code>tail</code> indices that wrap around with modulo arithmetic.
+                    The element count tells you whether the queue is full or empty.</li>
+                <li><strong>Linked list:</strong> keep pointers to both <code>head</code> and <code>tail</code>.
+                    Enqueue at tail, dequeue from head. All operations are O(1) as long as you have both pointers.</li>
+            </ul>
+            <p>
+                Many high-level languages hide these details:
+            </p>
+            <ul>
+                <li>Java’s <code>ArrayDeque</code> is a circular buffer under the hood.</li>
+                <li>Python’s <code>collections.deque</code> is a doubly linked list of blocks.</li>
+                <li>In JavaScript, using an array plus a moving head index is a common trick to avoid O(n) shifts.</li>
+            </ul>
+            <p>
+                Understanding the underlying representation helps you reason about performance when queues are used
+                in algorithms like BFS, schedulers, or streaming pipelines.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s4-use-cases"
+            data-title="Recognizing stack vs. queue patterns in problems" hidden>
+            <p>
+                Many interview problems boil down to spotting whether the natural behavior is “last in, first out”
+                or “first in, first out”.
+            </p>
+            <ul>
+                <li><strong>Stack hints:</strong> nested structure, undo/redo, backtracking, matching open/close
+                    tokens (parentheses, tags), or needing the “most recently seen thing that is still relevant”.</li>
+                <li><strong>Queue hints:</strong> layers or distances (shortest path in an unweighted graph),
+                    processing things in the order they arrive, or keeping a fixed-time window over a stream.</li>
+            </ul>
+            <p>
+                You will also see <strong>monotonic stacks/queues</strong>, where you maintain elements in sorted
+                order (by value or index) to answer “next greater”, “previous smaller”, or sliding-window maximum
+                queries in O(n) instead of O(n²).
+            </p>
+            <p>
+                A good mental model:
+            </p>
+            <ul>
+                <li>If you are peeling away the most recent decision or symbol, think stack.</li>
+                <li>If you are radiating outward level by level or by time, think queue.</li>
+            </ul>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s4-ex1"
+            data-title="Internals of push/pop and stack safety" hidden>
+            <p>
+                In the C implementation, the key invariant is that <code>top</code> always points to the
+                <strong>next free slot</strong> in the array:
+            </p>
+            <ul>
+                <li>Valid elements live in <code>data[0..top-1]</code>.</li>
+                <li>On <code>push</code>, we store at <code>data[top]</code> and then increment <code>top</code>.</li>
+                <li>On <code>pop</code>, we decrement <code>top</code> first and then read <code>data[top]</code>.</li>
+            </ul>
+            <p>
+                That ordering avoids off-by-one errors and keeps the valid region well-defined.
+            </p>
+            <p>
+                In higher-level languages, the vector/list growth strategy (doubling in size when full) gives
+                amortized O(1) pushes. A single push might trigger an O(n) copy, but over many operations the
+                cost per push stays constant on average.
+            </p>
+            <p>
+                From a safety perspective:
+            </p>
+            <ul>
+                <li>Always check for underflow before popping.</li>
+                <li>For fixed-capacity stacks, check for overflow before pushing.</li>
+                <li>Use exceptions or error codes consistently so callers can handle failure.</li>
+            </ul>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s4-ex2"
+            data-title="Circular buffers, deques, and real-world queues" hidden>
+            <p>
+                Circular buffers solve the “front removal is expensive” problem by letting both head and tail
+                move through the same array:
+            </p>
+            <ul>
+                <li>When tail reaches the end of the array, it wraps around to index 0.</li>
+                <li>When head reaches the end, it also wraps.</li>
+                <li>The queue is empty when <code>size == 0</code>, and full when <code>size == capacity</code>.</li>
+            </ul>
+            <p>
+                The key benefit is that enqueue and dequeue are always O(1) and never require shifting elements.
+            </p>
+            <p>
+                Deques (double-ended queues) generalize this idea so you can push and pop at both ends in O(1).
+                They are often implemented with:
+            </p>
+            <ul>
+                <li>A circular buffer that can grow and shrink.</li>
+                <li>A linked list of fixed-size blocks to keep operations cache-friendly.</li>
+            </ul>
+            <p>
+                In practice, using a well-tested library deque is almost always better than rolling your own,
+                unless the entire point of the exercise is to implement the data structure itself.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s4-ex3"
+            data-title="Parentheses validation and general parsing patterns" hidden>
+            <p>
+                The valid-parentheses problem is a tiny example of a wider pattern: using a stack to parse
+                <strong>nested structures</strong>.
+            </p>
+            <ul>
+                <li>When you see an opening symbol, you push it.</li>
+                <li>When you see a closing symbol, you pop and check that the types match.</li>
+                <li>At the end, the stack must be empty for the string to be valid.</li>
+            </ul>
+            <p>
+                This idea extends to:
+            </p>
+            <ul>
+                <li>XML/HTML-like tags: open tags push, close tags pop and must match.</li>
+                <li>Expression parsing: operators and operands are managed with stacks (shunting-yard algorithm).</li>
+                <li>Block-structured languages: braces or indentation levels are tracked in a stack of scopes.</li>
+            </ul>
+            <p>
+                In interview problems, watch for:
+            </p>
+            <ul>
+                <li>“Minimum removals to make parentheses valid” – still stack-based, but with extra bookkeeping.</li>
+                <li>“Longest valid parentheses substring” – may combine stacks with dynamic programming or two passes.</li>
+            </ul>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s4-ex4"
+            data-title="Why BFS works and how to extend it" hidden>
+            <p>
+                Breadth-first search is fundamentally a “layered” exploration:
+            </p>
+            <ul>
+                <li>You start from a source node and visit all nodes at distance 1.</li>
+                <li>Then all nodes at distance 2, and so on.</li>
+                <li>The queue enforces this order: earlier enqueued nodes are processed first.</li>
+            </ul>
+            <p>
+                In an unweighted graph, BFS naturally computes shortest-path distances from the start node:
+            </p>
+            <ul>
+                <li>When you first visit a node, you know you have found it via the fewest possible edges.</li>
+                <li>By storing a <code>parent</code> pointer for each node, you can reconstruct an actual path.</li>
+            </ul>
+            <p>
+                Variations you will see:
+            </p>
+            <ul>
+                <li>Multi-source BFS: push several starting nodes into the queue with distance 0.</li>
+                <li>Grid BFS: treat each cell as a node and neighbors as adjacent cells (up/down/left/right).</li>
+                <li>0–1 BFS / Dijkstra: when edges have weights, you generalize the queue into a priority queue.</li>
+            </ul>
+            <p>
+                Once you internalize the pattern “queue + visited set + process neighbors”, a whole family of
+                problems becomes much more approachable.
+            </p>
+        </div>
+
+        <!-- ======================= Deep dive modal shell ======================= -->
+
+        <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title"></h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
     </main>
 </body>
 

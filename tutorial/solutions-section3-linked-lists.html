@@ -93,6 +93,10 @@
                         <span class="label">Problem 1</span>
                         <span class="meta">Insert-head, insert-after, delete-after</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s3p1">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -320,6 +324,10 @@ def delete_after(p: Optional[ListNode]) -&gt; None:
                         <span class="label">Problem 2</span>
                         <span class="meta">Iterative in-place reversal</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s3p2">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -495,6 +503,10 @@ def reverse_list(head: Optional[ListNode]) -&gt; Optional[ListNode]:
                         <span class="label">Problem 3</span>
                         <span class="meta">Floyd&apos;s cycle detection</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s3p3">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -670,6 +682,10 @@ def has_cycle(head: Optional[ListNode]) -&gt; bool:
                         <span class="label">Problem 4</span>
                         <span class="meta">Slow/fast pointers to find middle</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s3p4">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -833,6 +849,10 @@ def middle_node(head: Optional[ListNode]) -&gt; Optional[ListNode]:
                         <span class="label">Problem 5</span>
                         <span class="meta">Dummy head plus tail pointer</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s3p5">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -1068,6 +1088,10 @@ def merge_two_lists(l1: Optional[ListNode],
                         <span class="label">Problem 6</span>
                         <span class="meta">One-pass two-pointer removal</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s3p6">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -1293,6 +1317,446 @@ def remove_nth_from_end(head: Optional[ListNode], n: int) -&gt; Optional[ListNod
                 Back to Practice Hub →
             </a>
         </div>
+
+        <!-- ======================= Understand-the-algorithm templates ======================= -->
+
+        <div class="deep-dive-template" id="understand-s3p1"
+            data-title="Step-by-step: Basic singly linked list operations" hidden>
+            <p>
+                These three operations all rely on the same core idea: once you have a pointer to the right place in
+                the list, you only need to change a couple of <code>next</code> pointers, regardless of the list
+                length.
+            </p>
+            <h3>1. Insert at head</h3>
+            <ol>
+                <li>
+                    <strong>Allocate a new node:</strong>
+                    <p>
+                        Create a new node and store the value <code>x</code> in its <code>val</code> field.
+                    </p>
+                </li>
+                <li>
+                    <strong>Point new node at the old head:</strong>
+                    <p>
+                        Set <code>node-&gt;next = *head</code> (or <code>node.next = head</code> in higher-level
+                        languages). This chains the new node in front of the old list.
+                    </p>
+                </li>
+                <li>
+                    <strong>Update head pointer:</strong>
+                    <p>
+                        Change <code>*head</code> (or return value) so that it now points to the new node. The new node
+                        becomes the first element.
+                    </p>
+                </li>
+            </ol>
+            <h3>2. Insert after a given node p</h3>
+            <ol>
+                <li>
+                    <strong>Check that p is not null:</strong>
+                    <p>
+                        If <code>p</code> is <code>NULL</code> / <code>null</code>, there is no valid &quot;after&quot;
+                        position, so we simply do nothing.
+                    </p>
+                </li>
+                <li>
+                    <strong>Create the new node:</strong>
+                    <p>
+                        Allocate and fill a node with value <code>x</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Link new node into the chain:</strong>
+                    <ul>
+                        <li>First, have it point to what used to come after <code>p</code>:
+                            <code>node-&gt;next = p-&gt;next</code>.
+                        </li>
+                        <li>Then redirect <code>p</code> to point to this new node:
+                            <code>p-&gt;next = node</code>.
+                        </li>
+                    </ul>
+                    <p>
+                        The list around <code>p</code> goes from <code>p → oldNext</code> to
+                        <code>p → node → oldNext</code>.
+                    </p>
+                </li>
+            </ol>
+            <h3>3. Delete the node after p</h3>
+            <ol>
+                <li>
+                    <strong>Check that there is something to delete:</strong>
+                    <p>
+                        If <code>p</code> is <code>NULL</code> or <code>p-&gt;next</code> is <code>NULL</code>, there is
+                        no node after <code>p</code>, so we return early.
+                    </p>
+                </li>
+                <li>
+                    <strong>Bypass the node to delete:</strong>
+                    <p>
+                        Let <code>doomed = p-&gt;next</code>. Then set
+                        <code>p-&gt;next = doomed-&gt;next</code>. The list now jumps directly from
+                        <code>p</code> to the node after <code>doomed</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Free or drop the node:</strong>
+                    <p>
+                        In manual-memory languages (like C/C++), call <code>free(doomed)</code> or <code>delete</code>.
+                        In GC languages, simply losing all references to <code>doomed</code> is enough.
+                    </p>
+                </li>
+                <li>
+                    <strong>Why it&apos;s O(1):</strong>
+                    <p>
+                        None of these operations walk the list from the head. They only modify local pointers, so they
+                        all run in constant time, independent of the list size.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s3p2"
+            data-title="Step-by-step: Reverse a singly linked list in-place" hidden>
+            <p>
+                The goal is to take a list like <code>1 → 2 → 3 → 4 → null</code> and turn it into
+                <code>4 → 3 → 2 → 1 → null</code> by only changing <code>next</code> pointers, using constant extra
+                space.
+            </p>
+            <ol>
+                <li>
+                    <strong>Track three pointers:</strong>
+                    <ul>
+                        <li><code>prev</code>: the head of the already-reversed part (initially <code>null</code>).</li>
+                        <li><code>curr</code>: the node we are currently processing (starts at <code>head</code>).</li>
+                        <li><code>nxt</code>: a temporary pointer to remember <code>curr-&gt;next</code>.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Loop while curr is not null:</strong>
+                    <p>
+                        At each step, we &quot;move&quot; <code>curr</code> from the original list into the front of
+                        the reversed list.
+                    </p>
+                </li>
+                <li>
+                    <strong>Step-by-step inside the loop:</strong>
+                    <ol>
+                        <li>
+                            <strong>Save the next node:</strong>
+                            <p>
+                                <code>nxt = curr-&gt;next</code> keeps track of where to continue in the original list.
+                            </p>
+                        </li>
+                        <li>
+                            <strong>Reverse the link:</strong>
+                            <p>
+                                Set <code>curr-&gt;next = prev</code>. Now <code>curr</code> points backward toward the
+                                partially reversed list.
+                            </p>
+                        </li>
+                        <li>
+                            <strong>Advance prev:</strong>
+                            <p>
+                                Move <code>prev</code> forward: <code>prev = curr</code>. The reversed list has grown
+                                by one node.
+                            </p>
+                        </li>
+                        <li>
+                            <strong>Advance curr:</strong>
+                            <p>
+                                Continue the scan with <code>curr = nxt</code>, the next node from the original list.
+                            </p>
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    <strong>End of the loop:</strong>
+                    <p>
+                        When <code>curr</code> becomes <code>null</code>, we have visited every node. The pointer
+                        <code>prev</code> now points to the new head of the fully reversed list.
+                    </p>
+                </li>
+                <li>
+                    <strong>Why pointers don&apos;t get lost:</strong>
+                    <p>
+                        We always save <code>curr-&gt;next</code> in <code>nxt</code> before overwriting it. That means
+                        we never lose access to the remainder of the list while reversing links.
+                    </p>
+                </li>
+                <li>
+                    <strong>Time and space:</strong>
+                    <p>
+                        Every node&apos;s <code>next</code> pointer is changed exactly once, so the time is
+                        O(n). We only use a few extra pointers, so the space is O(1).
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s3p3"
+            data-title="Step-by-step: Detect a cycle with Floyd’s tortoise and hare" hidden>
+            <p>
+                Floyd&apos;s cycle detection algorithm uses two pointers moving at different speeds to determine
+                whether a linked list loops back on itself.
+            </p>
+            <ol>
+                <li>
+                    <strong>Initialize pointers:</strong>
+                    <p>
+                        Set both <code>slow</code> and <code>fast</code> to <code>head</code>. If the list is empty,
+                        there is no cycle.
+                    </p>
+                </li>
+                <li>
+                    <strong>Movement rule:</strong>
+                    <ul>
+                        <li><code>slow</code> moves one step: <code>slow = slow-&gt;next</code>.</li>
+                        <li>
+                            <code>fast</code> moves two steps:
+                            <code>fast = fast-&gt;next-&gt;next</code> (or the equivalent in your language).
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Check for &quot;no cycle&quot;:</strong>
+                    <p>
+                        On each iteration, if <code>fast</code> hits <code>null</code> or
+                        <code>fast-&gt;next</code> is <code>null</code>, we know there is a tail node and therefore
+                        no cycle. We can safely return <code>false</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Check for a meeting point:</strong>
+                    <p>
+                        If the list has a cycle, then the faster pointer will eventually &quot;lap&quot; the slower
+                        one and they will point to the same node at some iteration. When
+                        <code>slow == fast</code>, we return <code>true</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Why do they meet if there is a cycle?</strong>
+                    <p>
+                        Think of nodes inside the cycle as positions on a circle. Both pointers enter the circle and
+                        then continue moving around it. In each step, <code>fast</code> moves one node more than
+                        <code>slow</code>. That means the distance between them (modulo the cycle length) shrinks by 1
+                        each iteration. Eventually that distance becomes 0, so they land on the same node.
+                    </p>
+                </li>
+                <li>
+                    <strong>Complexity:</strong>
+                    <p>
+                        Neither pointer visits more than a constant multiple of the list length before we either hit
+                        the tail or detect the cycle, so the runtime is O(n). Only a couple of pointers are used, so
+                        the space is O(1).
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s3p4"
+            data-title="Step-by-step: Find the middle node with slow/fast pointers" hidden>
+            <p>
+                This pattern is very similar to cycle detection but used to locate the middle of the list instead.
+            </p>
+            <ol>
+                <li>
+                    <strong>Initialize pointers:</strong>
+                    <p>
+                        Set <code>slow = head</code> and <code>fast = head</code>. If the list is empty, the middle is
+                        just <code>null</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Advance at different speeds:</strong>
+                    <ul>
+                        <li><code>slow</code> moves one node per step: <code>slow = slow-&gt;next</code>.</li>
+                        <li><code>fast</code> moves two nodes per step: <code>fast = fast-&gt;next-&gt;next</code>.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Stopping condition:</strong>
+                    <p>
+                        Continue while <code>fast</code> and <code>fast-&gt;next</code> are not <code>null</code>.
+                        When that condition fails, <code>fast</code> has reached (or passed) the end of the list.
+                    </p>
+                </li>
+                <li>
+                    <strong>Where is slow when we stop?</strong>
+                    <p>
+                        Since <code>fast</code> moves twice as quickly, by the time <code>fast</code> traverses the
+                        entire list, <code>slow</code> has traversed about half of it. That&apos;s exactly the middle
+                        node for odd lengths.
+                    </p>
+                </li>
+                <li>
+                    <strong>Even-length lists convention:</strong>
+                    <p>
+                        For an even number of nodes, there are two &quot;middle&quot; positions. With this loop
+                        condition, <code>slow</code> ends up pointing to the <em>second</em> middle, which matches the
+                        common LeetCode-style convention.
+                    </p>
+                </li>
+                <li>
+                    <strong>Complexity:</strong>
+                    <p>
+                        Both pointers move forward only, so this is still a single pass over the list with O(n) time
+                        and O(1) extra space.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s3p5"
+            data-title="Step-by-step: Merge two sorted linked lists" hidden>
+            <p>
+                The idea is similar to merging two sorted arrays, but we relink existing nodes instead of allocating
+                new ones.
+            </p>
+            <ol>
+                <li>
+                    <strong>Use a dummy head:</strong>
+                    <p>
+                        Create a <code>dummy</code> node whose <code>next</code> will become the head of the merged
+                        list. Maintain a <code>tail</code> pointer that always points to the last node of the merged
+                        list so far.
+                    </p>
+                </li>
+                <li>
+                    <strong>Set up two cursors:</strong>
+                    <p>
+                        Let <code>a = l1</code> and <code>b = l2</code>. These walk down each input list. Initially,
+                        <code>tail</code> points to <code>dummy</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Walk both lists while neither is empty:</strong>
+                    <ul>
+                        <li>
+                            At each step, compare <code>a-&gt;val</code> and <code>b-&gt;val</code>.
+                        </li>
+                        <li>
+                            Attach the smaller node to <code>tail-&gt;next</code> and advance that list&apos;s cursor
+                            (<code>a</code> or <code>b</code>).
+                        </li>
+                        <li>
+                            Move <code>tail</code> forward to the node you just attached.
+                        </li>
+                    </ul>
+                    <p>
+                        This preserves sorted order because you always choose the smallest remaining head element.
+                    </p>
+                </li>
+                <li>
+                    <strong>Attach the remainder:</strong>
+                    <p>
+                        When one list runs out (<code>a == null</code> or <code>b == null</code>), the other list
+                        still has nodes left, and they are already sorted. You can simply set
+                        <code>tail-&gt;next</code> to the non-null list (<code>a</code> or <code>b</code>).
+                    </p>
+                </li>
+                <li>
+                    <strong>Return the merged head:</strong>
+                    <p>
+                        The real head of the merged list is <code>dummy.next</code>, since <code>dummy</code> itself
+                        was only a convenience node.
+                    </p>
+                </li>
+                <li>
+                    <strong>Why this reuses nodes:</strong>
+                    <p>
+                        We never allocate new list nodes in the merge; we only change <code>next</code> pointers. This
+                        makes the algorithm memory-efficient and keeps the original nodes intact.
+                    </p>
+                </li>
+                <li>
+                    <strong>Runtime:</strong>
+                    <p>
+                        Each node from both input lists is processed exactly once, so the time is
+                        O(n + m), and the extra space (beyond a couple of pointers) is O(1).
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s3p6"
+            data-title="Step-by-step: Remove the N-th node from the end in one pass" hidden>
+            <p>
+                The trick is to avoid computing the list length explicitly by using two pointers with a fixed gap of
+                <code>n</code> nodes between them.
+            </p>
+            <ol>
+                <li>
+                    <strong>Use a dummy head:</strong>
+                    <p>
+                        Create a <code>dummy</code> node that points to the original <code>head</code>. This makes it
+                        easy to remove the first real node if needed (for example, when removing the N-th from end and
+                        N is the list length).
+                    </p>
+                </li>
+                <li>
+                    <strong>Initialize two pointers:</strong>
+                    <p>
+                        Set <code>fast = dummy</code> and <code>slow = dummy</code>. Both start before the real list.
+                    </p>
+                </li>
+                <li>
+                    <strong>Advance fast by n + 1 steps:</strong>
+                    <ul>
+                        <li>
+                            Move <code>fast</code> forward <code>n + 1</code> times. If it becomes <code>null</code>
+                            before you finish, then <code>n</code> was larger than the list length, and you can
+                            handle that as an error or return the original head.
+                        </li>
+                        <li>
+                            After this, there is a gap of exactly <code>n</code> nodes between <code>slow</code> and
+                            <code>fast</code>.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Move both pointers together:</strong>
+                    <p>
+                        While <code>fast</code> is not <code>null</code>, advance both
+                        <code>fast = fast-&gt;next</code> and <code>slow = slow-&gt;next</code>. Because of the gap,
+                        when <code>fast</code> hits the end, <code>slow</code> will be just <em>before</em> the node we
+                        want to remove.
+                    </p>
+                </li>
+                <li>
+                    <strong>Remove slow-&gt;next:</strong>
+                    <p>
+                        Let <code>doomed = slow-&gt;next</code>. Then set <code>slow-&gt;next = doomed-&gt;next</code>.
+                        This bypasses the target node, effectively deleting it from the list. In manual-memory
+                        languages, free or delete <code>doomed</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Return new head:</strong>
+                    <p>
+                        The new list head is <code>dummy.next</code>. This works even if the original head node was
+                        removed.
+                    </p>
+                </li>
+                <li>
+                    <strong>Why it&apos;s one pass:</strong>
+                    <p>
+                        Each pointer only walks the list once. We never restart from the beginning, so the algorithm
+                        runs in O(n) time with O(1) extra space.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <!-- ======================= Modal shell reused by all buttons ======================= -->
+
+        <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title"></h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
     </main>
 </body>
 

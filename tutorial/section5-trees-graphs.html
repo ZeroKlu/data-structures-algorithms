@@ -43,7 +43,12 @@
             networks, and search spaces. You will see these constantly in interviews and real systems.
         </p>
 
-        <h2>5.1 Trees vs. Graphs</h2>
+        <h2>
+            5.1 Trees vs. Graphs
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s5-trees-graphs">
+                Dig deeper
+            </button>
+        </h2>
         <p>
             A <strong>tree</strong> is a connected acyclic graph. In a rooted tree:
         </p>
@@ -61,7 +66,12 @@
             <li>May contain cycles or may be acyclic.</li>
         </ul>
 
-        <h2>5.2 Common Traversals</h2>
+        <h2>
+            5.2 Common Traversals
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s5-traversals">
+                Dig deeper
+            </button>
+        </h2>
         <p>
             For trees, the main traversals are:
         </p>
@@ -89,7 +99,7 @@
         <div class="theme-picker">
             <label for="theme-select">Syntax theme:</label>
             <select id="theme-select">
-                <option value="atom-one-dark">Dark</option>
+                <option value="atom-one-dark" selected>Dark</option>
                 <option value="far">Blue</option>
                 <option value="atom-one-light">Light</option>
             </select>
@@ -98,7 +108,12 @@
         <hr>
 
         <!-- ======================= Example 1 ======================= -->
-        <h3>5.4 Example 1 - Binary Tree Node &amp; Preorder Traversal</h3>
+        <h3>
+            5.4 Example 1 - Binary Tree Node &amp; Preorder Traversal
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s5-ex1">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             We define a binary tree node and implement a preorder traversal (node, left, right).
             This is a classic recursive pattern.
@@ -250,7 +265,12 @@ def preorder(root: "TreeNode | None") -&gt; None:
         </div>
 
         <!-- ======================= Example 2 ======================= -->
-        <h3>5.5 Example 2 - Level-Order (BFS) Traversal of a Binary Tree</h3>
+        <h3>
+            5.5 Example 2 - Level-Order (BFS) Traversal of a Binary Tree
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s5-ex2">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             We perform a breadth-first traversal using a queue, visiting nodes level by level.
         </p>
@@ -407,7 +427,12 @@ def level_order(root: "TreeNode | None") -&gt; None:
         </div>
 
         <!-- ======================= Example 3 ======================= -->
-        <h3>5.6 Example 3 - Depth-First Search (DFS) on a Graph</h3>
+        <h3>
+            5.6 Example 3 - Depth-First Search (DFS) on a Graph
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s5-ex3">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             We represent a graph as an adjacency list and perform recursive DFS, tracking a visited
             array to avoid cycles.
@@ -557,7 +582,12 @@ def dfs(start: int, graph: List[List[int]]) -&gt; None:
         </div>
 
         <!-- ======================= Example 4 ======================= -->
-        <h3>5.7 Example 4 - Shortest Path in Unweighted Graph (BFS)</h3>
+        <h3>
+            5.7 Example 4 - Shortest Path in Unweighted Graph (BFS)
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s5-ex4">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             For an unweighted graph, BFS from a start node finds the shortest path (in number of edges)
             to every reachable node. We track distance and optionally the previous node to reconstruct paths.
@@ -820,6 +850,170 @@ def shortest_distances(start: int, graph: List[List[int]]) -&gt; List[int]:
                 Next: Section 6 — Heaps and Priority Queues →
             </a>
         </div>
+
+        <!-- ======================= Deep dive templates ======================= -->
+
+        <div class="deep-dive-template" id="deep-dive-s5-trees-graphs"
+            data-title="How trees relate to general graphs" hidden>
+            <p>
+                A tree is really just a special kind of graph with strong guarantees:
+            </p>
+            <ul>
+                <li><strong>Connected:</strong> there is exactly one simple path between any two nodes.</li>
+                <li><strong>Acyclic:</strong> no way to start at a node, follow edges, and come back without
+                    repeating an edge.</li>
+                <li><strong>n nodes, n-1 edges:</strong> this is both a property and a quick sanity check.</li>
+            </ul>
+            <p>
+                Graphs are more general:
+            </p>
+            <ul>
+                <li>They may be <strong>disconnected</strong> (multiple components).</li>
+                <li>They may have <strong>cycles</strong>, self-loops, or parallel edges.</li>
+                <li>Edges can carry <strong>weights</strong>, directions, or labels.</li>
+            </ul>
+            <p>
+                Many tree algorithms are really just graph algorithms that rely on “no cycles”:
+                you do not have to worry about revisiting nodes as long as you move from parent to children.
+            </p>
+            <p>
+                In interviews, recognizing that your input is actually a tree (or a forest) often lets
+                you use simpler logic than you would for an arbitrary graph.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s5-traversals"
+            data-title="When to use which traversal" hidden>
+            <p>
+                Different traversals are good for different tasks:
+            </p>
+            <ul>
+                <li><strong>Preorder (node, left, right):</strong> great when you want to copy or serialize
+                    a tree, or when you need to process a node <em>before</em> its children.</li>
+                <li><strong>Inorder (left, node, right):</strong> for a binary search tree, this naturally
+                    yields values in sorted order.</li>
+                <li><strong>Postorder (left, right, node):</strong> useful when children must be processed
+                    before the parent (e.g., freeing memory, computing subtree sizes).</li>
+                <li><strong>Level-order (BFS):</strong> lets you reason about “distance from the root” or
+                    work layer by layer.</li>
+            </ul>
+            <p>
+                On graphs, DFS vs. BFS trade-offs:
+            </p>
+            <ul>
+                <li><strong>DFS:</strong> easy to implement recursively, good for topological sort,
+                    detecting cycles, or exploring deep structures.</li>
+                <li><strong>BFS:</strong> ideal for shortest paths in unweighted graphs and for any problem
+                    that cares about the minimum number of “steps” from a start node.</li>
+            </ul>
+            <p>
+                A helpful habit: when you see the words “layers”, “nearest”, or “fewest edges”, think BFS;
+                when you see “explore all reachable states” or “backtracking”, think DFS.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s5-ex1"
+            data-title="Tree shapes, height, and recursion depth" hidden>
+            <p>
+                The recursion depth of a tree traversal is tied directly to the tree’s height:
+            </p>
+            <ul>
+                <li>A <strong>balanced</strong> binary tree with <code>n</code> nodes has height <code>O(log n)</code>,
+                    so recursive traversals are usually safe.</li>
+                <li>A <strong>degenerate</strong> tree (like a linked list) can have height <code>O(n)</code>,
+                    which risks stack overflow in languages with limited call stacks.</li>
+            </ul>
+            <p>
+                Preorder, inorder, and postorder are all just different orders of the same three steps:
+            </p>
+            <ol>
+                <li>Do something with the current node.</li>
+                <li>Recurse on the left subtree.</li>
+                <li>Recurse on the right subtree.</li>
+            </ol>
+            <p>
+                Changing the order changes when you see each node relative to its children, which is why
+                different traversals are better suited to different tasks (printing, evaluation, cleanup, etc.).
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s5-ex2"
+            data-title="Level-order traversal and tree properties" hidden>
+            <p>
+                Level-order traversal is essentially BFS on a tree:
+            </p>
+            <ul>
+                <li>You start at the root (distance 0).</li>
+                <li>You visit all children (distance 1), then all grandchildren (distance 2), and so on.</li>
+            </ul>
+            <p>
+                This makes it ideal for:
+            </p>
+            <ul>
+                <li>Computing the tree’s <strong>minimum depth</strong> or <strong>maximum width</strong>.</li>
+                <li>Printing nodes level by level, which is helpful for debugging.</li>
+                <li>Problems that talk about “first time you reach this node” or “closest leaf”.</li>
+            </ul>
+            <p>
+                A useful pattern is to track the current level size (queue length at the start of each loop)
+                so you can separate levels cleanly or maintain a “depth” counter alongside the nodes.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s5-ex3"
+            data-title="DFS, recursion, and graph structure" hidden>
+            <p>
+                DFS explores as far as possible along each branch before backtracking. The recursion stack
+                implicitly holds the current path through the graph.
+            </p>
+            <p>
+                With DFS plus a visited array, you can:
+            </p>
+            <ul>
+                <li>Detect <strong>cycles</strong> in directed graphs using a “visiting” (gray) vs “visited” (black) state.</li>
+                <li>Compute <strong>connected components</strong> by starting a new DFS from every unvisited node.</li>
+                <li>Perform <strong>topological sort</strong> in DAGs by recording nodes in postorder.</li>
+            </ul>
+            <p>
+                In interviews, you’ll often convert recursion to an explicit stack to avoid stack limits or to
+                gain more control over the traversal order, but the underlying idea remains the same.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s5-ex4"
+            data-title="Shortest paths and when BFS is enough" hidden>
+            <p>
+                In an unweighted graph, every edge has the same “cost” (usually 1). BFS is perfect here because:
+            </p>
+            <ul>
+                <li>You discover nodes in order of increasing distance from the start.</li>
+                <li>When you first visit a node, you know you’ve found a shortest path to it.</li>
+            </ul>
+            <p>
+                Enhancements commonly used in problems:
+            </p>
+            <ul>
+                <li>Maintain a <strong>parent</strong> array to reconstruct the actual path, not just the distance.</li>
+                <li>Run BFS from multiple sources by pushing all of them into the queue with distance 0.</li>
+                <li>Use BFS over <strong>state spaces</strong> (e.g., puzzle configurations) where each edge
+                    represents a legal move.</li>
+            </ul>
+            <p>
+                When edges have different positive weights, plain BFS is no longer correct and you need
+                Dijkstra’s algorithm or one of its variants instead.
+            </p>
+        </div>
+
+        <!-- ======================= Deep dive modal shell ======================= -->
+
+        <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title"></h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
     </main>
 </body>
 

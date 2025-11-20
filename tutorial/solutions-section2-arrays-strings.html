@@ -77,6 +77,10 @@
                         <span class="label">Problem 1</span>
                         <span class="meta">Two-pointer in-place reversal</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s2p1">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -213,6 +217,10 @@ def reverse_array(arr: List[int]) -&gt; None:
                         <span class="label">Problem 2</span>
                         <span class="meta">Compare O(n²) vs. O(n) with hashing</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s2p2">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -421,6 +429,10 @@ def two_sum_hash(nums: List[int], target: int) -&gt; bool:
                         <span class="label">Problem 3</span>
                         <span class="meta">Stable compaction of non-zeros</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s2p3">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -570,6 +582,10 @@ def move_zeroes(nums: List[int]) -&gt; None:
                         <span class="label">Problem 4</span>
                         <span class="meta">Frequency counting with fixed alphabet</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s2p4">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -713,6 +729,10 @@ def is_anagram(s: str, t: str) -&gt; bool:
                         <span class="label">Problem 5</span>
                         <span class="meta">Sliding window with last-seen indices</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s2p5">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -883,6 +903,10 @@ def length_of_longest_substring(s: str) -&gt; int:
                         <span class="label">Problem 6</span>
                         <span class="meta">Three-reverse rotation trick</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s2p6">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -1063,6 +1087,369 @@ def reverse_range(nums: List[int], l: int, r: int) -&gt; None:
                 Back to Practice Hub →
             </a>
         </div>
+
+        <!-- ======================= Understand-the-algorithm templates ======================= -->
+
+        <div class="deep-dive-template" id="understand-s2p1"
+            data-title="Step-by-step: Reverse an array in-place" hidden>
+            <p>
+                The core idea is to swap symmetric elements from the two ends of the array until the pointers meet
+                in the middle.
+            </p>
+            <ol>
+                <li>
+                    <strong>Initialize two pointers:</strong>
+                    <ul>
+                        <li><code>i</code> starts at the beginning (index 0).</li>
+                        <li><code>j</code> starts at the end (index <code>n - 1</code>).</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Swap the outer elements:</strong>
+                    <p>
+                        While <code>i &lt; j</code>, we swap <code>arr[i]</code> with <code>arr[j]</code> using a
+                        temporary variable (or tuple swap in Python).
+                    </p>
+                </li>
+                <li>
+                    <strong>Move pointers inward:</strong>
+                    <ul>
+                        <li>After each swap, increment <code>i</code> (move right).</li>
+                        <li>Decrement <code>j</code> (move left).</li>
+                    </ul>
+                    <p>
+                        This keeps pairing the next elements from the front with their matching elements from the back.
+                    </p>
+                </li>
+                <li>
+                    <strong>Stop condition:</strong>
+                    <p>
+                        As soon as <code>i</code> is no longer less than <code>j</code>, we have reversed the whole
+                        array. Every element has been swapped into its mirror position exactly once.
+                    </p>
+                </li>
+                <li>
+                    <strong>Why it works:</strong>
+                    <p>
+                        Reversing is just mapping index <code>k</code> to <code>n - 1 - k</code>. Our two-pointer
+                        loop performs these swaps in pairs, ensuring we never overwrite an element before it is used.
+                        We only use constant extra space for a few variables.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s2p2"
+            data-title="Step-by-step: Two-sum with brute force and hashing" hidden>
+            <p>
+                This solution compares two strategies for checking whether any pair sums to a target:
+                a simple double loop and a faster hash-based approach.
+            </p>
+            <h3>1. Brute-force O(n²)</h3>
+            <ol>
+                <li>
+                    <strong>Check all pairs:</strong>
+                    <p>
+                        Use two indices <code>i</code> and <code>j</code> where <code>j &gt; i</code>. For every
+                        <code>i</code>, we loop over all <code>j</code> that come after it.
+                    </p>
+                </li>
+                <li>
+                    <strong>Test the sum:</strong>
+                    <p>
+                        For each pair <code>(i, j)</code>, compute <code>nums[i] + nums[j]</code>.
+                        If the result equals <code>target</code>, we can immediately return <code>true</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>No pair found:</strong>
+                    <p>
+                        If we finish both loops without a match, return <code>false</code>. We have tried all
+                        <code>O(n²)</code> combinations.
+                    </p>
+                </li>
+            </ol>
+            <h3>2. Hash-based O(n) expected</h3>
+            <ol>
+                <li>
+                    <strong>Maintain a set of seen numbers:</strong>
+                    <p>
+                        Initialize an empty set (or hash set). We iterate through the array once from left to right.
+                    </p>
+                </li>
+                <li>
+                    <strong>For each element x:</strong>
+                    <ul>
+                        <li>Compute <code>need = target - x</code>.</li>
+                        <li>
+                            If <code>need</code> is already in the set, then we have found
+                            <code>need + x = target</code>, so return <code>true</code>.
+                        </li>
+                        <li>
+                            Otherwise, insert <code>x</code> into the set and continue.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Why the set works:</strong>
+                    <p>
+                        The set is effectively remembering all values we have seen so far. When we see
+                        <code>x</code>, we check if its partner <code>target - x</code> has shown up earlier.
+                        Hash set operations are expected O(1), so the whole scan is O(n) on average.
+                    </p>
+                </li>
+                <li>
+                    <strong>End of array:</strong>
+                    <p>
+                        If we finish the loop without finding a match, no such pair exists and we return
+                        <code>false</code>.
+                    </p>
+                </li>
+            </ol>
+            <p>
+                In interviews, it is useful to start with the brute-force idea, then improve it by explaining how
+                hashing cuts the search from &quot;all pairs&quot; to a single linear scan.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s2p3"
+            data-title="Step-by-step: Move zeroes to the end while keeping order" hidden>
+            <p>
+                The goal is to move all zeros to the end but keep non-zero elements in their original order.
+                We do this in two phases using a <em>write pointer</em>.
+            </p>
+            <ol>
+                <li>
+                    <strong>Initialize write index:</strong>
+                    <p>
+                        Set <code>write = 0</code>. This marks the position where the next non-zero should be placed.
+                    </p>
+                </li>
+                <li>
+                    <strong>First pass - compact non-zeros:</strong>
+                    <ul>
+                        <li>Loop <code>read</code> from <code>0</code> to <code>n - 1</code>.</li>
+                        <li>
+                            If <code>nums[read] != 0</code>, copy it to <code>nums[write]</code>
+                            and increment <code>write</code>.
+                        </li>
+                        <li>
+                            If the element is zero, we simply skip it; <code>write</code> does not move,
+                            so zeros get &quot;squeezed out&quot; of the front part.
+                        </li>
+                    </ul>
+                    <p>
+                        After this pass, indices <code>[0 .. write-1]</code> hold all non-zero values in order.
+                        Indices <code>[write .. n-1]</code> are either leftover values or zeros that we still need to overwrite.
+                    </p>
+                </li>
+                <li>
+                    <strong>Second pass - fill remaining with zeros:</strong>
+                    <p>
+                        While <code>write &lt; n</code>, set <code>nums[write] = 0</code> and increment <code>write</code>.
+                        This overwrites any garbage or old values with zeros.
+                    </p>
+                </li>
+                <li>
+                    <strong>Why order is preserved:</strong>
+                    <p>
+                        We always copy non-zero elements forward in the same order we encounter them, and never swap
+                        them with later elements. That means the relative order of non-zero values never changes.
+                    </p>
+                </li>
+                <li>
+                    <strong>Space and time:</strong>
+                    <p>
+                        We only use two indices and touch each element a constant number of times, so the algorithm is
+                        O(n) time and O(1) extra space.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s2p4"
+            data-title="Step-by-step: Check if two strings are anagrams" hidden>
+            <p>
+                Two strings are anagrams if they use the same characters with the same frequencies, just in a
+                different order. With only lowercase a-z, a fixed-size frequency array is enough.
+            </p>
+            <ol>
+                <li>
+                    <strong>Length check:</strong>
+                    <p>
+                        If <code>s</code> and <code>t</code> have different lengths, they cannot be anagrams,
+                        so we immediately return <code>false</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Initialize frequency array:</strong>
+                    <p>
+                        Create an array <code>freq[26]</code> and set all entries to 0. Each index corresponds to a
+                        letter: index 0 for 'a', 1 for 'b', ..., 25 for 'z'.
+                    </p>
+                </li>
+                <li>
+                    <strong>Single pass over both strings:</strong>
+                    <ul>
+                        <li>For each position <code>i</code>:</li>
+                        <li>Increment <code>freq[s[i] - 'a']</code> (we saw one more of that letter in <code>s</code>).</li>
+                        <li>Decrement <code>freq[t[i] - 'a']</code> (we saw one more of that letter in <code>t</code>).</li>
+                    </ul>
+                    <p>
+                        Doing this in lockstep means matching characters in <code>s</code> and <code>t</code>
+                        cancel each other out.
+                    </p>
+                </li>
+                <li>
+                    <strong>Final frequency check:</strong>
+                    <p>
+                        After the loop, we scan through the 26 entries. If every entry is 0, then for every letter,
+                        counts in <code>s</code> and <code>t</code> match exactly → they are anagrams.
+                        If any entry is nonzero, the counts differ somewhere → not anagrams.
+                    </p>
+                </li>
+                <li>
+                    <strong>Why this is efficient:</strong>
+                    <p>
+                        The alphabet size is fixed (26), so the extra space is constant. We only loop over the strings
+                        once, plus a small 26-element check, for O(n) time.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s2p5"
+            data-title="Step-by-step: Longest substring without repeating characters" hidden>
+            <p>
+                We maintain a sliding window of characters that contains no duplicates, and expand/contract it as we
+                scan the string.
+            </p>
+            <ol>
+                <li>
+                    <strong>Key data structures:</strong>
+                    <ul>
+                        <li><code>left</code>: start index of the current window.</li>
+                        <li><code>right</code>: end index of the current window (loop variable).</li>
+                        <li>
+                            A map / array <code>last_pos</code> that stores the most recent index at which each
+                            character appeared (or -1 if never seen).
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Expand window with right:</strong>
+                    <p>
+                        For each <code>right</code> from 0 to <code>n - 1</code>, we look at <code>ch = s[right]</code>
+                        and ask: &quot;Have we seen this character inside the current window?&quot;
+                    </p>
+                </li>
+                <li>
+                    <strong>Detect duplicates inside the window:</strong>
+                    <ul>
+                        <li>
+                            If <code>last_pos[ch] &gt;= left</code>, the last occurrence of <code>ch</code> lies within
+                            the current window <code>[left, right]</code>.
+                        </li>
+                        <li>
+                            To remove the duplicate, we move <code>left</code> to one position after that old index:
+                            <code>left = last_pos[ch] + 1</code>.
+                        </li>
+                        <li>
+                            This &quot;cuts off&quot; the part of the window that contained the previous <code>ch</code>.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Update last seen position:</strong>
+                    <p>
+                        Set <code>last_pos[ch] = right</code> to remember where we just saw this character.
+                    </p>
+                </li>
+                <li>
+                    <strong>Track the best window length:</strong>
+                    <p>
+                        The current window is always <code>[left, right]</code> with all unique characters.
+                        Its length is <code>right - left + 1</code>. Update <code>best</code> if this window is longer
+                        than anything seen so far.
+                    </p>
+                </li>
+                <li>
+                    <strong>Why it is linear time:</strong>
+                    <p>
+                        Each index moves forward at most once: <code>right</code> increases from 0 to <code>n - 1</code>,
+                        and <code>left</code> only ever moves forward when duplicates are found. So the total work
+                        is O(n), not O(n²).
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s2p6"
+            data-title="Step-by-step: Rotate array using three reversals" hidden>
+            <p>
+                Rotating right by <code>k</code> steps means the last <code>k</code> elements wrap around to the front.
+                The triple-reversal trick achieves this in-place.
+            </p>
+            <ol>
+                <li>
+                    <strong>Normalize k:</strong>
+                    <p>
+                        If <code>n</code> is the array length, rotating by <code>k</code> and by
+                        <code>k % n</code> are the same. So we compute <code>k %= n</code>. If <code>k == 0</code>,
+                        nothing needs to be done.
+                    </p>
+                </li>
+                <li>
+                    <strong>Helper: reverse a subarray:</strong>
+                    <p>
+                        <code>reverse_range(nums, l, r)</code> swaps <code>nums[l]</code> with <code>nums[r]</code>,
+                        then moves inward, just like the array-reversal algorithm.
+                    </p>
+                </li>
+                <li>
+                    <strong>Step 1 - reverse the whole array:</strong>
+                    <p>
+                        Call <code>reverse_range(nums, 0, n - 1)</code>.
+                        This flips the entire array, so the previous end now comes to the front, but in reversed order.
+                    </p>
+                </li>
+                <li>
+                    <strong>Step 2 - reverse the first k elements:</strong>
+                    <p>
+                        Call <code>reverse_range(nums, 0, k - 1)</code>.
+                        This re-reverses the first <code>k</code> elements so that they appear in the same order
+                        as the original last <code>k</code> elements.
+                    </p>
+                </li>
+                <li>
+                    <strong>Step 3 - reverse the remaining n - k elements:</strong>
+                    <p>
+                        Call <code>reverse_range(nums, k, n - 1)</code>.
+                        This fixes the order of the remaining part of the array so that it matches the original
+                        first <code>n - k</code> elements.
+                    </p>
+                </li>
+                <li>
+                    <strong>Why the composition equals rotation:</strong>
+                    <p>
+                        Reversal is a simple, invertible operation. Doing &quot;reverse all&quot;, then &quot;reverse
+                        prefix&quot;, then &quot;reverse suffix&quot; rearranges the elements exactly as a right
+                        rotation by <code>k</code> would, but uses only constant extra space and O(n) time.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <!-- ======================= Modal shell reused by all buttons ======================= -->
+
+        <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title"></h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
     </main>
 </body>
 

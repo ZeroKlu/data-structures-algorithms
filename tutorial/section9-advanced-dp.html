@@ -44,7 +44,12 @@
             DP on trees, DP on subsets (bitmask DP), and DP on intervals.
         </p>
 
-        <h2>9.1 From Basic to Advanced DP</h2>
+        <h2>
+            9.1 From Basic to Advanced DP
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s9-from-basic">
+                Dig deeper
+            </button>
+        </h2>
         <p>
             Earlier, we used DP on simple 1D or 2D tables (Fibonacci, knapsack, LCS).
             Interview problems will often disguise DP inside other structures:
@@ -55,7 +60,12 @@
             <li><strong>Interval DP</strong>: the state is a range <code>[i, j]</code> in an array or string.</li>
         </ul>
 
-        <h2>9.2 Tree, Subset, and Interval States</h2>
+        <h2>
+            9.2 Tree, Subset, and Interval States
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s9-states">
+                Dig deeper
+            </button>
+        </h2>
         <ul>
             <li>
                 <strong>Tree DP</strong>: typically a post-order DFS that computes a value from children
@@ -101,7 +111,12 @@
         <hr>
 
         <!-- ======================= Example 1 ======================= -->
-        <h3>9.4 Example 1 - Tree DP: Max Root-to-Leaf Path Sum</h3>
+        <h3>
+            9.4 Example 1 - Tree DP: Max Root-to-Leaf Path Sum
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s9-ex1">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             Given a binary tree where each node has an integer value, compute the maximum sum of any
             path starting at the root and ending at a leaf.
@@ -278,7 +293,12 @@ def max_root_to_leaf(root: Optional[TreeNode]) -&gt; int:
         </div>
 
         <!-- ======================= Example 2 ======================= -->
-        <h3>9.5 Example 2 - Bitmask DP: Visit All Cities (TSP Style)</h3>
+        <h3>
+            9.5 Example 2 - Bitmask DP: Visit All Cities (TSP Style)
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s9-ex2">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             Suppose we have a complete graph of <code>n</code> cities (0 to <code>n - 1</code>) and a matrix
             <code>dist[i][j]</code>. We want the minimum cost path that starts at city 0 and visits
@@ -555,7 +575,12 @@ def tsp_bitmask(n: int, dist: List[List[int]]) -&gt; int:
         </div>
 
         <!-- ======================= Example 3 ======================= -->
-        <h3>9.6 Example 3 - Interval DP: Matrix Chain Multiplication</h3>
+        <h3>
+            9.6 Example 3 - Interval DP: Matrix Chain Multiplication
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s9-ex3">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             We are given matrices <code>A1, A2, ..., An</code> where matrix <code>Ai</code> has dimensions
             <code>p[i - 1] * p[i]</code>. We want to choose a parenthesization that minimizes the total
@@ -833,6 +858,163 @@ def matrix_chain_order(p: List[int]) -&gt; int:
                 Next: Section 10 — Practice Problems →
             </a>
         </div>
+
+        <!-- ======================= Deep dive templates ======================= -->
+
+        <div class="deep-dive-template" id="deep-dive-s9-from-basic"
+            data-title="How basic DP extends to trees, subsets, and intervals" hidden>
+            <p>
+                Everything you learned in basic DP still applies here. The only real change is what the
+                <strong>state</strong> means:
+            </p>
+            <ul>
+                <li>
+                    Before: states were usually simple indices like <code>dp[i]</code> or <code>dp[i][j]</code>
+                    over arrays/strings.
+                </li>
+                <li>
+                    Now: states may be attached to <em>nodes</em> in a tree, <em>subsets</em> of items, or
+                    <em>intervals</em> of indices.
+                </li>
+            </ul>
+            <p>
+                The DP recipe is unchanged:
+            </p>
+            <ol>
+                <li>Pick a state that uniquely describes a subproblem.</li>
+                <li>Express the answer for that state in terms of &quot;smaller&quot; states.</li>
+                <li>Choose an order (DFS, bitmask loops, interval lengths) so dependencies are computed first.</li>
+            </ol>
+            <p>
+                When a problem feels &quot;too big&quot; for a flat 1D/2D table, ask:
+                &quot;Could the natural subproblems be per-node, per-subset, or per-interval?&quot;
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s9-states"
+            data-title="Recognizing tree, subset, and interval DPs in the wild" hidden>
+            <p>
+                A quick pattern-matching guide for advanced DP states:
+            </p>
+            <ul>
+                <li>
+                    <strong>Tree DP clues:</strong>
+                    The input is literally a tree, and you&apos;re asked for something that depends on children
+                    (subtree sums, best choice per node, etc.). The natural move is a post-order DFS where
+                    each node returns a value built from its children.
+                </li>
+                <li>
+                    <strong>Subset / bitmask clues:</strong>
+                    The constraints have a small-ish <code>n</code> (often ≤ 20) and ask you to consider
+                    &quot;all subsets&quot;, &quot;all ways to visit/assign&quot;, or &quot;each element used at most once&quot;.
+                    States like <code>dp[mask]</code> or <code>dp[mask][last]</code> are almost always right.
+                </li>
+                <li>
+                    <strong>Interval clues:</strong>
+                    The problem talks about subarrays / substrings / segments and you need an optimal way
+                    to cut, merge, or parenthesize them. This screams <code>dp[i][j]</code> where
+                    <code>[i, j]</code> is the segment.
+                </li>
+            </ul>
+            <p>
+                In interviews, explicitly naming the state type (&quot;this is a tree DP&quot; /
+                &quot;this is bitmask DP&quot;) helps the interviewer see that you recognize the pattern,
+                even before you write code.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s9-ex1"
+            data-title="Why this is a tree DP and not just recursion" hidden>
+            <p>
+                The max root-to-leaf path sum looks like a simple recursive function, but it matches the
+                tree DP pattern exactly:
+            </p>
+            <ul>
+                <li>
+                    <strong>State:</strong> for each node <code>u</code>, define
+                    <code>best(u)</code> = max sum along a path that starts at <code>u</code> and ends at a leaf
+                    in <code>u</code>&apos;s subtree.
+                </li>
+                <li>
+                    <strong>Transition:</strong>
+                    <code>best(u) = u.val + max(best(left), best(right))</code> with null children treated as
+                    &quot;lose&quot; options.
+                </li>
+                <li>
+                    <strong>Order:</strong> post-order: compute children first, then the parent that depends on them.
+                </li>
+            </ul>
+            <p>
+                If you later extend the problem (e.g., ask for max path anywhere in the tree, or return the path
+                itself), you still reuse this per-node state idea. Tree DPs often start as &quot;just recursion&quot;
+                and then evolve as the problem gets more complex.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s9-ex2"
+            data-title="Intuition for bitmask TSP-style DP" hidden>
+            <p>
+                Bitmask DP looks scary because of the <code>2ⁿ</code> states, but each state has a small meaning:
+            </p>
+            <ul>
+                <li>
+                    <strong>State:</strong> <code>dp[mask][j]</code> = best cost to start at city 0,
+                    visit exactly the cities in <code>mask</code>, and end at <code>j</code>.
+                </li>
+                <li>
+                    <strong>Transition idea:</strong> &quot;I&apos;m at <code>j</code> having visited
+                    <code>mask</code>. Where can I go next?&quot; — try all cities <code>k</code> not in
+                    <code>mask</code> and update <code>dp[mask | (1&lt;&lt;k)][k]</code>.
+                </li>
+                <li>
+                    <strong>Base:</strong> only city 0 visited, at cost 0: <code>dp[1&lt;&lt;0][0] = 0</code>.
+                </li>
+            </ul>
+            <p>
+                A helpful mental model: each bit in <code>mask</code> is a &quot;visited&quot; flag. The DP
+                explores all bitmasks in increasing order of set bits, gradually building up from visiting 1 city,
+                to 2 cities, and so on, until the full mask has all bits set.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s9-ex3"
+            data-title="Why matrix chain is the poster child of interval DP" hidden>
+            <p>
+                Matrix chain multiplication is the classic example of interval DP:
+            </p>
+            <ul>
+                <li>
+                    <strong>State:</strong> <code>dp[i][j]</code> is the minimum cost to multiply the block
+                    of matrices <code>Ai..Aj</code> together.
+                </li>
+                <li>
+                    <strong>Transition:</strong> any optimal parenthesization splits at some
+                    <code>k</code> in <code>[i, j-1]</code>. We pay the cost of multiplying
+                    <code>Ai..Ak</code>, the cost of multiplying <code>Ak+1..Aj</code>, and finally the
+                    cost of multiplying those two resulting matrices.
+                </li>
+                <li>
+                    <strong>Order:</strong> iterate by interval length. Smaller intervals (length 1, 2)
+                    are solved first, then larger ones that depend on them.
+                </li>
+            </ul>
+            <p>
+                Any time you&apos;re free to insert parentheses or cut an interval at different split points,
+                and the cost depends on how you split, there&apos;s a good chance the solution is some form of
+                interval DP like this.
+            </p>
+        </div>
+
+        <!-- ======================= Deep dive modal shell ======================= -->
+
+        <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title"></h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
     </main>
 </body>
 

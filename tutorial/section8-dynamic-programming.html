@@ -44,7 +44,12 @@
             and reusing previous results instead of recomputing them.
         </p>
 
-        <h2>8.1 When to Use Dynamic Programming</h2>
+        <h2>
+            8.1 When to Use Dynamic Programming
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s8-when-dp">
+                Dig deeper
+            </button>
+        </h2>
         <p>
             A problem is a good candidate for dynamic programming if:
         </p>
@@ -54,7 +59,12 @@
             <li>There is an optimal substructure: an optimal solution is built from optimal solutions to subproblems.</li>
         </ul>
 
-        <h2>8.2 Two Common Styles</h2>
+        <h2>
+            8.2 Two Common Styles
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s8-styles">
+                Dig deeper
+            </button>
+        </h2>
         <ul>
             <li>
                 <strong>Top-down (memoization)</strong>:
@@ -97,7 +107,12 @@
         <hr>
 
         <!-- ======================= Example 1 ======================= -->
-        <h3>8.4 Example 1 - Fibonacci, Bottom-Up DP</h3>
+        <h3>
+            8.4 Example 1 - Fibonacci, Bottom-Up DP
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s8-ex1">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             The naive recursive Fibonacci is exponential because it recomputes subproblems.
             Here we compute from the bottom up in linear time.
@@ -218,7 +233,12 @@ def fib_dp(n: int) -&gt; int:
         </div>
 
         <!-- ======================= Example 2 ======================= -->
-        <h3>8.5 Example 2 - Climbing Stairs</h3>
+        <h3>
+            8.5 Example 2 - Climbing Stairs
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s8-ex2">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             You can climb 1 or 2 steps at a time. How many distinct ways are there to climb
             to step <code>n</code>? This has the same recurrence as Fibonacci:
@@ -341,7 +361,12 @@ def climb_stairs(n: int) -&gt; int:
         </div>
 
         <!-- ======================= Example 3 ======================= -->
-        <h3>8.6 Example 3 - 0/1 Knapsack (Value Maximization)</h3>
+        <h3>
+            8.6 Example 3 - 0/1 Knapsack (Value Maximization)
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s8-ex3">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             Given <code>n</code> items with weights <code>w[i]</code> and values <code>v[i]</code> and a capacity
             <code>W</code>, choose a subset of items with maximum total value such that total weight
@@ -486,7 +511,12 @@ def knapsack_01(n: int, W: int, w: List[int], v: List[int]) -&gt; int:
         </div>
 
         <!-- ======================= Example 4 ======================= -->
-        <h3>8.7 Example 4 - Longest Common Subsequence (LCS)</h3>
+        <h3>
+            8.7 Example 4 - Longest Common Subsequence (LCS)
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s8-ex4">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             Given two strings <code>s</code> and <code>t</code>, the longest common subsequence is the
            longest sequence of characters that appears in both in the same order (not necessarily
@@ -730,6 +760,163 @@ def lcs_length(s: str, t: str) -&gt; int:
                 Next: Section 9 — Advanced DP Patterns →
             </a>
         </div>
+
+        <!-- ======================= Deep dive templates ======================= -->
+
+        <div class="deep-dive-template" id="deep-dive-s8-when-dp"
+            data-title="How to recognize a dynamic programming problem" hidden>
+            <p>
+                When you suspect a problem might be DP, run through a quick checklist:
+            </p>
+            <ol>
+                <li>
+                    <strong>Subproblems:</strong> Can you express the full answer in terms of answers to smaller inputs?
+                    (For example, &quot;answer for n&quot; in terms of &quot;answers for &lt; n&quot;.)
+                </li>
+                <li>
+                    <strong>Overlap:</strong> If you write a naive recursive solution, do you see the same parameters
+                    being recomputed over and over? Overlap is what DP exploits.
+                </li>
+                <li>
+                    <strong>Optimal substructure:</strong> If you solve subproblems optimally and combine them,
+                    do you always get a globally optimal solution?
+                </li>
+            </ol>
+            <p>
+                In interviews, you rarely say &quot;I&apos;ll use DP&quot; up front. Instead, you:
+            </p>
+            <ul>
+                <li>Start with a simple recursive definition.</li>
+                <li>Notice repeated work or exponential blowup.</li>
+                <li>Introduce a table or memo to cache those results.</li>
+            </ul>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s8-styles"
+            data-title="Top-down vs. bottom-up DP in practice" hidden>
+            <p>
+                Both DP styles compute the same values; they differ in how you organize the work.
+            </p>
+            <ul>
+                <li>
+                    <strong>Top-down (memoization):</strong>
+                    You write a natural recursive function and add a cache (array/map). It only evaluates
+                    subproblems that are actually needed. Great for problems where many states are unreachable.
+                </li>
+                <li>
+                    <strong>Bottom-up (tabulation):</strong>
+                    You identify all states ahead of time, order them so dependencies come first, and fill
+                    a table iteratively. This avoids recursion and gives you more control over space usage.
+                </li>
+            </ul>
+            <p>
+                In interviews, top-down is often faster to write and reason about. Bottom-up is ideal when:
+            </p>
+            <ul>
+                <li>You need tight control over memory (1D, rolling arrays, etc.).</li>
+                <li>You might hit recursion depth limits.</li>
+                <li>You want to be explicit about iteration order and cache layout.</li>
+            </ul>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s8-ex1"
+            data-title="Fibonacci as the simplest DP pattern" hidden>
+            <p>
+                Fibonacci is the &quot;hello world&quot; of DP because it shows the core ideas in one line:
+            </p>
+            <ul>
+                <li><strong>State:</strong> <code>F(n)</code> — the nth Fibonacci number.</li>
+                <li><strong>Recurrence:</strong> <code>F(n) = F(n - 1) + F(n - 2)</code>.</li>
+                <li><strong>Base cases:</strong> <code>F(0) = 0</code>, <code>F(1) = 1</code>.</li>
+            </ul>
+            <p>
+                The bottom-up solution simply walks <code>n</code> from 2 up to the target, applying that recurrence.
+                We only need the last two values at any time, so we compress the whole table down to two variables.
+            </p>
+            <p>
+                When you see similar &quot;depends on a few previous positions&quot; patterns (stairs, tiling,
+                simple counting problems), you can usually apply the same 1D rolling DP trick.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s8-ex2"
+            data-title="Climbing stairs and rephrasing DP stories" hidden>
+            <p>
+                The climbing stairs problem is mathematically identical to Fibonacci, but framed as a story:
+            </p>
+            <ul>
+                <li><strong>State:</strong> <code>ways(n)</code> = ways to stand exactly on step <code>n</code>.</li>
+                <li>
+                    <strong>Transition:</strong> to reach step <code>n</code>, your last move came from
+                    <code>n - 1</code> (1 step) or <code>n - 2</code> (2 steps), so
+                    <code>ways(n) = ways(n - 1) + ways(n - 2)</code>.
+                </li>
+                <li><strong>Bases:</strong> exactly 1 way to be at step 0 (do nothing) and 1 way to reach step 1.</li>
+            </ul>
+            <p>
+                This is a good reminder that many seemingly different problems share the same recurrence.
+                In interviews, it&apos;s powerful to say: &quot;This is structurally the same as Fibonacci,
+                so I&apos;ll reuse that DP pattern.&quot;
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s8-ex3"
+            data-title="Why knapsack needs backward iteration in 1D DP" hidden>
+            <p>
+                In 0/1 knapsack, each item can be chosen at most once. The 1D DP array
+                <code>dp[c]</code> holds the best value for capacity <code>c</code> considering items so far.
+            </p>
+            <p>
+                The critical implementation detail is the loop order:
+            </p>
+            <ul>
+                <li>We iterate capacities <strong>backward</strong> (from <code>W</code> down to <code>w[i]</code>).</li>
+                <li>
+                    This ensures that when we compute <code>dp[c]</code> using <code>dp[c - w[i]]</code>, we are
+                    still reading the value from the previous item set, not one already updated for the current item.
+                </li>
+            </ul>
+            <p>
+                If you loop capacities forward, you accidentally allow taking the same item multiple times,
+                turning it into the unbounded knapsack variant. Backward vs. forward iteration is one of the
+                most common &quot;gotchas&quot; in knapsack-style DP.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s8-ex4"
+            data-title="Intuition behind the LCS table" hidden>
+            <p>
+                The LCS table <code>dp[i][j]</code> stores the LCS length of prefixes
+                <code>s[0..i)</code> and <code>t[0..j)</code>:
+            </p>
+            <ul>
+                <li>
+                    If the last characters match, they <strong>must</strong> be part of some optimal subsequence:
+                    we add 1 and move diagonally: <code>dp[i][j] = dp[i - 1][j - 1] + 1</code>.
+                </li>
+                <li>
+                    If they don&apos;t match, we try skipping one character from either string and take the better
+                    of those two options: <code>max(dp[i - 1][j], dp[i][j - 1])</code>.
+                </li>
+            </ul>
+            <p>
+                Visually, you can see the table as a grid where matches step diagonally, and mismatches choose
+                the best from up/left. Once you&apos;re comfortable with the length DP, reconstructing an actual
+                LCS string is just a matter of walking backwards from <code>dp[n][m]</code> to <code>dp[0][0]</code>
+                following the same rules.
+            </p>
+        </div>
+
+        <!-- ======================= Deep dive modal shell ======================= -->
+
+        <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title"></h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
     </main>
 </body>
 
