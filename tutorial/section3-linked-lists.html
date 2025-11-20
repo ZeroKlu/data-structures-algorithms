@@ -22,7 +22,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
 
@@ -43,7 +43,12 @@
             Recursion is a way to express solutions that naturally follow the structure of a list or tree.
         </p>
 
-        <h2>3.1 What Is a Linked List?</h2>
+        <h2>
+            3.1 What Is a Linked List?
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s3-what-is-ll">
+                Dig deeper
+            </button>
+        </h2>
         <p>
             A <strong>linked list</strong> is a sequence of nodes where each node holds a value and a reference
             (or pointer) to the next node. The list is usually accessed by a pointer or reference to the
@@ -59,7 +64,12 @@
             deletions in the middle, if you already have a pointer to the right place.
         </p>
 
-        <h2>3.2 Recap: Time Complexity for Linked Lists</h2>
+        <h2>
+            3.2 Recap: Time Complexity for Linked Lists
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s3-complexity">
+                Dig deeper
+            </button>
+        </h2>
         <ul>
             <li><strong>Traversal</strong> over all nodes: <strong>O(n)</strong>.</li>
             <li><strong>Insert or delete</strong> after a given node (and you already have that node):
@@ -68,7 +78,12 @@
             </li>
         </ul>
 
-        <h2>3.3 Recursion and the Call Stack</h2>
+        <h2>
+            3.3 Recursion and the Call Stack
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s3-recursion">
+                Dig deeper
+            </button>
+        </h2>
         <p>
             A <strong>recursive function</strong> calls itself on a smaller subproblem. For lists, the natural
             smaller piece is often "the list starting at the next node". Each call is pushed onto the
@@ -101,7 +116,12 @@
         <hr>
 
         <!-- ======================= Example 1 ======================= -->
-        <h3>3.5 Example 1 - Singly Linked List Node &amp; Insert at Head</h3>
+        <h3>
+            3.5 Example 1 - Singly Linked List Node &amp; Insert at Head
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s3-ex1">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             We will define a singly linked list node and implement a helper that inserts a new value
             at the head of the list. This is often the simplest way to build up a list.
@@ -222,7 +242,12 @@ def push_front(head: "ListNode | None", value: int) -&gt; "ListNode":
         </div>
 
         <!-- ======================= Example 2 ======================= -->
-        <h3>3.6 Example 2 - Traverse and Print a Linked List</h3>
+        <h3>
+            3.6 Example 2 - Traverse and Print a Linked List
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s3-ex2">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             Now we traverse the list from head to tail, printing each node's value. This is the
             linked list analog of iterating through an array.
@@ -320,7 +345,12 @@ def print_list(head: "ListNode | None") -&gt; None:
         </div>
 
         <!-- ======================= Example 3 ======================= -->
-        <h3>3.7 Example 3 - Reverse a Linked List (Iterative)</h3>
+        <h3>
+            3.7 Example 3 - Reverse a Linked List (Iterative)
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s3-ex3">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             A classic interview problem: reverse a singly linked list in place. We maintain
             three pointers: <code>prev</code>, <code>current</code>, and <code>next</code>.
@@ -438,7 +468,12 @@ def reverse_list(head: "ListNode | None") -&gt; "ListNode | None":
         </div>
 
         <!-- ======================= Example 4 ======================= -->
-        <h3>3.8 Example 4 - Recursively Print a Linked List</h3>
+        <h3>
+            3.8 Example 4 - Recursively Print a Linked List
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s3-ex4">
+                Dig deeper
+            </button>
+        </h3>
         <p>
             This example shows a simple recursive pattern: print the current node, then recursively
             print the rest of the list. The structure of the code mirrors the structure of the list.
@@ -463,6 +498,8 @@ def reverse_list(head: "ListNode | None") -&gt; "ListNode | None":
 
             <div class="code-panel" data-lang-panel="c">
                 <pre><code class="language-c">// C
+#include &lt;stdio.h&gt;
+
 void print_list_recursive(Node* head) {
     if (head == NULL) {
         return;  // base case: empty list
@@ -593,7 +630,7 @@ def print_list_recursive(head: "ListNode | None") -&gt; None:
                 </details>
             </li>
         </ol>
-        
+
         <div class="top-nav">
             <a href="problems-section3-linked-lists.html">
                 Problem Set for Section 3 Linked Lists →
@@ -608,6 +645,242 @@ def print_list_recursive(head: "ListNode | None") -&gt; None:
                 Next: Section 4 — Stacks &amp; Queues →
             </a>
         </div>
+
+        <!-- ======================= Deep dive templates ======================= -->
+
+        <div class="deep-dive-template" id="deep-dive-s3-what-is-ll"
+            data-title="How linked lists really work in memory" hidden>
+            <p>
+                A linked list is fundamentally different from an array in how it lives in memory:
+            </p>
+            <ul>
+                <li><strong>Array:</strong> elements are stored in one contiguous block. The address of
+                    <code>arr[i]</code> can be computed as <code>base + i * element_size</code>, which is why
+                    indexed access is O(1).</li>
+                <li><strong>Linked list:</strong> each node can live anywhere in memory. The "next"
+                    pointer stores the address of the following node.</li>
+            </ul>
+            <p>
+                This has two big consequences:
+            </p>
+            <ul>
+                <li><strong>Pros:</strong> inserting or deleting after a node just rewires a couple of pointers.
+                    No shifting of large blocks of memory.</li>
+                <li><strong>Cons:</strong> you cannot "jump" to index k directly; you must follow next pointers
+                    from the head, so random access is O(k).</li>
+            </ul>
+            <p>
+                Language-specific details:
+            </p>
+            <ul>
+                <li><strong>C / C++:</strong> nodes are usually allocated with <code>malloc</code> or
+                    <code>new</code>, and pointers are raw addresses.</li>
+                <li><strong>Java / C#:</strong> references are managed by the runtime; you work with objects and
+                    the garbage collector cleans up unreachable nodes.</li>
+                <li><strong>JavaScript / Python:</strong> everything is a reference to objects; a "node" class
+                    is just another object with fields.</li>
+            </ul>
+            <p>
+                In interviews, when you see phrases like "insert in the middle without shifting" or
+                "efficient removals given a node pointer", it is a hint that a linked list might be
+                the right abstraction.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s3-complexity"
+            data-title="Complexity trade-offs for linked lists" hidden>
+            <p>
+                The key linked list operations and their typical costs:
+            </p>
+            <ul>
+                <li><strong>Traversal:</strong> to visit all n nodes, you follow next pointers once each.
+                    That is O(n).</li>
+                <li><strong>Insert/delete after a node:</strong> you already have a pointer to the node
+                    <code>prev</code>. You can splice a new node in or out by changing a couple of next pointers.
+                    That is O(1).</li>
+                <li><strong>Find by index:</strong> if you want the k-th element, you must traverse from the head
+                    and follow k pointers. That is O(k), worst case O(n).</li>
+            </ul>
+            <p>
+                Design tips:
+            </p>
+            <ul>
+                <li>Maintaining a <strong>tail pointer</strong> lets you insert at the end in O(1) time.</li>
+                <li>Using a <strong>dummy head</strong> node can simplify edge cases around inserting or
+                    deleting at the front.</li>
+                <li>Doubly linked lists make deleting a node easier when you have a pointer to that node,
+                    because you can rewire both <code>prev</code> and <code>next</code> links directly.</li>
+            </ul>
+            <p>
+                A common interview question is essentially: "If I need fast random access, is a linked list a
+                good choice?" The answer is almost always <strong>no</strong>; arrays or array-backed structures
+                are better there.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s3-recursion"
+            data-title="Recursion, call stacks, and when to use them" hidden>
+            <p>
+                When a function calls itself, each call gets its own stack frame on the call stack. That frame
+                holds parameters, local variables, and the return address. When the function returns, its frame
+                is popped off.
+            </p>
+            <p>
+                For a linked list with n nodes, a straightforward recursive traversal will:
+            </p>
+            <ul>
+                <li>Make one call per node.</li>
+                <li>Build up n stack frames before hitting the base case (the null pointer).</li>
+                <li>Then unwind the stack, returning from each frame.</li>
+            </ul>
+            <p>
+                That is why recursive list operations usually have:
+            </p>
+            <ul>
+                <li><strong>Time:</strong> O(n) — the same as an iterative traversal.</li>
+                <li><strong>Extra space:</strong> O(n) — for the call stack.</li>
+            </ul>
+            <p>
+                In practice:
+            </p>
+            <ul>
+                <li>Recursion often yields very clean, declarative code that mirrors the structure of the data.</li>
+                <li>For very long lists (or deep trees), you risk a stack overflow in languages without
+                    guaranteed tail-call optimization.</li>
+                <li>Many production implementations use an iterative version to avoid stack limits, even if the
+                    recursive form is easier to reason about.</li>
+            </ul>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s3-ex1"
+            data-title="Pointer wiring when inserting at the head" hidden>
+            <p>
+                Inserting at the head of a singly linked list follows a small but important sequence of steps:
+            </p>
+            <ol>
+                <li>Allocate a new node.</li>
+                <li>Store the desired value in <code>new_node-&gt;value</code>.</li>
+                <li>Point <code>new_node-&gt;next</code> at the current head.</li>
+                <li>Return <code>new_node</code> as the new head.</li>
+            </ol>
+            <p>
+                The critical invariant is that you never lose the address of the old head:
+                you store it in <code>new_node-&gt;next</code> before overwriting any pointers.
+            </p>
+            <p>
+                In higher-level languages, the same idea appears as:
+                <code>head = new Node(value, head)</code> — the constructor does the wiring for you.
+            </p>
+            <p>
+                Common variations:
+            </p>
+            <ul>
+                <li><strong>Dummy head node:</strong> instead of changing the actual head reference, you keep a
+                    permanent dummy node whose next pointer points to the "real" first element.</li>
+                <li><strong>Multi-element insert:</strong> you can build a small chain of nodes and then link the
+                    tail of that chain to the existing head.</li>
+            </ul>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s3-ex2"
+            data-title="Traversal patterns and pitfalls" hidden>
+            <p>
+                Traversing a list safely comes down to a few simple rules:
+            </p>
+            <ul>
+                <li>Always test <code>current != null</code> (or equivalent) before dereferencing
+                    <code>current-&gt;next</code> or <code>current.value</code>.</li>
+                <li>Advance the pointer exactly once per loop iteration to avoid infinite loops.</li>
+                <li>If the list might be modified concurrently, consider how that affects traversal.</li>
+            </ul>
+            <p>
+                Variations you will see in interviews:
+            </p>
+            <ul>
+                <li><strong>Fast/slow pointers:</strong> one pointer moves one step at a time, another moves two
+                    steps. This is the basis of Floyd's cycle-detection algorithm.</li>
+                <li><strong>Previous/current pointers:</strong> useful when deleting a node while traversing, so
+                    you can rewire the previous node's next pointer.</li>
+                <li><strong>Sentinel (dummy) nodes:</strong> simplify edge cases like deleting the head by giving
+                    you a guaranteed node before the real head.</li>
+            </ul>
+            <p>
+                Practicing how to walk through pointer updates by hand (with a small diagram) is one of the most
+                effective ways to get comfortable with list code.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s3-ex3"
+            data-title="Reasoning about in-place list reversal" hidden>
+            <p>
+                The iterative reverse algorithm maintains this invariant:
+            </p>
+            <ul>
+                <li>At any time, <code>prev</code> points to the head of a <strong>fully reversed</strong> prefix
+                    of the original list.</li>
+                <li><code>current</code> points to the head of the remaining suffix that has not been reversed yet.</li>
+            </ul>
+            <p>
+                Each iteration:
+            </p>
+            <ol>
+                <li>Save <code>next_node = current-&gt;next</code> so we do not lose the rest of the list.</li>
+                <li>Reverse the pointer: <code>current-&gt;next = prev</code>.</li>
+                <li>Move <code>prev</code> forward to <code>current</code>.</li>
+                <li>Move <code>current</code> forward to <code>next_node</code>.</li>
+            </ol>
+            <p>
+                Eventually <code>current</code> becomes null and <code>prev</code> points at the new head of
+                the fully reversed list.
+            </p>
+            <p>
+                Comparing iterative vs. recursive reversal:
+            </p>
+            <ul>
+                <li><strong>Iterative:</strong> O(n) time, O(1) extra space, a bit more bookkeeping with pointers.</li>
+                <li><strong>Recursive:</strong> often shorter code, but uses O(n) stack space and can overflow
+                    the stack on very long lists.</li>
+            </ul>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s3-ex4"
+            data-title="Recursive list traversal and reverse-order printing" hidden>
+            <p>
+                The recursive print function:
+            </p>
+            <ul>
+                <li>Checks the base case: if the node is null, stop.</li>
+                <li>Prints the current node's value.</li>
+                <li>Recursively calls itself on <code>head.next</code>.</li>
+            </ul>
+            <p>
+                The call stack naturally captures "where we are" in the list. To print in reverse, you simply
+                move the print after the recursive call:
+            </p>
+            <ul>
+                <li>Recurse on <code>head.next</code> first.</li>
+                <li>Print <code>head.value</code> on the way back up.</li>
+            </ul>
+            <p>
+                That is a good example of using recursion to reverse the <strong>order of operations</strong>
+                without explicitly storing elements in another data structure.
+            </p>
+            <p>
+                Just remember the trade-off: every recursive call costs stack space. For large lists, an iterative
+                approach is usually safer in production code.
+            </p>
+        </div>
+
+        <!-- ======================= Deep dive modal shell ======================= -->
+
+        <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title"></h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
     </main>
 </body>
 

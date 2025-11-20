@@ -2,15 +2,15 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>Problems - Section 9 Advanced DP Patterns</title>
 
     <!-- Site styles -->
-    <link rel="stylesheet" href="css/site.css" />
+    <link rel="stylesheet" href="css/site.css">
 
     <!-- Highlight.js theme -->
     <link id="hljs-theme" rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -55,7 +55,7 @@
             </select>
         </div>
 
-        <hr />
+        <hr>
 
         <!-- Problem 1 -->
         <section class="problem">
@@ -99,13 +99,13 @@ int lengthOfLIS(const vector&lt;int&gt;&amp; nums) {
     return (int)tails.size();
 }</code></pre>
                     Each element performs a binary search on <code>tails</code>, which has length at most n.  
-                    Time: <strong>O(n log n)</strong>.<br />
+                    Time: <strong>O(n log n)</strong>.<br>
                     Space: <strong>O(n)</strong>.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 2 -->
         <section class="problem">
@@ -138,13 +138,13 @@ int lengthOfLIS(const vector&lt;int&gt;&amp; nums) {
         for w in range(W, w_i - 1, -1):
             dp[w] = max(dp[w], dp[w - w_i] + v_i)
     return dp[W]</code></pre>
-                    Time: for <code>n</code> items and capacity <code>W</code>, complexity is <strong>O(n W)</strong>.<br />
+                    Time: for <code>n</code> items and capacity <code>W</code>, complexity is <strong>O(n W)</strong>.<br>
                     Space: <strong>O(W)</strong>.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 3 -->
         <section class="problem">
@@ -183,13 +183,13 @@ int lengthOfLIS(const vector&lt;int&gt;&amp; nums) {
     }
     return dp[target];
 }</code></pre>
-                    Time: <strong>O(n * target)</strong> where <code>target = total / 2</code>.<br />
+                    Time: <strong>O(n * target)</strong> where <code>target = total / 2</code>.<br>
                     Space: <strong>O(target)</strong>.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 4 -->
         <section class="problem">
@@ -245,14 +245,14 @@ for (int mask = 0; mask &lt; (1 &lt;&lt; N); mask++) {
 
 // answer: min over i of dp[allVisited][i] + cost[i][0]</code></pre>
                     There are <code>2^n</code> masks and <code>n</code> possible endings per mask, and each transition
-                    loops over up to <code>n</code> previous cities.<br />
-                    Time: <strong>O(n² 2^n)</strong>.<br />
+                    loops over up to <code>n</code> previous cities.<br>
+                    Time: <strong>O(n² 2^n)</strong>.<br>
                     Space: <strong>O(n 2^n)</strong>.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 5 -->
         <section class="problem">
@@ -295,8 +295,8 @@ for (int mask = 0; mask &lt; (1 &lt;&lt; N); mask++) {
                     best = cost
             dp[i][j] = 0 if best == float("inf") else best
     return dp[0][m - 1]</code></pre>
-                    We consider all intervals and all possible split points inside each interval.<br />
-                    If there are <code>m</code> cut points (including boundaries), time is <strong>O(m³)</strong> in worst case.<br />
+                    We consider all intervals and all possible split points inside each interval.<br>
+                    If there are <code>m</code> cut points (including boundaries), time is <strong>O(m³)</strong> in worst case.<br>
                     Space: DP table <code>m * m</code> → <strong>O(m²)</strong>.
                 </div>
             </details>

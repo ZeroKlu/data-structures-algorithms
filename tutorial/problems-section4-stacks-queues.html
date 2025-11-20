@@ -2,15 +2,15 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>Problems - Section 4 Stacks &amp; Queues</title>
 
     <!-- Site styles -->
-    <link rel="stylesheet" href="css/site.css" />
+    <link rel="stylesheet" href="css/site.css">
 
     <!-- Highlight.js theme (initial, can be changed via selector) -->
     <link id="hljs-theme" rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -55,7 +55,7 @@
             </select>
         </div>
 
-        <hr />
+        <hr>
 
         <!-- Problem 1 -->
         <section class="problem">
@@ -118,7 +118,7 @@
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 2 -->
         <section class="problem">
@@ -169,15 +169,15 @@
     def empty(self) -&gt; bool:
         return not self._in and not self._out</code></pre>
                     Each element is moved from <code>_in</code> to <code>_out</code> at most once, and popped once.
-                    So over a sequence of <code>m</code> operations, total work is O(m).<br />
-                    Amortized time per operation: <strong>O(1)</strong>.<br />
+                    So over a sequence of <code>m</code> operations, total work is O(m).<br>
+                    Amortized time per operation: <strong>O(1)</strong>.<br>
                     Extra space: stacks store all elements → <strong>O(n)</strong> where <code>n</code>
                     is the number of items in the queue.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 3 -->
         <section class="problem">
@@ -230,14 +230,14 @@ vector&lt;int&gt; nextGreaterElements(const vector&lt;int&gt;&amp; nums) {
     return ans;
 }</code></pre>
                     Each element is pushed and popped at most once, so total operations on the stack
-                    are O(n).<br />
-                    Time complexity: <strong>O(n)</strong>.<br />
+                    are O(n).<br>
+                    Time complexity: <strong>O(n)</strong>.<br>
                     Extra space: result array plus stack of up to <code>n</code> elements → <strong>O(n)</strong>.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 4 -->
         <section class="problem">
@@ -282,14 +282,14 @@ vector&lt;int&gt; nextGreaterElements(const vector&lt;int&gt;&amp; nums) {
     // remaining positions stay 0 by default
     return ans;
 }</code></pre>
-                    Each index is pushed and popped at most once → total stack operations O(n).<br />
-                    Time complexity: <strong>O(n)</strong>.<br />
+                    Each index is pushed and popped at most once → total stack operations O(n).<br>
+                    Time complexity: <strong>O(n)</strong>.<br>
                     Extra space: answer array plus stack → <strong>O(n)</strong>.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 5 -->
         <section class="problem">
@@ -349,14 +349,14 @@ IList&lt;IList&lt;int&gt;&gt; LevelOrder(TreeNode? root) {
     return result;
 }</code></pre>
                     Each node is enqueued and dequeued exactly once → total work proportional to the number of nodes
-                    <code>n</code>.<br />
-                    Time complexity: <strong>O(n)</strong>.<br />
+                    <code>n</code>.<br>
+                    Time complexity: <strong>O(n)</strong>.<br>
                     Extra space: the queue can hold up to O(n) nodes in the worst case, plus result → <strong>O(n)</strong>.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 6 -->
         <section class="problem">
@@ -418,8 +418,8 @@ IList&lt;IList&lt;int&gt;&gt; LevelOrder(TreeNode? root) {
     return result;
 }</code></pre>
                     Each index is pushed into and popped from the deque at most once, so total deque operations
-                    are O(n).<br />
-                    Time complexity: <strong>O(n)</strong>.<br />
+                    are O(n).<br>
+                    Time complexity: <strong>O(n)</strong>.<br>
                     Extra space: deque and result arrays are O(n) → <strong>O(n)</strong>.
                 </div>
             </details>

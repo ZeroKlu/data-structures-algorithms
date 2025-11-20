@@ -2,15 +2,15 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>Problems - Section 2 Arrays &amp; Strings</title>
 
     <!-- Site styles -->
-    <link rel="stylesheet" href="css/site.css" />
+    <link rel="stylesheet" href="css/site.css">
 
     <!-- Highlight.js theme (initial, can be changed via selector) -->
     <link id="hljs-theme" rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -55,7 +55,7 @@
             </select>
         </div>
 
-        <hr />
+        <hr>
 
         <!-- Problem 1 -->
         <section class="problem">
@@ -98,13 +98,13 @@
         j--;
     }
 }</code></pre>
-                    Time complexity: the loop runs about <code>n / 2</code> times, so <strong>O(n)</strong>.<br />
+                    Time complexity: the loop runs about <code>n / 2</code> times, so <strong>O(n)</strong>.<br>
                     Extra space: we only use a few variables, so <strong>O(1)</strong>.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 2 -->
         <section class="problem">
@@ -131,7 +131,7 @@
             <details class="practice-details">
                 <summary>Show answer...</summary>
                 <div>
-                    <strong>Brute force:</strong><br />
+                    <strong>Brute force:</strong><br>
                     Check all pairs <code>(i, j)</code> with <code>i &lt; j</code>:
 <pre><code class="language-python">def two_sum_bruteforce(nums, target):
     n = len(nums)
@@ -140,10 +140,10 @@
             if nums[i] + nums[j] == target:
                 return True
     return False</code></pre>
-                    Time: there are about <code>n(n - 1)/2</code> pairs → <strong>O(n²)</strong>.<br />
-                    Space: <strong>O(1)</strong> extra.<br /><br />
+                    Time: there are about <code>n(n - 1)/2</code> pairs → <strong>O(n²)</strong>.<br>
+                    Space: <strong>O(1)</strong> extra.<br><br>
 
-                    <strong>Hash-based:</strong><br />
+                    <strong>Hash-based:</strong><br>
                     Scan once, keeping a set of seen numbers:
 <pre><code class="language-javascript">function twoSumExists(nums, target) {
     const seen = new Set();
@@ -157,13 +157,13 @@
     return false;
 }</code></pre>
                     Time: each element is processed once and set operations are expected O(1), so
-                    <strong>O(n)</strong>.<br />
+                    <strong>O(n)</strong>.<br>
                     Extra space: up to <code>n</code> elements in the set → <strong>O(n)</strong>.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 3 -->
         <section class="problem">
@@ -206,13 +206,13 @@
         write++;
     }
 }</code></pre>
-                    Time complexity: two passes over <code>n</code> elements → <strong>O(n)</strong>.<br />
+                    Time complexity: two passes over <code>n</code> elements → <strong>O(n)</strong>.<br>
                     Extra space: only a couple of indices → <strong>O(1)</strong>.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 4 -->
         <section class="problem">
@@ -254,13 +254,13 @@
     return true;
 }</code></pre>
                     Time: we scan the strings once (plus a fixed-size 26 loop) → <strong>O(n)</strong>, where
-                    <code>n</code> is the length of the strings.<br />
+                    <code>n</code> is the length of the strings.<br>
                     Extra space: the frequency array is size 26 (constant) → <strong>O(1)</strong>.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 5 -->
         <section class="problem">
@@ -303,15 +303,15 @@
         last_pos[ch] = right
         best = max(best, right - left + 1)
     return best</code></pre>
-                    The window defined by <code>[left, right]</code> always has no duplicates.<br />
-                    Each index moves at most forward once, so total work is proportional to <code>n</code>.<br />
-                    Time complexity: <strong>O(n)</strong>.<br />
+                    The window defined by <code>[left, right]</code> always has no duplicates.<br>
+                    Each index moves at most forward once, so total work is proportional to <code>n</code>.<br>
+                    Time complexity: <strong>O(n)</strong>.<br>
                     Extra space: at most one entry per distinct character → <strong>O(min(n, alphabet))</strong>.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 6 -->
         <section class="problem">
@@ -364,7 +364,7 @@ void rotate(std::vector&lt;int&gt;&amp; nums, int k) {
     // Reverse the rest
     reverseRange(nums, k, n - 1);
 }</code></pre>
-                    Time: each reverse is O(n), and we do three reversals → still <strong>O(n)</strong>.<br />
+                    Time: each reverse is O(n), and we do three reversals → still <strong>O(n)</strong>.<br>
                     Extra space: swaps happen in-place → <strong>O(1)</strong>.
                 </div>
             </details>

@@ -2,15 +2,15 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>Section 8 - Dynamic Programming</title>
 
     <!-- Site styles -->
-    <link rel="stylesheet" href="css/site.css" />
+    <link rel="stylesheet" href="css/site.css">
 
     <!-- Highlight.js theme (initial, can be changed via selector) -->
     <link id="hljs-theme" rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -94,7 +94,7 @@
             </select>
         </div>
 
-        <hr />
+        <hr>
 
         <!-- ======================= Example 1 ======================= -->
         <h3>8.4 Example 1 - Fibonacci, Bottom-Up DP</h3>
@@ -655,60 +655,60 @@ def lcs_length(s: str, t: str) -&gt; int:
         <p>For each of the following, think about whether DP is appropriate and what the state/table would be:</p>
         <ol>
             <li>
-                Compute the number of unique paths in an <code>m × n</code> grid moving only right or down.<br />
+                Compute the number of unique paths in an <code>m × n</code> grid moving only right or down.<br>
                 <details class="practice-details">
                     <summary>Show answer...</summary>
                     <div>
-                        <strong>1.</strong> Yes, DP works well.<br />
-                        State: <code>dp[i][j]</code> = number of ways to reach cell <code>(i, j)</code>.<br />
-                        Recurrence: <code>dp[i][j] = dp[i - 1][j] + dp[i][j - 1]</code> with first row/column = 1.<br />
+                        <strong>1.</strong> Yes, DP works well.<br>
+                        State: <code>dp[i][j]</code> = number of ways to reach cell <code>(i, j)</code>.<br>
+                        Recurrence: <code>dp[i][j] = dp[i - 1][j] + dp[i][j - 1]</code> with first row/column = 1.<br>
                         Time: <strong>O(m · n)</strong>. Space: <strong>O(m · n)</strong> (or <strong>O(min(m, n))</strong> with optimization).
                     </div>
                 </details>
             </li>
             <li>
-                Determine if a subset of an array can sum exactly to a target value (subset sum problem).<br />
+                Determine if a subset of an array can sum exactly to a target value (subset sum problem).<br>
                 <details class="practice-details">
                     <summary>Show answer...</summary>
                     <div>
-                        <strong>2.</strong> Yes, classic DP.<br />
-                        State: <code>dp[i][s]</code> = whether we can reach sum <code>s</code> using first <code>i</code> items.<br />
-                        Recurrence: either take or skip item <code>i</code>.<br />
+                        <strong>2.</strong> Yes, classic DP.<br>
+                        State: <code>dp[i][s]</code> = whether we can reach sum <code>s</code> using first <code>i</code> items.<br>
+                        Recurrence: either take or skip item <code>i</code>.<br>
                         Time: <strong>O(n · S)</strong> where <code>S</code> is the target sum. Space: <strong>O(n · S)</strong> or <strong>O(S)</strong> optimized.
                     </div>
                 </details>
             </li>
             <li>
-                Find the minimum number of coins to make a given amount, given unlimited copies of coin denominations.<br />
+                Find the minimum number of coins to make a given amount, given unlimited copies of coin denominations.<br>
                 <details class="practice-details">
                     <summary>Show answer...</summary>
                     <div>
-                        <strong>3.</strong> Yes, unbounded knapsack style DP.<br />
-                        State: <code>dp[amount]</code> = minimum coins to make that amount (or infinity if impossible).<br />
-                        Recurrence: <code>dp[a] = min(dp[a], dp[a - coin] + 1)</code> for each coin and amount.<br />
+                        <strong>3.</strong> Yes, unbounded knapsack style DP.<br>
+                        State: <code>dp[amount]</code> = minimum coins to make that amount (or infinity if impossible).<br>
+                        Recurrence: <code>dp[a] = min(dp[a], dp[a - coin] + 1)</code> for each coin and amount.<br>
                         Time: <strong>O(n · A)</strong> where <code>A</code> is the target amount and <code>n</code> the number of coin types.
                     </div>
                 </details>
             </li>
             <li>
-                Given a string, split it into dictionary words to minimize the number of pieces (word break with cost).<br />
+                Given a string, split it into dictionary words to minimize the number of pieces (word break with cost).<br>
                 <details class="practice-details">
                     <summary>Show answer...</summary>
                     <div>
-                        <strong>4.</strong> Yes, DP on prefixes.<br />
-                        State: <code>dp[i]</code> = minimum pieces needed to segment prefix <code>s[0..i)</code>.<br />
-                        Recurrence: try all dictionary words that end at <code>i</code>, update <code>dp[i]</code> from <code>dp[j]</code> where <code>j</code> is the start of the word.<br />
+                        <strong>4.</strong> Yes, DP on prefixes.<br>
+                        State: <code>dp[i]</code> = minimum pieces needed to segment prefix <code>s[0..i)</code>.<br>
+                        Recurrence: try all dictionary words that end at <code>i</code>, update <code>dp[i]</code> from <code>dp[j]</code> where <code>j</code> is the start of the word.<br>
                         Time depends on dictionary and matching method, often around <strong>O(n²)</strong> with naive checks.
                     </div>
                 </details>
             </li>
             <li>
-                Why is naive recursion for Fibonacci <code>F(n)</code> exponential, while the DP versions above are linear?<br />
+                Why is naive recursion for Fibonacci <code>F(n)</code> exponential, while the DP versions above are linear?<br>
                 <details class="practice-details">
                     <summary>Show answer...</summary>
                     <div>
                         <strong>5.</strong> Naive recursion recomputes the same subproblems many times, leading to roughly
-                        <strong>O(φⁿ)</strong> calls (exponential).<br />
+                        <strong>O(φⁿ)</strong> calls (exponential).<br>
                         DP computes each <code>F(k)</code> exactly once and stores it, so total work is proportional
                         to <code>n</code>, giving <strong>O(n)</strong> time.
                     </div>

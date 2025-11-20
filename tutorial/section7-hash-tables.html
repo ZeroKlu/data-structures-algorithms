@@ -2,15 +2,15 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>Section 7 - Hash Tables</title>
 
     <!-- Site styles -->
-    <link rel="stylesheet" href="css/site.css" />
+    <link rel="stylesheet" href="css/site.css">
 
     <!-- Highlight.js theme (initial, can be changed via selector) -->
     <link id="hljs-theme" rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -105,7 +105,7 @@
             </select>
         </div>
 
-        <hr />
+        <hr>
 
         <!-- ======================= Example 1 ======================= -->
         <h3>7.5 Example 1 - Simple String Hash (Chaining)</h3>
@@ -658,59 +658,59 @@ def two_sum(nums: List[int], target: int) -&gt; Tuple[int, int]:
         <p>For each of the following, identify the time and space complexity and the main idea:</p>
         <ol>
             <li>
-                Counting character frequencies in a string using a hash map.<br />
+                Counting character frequencies in a string using a hash map.<br>
                 <details class="practice-details">
                     <summary>Show answer...</summary>
                     <div>
-                        <strong>1.</strong> We scan each character once and update a map.<br />
-                        Time: <strong>O(n)</strong> for a string of length <code>n</code>.<br />
+                        <strong>1.</strong> We scan each character once and update a map.<br>
+                        Time: <strong>O(n)</strong> for a string of length <code>n</code>.<br>
                         Extra space: <strong>O(k)</strong> where <code>k</code> is the number of distinct characters
                         (at most a constant if we restrict to ASCII).
                     </div>
                 </details>
             </li>
             <li>
-                Checking if two strings are anagrams using a hash map of character counts.<br />
+                Checking if two strings are anagrams using a hash map of character counts.<br>
                 <details class="practice-details">
                     <summary>Show answer...</summary>
                     <div>
-                        <strong>2.</strong> Count characters in the first string, subtract counts for the second.<br />
-                        Time: <strong>O(n)</strong> for length <code>n</code> (assuming both are similar length).<br />
+                        <strong>2.</strong> Count characters in the first string, subtract counts for the second.<br>
+                        Time: <strong>O(n)</strong> for length <code>n</code> (assuming both are similar length).<br>
                         Extra space: <strong>O(k)</strong> for character counts.
                     </div>
                 </details>
             </li>
             <li>
-                Using a hash set to determine whether an array contains any duplicates at all.<br />
+                Using a hash set to determine whether an array contains any duplicates at all.<br>
                 <details class="practice-details">
                     <summary>Show answer...</summary>
                     <div>
                         <strong>3.</strong> Insert each element into a set; if insertion fails or element already
-                        present, we have a duplicate.<br />
-                        Time: <strong>O(n)</strong> average.<br />
+                        present, we have a duplicate.<br>
+                        Time: <strong>O(n)</strong> average.<br>
                         Extra space: <strong>O(n)</strong>.
                     </div>
                 </details>
             </li>
             <li>
-                Using a hash map to group words into anagram groups (e.g., "eat", "tea", "ate").<br />
+                Using a hash map to group words into anagram groups (e.g., "eat", "tea", "ate").<br>
                 <details class="practice-details">
                     <summary>Show answer...</summary>
                     <div>
-                        <strong>4.</strong> Key = sorted letters or a letter-count signature, value = list of words.<br />
+                        <strong>4.</strong> Key = sorted letters or a letter-count signature, value = list of words.<br>
                         Time: typically <strong>O(n · L log L)</strong> if we sort each word of length <code>L</code>,
-                        or <strong>O(n · L)</strong> with counting signatures.<br />
+                        or <strong>O(n · L)</strong> with counting signatures.<br>
                         Extra space: <strong>O(n · L)</strong> for storing words and keys.
                     </div>
                 </details>
             </li>
             <li>
-                What is the trade-off between using a hash table vs. a balanced binary search tree (like a red-black tree)?<br />
+                What is the trade-off between using a hash table vs. a balanced binary search tree (like a red-black tree)?<br>
                 <details class="practice-details">
                     <summary>Show answer...</summary>
                     <div>
                         <strong>5.</strong> Hash tables give average <strong>O(1)</strong> for insert / lookup / delete
-                        but do not maintain sorted order, and worst-case operations can be <strong>O(n)</strong>.<br />
+                        but do not maintain sorted order, and worst-case operations can be <strong>O(n)</strong>.<br>
                         Balanced BSTs give <strong>O(log n)</strong> worst-case and keep keys ordered, which is useful
                         for range queries and ordered traversals, but they are usually slower in practice on simple
                         lookups than a good hash table.

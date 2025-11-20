@@ -2,15 +2,15 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>Section 9 - Advanced Dynamic Programming Patterns</title>
 
     <!-- Site styles -->
-    <link rel="stylesheet" href="css/site.css" />
+    <link rel="stylesheet" href="css/site.css">
 
     <!-- Highlight.js theme (initial, can be changed via selector) -->
     <link id="hljs-theme" rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -98,7 +98,7 @@
             </select>
         </div>
 
-        <hr />
+        <hr>
 
         <!-- ======================= Example 1 ======================= -->
         <h3>9.4 Example 1 - Tree DP: Max Root-to-Leaf Path Sum</h3>
@@ -757,36 +757,36 @@ def matrix_chain_order(p: List[int]) -&gt; int:
         <p>For each of these, decide what the DP state would look like and how you would transition:</p>
         <ol>
             <li>
-                Given a tree, compute the size of the largest independent set (no two chosen nodes share an edge).<br />
+                Given a tree, compute the size of the largest independent set (no two chosen nodes share an edge).<br>
                 <details class="practice-details">
                     <summary>Show answer...</summary>
                     <div>
-                        <strong>1.</strong> Tree DP.<br />
+                        <strong>1.</strong> Tree DP.<br>
                         State per node: <code>dp[node][0]</code> = best if we do not take this node,
-                        <code>dp[node][1]</code> = best if we do take this node.<br />
+                        <code>dp[node][1]</code> = best if we do take this node.<br>
                         Transition: if we take node, we cannot take children; if we do not take node,
                         we can choose best of taking or not taking each child.
                     </div>
                 </details>
             </li>
             <li>
-                Count the number of Hamiltonian paths that start at node 0 in a small graph (say <code>n ≤ 15</code>).<br />
+                Count the number of Hamiltonian paths that start at node 0 in a small graph (say <code>n ≤ 15</code>).<br>
                 <details class="practice-details">
                     <summary>Show answer...</summary>
                     <div>
-                        <strong>2.</strong> Subset / bitmask DP.<br />
+                        <strong>2.</strong> Subset / bitmask DP.<br>
                         State: <code>dp[mask][j]</code> = number of ways to start at 0, visit exactly
-                        the nodes in <code>mask</code>, and end at <code>j</code>.<br />
+                        the nodes in <code>mask</code>, and end at <code>j</code>.<br>
                         Transition: extend from smaller masks by adding one new node along an edge.
                     </div>
                 </details>
             </li>
             <li>
-                Given a string, find the minimum cuts needed to partition it into palindromic substrings.<br />
+                Given a string, find the minimum cuts needed to partition it into palindromic substrings.<br>
                 <details class="practice-details">
                     <summary>Show answer...</summary>
                     <div>
-                        <strong>3.</strong> Interval DP or 1D DP with palindrome checks.<br />
+                        <strong>3.</strong> Interval DP or 1D DP with palindrome checks.<br>
                         One approach: precompute <code>isPal[i][j]</code>, then let <code>dp[i]</code> be
                         min cuts for prefix <code>s[0..i]</code>, or use <code>dp[i][j]</code> directly
                         as minimum cuts on interval <code>[i, j]</code>.
@@ -794,19 +794,19 @@ def matrix_chain_order(p: List[int]) -&gt; int:
                 </details>
             </li>
             <li>
-                On a tree, compute for every node the sum of distances to all other nodes.<br />
+                On a tree, compute for every node the sum of distances to all other nodes.<br>
                 <details class="practice-details">
                     <summary>Show answer...</summary>
                     <div>
-                        <strong>4.</strong> Tree DP with rerooting.<br />
-                        First pass: compute subtree sizes and sum of distances from an arbitrary root.<br />
+                        <strong>4.</strong> Tree DP with rerooting.<br>
+                        First pass: compute subtree sizes and sum of distances from an arbitrary root.<br>
                         Second pass: reroot DP, using parent information to compute results for children
                         in <strong>O(1)</strong> each, for overall <strong>O(n)</strong>.
                     </div>
                 </details>
             </li>
             <li>
-                Why does bitmask DP usually require the constraints to be small (like <code>n ≤ 20</code>)?<br />
+                Why does bitmask DP usually require the constraints to be small (like <code>n ≤ 20</code>)?<br>
                 <details class="practice-details">
                     <summary>Show answer...</summary>
                     <div>

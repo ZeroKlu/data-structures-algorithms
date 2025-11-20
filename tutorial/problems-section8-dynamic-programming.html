@@ -2,15 +2,15 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>Problems - Section 8 Dynamic Programming</title>
 
     <!-- Site styles -->
-    <link rel="stylesheet" href="css/site.css" />
+    <link rel="stylesheet" href="css/site.css">
 
     <!-- Highlight.js theme -->
     <link id="hljs-theme" rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -55,7 +55,7 @@
             </select>
         </div>
 
-        <hr />
+        <hr>
 
         <!-- Problem 1 -->
         <section class="problem">
@@ -94,7 +94,7 @@
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 2 -->
         <section class="problem">
@@ -134,13 +134,13 @@
         prev2 = prev1
         prev1 = cur
     return prev1</code></pre>
-                    Time: <strong>O(n)</strong>.<br />
+                    Time: <strong>O(n)</strong>.<br>
                     Extra space: <strong>O(1)</strong> with rolling variables.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 3 -->
         <section class="problem">
@@ -177,13 +177,13 @@
     return dp[amount] == INF ? -1 : dp[amount];
 }</code></pre>
                     Time: we iterate over each coin and each amount up to <code>amount</code> → <strong>O(n * amount)</strong>,
-                    where <code>n</code> is number of coins.<br />
+                    where <code>n</code> is number of coins.<br>
                     Extra space: <strong>O(amount)</strong>.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 4 -->
         <section class="problem">
@@ -217,13 +217,13 @@ int uniquePaths(int m, int n) {
     }
     return dp[m - 1][n - 1];
 }</code></pre>
-                    Time: visit each cell once → <strong>O(m n)</strong>.<br />
+                    Time: visit each cell once → <strong>O(m n)</strong>.<br>
                     Space: <strong>O(m n)</strong> (can be optimized to O(n) with 1D DP).
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 5 -->
         <section class="problem">
@@ -272,7 +272,7 @@ int uniquePaths(int m, int n) {
     }
     return dp[m][n];
 }</code></pre>
-                    Time: filling an <code>(m + 1) * (n + 1)</code> table → <strong>O(m n)</strong>.<br />
+                    Time: filling an <code>(m + 1) * (n + 1)</code> table → <strong>O(m n)</strong>.<br>
                     Space: <strong>O(m n)</strong> (can be reduced to O(min(m, n))).
                 </div>
             </details>

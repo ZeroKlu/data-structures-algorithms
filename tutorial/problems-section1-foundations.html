@@ -2,15 +2,15 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>Problems - Section 1 Foundations (Big-O &amp; Complexity)</title>
 
     <!-- Site styles -->
-    <link rel="stylesheet" href="css/site.css" />
+    <link rel="stylesheet" href="css/site.css">
 
     <!-- Highlight.js theme (initial, can be changed via selector) -->
     <link id="hljs-theme" rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -55,7 +55,7 @@
             </select>
         </div>
 
-        <hr />
+        <hr>
 
         <!-- Problem 1 -->
         <section class="problem">
@@ -90,14 +90,14 @@
                         <li>Loop: <code>3n</code> steps.</li>
                         <li>Nested loop: outer runs <code>n</code>, inner runs <code>2</code>, so <code>2n</code> steps.</li>
                     </ul>
-                    Combined: <code>5 + 3n + 2n = 5 + 5n</code>.<br />
+                    Combined: <code>5 + 3n + 2n = 5 + 5n</code>.<br>
                     Drop constant factor and additive constants:
                     time is <strong>O(n)</strong>.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 2 -->
         <section class="problem">
@@ -135,17 +135,17 @@
                 <summary>Show answer...</summary>
                 <div>
                     The outer loop runs <code>n</code> times. For each <code>i</code>, the inner loop runs
-                    roughly <code>n - i - 1</code> times.<br />
+                    roughly <code>n - i - 1</code> times.<br>
                     Total iterations:
-                    <code>(n - 1) + (n - 2) + ... + 1 = n(n - 1)/2 = O(n²)</code>.<br />
-                    So time is <strong>O(n²)</strong>.<br /><br />
+                    <code>(n - 1) + (n - 2) + ... + 1 = n(n - 1)/2 = O(n²)</code>.<br>
+                    So time is <strong>O(n²)</strong>.<br><br>
                     Extra space: only a few variables (<code>count</code>, <code>i</code>, <code>j</code>),
                     so <strong>O(1)</strong>.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 3 -->
         <section class="problem">
@@ -188,7 +188,7 @@
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 4 -->
         <section class="problem">
@@ -223,15 +223,15 @@
                 <summary>Show answer...</summary>
                 <div>
                     The loop runs from <code>i = 1</code> to <code>n - 1</code>, so it runs <code>n - 1</code> times.
-                    Each iteration does O(1) work (one addition and one assignment).<br />
-                    Time: <strong>O(n)</strong>.<br /><br />
+                    Each iteration does O(1) work (one addition and one assignment).<br>
+                    Time: <strong>O(n)</strong>.<br><br>
                     Extra space: <code>prefix</code> has size <code>n</code>, so extra memory is
                     <strong>O(n)</strong> beyond the input array.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 5 -->
         <section class="problem">
@@ -269,12 +269,12 @@
                         <li>Number of iterations is about <code>log₂ n</code>.</li>
                     </ul>
                     For each <code>i</code>, the inner loop sets <code>j = 1</code>, then doubles:
-                    <code>1, 2, 4, ..., i</code>, so it runs about <code>log₂ i</code> times.<br /><br />
+                    <code>1, 2, 4, ..., i</code>, so it runs about <code>log₂ i</code> times.<br><br>
                     Total prints is roughly:
-                    <code>∑ (for i = 1, 2, 4, ..., n) of log i</code>.<br />
+                    <code>∑ (for i = 1, 2, 4, ..., n) of log i</code>.<br>
                     There are <code>log n</code> different values of <code>i</code>, and the largest
                     <code>log i</code> is <code>log n</code>, so total work is on the order of
-                    <code>(log n) * (log n) = (log² n)</code>.<br /><br />
+                    <code>(log n) * (log n) = (log² n)</code>.<br><br>
                     Time complexity: <strong>O((log n)²)</strong>. Extra space: <strong>O(1)</strong>.
                 </div>
             </details>

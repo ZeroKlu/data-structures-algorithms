@@ -2,15 +2,15 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>Problems - Section 5 Trees &amp; BSTs</title>
 
     <!-- Site styles -->
-    <link rel="stylesheet" href="css/site.css" />
+    <link rel="stylesheet" href="css/site.css">
 
     <!-- Highlight.js theme (initial, can be changed via selector) -->
     <link id="hljs-theme" rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -55,7 +55,7 @@
             </select>
         </div>
 
-        <hr />
+        <hr>
 
         <!-- Problem 1 -->
         <section class="problem">
@@ -125,7 +125,7 @@ def postorder(root: Optional[TreeNode]) -&gt; List[int]:
         return []
     return postorder(root.left) + postorder(root.right) + [root.val]</code></pre>
                     Each node is visited exactly once in each traversal.
-                    Time complexity: <strong>O(n)</strong> per traversal.<br />
+                    Time complexity: <strong>O(n)</strong> per traversal.<br>
                     Extra space:
                     <ul>
                         <li>Output list stores <code>n</code> values → <strong>O(n)</strong>.</li>
@@ -135,7 +135,7 @@ def postorder(root: Optional[TreeNode]) -&gt; List[int]:
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 2 -->
         <section class="problem">
@@ -203,14 +203,14 @@ Info check(TreeNode* root) {
 bool isBalanced(TreeNode* root) {
     return check(root).balanced;
 }</code></pre>
-                    Each node is processed once, combining information from children.<br />
-                    Time: <strong>O(n)</strong> for <code>n</code> nodes.<br />
+                    Each node is processed once, combining information from children.<br>
+                    Time: <strong>O(n)</strong> for <code>n</code> nodes.<br>
                     Extra space: recursion stack up to tree height <code>h</code> → <strong>O(h)</strong>.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 3 -->
         <section class="problem">
@@ -258,14 +258,14 @@ boolean helper(TreeNode node, Integer low, Integer high) {
     return helper(node.left, low, node.val)
         &amp;&amp; helper(node.right, node.val, high);
 }</code></pre>
-                    Each node is visited once and constant work is done per node.<br />
-                    Time complexity: <strong>O(n)</strong>.<br />
+                    Each node is visited once and constant work is done per node.<br>
+                    Time complexity: <strong>O(n)</strong>.<br>
                     Extra space: recursion stack up to height <code>h</code> → <strong>O(h)</strong>.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 4 -->
         <section class="problem">
@@ -316,14 +316,14 @@ bool HasPathSum(TreeNode? root, int targetSum) {
     return HasPathSum(root.Left, remaining) ||
            HasPathSum(root.Right, remaining);
 }</code></pre>
-                    Each node is visited at most once.<br />
-                    Time complexity: <strong>O(n)</strong>.<br />
+                    Each node is visited at most once.<br>
+                    Time complexity: <strong>O(n)</strong>.<br>
                     Extra space: recursion depth up to height <code>h</code> → <strong>O(h)</strong>.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 5 -->
         <section class="problem">
@@ -376,14 +376,14 @@ function lowestCommonAncestor(root, p, q) {
     }
     return null;
 }</code></pre>
-                    At each step, we move one level down; in a tree with height <code>h</code>, we take at most <code>h</code> steps.<br />
-                    Time complexity: <strong>O(h)</strong>, <strong>O(log n)</strong> on average for a balanced BST.<br />
+                    At each step, we move one level down; in a tree with height <code>h</code>, we take at most <code>h</code> steps.<br>
+                    Time complexity: <strong>O(h)</strong>, <strong>O(log n)</strong> on average for a balanced BST.<br>
                     Extra space: iterative version uses only a few pointers → <strong>O(1)</strong>.
                 </div>
             </details>
         </section>
 
-        <hr />
+        <hr>
 
         <!-- Problem 6 -->
         <section class="problem">
@@ -439,8 +439,8 @@ def deserialize(data):
 
     return dfs()</code></pre>
                     In both serialization and deserialization, each node is visited exactly once
-                    (plus a constant amount of work).<br />
-                    Time complexity: <strong>O(n)</strong> for <code>n</code> nodes in both operations.<br />
+                    (plus a constant amount of work).<br>
+                    Time complexity: <strong>O(n)</strong> for <code>n</code> nodes in both operations.<br>
                     Extra space:
                     <ul>
                         <li>String size is O(n).</li>
