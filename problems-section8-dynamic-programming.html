@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Problems - Section 8 Dynamic Programming</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css" />
+
+    <!-- Highlight.js theme -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts -->
+    <script src="js/site.js"></script>
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="section10-practice.html">← Back to Practice Hub</a>
+            &nbsp;&nbsp;
+            <a href="section8-dynamic-programming.html">View Section 8 Lesson →</a>
+        </div>
+
+        <div class="kicker">Section 8 - Problem Set</div>
+        <h1>Dynamic Programming</h1>
+        <p class="tagline">
+            These problems develop core DP skills: identifying subproblems, defining a recurrence,
+            and implementing bottom-up or top-down solutions.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr />
+
+        <!-- Problem 1 -->
+        <section class="problem">
+            <h2>Problem 1 - Climbing Stairs</h2>
+            <p>
+                You are climbing a staircase. It takes <code>n</code> steps to reach the top.
+                Each time you can climb either 1 or 2 steps. In how many distinct ways can you climb to the top?
+            </p>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Let <code>dp[i]</code> be the number of ways to reach step <code>i</code>.  
+                    Think about how you can arrive at step <code>i</code> from <code>i-1</code> or <code>i-2</code>.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Iterative solution (C#):
+<pre><code class="language-csharp">int ClimbStairs(int n) {
+    if (n &lt;= 2) return n;
+    int prev2 = 1; // ways to reach step 1-1 = 0
+    int prev1 = 2; // ways for step 2
+    for (int i = 3; i &lt;= n; i++) {
+        int cur = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = cur;
+    }
+    return prev1;
+}</code></pre>
+                    Recurrence: <code>dp[i] = dp[i-1] + dp[i-2]</code>.  
+                    Time: <strong>O(n)</strong>, space reduced to <strong>O(1)</strong> with rolling variables.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 2 -->
+        <section class="problem">
+            <h2>Problem 2 - House Robber</h2>
+            <p>
+                You are given an integer array <code>nums</code> where each element represents the amount of money
+                in a house on a street. Adjacent houses cannot both be robbed. Return the maximum amount of money
+                you can rob tonight.
+            </p>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    For house <code>i</code>, you either:
+                    <ul>
+                        <li>Rob it → you must skip <code>i-1</code>, add <code>nums[i]</code> to best up to <code>i-2</code>.</li>
+                        <li>Skip it → best up to <code>i-1</code>.</li>
+                    </ul>
+                    This leads to a simple max recurrence.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Bottom-up (Python):
+<pre><code class="language-python">def rob(nums):
+    n = len(nums)
+    if n == 0:
+        return 0
+    if n == 1:
+        return nums[0]
+    prev2 = nums[0]          # best up to house 0
+    prev1 = max(nums[0], nums[1])  # best up to house 1
+    for i in range(2, n):
+        cur = max(prev1, prev2 + nums[i])
+        prev2 = prev1
+        prev1 = cur
+    return prev1</code></pre>
+                    Time: <strong>O(n)</strong>.<br />
+                    Extra space: <strong>O(1)</strong> with rolling variables.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 3 -->
+        <section class="problem">
+            <h2>Problem 3 - Coin Change (Minimum Coins)</h2>
+            <p>
+                You are given an integer array <code>coins</code> representing coin denominations and an integer
+                <code>amount</code>. Return the fewest number of coins needed to make up that amount, or
+                <code>-1</code> if it is not possible.
+            </p>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Let <code>dp[x]</code> be the minimum number of coins needed to make amount <code>x</code>.
+                    For each coin <code>c</code>, you can transition from <code>x - c</code> to <code>x</code>.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Bottom-up DP (Java):
+<pre><code class="language-java">int coinChange(int[] coins, int amount) {
+    int INF = amount + 1;
+    int[] dp = new int[amount + 1];
+    java.util.Arrays.fill(dp, INF);
+    dp[0] = 0;
+
+    for (int c : coins) {
+        for (int x = c; x &lt;= amount; x++) {
+            dp[x] = Math.min(dp[x], dp[x - c] + 1);
+        }
+    }
+    return dp[amount] == INF ? -1 : dp[amount];
+}</code></pre>
+                    Time: we iterate over each coin and each amount up to <code>amount</code> → <strong>O(n * amount)</strong>,
+                    where <code>n</code> is number of coins.<br />
+                    Extra space: <strong>O(amount)</strong>.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 4 -->
+        <section class="problem">
+            <h2>Problem 4 - Unique Paths in a Grid</h2>
+            <p>
+                You are in the top-left corner of an <code>m * n</code> grid and want to get to the bottom-right.
+                You can only move right or down. How many unique paths are there?
+            </p>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Let <code>dp[r][c]</code> be the number of ways to reach cell <code>(r, c)</code>.
+                    You can only come from above or from the left.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    2D DP (C++):
+<pre><code class="language-cpp">#include &lt;vector&gt;
+using namespace std;
+
+int uniquePaths(int m, int n) {
+    vector&lt;vector&lt;int&gt;&gt; dp(m, vector&lt;int&gt;(n, 1));
+    for (int r = 1; r &lt; m; r++) {
+        for (int c = 1; c &lt; n; c++) {
+            dp[r][c] = dp[r - 1][c] + dp[r][c - 1];
+        }
+    }
+    return dp[m - 1][n - 1];
+}</code></pre>
+                    Time: visit each cell once → <strong>O(m n)</strong>.<br />
+                    Space: <strong>O(m n)</strong> (can be optimized to O(n) with 1D DP).
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 5 -->
+        <section class="problem">
+            <h2>Problem 5 - Longest Common Subsequence (LCS)</h2>
+            <p>
+                Given two strings <code>text1</code> and <code>text2</code>, return the length of their
+                longest common subsequence.
+            </p>
+
+            <p>Example:</p>
+            <ul>
+                <li><code>"abcde"</code> and <code>"ace"</code> → LCS length is <code>3</code> (<code>"ace"</code>).</li>
+                <li><code>"abc"</code> and <code>"def"</code> → <code>0</code>.</li>
+            </ul>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Let <code>dp[i][j]</code> be the LCS length of <code>text1[0..i-1]</code> and
+                    <code>text2[0..j-1]</code>.
+                    <ul>
+                        <li>If characters match, add 1 to <code>dp[i-1][j-1]</code>.</li>
+                        <li>Otherwise, take max of skipping a char from one of the strings.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Bottom-up (JavaScript):
+<pre><code class="language-javascript">function longestCommonSubsequence(text1, text2) {
+    const m = text1.length;
+    const n = text2.length;
+    const dp = Array.from({ length: m + 1 },
+        () =&gt; new Array(n + 1).fill(0));
+
+    for (let i = 1; i &lt;= m; i++) {
+        for (let j = 1; j &lt;= n; j++) {
+            if (text1[i - 1] === text2[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            } else {
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+    return dp[m][n];
+}</code></pre>
+                    Time: filling an <code>(m + 1) * (n + 1)</code> table → <strong>O(m n)</strong>.<br />
+                    Space: <strong>O(m n)</strong> (can be reduced to O(min(m, n))).
+                </div>
+            </details>
+        </section>
+
+        <div class="next-section">
+            <a href="section8-dynamic-programming.html">← Back to Section 8 Lesson</a>
+            &nbsp;&nbsp;
+            <a href="solutions-section8-dynamic-programming.html">
+                View detailed Solutions
+            </a>
+            &nbsp;&nbsp;
+            <a href="section10-practice.html">Back to Practice Hub →</a>
+        </div>
+    </main>
+</body>
+
+</html>

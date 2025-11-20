@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Problems - Section 6 Heaps &amp; Priority Queues</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css" />
+
+    <!-- Highlight.js theme -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts -->
+    <script src="js/site.js"></script>
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="section10-practice.html">← Back to Practice Hub</a>
+            &nbsp;&nbsp;
+            <a href="section6-heaps-priority-queues.html">View Section 6 Lesson →</a>
+        </div>
+
+        <div class="kicker">Section 6 - Problem Set</div>
+        <h1>Heaps &amp; Priority Queues</h1>
+
+        <p class="tagline">
+            These problems strengthen your understanding of heap operations, priority queues,
+            heap construction, k-selection problems, and real-world usage patterns.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr />
+
+        <!-- Problem 1 -->
+        <section class="problem">
+            <h2>Problem 1 — Implement a Min-Heap (Array-Based)</h2>
+            <p>
+                Implement a classic <strong>min heap</strong> with the operations:
+            </p>
+            <ul>
+                <li><code>insert(x)</code></li>
+                <li><code>peek()</code> → return smallest element</li>
+                <li><code>pop()</code> → remove smallest</li>
+            </ul>
+
+            <p>
+                Assume you are using a zero-based array where:
+                <code>parent = (i - 1) / 2</code>, <code>left = 2i + 1</code>, <code>right = 2i + 2</code>.
+            </p>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    <strong>Insert</strong> uses "bubble up" (shift up).  
+                    <strong>Pop</strong> swaps the last element with the root and "heapifies down".
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Example (JavaScript):
+<pre><code class="language-javascript">class MinHeap {
+    constructor() { this.data = []; }
+
+    insert(x) {
+        this.data.push(x);
+        this._bubbleUp(this.data.length - 1);
+    }
+
+    peek() {
+        return this.data.length ? this.data[0] : null;
+    }
+
+    pop() {
+        if (this.data.length === 0) return null;
+        if (this.data.length === 1) return this.data.pop();
+        const root = this.data[0];
+        this.data[0] = this.data.pop();
+        this._heapify(0);
+        return root;
+    }
+
+    _bubbleUp(i) {
+        while (i &gt; 0) {
+            let parent = Math.floor((i - 1) / 2);
+            if (this.data[i] &gt;= this.data[parent]) break;
+            [this.data[i], this.data[parent]] = [this.data[parent], this.data[i]];
+            i = parent;
+        }
+    }
+
+    _heapify(i) {
+        const n = this.data.length;
+        while (true) {
+            let smallest = i;
+            let left = 2 * i + 1;
+            let right = 2 * i + 2;
+
+            if (left &lt; n &amp;&amp; this.data[left] &lt; this.data[smallest]) smallest = left;
+            if (right &lt; n &amp;&amp; this.data[right] &lt; this.data[smallest]) smallest = right;
+            if (smallest === i) break;
+
+            [this.data[i], this.data[smallest]] = [this.data[smallest], this.data[i]];
+            i = smallest;
+        }
+    }
+}</code></pre>
+                    <strong>Time Complexity</strong>:  
+                    • Insert → O(log n)  
+                    • Pop → O(log n)  
+                    • Peek → O(1)  
+                    <br />
+                    <strong>Space</strong>: O(n)
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 2 -->
+        <section class="problem">
+            <h2>Problem 2 — Build a Heap in O(n)</h2>
+            <p>
+                Given an array of <code>n</code> elements, convert it into a valid min-heap <strong>in O(n)</strong> time.
+                Write the algorithm and explain why it is linear.
+            </p>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Start heapifying from the last non-leaf node:  
+                    <code>i = floor(n/2 - 1)</code> down to <code>0</code>.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+<pre><code class="language-python">def buildHeap(arr):
+    n = len(arr)
+    # last non-leaf index
+    start = (n // 2) - 1
+    for i in range(start, -1, -1):
+        heapify(arr, n, i)
+
+def heapify(arr, n, i):
+    smallest = i
+    left = 2*i + 1
+    right = 2*i + 2
+
+    if left &lt; n and arr[left] &lt; arr[smallest]:
+        smallest = left
+    if right &lt; n and arr[right] &lt; arr[smallest]:
+        smallest = right
+
+    if smallest != i:
+        arr[i], arr[smallest] = arr[smallest], arr[i]
+        heapify(arr, n, smallest)</code></pre>
+                    <strong>Reason for O(n):</strong>  
+                    Lower levels contain many nodes but require very little heapifying work.  
+                    Upper levels contain few nodes but require deeper heapify operations.  
+                    These effects cancel, giving a total cost of <strong>≈ 2n</strong> operations.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 3 -->
+        <section class="problem">
+            <h2>Problem 3 — Find the K Smallest Elements</h2>
+            <p>
+                Given an array of <code>n</code> elements and an integer <code>k</code>, return the
+                <strong>k smallest elements</strong> in any order.
+            </p>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    One approach: Use a <strong>max-heap of size k</strong>.  
+                    Another: Build full min-heap and pop k times → O(n + k log n).
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Best general approach → <strong>max heap of size k</strong>:
+<pre><code class="language-java">PriorityQueue&lt;Integer&gt; pq =
+    new PriorityQueue&lt;&gt;((a, b) -&gt; b - a); // max-heap
+
+for (int x : arr) {
+    if (pq.size() &lt; k) pq.add(x);
+    else if (x &lt; pq.peek()) {
+        pq.poll();
+        pq.add(x);
+    }
+}
+
+return new ArrayList&lt;&gt;(pq);</code></pre>
+                    <strong>Time:</strong> O(n log k)  
+                    <strong>Space:</strong> O(k)
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 4 -->
+        <section class="problem">
+            <h2>Problem 4 — Merge K Sorted Lists</h2>
+            <p>
+                You are given <code>k</code> sorted linked lists. Merge them into a single sorted list using a heap.
+            </p>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Push the head of each list into a min-heap, then repeatedly extract the smallest.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+<pre><code class="language-csharp">ListNode MergeKLists(ListNode[] lists) {
+    var pq = new PriorityQueue&lt;ListNode, int&gt;();
+    foreach (var node in lists)
+        if (node != null) pq.Enqueue(node, node.val);
+
+    ListNode dummy = new ListNode(0);
+    var cur = dummy;
+
+    while (pq.Count &gt; 0) {
+        var node = pq.Dequeue();
+        cur.next = node;
+        cur = cur.next;
+        if (node.next != null)
+            pq.Enqueue(node.next, node.next.val);
+    }
+
+    return dummy.next;
+}</code></pre>
+                    <strong>Time Complexity:</strong> O(N log k), N = total nodes  
+                    <strong>Space:</strong> O(k)
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 5 -->
+        <section class="problem">
+            <h2>Problem 5 — Kth Largest Element in a Stream</h2>
+            <p>
+                You receive numbers one by one. Maintain a structure that always returns the
+                <strong>kth largest element</strong> seen so far.
+            </p>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Use a <strong>min-heap of size k</strong>.  
+                    Insert new numbers; if heap grows beyond k, remove min.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+<pre><code class="language-python">import heapq
+
+class KthLargest:
+    def __init__(self, k, nums):
+        self.k = k
+        self.h = []
+        for n in nums:
+            self.add(n)
+
+    def add(self, val):
+        if len(self.h) &lt; self.k:
+            heapq.heappush(self.h, val)
+        elif val &gt; self.h[0]:
+            heapq.heapreplace(self.h, val)
+        return self.h[0]</code></pre>
+                    <strong>Time per add:</strong> O(log k)  
+                    <strong>Space:</strong> O(k)
+                </div>
+            </details>
+        </section>
+
+        <div class="next-section">
+            <a href="section6-heaps-priority-queues.html">← Back to Section 6 Lesson</a>
+            &nbsp;&nbsp;
+            <a href="solutions-section6-heaps-priority-queues.html">
+                View detailed Solutions
+            </a>
+            &nbsp;&nbsp;
+            <a href="section10-practice.html">Back to Practice Hub →</a>
+        </div>
+
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Solutions - Section 7 Hash Tables</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css" />
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts -->
+    <script src="js/site.js"></script>
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="section10-practice.html">← Back to Practice Hub</a>
+            &nbsp;&nbsp;
+            <a href="problems-section7-hash-tables.html">← Back to Section 7 Problems</a>
+            &nbsp;&nbsp;
+            <a href="section7-hash-tables.html">View Section 7 Lesson →</a>
+        </div>
+
+        <div class="kicker">Section 7 - Solutions</div>
+        <h1>Hash Tables - Solutions</h1>
+        <p class="tagline">
+            Detailed solutions for the Section 7 hash table problems: first unique character, grouping anagrams,
+            longest consecutive sequence, subarray sums, and two-sum variants. Each core solution is shown in
+            C, C++, Java, JavaScript, C#, and Python.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 1 - First Non-Repeating Character                 -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 1 - First Non-Repeating Character in a String</h2>
+            <p>
+                Strategy: make one pass to count frequencies of each character, then a second pass to find the
+                first index whose frequency is exactly 1.
+            </p>
+
+            <div class="code-example" data-example="s7p1">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 1</span>
+                        <span class="meta">First unique character index</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdio.h&gt;
+
+int firstUniqChar(const char *s) {
+    int freq[256] = {0};
+    const unsigned char *p;
+
+    // First pass: count frequencies
+    for (p = (const unsigned char *)s; *p != '\0'; ++p) {
+        freq[*p]++;
+    }
+
+    // Second pass: find first index with freq == 1
+    int idx = 0;
+    for (p = (const unsigned char *)s; *p != '\0'; ++p, ++idx) {
+        if (freq[*p] == 1) {
+            return idx;
+        }
+    }
+    return -1;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;string&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int firstUniqChar(const string &amp;s) {
+    vector&lt;int&gt; freq(256, 0);
+    for (unsigned char ch : s) {
+        freq[ch]++;
+    }
+    for (int i = 0; i &lt; (int)s.size(); i++) {
+        if (freq[(unsigned char)s[i]] == 1) {
+            return i;
+        }
+    }
+    return -1;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+int firstUniqChar(String s) {
+    int[] freq = new int[256];
+    for (int i = 0; i &lt; s.length(); i++) {
+        freq[s.charAt(i)]++;
+    }
+    for (int i = 0; i &lt; s.length(); i++) {
+        if (freq[s.charAt(i)] == 1) {
+            return i;
+        }
+    }
+    return -1;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function firstUniqChar(s) {
+    const freq = {};
+    for (const ch of s) {
+        freq[ch] = (freq[ch] || 0) + 1;
+    }
+    for (let i = 0; i &lt; s.length; i++) {
+        if (freq[s[i]] === 1) {
+            return i;
+        }
+    }
+    return -1;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+int FirstUniqChar(string s) {
+    var freq = new Dictionary&lt;char, int&gt;();
+    foreach (char ch in s) {
+        freq[ch] = freq.TryGetValue(ch, out int c) ? c + 1 : 1;
+    }
+    for (int i = 0; i &lt; s.Length; i++) {
+        if (freq[s[i]] == 1) {
+            return i;
+        }
+    }
+    return -1;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import Dict
+
+def first_uniq_char(s: str) -&gt; int:
+    freq: Dict[str, int] = {}
+    for ch in s:
+        freq[ch] = freq.get(ch, 0) + 1
+    for i, ch in enumerate(s):
+        if freq[ch] == 1:
+            return i
+    return -1</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: two passes over length n → <strong>O(n)</strong>.  
+                    Space: at most one entry per distinct character → <strong>O(min(n, alphabet))</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 2 - Group Anagrams                                -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 2 - Group Anagrams</h2>
+            <p>
+                Key idea: two strings are anagrams if they share the same <strong>signature</strong>.
+                The simplest signature is the sorted string. Use that as a hash key to group words.
+            </p>
+
+            <div class="code-example" data-example="s7p2">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 2</span>
+                        <span class="meta">Group anagrams by sorted-string key</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C (conceptual; assumes helper map from char* key to list of strings) -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C (conceptual sketch)
+//
+// In C, you would typically implement this by:
+// 1. Sorting a copy of each string as the key.
+// 2. Using a hash table mapping key string -&gt; dynamic array of original strings.
+// The details depend on your hash table implementation, so we show high-level steps here.
+
+#include &lt;string.h&gt;
+#include &lt;stdlib.h&gt;
+
+// Pseudocode-level only:
+void groupAnagrams(char **strs, int strsSize /*, HashMap *map */) {
+    for (int i = 0; i &lt; strsSize; i++) {
+        char *s = strs[i];
+        int len = (int)strlen(s);
+
+        char *key = (char *)malloc(len + 1);
+        strcpy(key, s);
+        qsort(key, len, sizeof(char), (int (*)(const void*, const void*))strcmp); // or custom char cmp
+
+        // hash_map_add(map, key, s);
+        // where map groups values by identical key strings
+
+        // free key once map stores its own copy
+    }
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;algorithm&gt;
+#include &lt;string&gt;
+#include &lt;unordered_map&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+vector&lt;vector&lt;string&gt; &gt; groupAnagrams(const vector&lt;string&gt; &amp;strs) {
+    unordered_map&lt;string, vector&lt;string&gt; &gt; mp;
+    for (const string &amp;s : strs) {
+        string key = s;
+        sort(key.begin(), key.end());
+        mp[key].push_back(s);
+    }
+    vector&lt;vector&lt;string&gt; &gt; result;
+    result.reserve(mp.size());
+    for (auto &amp;kv : mp) {
+        result.push_back(move(kv.second));
+    }
+    return result;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.*;
+
+List&lt;List&lt;String&gt; &gt; groupAnagrams(String[] strs) {
+    Map&lt;String, List&lt;String&gt;&gt; map = new HashMap&lt;&gt;();
+    for (String s : strs) {
+        char[] chars = s.toCharArray();
+        Arrays.sort(chars);
+        String key = new String(chars);
+        map.computeIfAbsent(key, k -&gt; new ArrayList&lt;&gt;()).add(s);
+    }
+    return new ArrayList&lt;&gt;(map.values());
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function groupAnagrams(strs) {
+    const map = new Map();
+    for (const s of strs) {
+        const key = s.split("").sort().join("");
+        if (!map.has(key)) {
+            map.set(key, []);
+        }
+        map.get(key).push(s);
+    }
+    return Array.from(map.values());
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+IList&lt;IList&lt;string&gt; &gt; GroupAnagrams(string[] strs) {
+    var map = new Dictionary&lt;string, List&lt;string&gt;&gt;();
+    foreach (var s in strs) {
+        var chars = s.ToCharArray();
+        Array.Sort(chars);
+        var key = new string(chars);
+        if (!map.TryGetValue(key, out var list)) {
+            list = new List&lt;string&gt;();
+            map[key] = list;
+        }
+        list.Add(s);
+    }
+    return map.Values.Cast&lt;IList&lt;string&gt; &gt;().ToList();
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from collections import defaultdict
+from typing import List
+
+def group_anagrams(strs: List[str]) -&gt; List[List[str]]:
+    groups: defaultdict[str, List[str]] = defaultdict(list)
+    for s in strs:
+        key = "".join(sorted(s))
+        groups[key].append(s)
+    return list(groups.values())</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Let n be the number of strings and m the maximum length.  
+                    Sorting each string costs O(m log m), so time is <strong>O(n m log m)</strong>.  
+                    Extra space: <strong>O(n m)</strong> to store keys and groups.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 3 - Longest Consecutive Sequence                  -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 3 - Longest Consecutive Sequence</h2>
+            <p>
+                Load all numbers into a set. For each number x, only attempt to grow a sequence starting at x
+                if x - 1 is not in the set. Then walk forward x, x+1, x+2, ... to count the chain length.
+            </p>
+
+            <div class="code-example" data-example="s7p3">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 3</span>
+                        <span class="meta">O(n) expected using a hash set</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C (conceptual; requires hash-set implementation) -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C (conceptual sketch)
+//
+// Assume you have a HashSet of ints with operations:
+//   set_add(&amp;set, x);
+//   set_contains(&amp;set, x);
+//   set_iterate(&amp;set, callback).
+// The high-level algorithm mirrors the other languages.
+
+int longestConsecutive(int *nums, int numsSize /*, HashSet *set */) {
+    // 1. Insert all nums[i] into set.
+    // 2. For each x in set:
+    //      if (!set_contains(set, x - 1)):
+    //          cur = x; length = 1;
+    //          while (set_contains(set, cur + 1)):
+    //              cur++; length++;
+    //          update best.
+    // 3. Return best.
+    return 0; // Placeholder: actual code depends on your set implementation.
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;unordered_set&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int longestConsecutive(const vector&lt;int&gt; &amp;nums) {
+    unordered_set&lt;int&gt; set(nums.begin(), nums.end());
+    int best = 0;
+
+    for (int x : set) {
+        if (!set.count(x - 1)) { // start of a sequence
+            int cur = x;
+            int length = 1;
+            while (set.count(cur + 1)) {
+                cur++;
+                length++;
+            }
+            if (length &gt; best) best = length;
+        }
+    }
+    return best;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.*;
+
+int longestConsecutive(int[] nums) {
+    Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+    for (int x : nums) set.add(x);
+
+    int best = 0;
+    for (int x : set) {
+        if (!set.contains(x - 1)) { // start of sequence
+            int cur = x;
+            int length = 1;
+            while (set.contains(cur + 1)) {
+                cur++;
+                length++;
+            }
+            best = Math.max(best, length);
+        }
+    }
+    return best;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function longestConsecutive(nums) {
+    const set = new Set(nums);
+    let best = 0;
+
+    for (const x of set) {
+        if (!set.has(x - 1)) {
+            let cur = x;
+            let length = 1;
+            while (set.has(cur + 1)) {
+                cur++;
+                length++;
+            }
+            if (length &gt; best) best = length;
+        }
+    }
+    return best;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+int LongestConsecutive(int[] nums) {
+    var set = new HashSet&lt;int&gt;(nums);
+    int best = 0;
+
+    foreach (var x in set) {
+        if (!set.Contains(x - 1)) {
+            int cur = x;
+            int length = 1;
+            while (set.Contains(cur + 1)) {
+                cur++;
+                length++;
+            }
+            if (length &gt; best) best = length;
+        }
+    }
+    return best;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import List
+
+def longest_consecutive(nums: List[int]) -&gt; int:
+    s = set(nums)
+    best = 0
+    for x in s:
+        if x - 1 not in s:
+            cur = x
+            length = 1
+            while cur + 1 in s:
+                cur += 1
+                length += 1
+            best = max(best, length)
+    return best</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Each element starts a sequence at most once and each value is advanced through once overall.  
+                    Time: <strong>O(n)</strong> expected.  
+                    Space: <strong>O(n)</strong> for the set.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 4 - Subarray Sum Equals K                         -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 4 - Subarray Sum Equals K</h2>
+            <p>
+                Use a running prefix sum and a hash map from prefix value to count of occurrences so far.
+                For each new prefix, any earlier prefix equal to <code>prefix - k</code> forms a subarray
+                summing to <code>k</code>.
+            </p>
+
+            <div class="code-example" data-example="s7p4">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 4</span>
+                        <span class="meta">Prefix sums + frequency map</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C (conceptual; needs hash map of int->int) -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C (conceptual sketch)
+//
+// Requires a hash map from int prefix sum -&gt; int count.
+// Pseudocode:
+//
+// int subarraySum(int *nums, int numsSize, int k) {
+//     HashMap freq;
+//     hash_init(&amp;freq);
+//     hash_put(&amp;freq, 0, 1);
+//     int prefix = 0;
+//     int count = 0;
+//     for (int i = 0; i &lt; numsSize; i++) {
+//         prefix += nums[i];
+//         int need = prefix - k;
+//         count += hash_get_or_default(&amp;freq, need, 0);
+//         hash_put(&amp;freq, prefix, hash_get_or_default(&amp;freq, prefix, 0) + 1);
+//     }
+//     return count;
+// }</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;unordered_map&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int subarraySum(const vector&lt;int&gt; &amp;nums, int k) {
+    unordered_map&lt;int, int&gt; freq;
+    freq[0] = 1;
+    int prefix = 0;
+    int count = 0;
+    for (int x : nums) {
+        prefix += x;
+        int need = prefix - k;
+        if (freq.count(need)) {
+            count += freq[need];
+        }
+        freq[prefix]++;
+    }
+    return count;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.*;
+
+int subarraySum(int[] nums, int k) {
+    Map&lt;Integer, Integer&gt; freq = new HashMap&lt;&gt;();
+    freq.put(0, 1);
+    int prefix = 0;
+    int count = 0;
+
+    for (int x : nums) {
+        prefix += x;
+        int need = prefix - k;
+        count += freq.getOrDefault(need, 0);
+        freq.put(prefix, freq.getOrDefault(prefix, 0) + 1);
+    }
+    return count;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function subarraySum(nums, k) {
+    const freq = new Map();
+    freq.set(0, 1);
+    let prefix = 0;
+    let count = 0;
+
+    for (const x of nums) {
+        prefix += x;
+        const need = prefix - k;
+        if (freq.has(need)) {
+            count += freq.get(need);
+        }
+        freq.set(prefix, (freq.get(prefix) || 0) + 1);
+    }
+    return count;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+int SubarraySum(int[] nums, int k) {
+    var freq = new Dictionary&lt;int, int&gt;();
+    freq[0] = 1;
+    int prefix = 0;
+    int count = 0;
+
+    foreach (var x in nums) {
+        prefix += x;
+        int need = prefix - k;
+        if (freq.TryGetValue(need, out int c)) {
+            count += c;
+        }
+        freq[prefix] = freq.TryGetValue(prefix, out int cur) ? cur + 1 : 1;
+    }
+    return count;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import List, Dict
+
+def subarray_sum(nums: List[int], k: int) -&gt; int:
+    count = 0
+    prefix = 0
+    freq: Dict[int, int] = {0: 1}
+    for x in nums:
+        prefix += x
+        need = prefix - k
+        count += freq.get(need, 0)
+        freq[prefix] = freq.get(prefix, 0) + 1
+    return count</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Each element is processed once with O(1) expected hash operations.  
+                    Time: <strong>O(n)</strong>.  
+                    Extra space: up to <strong>O(n)</strong> for distinct prefix sums.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 5 - Two-Sum Variants                              -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 5 - Two-Sum Variants: Indices and Uniqueness</h2>
+            <p>
+                We solve both parts:
+            </p>
+            <ol>
+                <li>Return any valid pair of indices <code>(i, j)</code> such that <code>nums[i] + nums[j] == target</code>.</li>
+                <li>Return the number of <strong>unique value pairs</strong> <code>(a, b)</code> such that <code>a + b == target</code>.</li>
+            </ol>
+
+            <!-- ----------------- Part 1: indices -------------------- -->
+            <h3>Part 1 - Return Indices (Any One Pair)</h3>
+            <p>
+                Use a map from value to index. For each element, check if <code>target - nums[i]</code> is
+                already in the map.
+            </p>
+
+            <div class="code-example" data-example="s7p5a">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 5A</span>
+                        <span class="meta">Two-sum indices using a hash map</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C (conceptual; needs map from value->index) -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C (conceptual sketch)
+//
+// For real C code, you would need a hash map from int -&gt; int (value -&gt; index).
+// The algorithm is the same as other languages:
+//
+// for i in [0..n):
+//   need = target - nums[i]
+//   if need in map: return (map[need], i)
+//   map[nums[i]] = i
+//
+// If no pair exists, return something like (-1, -1).</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;unordered_map&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+vector&lt;int&gt; twoSumIndices(const vector&lt;int&gt; &amp;nums, int target) {
+    unordered_map&lt;int, int&gt; mp; // value -&gt; index
+    for (int i = 0; i &lt; (int)nums.size(); i++) {
+        int need = target - nums[i];
+        auto it = mp.find(need);
+        if (it != mp.end()) {
+            return {it-&gt;second, i};
+        }
+        mp[nums[i]] = i;
+    }
+    return {}; // no solution
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.*;
+
+int[] twoSumIndices(int[] nums, int target) {
+    Map&lt;Integer, Integer&gt; mp = new HashMap&lt;&gt;(); // value -&gt; index
+    for (int i = 0; i &lt; nums.length; i++) {
+        int need = target - nums[i];
+        if (mp.containsKey(need)) {
+            return new int[]{mp.get(need), i};
+        }
+        mp.put(nums[i], i);
+    }
+    return new int[0]; // no solution
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function twoSumIndices(nums, target) {
+    const map = new Map(); // value -&gt; index
+    for (let i = 0; i &lt; nums.length; i++) {
+        const need = target - nums[i];
+        if (map.has(need)) {
+            return [map.get(need), i];
+        }
+        map.set(nums[i], i);
+    }
+    return []; // no solution
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+int[] TwoSumIndices(int[] nums, int target) {
+    var map = new Dictionary&lt;int, int&gt;(); // value -&gt; index
+    for (int i = 0; i &lt; nums.Length; i++) {
+        int need = target - nums[i];
+        if (map.TryGetValue(need, out int j)) {
+            return new[] { j, i };
+        }
+        map[nums[i]] = i;
+    }
+    return Array.Empty&lt;int&gt;();
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import List
+
+def two_sum_indices(nums: List[int], target: int) -&gt; List[int]:
+    index_of = {}
+    for i, x in enumerate(nums):
+        need = target - x
+        if need in index_of:
+            return [index_of[need], i]
+        index_of[x] = i
+    return []</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Each element is processed once with O(1) expected hash map operations.  
+                    Time: <strong>O(n)</strong>.  
+                    Extra space: <strong>O(n)</strong> in the worst case for the map.
+                </div>
+            </div>
+
+            <!-- ----------------- Part 2: unique pairs ---------------- -->
+            <h3>Part 2 - Count Unique Value Pairs</h3>
+            <p>
+                Use a set <code>seen</code> for values we have visited, and another set (or encoding) to
+                track unique pairs. Always store pairs as <code>(min, max)</code> to avoid double-counting.
+            </p>
+
+            <div class="code-example" data-example="s7p5b">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 5B</span>
+                        <span class="meta">Count unique value pairs summing to target</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C (conceptual) -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C (conceptual sketch)
+//
+// Maintain:
+//   HashSet seen;
+//   HashSet pairs; // e.g. store pair as (min, max) encoded as a struct or 64-bit key.
+//
+// For each x in nums:
+//   y = target - x
+//   if y in seen:
+//       a = min(x, y); b = max(x, y);
+//       add pair (a, b) to pairs
+//   add x to seen
+//
+// Answer is size(pairs).</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;unordered_set&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int countUniquePairs(const vector&lt;int&gt; &amp;nums, int target) {
+    unordered_set&lt;int&gt; seen;
+    unordered_set&lt;string&gt; pairs;
+
+    for (int x : nums) {
+        int y = target - x;
+        if (seen.count(y)) {
+            int a = min(x, y);
+            int b = max(x, y);
+            string key = to_string(a) + "," + to_string(b);
+            pairs.insert(key);
+        }
+        seen.insert(x);
+    }
+    return (int)pairs.size();
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.*;
+
+int countUniquePairs(int[] nums, int target) {
+    Set&lt;Integer&gt; seen = new HashSet&lt;&gt;();
+    Set&lt;String&gt; pairs = new HashSet&lt;&gt;();
+
+    for (int x : nums) {
+        int y = target - x;
+        if (seen.contains(y)) {
+            int a = Math.min(x, y);
+            int b = Math.max(x, y);
+            String key = a + "," + b;
+            pairs.add(key);
+        }
+        seen.add(x);
+    }
+    return pairs.size();
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function countUniquePairs(nums, target) {
+    const seen = new Set();
+    const pairs = new Set(); // store "a,b" with a &lt;= b
+
+    for (const x of nums) {
+        const y = target - x;
+        if (seen.has(y)) {
+            const a = Math.min(x, y);
+            const b = Math.max(x, y);
+            pairs.add(a + "," + b);
+        }
+        seen.add(x);
+    }
+    return pairs.size;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System;
+using System.Collections.Generic;
+
+int CountUniquePairs(int[] nums, int target) {
+    var seen = new HashSet&lt;int&gt;();
+    var pairs = new HashSet&lt;string&gt;(); // store "a,b" with a &lt;= b
+
+    foreach (var x in nums) {
+        int y = target - x;
+        if (seen.Contains(y)) {
+            int a = Math.Min(x, y);
+            int b = Math.Max(x, y);
+            pairs.Add($"{a},{b}");
+        }
+        seen.Add(x);
+    }
+    return pairs.Count;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import List, Set, Tuple
+
+def count_unique_pairs(nums: List[int], target: int) -&gt; int:
+    seen: Set[int] = set()
+    pairs: Set[Tuple[int, int]] = set()
+
+    for x in nums:
+        y = target - x
+        if y in seen:
+            a = min(x, y)
+            b = max(x, y)
+            pairs.add((a, b))
+        seen.add(x)
+    return len(pairs)</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Both sets grow to at most O(n) size.  
+                    Time: single pass with O(1) expected hash operations → <strong>O(n)</strong>.  
+                    Extra space: <strong>O(n)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <div class="next-section">
+            <a href="problems-section7-hash-tables.html">← Back to Section 7 Problem Set</a>
+            &nbsp;&nbsp;
+            <a href="section10-practice.html">Back to Practice Hub →</a>
+        </div>
+    </main>
+</body>
+
+</html>

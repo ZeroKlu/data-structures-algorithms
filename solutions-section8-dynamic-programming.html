@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Solutions - Section 8 Dynamic Programming</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css" />
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tabs, highlight init, cookies, etc.) -->
+    <script src="js/site.js"></script>
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="section10-practice.html">← Back to Practice Hub</a>
+            &nbsp;&nbsp;
+            <a href="problems-section8-dynamic-programming.html">← Back to Section 8 Problems</a>
+            &nbsp;&nbsp;
+            <a href="section8-dynamic-programming.html">View Section 8 Lesson →</a>
+        </div>
+
+        <div class="kicker">Section 8 - Solutions</div>
+        <h1>Dynamic Programming - Solutions</h1>
+
+        <p class="tagline">
+            Classic DP problems: climbing stairs, house robber, coin change, grid paths, and longest common subsequence.
+            Each solution includes a short explanation plus implementations in C, C++, Java, JavaScript, C#, and Python.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 1 - Climbing Stairs                               -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 1 - Climbing Stairs</h2>
+            <p>
+                Let <code>dp[i]</code> be the number of ways to reach step <code>i</code>. From step <code>i - 1</code> we
+                can take 1 step, and from step <code>i - 2</code> we can take 2 steps, so:
+                <code>dp[i] = dp[i - 1] + dp[i - 2]</code>. This is just the Fibonacci sequence shifted.
+            </p>
+
+            <div class="code-example" data-example="s8p1">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 1</span>
+                        <span class="meta">Bottom-up Fibonacci-style DP</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+int climbStairs(int n) {
+    if (n &lt;= 2) return n;
+    int prev2 = 1; // dp[1]
+    int prev1 = 2; // dp[2]
+    for (int i = 3; i &lt;= n; i++) {
+        int cur = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = cur;
+    }
+    return prev1;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+int climbStairs(int n) {
+    if (n &lt;= 2) return n;
+    int prev2 = 1;
+    int prev1 = 2;
+    for (int i = 3; i &lt;= n; i++) {
+        int cur = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = cur;
+    }
+    return prev1;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+int climbStairs(int n) {
+    if (n &lt;= 2) return n;
+    int prev2 = 1;
+    int prev1 = 2;
+    for (int i = 3; i &lt;= n; i++) {
+        int cur = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = cur;
+    }
+    return prev1;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function climbStairs(n) {
+    if (n &lt;= 2) return n;
+    let prev2 = 1;
+    let prev1 = 2;
+    for (let i = 3; i &lt;= n; i++) {
+        const cur = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = cur;
+    }
+    return prev1;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+int ClimbStairs(int n) {
+    if (n &lt;= 2) return n;
+    int prev2 = 1;
+    int prev1 = 2;
+    for (int i = 3; i &lt;= n; i++) {
+        int cur = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = cur;
+    }
+    return prev1;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+def climb_stairs(n: int) -&gt; int:
+    if n &lt;= 2:
+        return n
+    prev2, prev1 = 1, 2
+    for _ in range(3, n + 1):
+        cur = prev1 + prev2
+        prev2, prev1 = prev1, cur
+    return prev1</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: <strong>O(n)</strong>. Extra space: <strong>O(1)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 2 - House Robber                                  -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 2 - House Robber</h2>
+            <p>
+                Let <code>dp[i]</code> be the maximum amount we can rob from houses
+                <code>[0..i]</code>. For house <code>i</code>, either skip it or rob it:
+                <code>dp[i] = max(dp[i - 1], dp[i - 2] + nums[i])</code>. We only need the last two states.
+            </p>
+
+            <div class="code-example" data-example="s8p2">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 2</span>
+                        <span class="meta">Rob or skip with rolling DP</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+int rob(int *nums, int numsSize) {
+    if (numsSize == 0) return 0;
+    if (numsSize == 1) return nums[0];
+    int prev2 = nums[0];
+    int prev1 = nums[0] &gt; nums[1] ? nums[0] : nums[1];
+    for (int i = 2; i &lt; numsSize; i++) {
+        int take = prev2 + nums[i];
+        int skip = prev1;
+        int cur = take &gt; skip ? take : skip;
+        prev2 = prev1;
+        prev1 = cur;
+    }
+    return prev1;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+using namespace std;
+
+int rob(const vector&lt;int&gt; &amp;nums) {
+    if (nums.empty()) return 0;
+    if (nums.size() == 1) return nums[0];
+    int prev2 = nums[0];
+    int prev1 = max(nums[0], nums[1]);
+    for (size_t i = 2; i &lt; nums.size(); i++) {
+        int take = prev2 + nums[i];
+        int skip = prev1;
+        int cur = max(take, skip);
+        prev2 = prev1;
+        prev1 = cur;
+    }
+    return prev1;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+int rob(int[] nums) {
+    if (nums.length == 0) return 0;
+    if (nums.length == 1) return nums[0];
+    int prev2 = nums[0];
+    int prev1 = Math.max(nums[0], nums[1]);
+    for (int i = 2; i &lt; nums.length; i++) {
+        int take = prev2 + nums[i];
+        int skip = prev1;
+        int cur = Math.max(take, skip);
+        prev2 = prev1;
+        prev1 = cur;
+    }
+    return prev1;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function rob(nums) {
+    if (nums.length === 0) return 0;
+    if (nums.length === 1) return nums[0];
+    let prev2 = nums[0];
+    let prev1 = Math.max(nums[0], nums[1]);
+    for (let i = 2; i &lt; nums.length; i++) {
+        const take = prev2 + nums[i];
+        const skip = prev1;
+        const cur = Math.max(take, skip);
+        prev2 = prev1;
+        prev1 = cur;
+    }
+    return prev1;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+int Rob(int[] nums) {
+    if (nums.Length == 0) return 0;
+    if (nums.Length == 1) return nums[0];
+    int prev2 = nums[0];
+    int prev1 = Math.Max(nums[0], nums[1]);
+    for (int i = 2; i &lt; nums.Length; i++) {
+        int take = prev2 + nums[i];
+        int skip = prev1;
+        int cur = Math.Max(take, skip);
+        prev2 = prev1;
+        prev1 = cur;
+    }
+    return prev1;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import List
+
+def rob(nums: List[int]) -&gt; int:
+    if not nums:
+        return 0
+    if len(nums) == 1:
+        return nums[0]
+    prev2 = nums[0]
+    prev1 = max(nums[0], nums[1])
+    for i in range(2, len(nums)):
+        take = prev2 + nums[i]
+        skip = prev1
+        cur = max(take, skip)
+        prev2, prev1 = prev1, cur
+    return prev1</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: <strong>O(n)</strong>. Extra space: <strong>O(1)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 3 - Coin Change (Minimum Coins)                   -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 3 - Coin Change (Minimum Coins)</h2>
+            <p>
+                Let <code>dp[x]</code> be the minimum number of coins needed to make amount <code>x</code>.
+                Initialize <code>dp[0] = 0</code> and others to a large sentinel value. For each coin,
+                update <code>dp[x]</code> by considering use of that coin:
+                <code>dp[x] = min(dp[x], dp[x - coin] + 1)</code>.
+            </p>
+
+            <div class="code-example" data-example="s8p3">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 3</span>
+                        <span class="meta">Unbounded knapsack style DP over amount</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;limits.h&gt;
+#include &lt;stdlib.h&gt;
+
+int coinChange(int *coins, int coinsSize, int amount) {
+    if (amount == 0) return 0;
+    int max = amount + 1;
+    int *dp = (int *)malloc((amount + 1) * sizeof(int));
+    for (int i = 0; i &lt;= amount; i++) {
+        dp[i] = max;
+    }
+    dp[0] = 0;
+    for (int i = 0; i &lt; coinsSize; i++) {
+        int coin = coins[i];
+        for (int x = coin; x &lt;= amount; x++) {
+            if (dp[x - coin] + 1 &lt; dp[x]) {
+                dp[x] = dp[x - coin] + 1;
+            }
+        }
+    }
+    int ans = dp[amount] &gt; amount ? -1 : dp[amount];
+    free(dp);
+    return ans;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+int coinChange(const vector&lt;int&gt; &amp;coins, int amount) {
+    if (amount == 0) return 0;
+    const int INF = amount + 1;
+    vector&lt;int&gt; dp(amount + 1, INF);
+    dp[0] = 0;
+    for (int coin : coins) {
+        for (int x = coin; x &lt;= amount; x++) {
+            dp[x] = min(dp[x], dp[x - coin] + 1);
+        }
+    }
+    return dp[amount] &gt; amount ? -1 : dp[amount];
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+int coinChange(int[] coins, int amount) {
+    if (amount == 0) return 0;
+    int INF = amount + 1;
+    int[] dp = new int[amount + 1];
+    for (int i = 0; i &lt;= amount; i++) {
+        dp[i] = INF;
+    }
+    dp[0] = 0;
+    for (int coin : coins) {
+        for (int x = coin; x &lt;= amount; x++) {
+            dp[x] = Math.min(dp[x], dp[x - coin] + 1);
+        }
+    }
+    return dp[amount] &gt; amount ? -1 : dp[amount];
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function coinChange(coins, amount) {
+    if (amount === 0) return 0;
+    const INF = amount + 1;
+    const dp = new Array(amount + 1).fill(INF);
+    dp[0] = 0;
+    for (const coin of coins) {
+        for (let x = coin; x &lt;= amount; x++) {
+            dp[x] = Math.min(dp[x], dp[x - coin] + 1);
+        }
+    }
+    return dp[amount] &gt; amount ? -1 : dp[amount];
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+int CoinChange(int[] coins, int amount) {
+    if (amount == 0) return 0;
+    int INF = amount + 1;
+    int[] dp = new int[amount + 1];
+    for (int i = 0; i &lt;= amount; i++) {
+        dp[i] = INF;
+    }
+    dp[0] = 0;
+    foreach (int coin in coins) {
+        for (int x = coin; x &lt;= amount; x++) {
+            dp[x] = Math.Min(dp[x], dp[x - coin] + 1);
+        }
+    }
+    return dp[amount] &gt; amount ? -1 : dp[amount];
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import List
+
+def coin_change(coins: List[int], amount: int) -&gt; int:
+    if amount == 0:
+        return 0
+    INF = amount + 1
+    dp = [INF] * (amount + 1)
+    dp[0] = 0
+    for coin in coins:
+        for x in range(coin, amount + 1):
+            dp[x] = min(dp[x], dp[x - coin] + 1)
+    return -1 if dp[amount] &gt; amount else dp[amount]</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: <strong>O(n * amount)</strong> where n is number of coin types.  
+                    Extra space: <strong>O(amount)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 4 - Unique Paths in a Grid                         -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 4 - Unique Paths in a Grid</h2>
+            <p>
+                Let <code>dp[i][j]</code> be the number of ways to reach cell <code>(i, j)</code>.
+                We can only come from above or from the left:
+                <code>dp[i][j] = dp[i - 1][j] + dp[i][j - 1]</code>, with base row and column set to 1.
+            </p>
+
+            <div class="code-example" data-example="s8p4">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 4</span>
+                        <span class="meta">2D DP on grid cells</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdlib.h&gt;
+
+int uniquePaths(int m, int n) {
+    int **dp = (int **)malloc(m * sizeof(int *));
+    for (int i = 0; i &lt; m; i++) {
+        dp[i] = (int *)malloc(n * sizeof(int));
+    }
+    for (int i = 0; i &lt; m; i++) {
+        dp[i][0] = 1;
+    }
+    for (int j = 0; j &lt; n; j++) {
+        dp[0][j] = 1;
+    }
+    for (int i = 1; i &lt; m; i++) {
+        for (int j = 1; j &lt; n; j++) {
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+        }
+    }
+    int ans = dp[m - 1][n - 1];
+    for (int i = 0; i &lt; m; i++) {
+        free(dp[i]);
+    }
+    free(dp);
+    return ans;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+int uniquePaths(int m, int n) {
+    vector&lt;vector&lt;int&gt; &gt; dp(m, vector&lt;int&gt;(n, 1));
+    for (int i = 1; i &lt; m; i++) {
+        for (int j = 1; j &lt; n; j++) {
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+        }
+    }
+    return dp[m - 1][n - 1];
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+int uniquePaths(int m, int n) {
+    int[][] dp = new int[m][n];
+    for (int i = 0; i &lt; m; i++) {
+        dp[i][0] = 1;
+    }
+    for (int j = 0; j &lt; n; j++) {
+        dp[0][j] = 1;
+    }
+    for (int i = 1; i &lt; m; i++) {
+        for (int j = 1; j &lt; n; j++) {
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+        }
+    }
+    return dp[m - 1][n - 1];
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function uniquePaths(m, n) {
+    const dp = Array.from({ length: m }, () =&gt; new Array(n).fill(1));
+    for (let i = 1; i &lt; m; i++) {
+        for (let j = 1; j &lt; n; j++) {
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+        }
+    }
+    return dp[m - 1][n - 1];
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+int UniquePaths(int m, int n) {
+    int[,] dp = new int[m, n];
+    for (int i = 0; i &lt; m; i++) {
+        dp[i, 0] = 1;
+    }
+    for (int j = 0; j &lt; n; j++) {
+        dp[0, j] = 1;
+    }
+    for (int i = 1; i &lt; m; i++) {
+        for (int j = 1; j &lt; n; j++) {
+            dp[i, j] = dp[i - 1, j] + dp[i, j - 1];
+        }
+    }
+    return dp[m - 1, n - 1];
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+def unique_paths(m: int, n: int) -&gt; int:
+    dp = [[1] * n for _ in range(m)]
+    for i in range(1, m):
+        for j in range(1, n):
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+    return dp[m - 1][n - 1]</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: <strong>O(m * n)</strong>. Extra space: <strong>O(m * n)</strong> (can be reduced to O(n)).
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 5 - Longest Common Subsequence                    -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 5 - Longest Common Subsequence (LCS)</h2>
+            <p>
+                Let <code>dp[i][j]</code> be the LCS length of <code>text1[0..i-1]</code> and
+                <code>text2[0..j-1]</code>. If characters match, extend by 1; otherwise take the best
+                of skipping one character from either string.
+            </p>
+
+            <div class="code-example" data-example="s8p5">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 5</span>
+                        <span class="meta">2D DP over prefixes of the strings</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;string.h&gt;
+#include &lt;stdlib.h&gt;
+
+int longestCommonSubsequence(const char *text1, const char *text2) {
+    int m = (int)strlen(text1);
+    int n = (int)strlen(text2);
+    int **dp = (int **)malloc((m + 1) * sizeof(int *));
+    for (int i = 0; i &lt;= m; i++) {
+        dp[i] = (int *)calloc(n + 1, sizeof(int));
+    }
+
+    for (int i = 1; i &lt;= m; i++) {
+        for (int j = 1; j &lt;= n; j++) {
+            if (text1[i - 1] == text2[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            } else {
+                int a = dp[i - 1][j];
+                int b = dp[i][j - 1];
+                dp[i][j] = a &gt; b ? a : b;
+            }
+        }
+    }
+    int ans = dp[m][n];
+    for (int i = 0; i &lt;= m; i++) {
+        free(dp[i]);
+    }
+    free(dp);
+    return ans;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;string&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int longestCommonSubsequence(const string &amp;text1, const string &amp;text2) {
+    int m = (int)text1.size();
+    int n = (int)text2.size();
+    vector&lt;vector&lt;int&gt; &gt; dp(m + 1, vector&lt;int&gt;(n + 1, 0));
+
+    for (int i = 1; i &lt;= m; i++) {
+        for (int j = 1; j &lt;= n; j++) {
+            if (text1[i - 1] == text2[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            } else {
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+    return dp[m][n];
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+int longestCommonSubsequence(String text1, String text2) {
+    int m = text1.length();
+    int n = text2.length();
+    int[][] dp = new int[m + 1][n + 1];
+
+    for (int i = 1; i &lt;= m; i++) {
+        for (int j = 1; j &lt;= n; j++) {
+            if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            } else {
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+    return dp[m][n];
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function longestCommonSubsequence(text1, text2) {
+    const m = text1.length;
+    const n = text2.length;
+    const dp = Array.from({ length: m + 1 }, () =&gt; new Array(n + 1).fill(0));
+
+    for (let i = 1; i &lt;= m; i++) {
+        for (let j = 1; j &lt;= n; j++) {
+            if (text1[i - 1] === text2[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            } else {
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+    return dp[m][n];
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+int LongestCommonSubsequence(string text1, string text2) {
+    int m = text1.Length;
+    int n = text2.Length;
+    int[,] dp = new int[m + 1, n + 1];
+
+    for (int i = 1; i &lt;= m; i++) {
+        for (int j = 1; j &lt;= n; j++) {
+            if (text1[i - 1] == text2[j - 1]) {
+                dp[i, j] = dp[i - 1, j - 1] + 1;
+            } else {
+                dp[i, j] = Math.Max(dp[i - 1, j], dp[i, j - 1]);
+            }
+        }
+    }
+    return dp[m, n];
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+def lcs_length(text1: str, text2: str) -&gt; int:
+    m, n = len(text1), len(text2)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if text1[i - 1] == text2[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] + 1
+            else:
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+    return dp[m][n]</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: <strong>O(m * n)</strong> where m and n are string lengths.  
+                    Extra space: <strong>O(m * n)</strong> (can be optimized to O(min(m, n)) if needed).
+                </div>
+            </div>
+        </section>
+
+        <div class="next-section">
+            <a href="problems-section8-dynamic-programming.html">← Back to Section 8 Problem Set</a>
+            &nbsp;&nbsp;
+            <a href="section10-practice.html">Back to Practice Hub →</a>
+        </div>
+    </main>
+</body>
+
+</html>

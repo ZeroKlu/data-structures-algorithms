@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Solutions - Section 5 Trees &amp; BSTs</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css" />
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tabs, highlight init, prefs, cookies, etc.) -->
+    <script src="js/site.js"></script>
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="section10-practice.html">← Back to Practice Hub</a>
+            &nbsp;&nbsp;
+            <a href="problems-section5-trees.html">← Back to Section 5 Problems</a>
+            &nbsp;&nbsp;
+            <a href="section5-trees-graphs.html">View Section 5 Lesson →</a>
+        </div>
+
+        <div class="kicker">Section 5 - Solutions</div>
+        <h1>Trees &amp; Binary Search Trees (BSTs) - Solutions</h1>
+        <p class="tagline">
+            These solutions mirror the Section 5 problem set: traversals, height and balance, BST validation,
+            path sums, lowest common ancestor, and tree serialization. Each code block is available in
+            C, C++, Java, JavaScript, C#, and Python.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 1 - Traversals                                    -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 1 - Tree Traversals (Preorder, Inorder, Postorder)</h2>
+            <p>
+                We implement recursive preorder, inorder, and postorder traversals, returning a list
+                of values in each order. Each node is visited exactly once.
+            </p>
+
+            <div class="code-example" data-example="s5p1">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 1</span>
+                        <span class="meta">Preorder, Inorder, Postorder traversals</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdlib.h&gt;
+
+typedef struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+} TreeNode;
+
+// Simple dynamic array helpers for collecting traversal result.
+typedef struct {
+    int *data;
+    int size;
+    int capacity;
+} IntList;
+
+static void list_init(IntList *list) {
+    list-&gt;size = 0;
+    list-&gt;capacity = 8;
+    list-&gt;data = (int *)malloc(sizeof(int) * list-&gt;capacity);
+}
+
+static void list_push_back(IntList *list, int v) {
+    if (list-&gt;size == list-&gt;capacity) {
+        list-&gt;capacity *= 2;
+        list-&gt;data = (int *)realloc(list-&gt;data, sizeof(int) * list-&gt;capacity);
+    }
+    list-&gt;data[list-&gt;size++] = v;
+}
+
+static void preorder_dfs(TreeNode *root, IntList *out) {
+    if (!root) return;
+    list_push_back(out, root-&gt;val);
+    preorder_dfs(root-&gt;left, out);
+    preorder_dfs(root-&gt;right, out);
+}
+
+static void inorder_dfs(TreeNode *root, IntList *out) {
+    if (!root) return;
+    inorder_dfs(root-&gt;left, out);
+    list_push_back(out, root-&gt;val);
+    inorder_dfs(root-&gt;right, out);
+}
+
+static void postorder_dfs(TreeNode *root, IntList *out) {
+    if (!root) return;
+    postorder_dfs(root-&gt;left, out);
+    postorder_dfs(root-&gt;right, out);
+    list_push_back(out, root-&gt;val);
+}
+
+// Callers can wrap these to return IntList or copy to an array.
+</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+void preorder(TreeNode *root, vector&lt;int&gt; &amp;out) {
+    if (!root) return;
+    out.push_back(root-&gt;val);
+    preorder(root-&gt;left, out);
+    preorder(root-&gt;right, out);
+}
+
+void inorder(TreeNode *root, vector&lt;int&gt; &amp;out) {
+    if (!root) return;
+    inorder(root-&gt;left, out);
+    out.push_back(root-&gt;val);
+    inorder(root-&gt;right, out);
+}
+
+void postorder(TreeNode *root, vector&lt;int&gt; &amp;out) {
+    if (!root) return;
+    postorder(root-&gt;left, out);
+    postorder(root-&gt;right, out);
+    out.push_back(root-&gt;val);
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.ArrayList;
+import java.util.List;
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int v) { val = v; }
+}
+
+List&lt;Integer&gt; preorder(TreeNode root) {
+    List&lt;Integer&gt; out = new ArrayList&lt;&gt;();
+    preorderDfs(root, out);
+    return out;
+}
+
+void preorderDfs(TreeNode node, List&lt;Integer&gt; out) {
+    if (node == null) return;
+    out.add(node.val);
+    preorderDfs(node.left, out);
+    preorderDfs(node.right, out);
+}
+
+List&lt;Integer&gt; inorder(TreeNode root) {
+    List&lt;Integer&gt; out = new ArrayList&lt;&gt;();
+    inorderDfs(root, out);
+    return out;
+}
+
+void inorderDfs(TreeNode node, List&lt;Integer&gt; out) {
+    if (node == null) return;
+    inorderDfs(node.left, out);
+    out.add(node.val);
+    inorderDfs(node.right, out);
+}
+
+List&lt;Integer&gt; postorder(TreeNode root) {
+    List&lt;Integer&gt; out = new ArrayList&lt;&gt;();
+    postorderDfs(root, out);
+    return out;
+}
+
+void postorderDfs(TreeNode node, List&lt;Integer&gt; out) {
+    if (node == null) return;
+    postorderDfs(node.left, out);
+    postorderDfs(node.right, out);
+    out.add(node.val);
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+class TreeNode {
+    constructor(val, left = null, right = null) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+function preorder(root) {
+    const out = [];
+    function dfs(node) {
+        if (node === null) return;
+        out.push(node.val);
+        dfs(node.left);
+        dfs(node.right);
+    }
+    dfs(root);
+    return out;
+}
+
+function inorder(root) {
+    const out = [];
+    function dfs(node) {
+        if (node === null) return;
+        dfs(node.left);
+        out.push(node.val);
+        dfs(node.right);
+    }
+    dfs(root);
+    return out;
+}
+
+function postorder(root) {
+    const out = [];
+    function dfs(node) {
+        if (node === null) return;
+        dfs(node.left);
+        dfs(node.right);
+        out.push(node.val);
+    }
+    dfs(root);
+    return out;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+class TreeNode {
+    public int Val;
+    public TreeNode? Left;
+    public TreeNode? Right;
+    public TreeNode(int v) { Val = v; }
+}
+
+IList&lt;int&gt; Preorder(TreeNode? root) {
+    var result = new List&lt;int&gt;();
+    void Dfs(TreeNode? node) {
+        if (node == null) return;
+        result.Add(node.Val);
+        Dfs(node.Left);
+        Dfs(node.Right);
+    }
+    Dfs(root);
+    return result;
+}
+
+IList&lt;int&gt; Inorder(TreeNode? root) {
+    var result = new List&lt;int&gt;();
+    void Dfs(TreeNode? node) {
+        if (node == null) return;
+        Dfs(node.Left);
+        result.Add(node.Val);
+        Dfs(node.Right);
+    }
+    Dfs(root);
+    return result;
+}
+
+IList&lt;int&gt; Postorder(TreeNode? root) {
+    var result = new List&lt;int&gt;();
+    void Dfs(TreeNode? node) {
+        if (node == null) return;
+        Dfs(node.Left);
+        Dfs(node.Right);
+        result.Add(node.Val);
+    }
+    Dfs(root);
+    return result;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import List, Optional
+
+class TreeNode:
+    def __init__(self, val: int = 0,
+                 left: "Optional[TreeNode]" = None,
+                 right: "Optional[TreeNode]" = None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def preorder(root: Optional[TreeNode]) -&gt; List[int]:
+    if root is None:
+        return []
+    return [root.val] + preorder(root.left) + preorder(root.right)
+
+def inorder(root: Optional[TreeNode]) -&gt; List[int]:
+    if root is None:
+        return []
+    return inorder(root.left) + [root.val] + inorder(root.right)
+
+def postorder(root: Optional[TreeNode]) -&gt; List[int]:
+    if root is None:
+        return []
+    return postorder(root.left) + postorder(root.right) + [root.val]</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: each node is visited once per traversal → <strong>O(n)</strong>.<br />
+                    Extra space: output list <strong>O(n)</strong>, recursion stack up to height <code>h</code> → <strong>O(h)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 2 - Height & Balance                              -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 2 - Height of a Binary Tree &amp; Balance Check</h2>
+            <p>
+                We compute height and balance in one pass. Each helper returns both whether the subtree is balanced
+                and its height, avoiding repeated recomputation.
+            </p>
+
+            <div class="code-example" data-example="s5p2">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 2</span>
+                        <span class="meta">Height and height-balanced check</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdbool.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+} TreeNode;
+
+typedef struct {
+    bool balanced;
+    int height;
+} Info;
+
+static Info check(TreeNode *root) {
+    if (!root) {
+        Info base = { true, -1 };  // empty tree height = -1
+        return base;
+    }
+    Info leftInfo = check(root-&gt;left);
+    if (!leftInfo.balanced) {
+        Info res = { false, 0 };
+        return res;
+    }
+    Info rightInfo = check(root-&gt;right);
+    if (!rightInfo.balanced) {
+        Info res = { false, 0 };
+        return res;
+    }
+    int diff = leftInfo.height - rightInfo.height;
+    if (diff &lt; 0) diff = -diff;
+    bool bal = diff &lt;= 1;
+    Info res = { bal, 1 + (leftInfo.height &gt; rightInfo.height ? leftInfo.height : rightInfo.height) };
+    return res;
+}
+
+int height(TreeNode *root) {
+    if (!root) return -1;
+    int lh = height(root-&gt;left);
+    int rh = height(root-&gt;right);
+    return 1 + (lh &gt; rh ? lh : rh);
+}
+
+bool isBalanced(TreeNode *root) {
+    return check(root).balanced;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;cstdlib&gt;
+#include &lt;algorithm&gt;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+struct Info {
+    bool balanced;
+    int height;
+};
+
+static Info check(TreeNode *root) {
+    if (!root) return { true, -1 };
+    Info leftInfo = check(root-&gt;left);
+    if (!leftInfo.balanced) return { false, 0 };
+    Info rightInfo = check(root-&gt;right);
+    if (!rightInfo.balanced) return { false, 0 };
+    bool bal = std::abs(leftInfo.height - rightInfo.height) &lt;= 1;
+    int h = 1 + std::max(leftInfo.height, rightInfo.height);
+    return { bal, h };
+}
+
+int height(TreeNode *root) {
+    if (!root) return -1;
+    return 1 + std::max(height(root-&gt;left), height(root-&gt;right));
+}
+
+bool isBalanced(TreeNode *root) {
+    return check(root).balanced;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int v) { val = v; }
+}
+
+class Info {
+    boolean balanced;
+    int height;
+    Info(boolean b, int h) { balanced = b; height = h; }
+}
+
+int height(TreeNode root) {
+    if (root == null) return -1;
+    return 1 + Math.max(height(root.left), height(root.right));
+}
+
+private Info check(TreeNode node) {
+    if (node == null) return new Info(true, -1);
+    Info left = check(node.left);
+    if (!left.balanced) return new Info(false, 0);
+    Info right = check(node.right);
+    if (!right.balanced) return new Info(false, 0);
+    boolean bal = Math.abs(left.height - right.height) &lt;= 1;
+    int h = 1 + Math.max(left.height, right.height);
+    return new Info(bal, h);
+}
+
+boolean isBalanced(TreeNode root) {
+    return check(root).balanced;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+class TreeNode {
+    constructor(val, left = null, right = null) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+function height(root) {
+    if (root === null) return -1;
+    return 1 + Math.max(height(root.left), height(root.right));
+}
+
+function isBalanced(root) {
+    function check(node) {
+        if (node === null) return { balanced: true, height: -1 };
+        const left = check(node.left);
+        if (!left.balanced) return { balanced: false, height: 0 };
+        const right = check(node.right);
+        if (!right.balanced) return { balanced: false, height: 0 };
+        const diff = Math.abs(left.height - right.height);
+        const bal = diff &lt;= 1;
+        return { balanced: bal, height: 1 + Math.max(left.height, right.height) };
+    }
+    return check(root).balanced;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System;
+
+class TreeNode {
+    public int Val;
+    public TreeNode? Left;
+    public TreeNode? Right;
+    public TreeNode(int v) { Val = v; }
+}
+
+int Height(TreeNode? root) {
+    if (root == null) return -1;
+    return 1 + Math.Max(Height(root.Left), Height(root.Right));
+}
+
+(bool balanced, int height) Check(TreeNode? node) {
+    if (node == null) return (true, -1);
+    var left = Check(node.Left);
+    if (!left.balanced) return (false, 0);
+    var right = Check(node.Right);
+    if (!right.balanced) return (false, 0);
+    bool bal = Math.Abs(left.height - right.height) &lt;= 1;
+    int h = 1 + Math.Max(left.height, right.height);
+    return (bal, h);
+}
+
+bool IsBalanced(TreeNode? root) {
+    return Check(root).balanced;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import Optional, Tuple
+
+class TreeNode:
+    def __init__(self, val: int = 0,
+                 left: "Optional[TreeNode]" = None,
+                 right: "Optional[TreeNode]" = None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def height(root: Optional[TreeNode]) -&gt; int:
+    if root is None:
+        return -1
+    return 1 + max(height(root.left), height(root.right))
+
+def _check(node: Optional[TreeNode]) -&gt; Tuple[bool, int]:
+    if node is None:
+        return True, -1
+    left_bal, left_h = _check(node.left)
+    if not left_bal:
+        return False, 0
+    right_bal, right_h = _check(node.right)
+    if not right_bal:
+        return False, 0
+    bal = abs(left_h - right_h) &lt;= 1
+    h = 1 + max(left_h, right_h)
+    return bal, h
+
+def is_balanced(root: Optional[TreeNode]) -&gt; bool:
+    bal, _ = _check(root)
+    return bal</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: each node contributes its info once → <strong>O(n)</strong>.<br />
+                    Extra space: recursion up to height <code>h</code> → <strong>O(h)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 3 - Validate BST                                  -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 3 - Validate a Binary Search Tree (BST)</h2>
+            <p>
+                We carry a valid range <code>(low, high)</code> down the recursion and ensure each node value
+                lies strictly between those bounds, matching the BST rules in the problem.
+            </p>
+
+            <div class="code-example" data-example="s5p3">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 3</span>
+                        <span class="meta">Range-based BST validation</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdbool.h&gt;
+#include &lt;limits.h&gt;
+
+typedef struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+} TreeNode;
+
+static bool helper(TreeNode *node, long low, long high) {
+    if (!node) return true;
+    if (node-&gt;val &lt;= low || node-&gt;val &gt;= high) return false;
+    return helper(node-&gt;left, low, node-&gt;val) &amp;&amp;
+           helper(node-&gt;right, node-&gt;val, high);
+}
+
+bool isValidBST(TreeNode *root) {
+    return helper(root, LONG_MIN, LONG_MAX);
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;limits&gt;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+static bool helper(TreeNode *node, long low, long high) {
+    if (!node) return true;
+    if (node-&gt;val &lt;= low || node-&gt;val &gt;= high) return false;
+    return helper(node-&gt;left, low, node-&gt;val) &amp;&amp;
+           helper(node-&gt;right, node-&gt;val, high);
+}
+
+bool isValidBST(TreeNode *root) {
+    return helper(root, std::numeric_limits&lt;long&gt;::min(),
+                        std::numeric_limits&lt;long&gt;::max());
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int v) { val = v; }
+}
+
+boolean isValidBST(TreeNode root) {
+    return helper(root, null, null);
+}
+
+boolean helper(TreeNode node, Integer low, Integer high) {
+    if (node == null) return true;
+    if (low != null &amp;&amp; node.val &lt;= low) return false;
+    if (high != null &amp;&amp; node.val &gt;= high) return false;
+    return helper(node.left, low, node.val)
+        &amp;&amp; helper(node.right, node.val, high);
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+class TreeNode {
+    constructor(val, left = null, right = null) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+function isValidBST(root) {
+    function helper(node, low, high) {
+        if (node === null) return true;
+        if (low !== null &amp;&amp; node.val &lt;= low) return false;
+        if (high !== null &amp;&amp; node.val &gt;= high) return false;
+        return helper(node.left, low, node.val) &amp;&amp;
+               helper(node.right, node.val, high);
+    }
+    return helper(root, null, null);
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+class TreeNode {
+    public int Val;
+    public TreeNode? Left;
+    public TreeNode? Right;
+    public TreeNode(int v) { Val = v; }
+}
+
+bool IsValidBST(TreeNode? root) {
+    bool Helper(TreeNode? node, int? low, int? high) {
+        if (node == null) return true;
+        if (low.HasValue &amp;&amp; node.Val &lt;= low.Value) return false;
+        if (high.HasValue &amp;&amp; node.Val &gt;= high.Value) return false;
+        return Helper(node.Left, low, node.Val) &amp;&amp;
+               Helper(node.Right, node.Val, high);
+    }
+    return Helper(root, null, null);
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import Optional
+
+class TreeNode:
+    def __init__(self, val: int = 0,
+                 left: "Optional[TreeNode]" = None,
+                 right: "Optional[TreeNode]" = None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def is_valid_bst(root: Optional[TreeNode]) -&gt; bool:
+    def helper(node: Optional[TreeNode],
+               low: Optional[int],
+               high: Optional[int]) -&gt; bool:
+        if node is None:
+            return True
+        if low is not None and node.val &lt;= low:
+            return False
+        if high is not None and node.val &gt;= high:
+            return False
+        return helper(node.left, low, node.val) and \
+               helper(node.right, node.val, high)
+    return helper(root, None, None)</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: visit each node with constant work → <strong>O(n)</strong>.<br />
+                    Extra space: recursion depth up to height <code>h</code> → <strong>O(h)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 4 - Path Sum Root-to-Leaf                         -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 4 - Path Sum from Root to Leaf</h2>
+            <p>
+                DFS subtracts node values from the remaining target. When we reach a leaf, we check
+                if the remaining sum equals the leaf value.
+            </p>
+
+            <div class="code-example" data-example="s5p4">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 4</span>
+                        <span class="meta">Root-to-leaf path sum equals target</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdbool.h&gt;
+
+typedef struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+} TreeNode;
+
+bool hasPathSum(TreeNode *root, int targetSum) {
+    if (!root) return false;
+    if (!root-&gt;left &amp;&amp; !root-&gt;right) {
+        return root-&gt;val == targetSum;
+    }
+    int remaining = targetSum - root-&gt;val;
+    return hasPathSum(root-&gt;left, remaining) ||
+           hasPathSum(root-&gt;right, remaining);
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+bool hasPathSum(TreeNode *root, int targetSum) {
+    if (!root) return false;
+    if (!root-&gt;left &amp;&amp; !root-&gt;right) {
+        return root-&gt;val == targetSum;
+    }
+    int remaining = targetSum - root-&gt;val;
+    return hasPathSum(root-&gt;left, remaining) ||
+           hasPathSum(root-&gt;right, remaining);
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int v) { val = v; }
+}
+
+boolean hasPathSum(TreeNode root, int targetSum) {
+    if (root == null) return false;
+    if (root.left == null &amp;&amp; root.right == null) {
+        return root.val == targetSum;
+    }
+    int remaining = targetSum - root.val;
+    return hasPathSum(root.left, remaining) ||
+           hasPathSum(root.right, remaining);
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+class TreeNode {
+    constructor(val, left = null, right = null) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+function hasPathSum(root, targetSum) {
+    if (root === null) return false;
+    if (root.left === null &amp;&amp; root.right === null) {
+        return root.val === targetSum;
+    }
+    const remaining = targetSum - root.val;
+    return hasPathSum(root.left, remaining) ||
+           hasPathSum(root.right, remaining);
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+class TreeNode {
+    public int Val;
+    public TreeNode? Left;
+    public TreeNode? Right;
+    public TreeNode(int v) { Val = v; }
+}
+
+bool HasPathSum(TreeNode? root, int targetSum) {
+    if (root == null) return false;
+    if (root.Left == null &amp;&amp; root.Right == null) {
+        return root.Val == targetSum;
+    }
+    int remaining = targetSum - root.Val;
+    return HasPathSum(root.Left, remaining) ||
+           HasPathSum(root.Right, remaining);
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import Optional
+
+class TreeNode:
+    def __init__(self, val: int = 0,
+                 left: "Optional[TreeNode]" = None,
+                 right: "Optional[TreeNode]" = None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def has_path_sum(root: Optional[TreeNode], target_sum: int) -&gt; bool:
+    if root is None:
+        return False
+    if root.left is None and root.right is None:
+        return root.val == target_sum
+    remaining = target_sum - root.val
+    return has_path_sum(root.left, remaining) or \
+           has_path_sum(root.right, remaining)</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: visit each node at most once → <strong>O(n)</strong>.<br />
+                    Extra space: recursion depth up to <code>h</code> → <strong>O(h)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 5 - LCA in BST                                    -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 5 - Lowest Common Ancestor (LCA) in a BST</h2>
+            <p>
+                We walk down the BST using its ordering: if both targets are smaller, go left;
+                if both are larger, go right; otherwise the current node is the LCA.
+            </p>
+
+            <div class="code-example" data-example="s5p5">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 5</span>
+                        <span class="meta">Iterative LCA using BST property</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+typedef struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+} TreeNode;
+
+TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q) {
+    TreeNode *node = root;
+    int pv = p-&gt;val;
+    int qv = q-&gt;val;
+    while (node) {
+        if (pv &lt; node-&gt;val &amp;&amp; qv &lt; node-&gt;val) {
+            node = node-&gt;left;
+        } else if (pv &gt; node-&gt;val &amp;&amp; qv &gt; node-&gt;val) {
+            node = node-&gt;right;
+        } else {
+            return node;
+        }
+    }
+    return NULL;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q) {
+    TreeNode *node = root;
+    int pv = p-&gt;val;
+    int qv = q-&gt;val;
+    while (node) {
+        if (pv &lt; node-&gt;val &amp;&amp; qv &lt; node-&gt;val) {
+            node = node-&gt;left;
+        } else if (pv &gt; node-&gt;val &amp;&amp; qv &gt; node-&gt;val) {
+            node = node-&gt;right;
+        } else {
+            return node;
+        }
+    }
+    return nullptr;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int v) { val = v; }
+}
+
+TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    TreeNode node = root;
+    int pv = p.val;
+    int qv = q.val;
+    while (node != null) {
+        if (pv &lt; node.val &amp;&amp; qv &lt; node.val) {
+            node = node.left;
+        } else if (pv &gt; node.val &amp;&amp; qv &gt; node.val) {
+            node = node.right;
+        } else {
+            return node;
+        }
+    }
+    return null;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+class TreeNode {
+    constructor(val, left = null, right = null) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+function lowestCommonAncestor(root, p, q) {
+    let node = root;
+    const pv = p.val;
+    const qv = q.val;
+    while (node !== null) {
+        if (pv &lt; node.val &amp;&amp; qv &lt; node.val) {
+            node = node.left;
+        } else if (pv &gt; node.val &amp;&amp; qv &gt; node.val) {
+            node = node.right;
+        } else {
+            return node;
+        }
+    }
+    return null;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+class TreeNode {
+    public int Val;
+    public TreeNode? Left;
+    public TreeNode? Right;
+    public TreeNode(int v) { Val = v; }
+}
+
+TreeNode? LowestCommonAncestor(TreeNode? root, TreeNode p, TreeNode q) {
+    TreeNode? node = root;
+    int pv = p.Val;
+    int qv = q.Val;
+    while (node != null) {
+        if (pv &lt; node.Val &amp;&amp; qv &lt; node.Val) {
+            node = node.Left;
+        } else if (pv &gt; node.Val &amp;&amp; qv &gt; node.Val) {
+            node = node.Right;
+        } else {
+            return node;
+        }
+    }
+    return null;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import Optional
+
+class TreeNode:
+    def __init__(self, val: int = 0,
+                 left: "Optional[TreeNode]" = None,
+                 right: "Optional[TreeNode]" = None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def lowest_common_ancestor(root: Optional[TreeNode],
+                           p: TreeNode,
+                           q: TreeNode) -&gt; Optional[TreeNode]:
+    node = root
+    pv = p.val
+    qv = q.val
+    while node is not None:
+        if pv &lt; node.val and qv &lt; node.val:
+            node = node.left
+        elif pv &gt; node.val and qv &gt; node.val:
+            node = node.right
+        else:
+            return node
+    return None</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: follow a single path from root to LCA → <strong>O(h)</strong>
+                    (average <strong>O(log n)</strong> if tree is balanced).<br />
+                    Extra space: iterative, so <strong>O(1)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 6 - Serialize / Deserialize                       -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 6 - Serialize and Deserialize a Binary Tree</h2>
+            <p>
+                We use preorder traversal with a special marker (for example <code>#</code>) for null children.
+                During deserialization we consume tokens in order and rebuild the tree recursively.
+            </p>
+
+            <div class="code-example" data-example="s5p6">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 6</span>
+                        <span class="meta">Preorder with null markers</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+// For brevity, this is a conceptual sketch using a growable string buffer.
+// In real C code you would need robust string-building utilities.
+
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+typedef struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+} TreeNode;
+
+typedef struct {
+    char *data;
+    size_t size;
+    size_t capacity;
+} StrBuf;
+
+static void sb_init(StrBuf *sb) {
+    sb-&gt;size = 0;
+    sb-&gt;capacity = 64;
+    sb-&gt;data = (char *)malloc(sb-&gt;capacity);
+    sb-&gt;data[0] = '\0';
+}
+
+static void sb_append(StrBuf *sb, const char *s) {
+    size_t len = strlen(s);
+    if (sb-&gt;size + len + 1 &gt; sb-&gt;capacity) {
+        while (sb-&gt;size + len + 1 &gt; sb-&gt;capacity) {
+            sb-&gt;capacity *= 2;
+        }
+        sb-&gt;data = (char *)realloc(sb-&gt;data, sb-&gt;capacity);
+    }
+    memcpy(sb-&gt;data + sb-&gt;size, s, len + 1);
+    sb-&gt;size += len;
+}
+
+static void serialize_dfs(TreeNode *root, StrBuf *sb) {
+    if (!root) {
+        sb_append(sb, "#,");
+        return;
+    }
+    char buf[32];
+    snprintf(buf, sizeof(buf), "%d,", root-&gt;val);
+    sb_append(sb, buf);
+    serialize_dfs(root-&gt;left, sb);
+    serialize_dfs(root-&gt;right, sb);
+}
+
+char *serialize(TreeNode *root) {
+    StrBuf sb;
+    sb_init(&sb);
+    serialize_dfs(root, &sb);
+    return sb.data; // caller should free
+}
+
+// Deserialization helpers.
+static char *next_token(char **strp) {
+    if (*strp == NULL) return NULL;
+    char *start = *strp;
+    char *comma = strchr(start, ',');
+    if (!comma) {
+        *strp = NULL;
+        return start;
+    }
+    *comma = '\0';
+    *strp = comma + 1;
+    return start;
+}
+
+static TreeNode *deserialize_dfs(char **strp) {
+    char *tok = next_token(strp);
+    if (!tok) return NULL;
+    if (strcmp(tok, "#") == 0) {
+        return NULL;
+    }
+    int val = atoi(tok);
+    TreeNode *node = (TreeNode *)malloc(sizeof(TreeNode));
+    node-&gt;val = val;
+    node-&gt;left = deserialize_dfs(strp);
+    node-&gt;right = deserialize_dfs(strp);
+    return node;
+}
+
+TreeNode *deserialize(char *data) {
+    char *cursor = data;
+    return deserialize_dfs(&cursor);
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;string&gt;
+#include &lt;vector&gt;
+#include &lt;sstream&gt;
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+string serialize(TreeNode *root) {
+    string out;
+    function&lt;void(TreeNode *)&gt; dfs = [&amp;](TreeNode *node) {
+        if (!node) {
+            out += "#,";
+            return;
+        }
+        out += to_string(node-&gt;val) + ",";
+        dfs(node-&gt;left);
+        dfs(node-&gt;right);
+    };
+    dfs(root);
+    return out;
+}
+
+TreeNode *deserialize(const string &amp;data) {
+    vector&lt;string&gt; tokens;
+    string token;
+    stringstream ss(data);
+    while (getline(ss, token, ',')) {
+        if (!token.empty()) tokens.push_back(token);
+    }
+    int idx = 0;
+    function&lt;TreeNode *()&gt; dfs = [&amp;]() -&gt; TreeNode * {
+        if (idx &gt;= (int)tokens.size()) return nullptr;
+        const string &amp;t = tokens[idx++];
+        if (t == "#") return nullptr;
+        int val = stoi(t);
+        TreeNode *node = new TreeNode(val);
+        node-&gt;left = dfs();
+        node-&gt;right = dfs();
+        return node;
+    };
+    return dfs();
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int v) { val = v; }
+}
+
+class Codec {
+    // Serialize using preorder with "#" for nulls.
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        serializeDfs(root, sb);
+        return sb.toString();
+    }
+
+    private void serializeDfs(TreeNode node, StringBuilder sb) {
+        if (node == null) {
+            sb.append("#,");
+            return;
+        }
+        sb.append(node.val).append(',');
+        serializeDfs(node.left, sb);
+        serializeDfs(node.right, sb);
+    }
+
+    public TreeNode deserialize(String data) {
+        String[] parts = data.split(",");
+        Deque&lt;String&gt; q = new ArrayDeque&lt;&gt;(Arrays.asList(parts));
+        return deserializeDfs(q);
+    }
+
+    private TreeNode deserializeDfs(Deque&lt;String&gt; q) {
+        if (q.isEmpty()) return null;
+        String t = q.removeFirst();
+        if (t.equals("#")) return null;
+        int val = Integer.parseInt(t);
+        TreeNode node = new TreeNode(val);
+        node.left = deserializeDfs(q);
+        node.right = deserializeDfs(q);
+        return node;
+    }
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+class TreeNode {
+    constructor(val, left = null, right = null) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+class Codec {
+    serialize(root) {
+        const out = [];
+        function dfs(node) {
+            if (node === null) {
+                out.push("#");
+                return;
+            }
+            out.push(String(node.val));
+            dfs(node.left);
+            dfs(node.right);
+        }
+        dfs(root);
+        return out.join(",");
+    }
+
+    deserialize(data) {
+        const tokens = data.split(",");
+        let idx = 0;
+        function dfs() {
+            if (idx &gt;= tokens.length) return null;
+            const t = tokens[idx++];
+            if (t === "#" || t === "") return null;
+            const node = new TreeNode(parseInt(t, 10));
+            node.left = dfs();
+            node.right = dfs();
+            return node;
+        }
+        return dfs();
+    }
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+class TreeNode {
+    public int Val;
+    public TreeNode? Left;
+    public TreeNode? Right;
+    public TreeNode(int v) { Val = v; }
+}
+
+class Codec {
+    public string Serialize(TreeNode? root) {
+        var sb = new StringBuilder();
+        void Dfs(TreeNode? node) {
+            if (node == null) {
+                sb.Append("#,");
+                return;
+            }
+            sb.Append(node.Val);
+            sb.Append(',');
+            Dfs(node.Left);
+            Dfs(node.Right);
+        }
+        Dfs(root);
+        return sb.ToString();
+    }
+
+    public TreeNode? Deserialize(string data) {
+        var tokens = new Queue&lt;string&gt;(data.Split(',', StringSplitOptions.RemoveEmptyEntries));
+        TreeNode? Dfs() {
+            if (tokens.Count == 0) return null;
+            string t = tokens.Dequeue();
+            if (t == "#") return null;
+            int val = int.Parse(t);
+            var node = new TreeNode(val);
+            node.Left = Dfs();
+            node.Right = Dfs();
+            return node;
+        }
+        return Dfs();
+    }
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import Optional, List, Iterator
+
+class TreeNode:
+    def __init__(self, val: int = 0,
+                 left: "Optional[TreeNode]" = None,
+                 right: "Optional[TreeNode]" = None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+class Codec:
+    def serialize(self, root: Optional[TreeNode]) -&gt; str:
+        vals: List[str] = []
+
+        def dfs(node: Optional[TreeNode]) -&gt; None:
+            if node is None:
+                vals.append("#")
+                return
+            vals.append(str(node.val))
+            dfs(node.left)
+            dfs(node.right)
+
+        dfs(root)
+        return ",".join(vals)
+
+    def deserialize(self, data: str) -&gt; Optional[TreeNode]:
+        tokens = iter(data.split(","))
+
+        def dfs(it: Iterator[str]) -&gt; Optional[TreeNode]:
+            try:
+                t = next(it)
+            except StopIteration:
+                return None
+            if t == "#":
+                return None
+            node = TreeNode(int(t))
+            node.left = dfs(it)
+            node.right = dfs(it)
+            return node
+
+        return dfs(tokens)</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Both serialization and deserialization visit each node once → <strong>O(n)</strong> time.<br />
+                    Extra space: output string is <strong>O(n)</strong>, recursion stack up to <code>h</code> → <strong>O(h)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <div class="next-section">
+            <a href="problems-section5-trees.html">
+                ← Back to Section 5 Problem Set
+            </a>
+            &nbsp;&nbsp;
+            <a href="section10-practice.html">
+                Back to Practice Hub →
+            </a>
+        </div>
+    </main>
+</body>
+
+</html>

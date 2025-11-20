@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Problems - Section 4 Stacks &amp; Queues</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css" />
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tabs, highlight init, prefs, etc.) -->
+    <script src="js/site.js"></script>
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="section10-practice.html">← Back to Practice Hub</a>
+            &nbsp;&nbsp;
+            <a href="section4-stacks-queues.html">View Section 4 Lesson →</a>
+        </div>
+
+        <div class="kicker">Section 4 - Problem Set</div>
+        <h1>Stacks &amp; Queues</h1>
+        <p class="tagline">
+            These problems focus on stack and queue usage, monotonic stacks, BFS-style traversal,
+            and classic interview patterns like validating parentheses and next-greater-element.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr />
+
+        <!-- Problem 1 -->
+        <section class="problem">
+            <h2>Problem 1 - Valid Parentheses</h2>
+            <p>
+                Given a string <code>s</code> containing just the characters
+                <code>'('</code>, <code>')'</code>, <code>'{'</code>, <code>'}'</code>,
+                <code>'['</code>, and <code>']'</code>, determine if the input string is valid.
+            </p>
+            <p>The string is valid if:</p>
+            <ul>
+                <li>Open brackets are closed by the same type of brackets.</li>
+                <li>Open brackets are closed in the correct order.</li>
+            </ul>
+
+            <p>Examples:</p>
+            <ul>
+                <li><code>"()"</code> → valid</li>
+                <li><code>"()[]{}"</code> → valid</li>
+                <li><code>"(]"</code> → invalid</li>
+                <li><code>"([)]"</code> → invalid</li>
+                <li><code>"{[]}"</code> → valid</li>
+            </ul>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Use a stack of opening brackets. When you see a closing bracket, check that the stack
+                    is not empty and that the top matches the closing bracket type. At the end, the stack
+                    must be empty.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Example solution (JavaScript):
+<pre><code class="language-javascript">function isValid(s) {
+    const stack = [];
+    const match = {
+        ')': '(',
+        ']': '[',
+        '}': '{'
+    };
+    for (const ch of s) {
+        if (ch === '(' || ch === '[' || ch === '{') {
+            stack.push(ch);
+        } else {
+            if (stack.length === 0) return false;
+            const top = stack.pop();
+            if (top !== match[ch]) return false;
+        }
+    }
+    return stack.length === 0;
+}</code></pre>
+                    Each character is pushed or popped at most once, so time is <strong>O(n)</strong>,
+                    where <code>n</code> is the length of <code>s</code>. The stack may hold up to <code>n</code>
+                    characters → extra space <strong>O(n)</strong>.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 2 -->
+        <section class="problem">
+            <h2>Problem 2 - Implement a Queue Using Two Stacks</h2>
+            <p>
+                Design a queue that supports the operations <code>enqueue(x)</code>, <code>dequeue()</code>,
+                and <code>front()</code> using two stacks. All operations should be amortized O(1).
+            </p>
+
+            <ol>
+                <li>Describe how to implement this using an "in" stack and an "out" stack.</li>
+                <li>Explain why the amortized time per operation is O(1).</li>
+            </ol>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Push new elements onto the "in" stack. When you need to dequeue and the "out" stack is empty,
+                    pop everything from "in" and push it onto "out" (reversing order).
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Example implementation (Python):
+<pre><code class="language-python">class MyQueue:
+    def __init__(self) -&gt; None:
+        self._in = []
+        self._out = []
+
+    def enqueue(self, x: int) -&gt; None:
+        self._in.append(x)
+
+    def _move_in_to_out(self) -&gt; None:
+        if not self._out:
+            while self._in:
+                self._out.append(self._in.pop())
+
+    def dequeue(self) -&gt; int:
+        self._move_in_to_out()
+        return self._out.pop()
+
+    def front(self) -&gt; int:
+        self._move_in_to_out()
+        return self._out[-1]
+
+    def empty(self) -&gt; bool:
+        return not self._in and not self._out</code></pre>
+                    Each element is moved from <code>_in</code> to <code>_out</code> at most once, and popped once.
+                    So over a sequence of <code>m</code> operations, total work is O(m).<br />
+                    Amortized time per operation: <strong>O(1)</strong>.<br />
+                    Extra space: stacks store all elements → <strong>O(n)</strong> where <code>n</code>
+                    is the number of items in the queue.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 3 -->
+        <section class="problem">
+            <h2>Problem 3 - Next Greater Element (Monotonic Stack)</h2>
+            <p>
+                Given an array <code>nums</code> of length <code>n</code>, for each element compute the value
+                of the next element to the right that is strictly greater. If no such element exists, store <code>-1</code>.
+            </p>
+
+            <p>Example:</p>
+            <ul>
+                <li>Input: <code>[2, 1, 2, 4, 3]</code></li>
+                <li>Output: <code>[4, 2, 4, -1, -1]</code></li>
+            </ul>
+
+            <p>
+                Design an O(n) time algorithm using a stack and describe how it works.
+            </p>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Scan from right to left. Maintain a stack of elements that are candidates to be the
+                    "next greater" for items to the left. For each new element, pop from the stack while
+                    the top is less than or equal to it.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Example solution (C++):
+<pre><code class="language-cpp">#include &lt;vector&gt;
+#include &lt;stack&gt;
+using namespace std;
+
+vector&lt;int&gt; nextGreaterElements(const vector&lt;int&gt;&amp; nums) {
+    int n = (int)nums.size();
+    vector&lt;int&gt; ans(n, -1);
+    stack&lt;int&gt; st; // will store values, decreasing from bottom to top
+
+    for (int i = n - 1; i &gt;= 0; i--) {
+        int x = nums[i];
+        while (!st.empty() &amp;&amp; st.top() &lt;= x) {
+            st.pop();
+        }
+        ans[i] = st.empty() ? -1 : st.top();
+        st.push(x);
+    }
+    return ans;
+}</code></pre>
+                    Each element is pushed and popped at most once, so total operations on the stack
+                    are O(n).<br />
+                    Time complexity: <strong>O(n)</strong>.<br />
+                    Extra space: result array plus stack of up to <code>n</code> elements → <strong>O(n)</strong>.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 4 -->
+        <section class="problem">
+            <h2>Problem 4 - Daily Temperatures (Monotonic Stack of Indices)</h2>
+            <p>
+                You are given an array <code>temps</code> where <code>temps[i]</code> is the temperature on day
+                <code>i</code>. For each day, find how many days you would have to wait until a warmer temperature.
+                If there is no future day with a warmer temperature, use <code>0</code>.
+            </p>
+
+            <p>Example:</p>
+            <ul>
+                <li>Input: <code>[73, 74, 75, 71, 69, 72, 76, 73]</code></li>
+                <li>Output: <code>[1, 1, 4, 2, 1, 1, 0, 0]</code></li>
+            </ul>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Use a stack of indices with decreasing temperatures. As you scan forward, when the current
+                    temperature is higher than the temperature at the index on the top of the stack, you have
+                    found the next warmer day for that index.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Example solution (Java):
+<pre><code class="language-java">int[] dailyTemperatures(int[] temps) {
+    int n = temps.length;
+    int[] ans = new int[n];
+    java.util.Deque&lt;Integer&gt; stack = new java.util.ArrayDeque&lt;&gt;(); // indices
+
+    for (int i = 0; i &lt; n; i++) {
+        while (!stack.isEmpty() &amp;&amp; temps[i] &gt; temps[stack.peek()]) {
+            int idx = stack.pop();
+            ans[idx] = i - idx;
+        }
+        stack.push(i);
+    }
+    // remaining positions stay 0 by default
+    return ans;
+}</code></pre>
+                    Each index is pushed and popped at most once → total stack operations O(n).<br />
+                    Time complexity: <strong>O(n)</strong>.<br />
+                    Extra space: answer array plus stack → <strong>O(n)</strong>.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 5 -->
+        <section class="problem">
+            <h2>Problem 5 - Level Order Traversal (BFS Using a Queue)</h2>
+            <p>
+                Given the root of a binary tree, return its level order traversal (also called breadth-first search):
+                a list of lists of node values, one list per level from top to bottom.
+            </p>
+
+            <p>Example tree:</p>
+            <pre><code class="language-text">    3
+   / \
+  9  20
+    /  \
+   15   7</code></pre>
+            <p>Output: <code>[[3], [9, 20], [15, 7]]</code></p>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Use a queue. Push the root, then repeatedly pop nodes, push their children, and group
+                    nodes by levels using the queue size at the start of each level.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Example solution (C#):
+<pre><code class="language-csharp">using System.Collections.Generic;
+
+class TreeNode {
+    public int Val;
+    public TreeNode? Left;
+    public TreeNode? Right;
+    public TreeNode(int val) { Val = val; }
+}
+
+IList&lt;IList&lt;int&gt;&gt; LevelOrder(TreeNode? root) {
+    var result = new List&lt;IList&lt;int&gt;&gt;();
+    if (root == null) return result;
+
+    var q = new Queue&lt;TreeNode&gt;();
+    q.Enqueue(root);
+
+    while (q.Count &gt; 0) {
+        int levelSize = q.Count;
+        var level = new List&lt;int&gt;();
+        for (int i = 0; i &lt; levelSize; i++) {
+            var node = q.Dequeue();
+            level.Add(node.Val);
+            if (node.Left != null) q.Enqueue(node.Left);
+            if (node.Right != null) q.Enqueue(node.Right);
+        }
+        result.Add(level);
+    }
+    return result;
+}</code></pre>
+                    Each node is enqueued and dequeued exactly once → total work proportional to the number of nodes
+                    <code>n</code>.<br />
+                    Time complexity: <strong>O(n)</strong>.<br />
+                    Extra space: the queue can hold up to O(n) nodes in the worst case, plus result → <strong>O(n)</strong>.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 6 -->
+        <section class="problem">
+            <h2>Problem 6 - Sliding Window Maximum (Deque as a Monotonic Queue)</h2>
+            <p>
+                Given an array of integers <code>nums</code> and a window size <code>k</code>, return an array
+                <code>maxes</code> where <code>maxes[i]</code> is the maximum value in
+                <code>nums[i .. i + k - 1]</code>.
+            </p>
+
+            <p>Example:</p>
+            <ul>
+                <li>Input: <code>nums = [1, 3, -1, -3, 5, 3, 6, 7]</code>, <code>k = 3</code></li>
+                <li>Output: <code>[3, 3, 5, 5, 6, 7]</code></li>
+            </ul>
+
+            <p>
+                Implement an O(n) time solution using a deque, and briefly explain how it works.
+            </p>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Store indices in a deque in decreasing order of their values. The front of the deque is
+                    always the index of the maximum in the current window. When you slide the window:
+                    <ul>
+                        <li>Remove indices from the front that fall out of the window.</li>
+                        <li>Remove indices from the back whose values are smaller than the new element.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Example solution (JavaScript):
+<pre><code class="language-javascript">function maxSlidingWindow(nums, k) {
+    const n = nums.length;
+    if (n === 0 || k === 0) return [];
+    const deque = []; // will store indices
+    const result = [];
+
+    for (let i = 0; i &lt; n; i++) {
+        // Remove indices out of the current window
+        while (deque.length &gt; 0 &amp;&amp; deque[0] &lt;= i - k) {
+            deque.shift();
+        }
+        // Maintain decreasing order in deque
+        while (deque.length &gt; 0 &amp;&amp; nums[deque[deque.length - 1]] &lt;= nums[i]) {
+            deque.pop();
+        }
+        deque.push(i);
+
+        // The window starts being valid at i &gt;= k - 1
+        if (i &gt;= k - 1) {
+            result.push(nums[deque[0]]);
+        }
+    }
+    return result;
+}</code></pre>
+                    Each index is pushed into and popped from the deque at most once, so total deque operations
+                    are O(n).<br />
+                    Time complexity: <strong>O(n)</strong>.<br />
+                    Extra space: deque and result arrays are O(n) → <strong>O(n)</strong>.
+                </div>
+            </details>
+        </section>
+
+        <div class="next-section">
+            <a href="section4-stacks-queues.html">
+                ← Back to Section 4 Lesson
+            </a>
+            &nbsp;&nbsp;
+            <a href="solutions-section4-stacks-queues.html">
+                View detailed Solutions
+            </a>
+            &nbsp;&nbsp;
+            <a href="section10-practice.html">
+                Back to Practice Hub →
+            </a>
+        </div>
+    </main>
+</body>
+
+</html>

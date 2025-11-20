@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Section 3 - Linked Lists &amp; Recursion</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css">
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tab logic, highlight init, etc.) -->
+    <script src="js/site.js"></script>
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="index.html">← Back to Index</a>
+        </div>
+        <div class="kicker">Section 3</div>
+        <h1>Linked Lists &amp; Recursion</h1>
+        <p class="tagline">
+            Linked lists let you insert and remove elements efficiently without shifting neighbors.
+            Recursion is a way to express solutions that naturally follow the structure of a list or tree.
+        </p>
+
+        <h2>3.1 What Is a Linked List?</h2>
+        <p>
+            A <strong>linked list</strong> is a sequence of nodes where each node holds a value and a reference
+            (or pointer) to the next node. The list is usually accessed by a pointer or reference to the
+            first node, called the <strong>head</strong>.
+        </p>
+        <ul class="bullet-tight">
+            <li><strong>Singly linked list</strong>: each node points only to the next node.</li>
+            <li><strong>Doubly linked list</strong>: each node points to both the next and previous node.</li>
+            <li>No random access: we reach the k-th element by walking from the head in <strong>O(k)</strong> time.</li>
+        </ul>
+        <p>
+            Linked lists trade away fast indexed access (arrays) in exchange for cheaper insertions and
+            deletions in the middle, if you already have a pointer to the right place.
+        </p>
+
+        <h2>3.2 Recap: Time Complexity for Linked Lists</h2>
+        <ul>
+            <li><strong>Traversal</strong> over all nodes: <strong>O(n)</strong>.</li>
+            <li><strong>Insert or delete</strong> after a given node (and you already have that node):
+                <strong>O(1)</strong>.</li>
+            <li><strong>Find by index</strong> (k-th element): <strong>O(k)</strong>, worst case <strong>O(n)</strong>.
+            </li>
+        </ul>
+
+        <h2>3.3 Recursion and the Call Stack</h2>
+        <p>
+            A <strong>recursive function</strong> calls itself on a smaller subproblem. For lists, the natural
+            smaller piece is often "the list starting at the next node". Each call is pushed onto the
+            <strong>call stack</strong>, and when it returns, it is popped off.
+        </p>
+        <p>
+            To avoid infinite recursion you need:
+        </p>
+        <ul>
+            <li>A <strong>base case</strong> that returns without recursing further.</li>
+            <li>A <strong>step</strong> that moves toward the base case (for example, advancing the node pointer).</li>
+        </ul>
+
+        <h2>3.4 Code Examples in Multiple Languages</h2>
+        <p>
+            As in earlier sections, each example appears in six languages:
+            <strong>C, C++, Java, JavaScript, C#,</strong> and <strong>Python</strong>. Use the language tabs
+            to switch between them.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark" selected>Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <!-- ======================= Example 1 ======================= -->
+        <h3>3.5 Example 1 - Singly Linked List Node &amp; Insert at Head</h3>
+        <p>
+            We will define a singly linked list node and implement a helper that inserts a new value
+            at the head of the list. This is often the simplest way to build up a list.
+        </p>
+
+        <div class="code-example" data-example="s3-ex1">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 1</span>
+                    <span class="meta">Define a node and insert at head</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+#include &lt;stdlib.h&gt;
+
+typedef struct Node {
+    int value;
+    struct Node* next;
+} Node;
+
+Node* push_front(Node* head, int value) {
+    Node* new_node = (Node*)malloc(sizeof(Node));
+    if (!new_node) return head;  // allocation failed, return old head
+    new_node-&gt;value = value;
+    new_node-&gt;next = head;
+    return new_node;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+struct Node {
+    int value;
+    Node* next;
+    Node(int v, Node* n = nullptr) : value(v), next(n) {}
+};
+
+Node* pushFront(Node* head, int value) {
+    Node* newNode = new Node(value, head);
+    return newNode;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+class ListNode {
+    int value;
+    ListNode next;
+
+    ListNode(int value, ListNode next) {
+        this.value = value;
+        this.next = next;
+    }
+}
+
+ListNode pushFront(ListNode head, int value) {
+    return new ListNode(value, head);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+class ListNode {
+    constructor(value, next = null) {
+        this.value = value;
+        this.next = next;
+    }
+}
+
+function pushFront(head, value) {
+    return new ListNode(value, head);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+class ListNode {
+    public int Value;
+    public ListNode? Next;
+
+    public ListNode(int value, ListNode? next = null) {
+        Value = value;
+        Next = next;
+    }
+}
+
+ListNode? PushFront(ListNode? head, int value) {
+    return new ListNode(value, head);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+class ListNode:
+    def __init__(self, value: int, next: "ListNode | None" = None):
+        self.value = value
+        self.next = next
+
+def push_front(head: "ListNode | None", value: int) -&gt; "ListNode":
+    return ListNode(value, head)</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(1)</strong> — a fixed number of pointer updates. &nbsp;|&nbsp;
+                Extra space: <strong>O(1)</strong> per insertion (one new node).
+            </div>
+        </div>
+
+        <!-- ======================= Example 2 ======================= -->
+        <h3>3.6 Example 2 - Traverse and Print a Linked List</h3>
+        <p>
+            Now we traverse the list from head to tail, printing each node's value. This is the
+            linked list analog of iterating through an array.
+        </p>
+
+        <div class="code-example" data-example="s3-ex2">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 2</span>
+                    <span class="meta">Iterative traversal</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+#include &lt;stdio.h&gt;
+
+void print_list(Node* head) {
+    Node* current = head;
+    while (current != NULL) {
+        printf("%d\n", current-&gt;value);
+        current = current-&gt;next;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;iostream&gt;
+
+void printList(Node* head) {
+    Node* current = head;
+    while (current != nullptr) {
+        std::cout &lt;&lt; current-&gt;value &lt;&lt; std::endl;
+        current = current-&gt;next;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+void printList(ListNode head) {
+    ListNode current = head;
+    while (current != null) {
+        System.out.println(current.value);
+        current = current.next;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function printList(head) {
+    let current = head;
+    while (current !== null) {
+        console.log(current.value);
+        current = current.next;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+void PrintList(ListNode? head) {
+    var current = head;
+    while (current != null) {
+        Console.WriteLine(current.Value);
+        current = current.Next;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+def print_list(head: "ListNode | None") -&gt; None:
+    current = head
+    while current is not None:
+        print(current.value)
+        current = current.next</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n)</strong> — we visit every node once. &nbsp;|&nbsp;
+                Extra space: <strong>O(1)</strong>.
+            </div>
+        </div>
+
+        <!-- ======================= Example 3 ======================= -->
+        <h3>3.7 Example 3 - Reverse a Linked List (Iterative)</h3>
+        <p>
+            A classic interview problem: reverse a singly linked list in place. We maintain
+            three pointers: <code>prev</code>, <code>current</code>, and <code>next</code>.
+        </p>
+
+        <div class="code-example" data-example="s3-ex3">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 3</span>
+                    <span class="meta">Reverse a list iteratively</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+Node* reverse_list(Node* head) {
+    Node* prev = NULL;
+    Node* current = head;
+    while (current != NULL) {
+        Node* next_node = current-&gt;next;
+        current-&gt;next = prev;
+        prev = current;
+        current = next_node;
+    }
+    return prev;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+Node* reverseList(Node* head) {
+    Node* prev = nullptr;
+    Node* current = head;
+    while (current != nullptr) {
+        Node* nextNode = current-&gt;next;
+        current-&gt;next = prev;
+        prev = current;
+        current = nextNode;
+    }
+    return prev;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+ListNode reverseList(ListNode head) {
+    ListNode prev = null;
+    ListNode current = head;
+    while (current != null) {
+        ListNode nextNode = current.next;
+        current.next = prev;
+        prev = current;
+        current = nextNode;
+    }
+    return prev;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function reverseList(head) {
+    let prev = null;
+    let current = head;
+    while (current !== null) {
+        const nextNode = current.next;
+        current.next = prev;
+        prev = current;
+        current = nextNode;
+    }
+    return prev;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+ListNode? ReverseList(ListNode? head) {
+    ListNode? prev = null;
+    var current = head;
+    while (current != null) {
+        var nextNode = current.Next;
+        current.Next = prev;
+        prev = current;
+        current = nextNode;
+    }
+    return prev;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+def reverse_list(head: "ListNode | None") -&gt; "ListNode | None":
+    prev = None
+    current = head
+    while current is not None:
+        next_node = current.next
+        current.next = prev
+        prev = current
+        current = next_node
+    return prev</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n)</strong> — we visit each node once. &nbsp;|&nbsp;
+                Extra space: <strong>O(1)</strong> — in-place reversal.
+            </div>
+        </div>
+
+        <!-- ======================= Example 4 ======================= -->
+        <h3>3.8 Example 4 - Recursively Print a Linked List</h3>
+        <p>
+            This example shows a simple recursive pattern: print the current node, then recursively
+            print the rest of the list. The structure of the code mirrors the structure of the list.
+        </p>
+
+        <div class="code-example" data-example="s3-ex4">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 4</span>
+                    <span class="meta">Recursive traversal</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+void print_list_recursive(Node* head) {
+    if (head == NULL) {
+        return;  // base case: empty list
+    }
+    printf("%d\n", head-&gt;value);
+    print_list_recursive(head-&gt;next);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;iostream&gt;
+
+void printListRecursive(Node* head) {
+    if (head == nullptr) return;
+    std::cout &lt;&lt; head-&gt;value &lt;&lt; std::endl;
+    printListRecursive(head-&gt;next);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+void printListRecursive(ListNode head) {
+    if (head == null) {
+        return;
+    }
+    System.out.println(head.value);
+    printListRecursive(head.next);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function printListRecursive(head) {
+    if (head === null) {
+        return;
+    }
+    console.log(head.value);
+    printListRecursive(head.next);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+void PrintListRecursive(ListNode? head) {
+    if (head == null) {
+        return;
+    }
+    Console.WriteLine(head.Value);
+    PrintListRecursive(head.Next);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+def print_list_recursive(head: "ListNode | None") -&gt; None:
+    if head is None:
+        return
+    print(head.value)
+    print_list_recursive(head.next)</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n)</strong> — one call per node. &nbsp;|&nbsp;
+                Extra space: <strong>O(n)</strong> for the call stack (one frame per node).
+            </div>
+        </div>
+
+        <h2>3.9 Quick Practice</h2>
+        <p>For each of these, think about both time and space complexity (including recursion stack space):</p>
+        <ol>
+            <li>
+                Write a function that counts the number of nodes in a linked list iteratively.<br>
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>1.</strong> We walk the list once, incrementing a counter.<br>
+                        Time: <strong>O(n)</strong>.<br>
+                        Extra space: <strong>O(1)</strong>.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Write a recursive function that counts the number of nodes in a linked list.<br>
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>2.</strong> One recursive call per node.<br>
+                        Time: <strong>O(n)</strong>.<br>
+                        Extra space: <strong>O(n)</strong> for the call stack.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Modify the recursive print function so that it prints the list in reverse order.<br>
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>3.</strong> Recurse first, then print on the way back up.<br>
+                        Time: <strong>O(n)</strong> (still one call per node).<br>
+                        Extra space: <strong>O(n)</strong> for the call stack.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Consider reversing a linked list recursively instead of iteratively. What happens to
+                time and space complexity?<br>
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>4.</strong> Each node is still visited a constant number of times.<br>
+                        Time: <strong>O(n)</strong>.<br>
+                        Extra space: <strong>O(n)</strong> for recursion, instead of <strong>O(1)</strong> iteratively.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Suppose you insert a new node at the tail of a singly linked list when you only have
+                a pointer to the head (no tail pointer). What is the time complexity of a single
+                insertion?<br>
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>5.</strong> You must traverse from head to the last node to find the tail.<br>
+                        Time: <strong>O(n)</strong> per insertion.<br>
+                        Extra space: <strong>O(1)</strong>.
+                    </div>
+                </details>
+            </li>
+        </ol>
+        
+        <div class="top-nav">
+            <a href="problems-section3-linked-lists.html">
+                Problem Set for Section 3 Linked Lists →
+            </a>
+        </div>
+        <div class="next-section">
+            <a href="section2-arrays-strings.html">
+                ← Back to Section 2
+            </a>
+            &nbsp;&nbsp;
+            <a href="section4-stacks-queues.html">
+                Next: Section 4 — Stacks &amp; Queues →
+            </a>
+        </div>
+    </main>
+</body>
+
+</html>

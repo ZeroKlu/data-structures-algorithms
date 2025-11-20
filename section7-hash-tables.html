@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Section 7 - Hash Tables</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css" />
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tab logic, highlight init, localStorage prefs, etc.) -->
+    <script src="js/site.js"></script>
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="index.html">← Back to Index</a>
+        </div>
+        <div class="kicker">Section 7</div>
+        <h1>Hash Tables</h1>
+        <p class="tagline">
+            Hash tables give you average O(1) inserts, lookups, and deletes for key-value data.
+            They are the backbone of dictionaries, maps, and sets in most languages.
+        </p>
+
+        <h2>7.1 What Is a Hash Table?</h2>
+        <p>
+            A <strong>hash table</strong> (or hash map) stores key-value pairs and lets you:
+        </p>
+        <ul class="bullet-tight">
+            <li>Insert a key with a value.</li>
+            <li>Look up the value for a key.</li>
+            <li>Update or delete a key.</li>
+        </ul>
+        <p>
+            Internally, a hash table uses:
+        </p>
+        <ul class="bullet-tight">
+            <li>A <strong>hash function</strong> that maps a key to an integer index.</li>
+            <li>An underlying <strong>array of buckets</strong> where the data is stored.</li>
+        </ul>
+
+        <h2>7.2 Hash Functions and Collisions</h2>
+        <p>
+            A <strong>hash function</strong> <code>h(key)</code> maps a key to an index in the range
+            <code>0 ... capacity - 1</code>. A good hash function tries to:
+        </p>
+        <ul>
+            <li>Spread keys out uniformly over the buckets.</li>
+            <li>Be fast to compute.</li>
+            <li>Be deterministic (same key, same hash every time).</li>
+        </ul>
+        <p>
+            When two different keys map to the same index, we get a <strong>collision</strong>.
+            Common strategies:
+        </p>
+        <ul>
+            <li><strong>Chaining</strong> - each bucket holds a linked list or dynamic array of entries.</li>
+            <li><strong>Open addressing</strong> - if a bucket is full, probe other buckets (linear, quadratic, etc.).</li>
+        </ul>
+
+        <h2>7.3 Performance and Load Factor</h2>
+        <p>
+            Let <code>n</code> be the number of stored keys and <code>m</code> be the number of buckets.
+            The <strong>load factor</strong> is <code>α = n / m</code>.
+        </p>
+        <ul>
+            <li>With a good hash and resizing strategy, average time for insert / lookup / delete is <strong>O(1)</strong>.</li>
+            <li>Worst-case time can be <strong>O(n)</strong> if everything collides, but we try to avoid this.</li>
+        </ul>
+
+        <h2>7.4 Code Examples in Multiple Languages</h2>
+        <p>
+            In this section, we will implement simple hash tables and show common patterns like
+            counting frequencies and detecting duplicates. Each example appears in:
+            <strong>C, C++, Java, JavaScript, C#,</strong> and <strong>Python</strong>.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr />
+
+        <!-- ======================= Example 1 ======================= -->
+        <h3>7.5 Example 1 - Simple String Hash (Chaining)</h3>
+        <p>
+            We will implement a tiny hash table for mapping strings to integers using chaining.
+            This is educational, not production quality, but it shows the core mechanics.
+        </p>
+
+        <div class="code-example" data-example="s7-ex1">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 1</span>
+                    <span class="meta">String to int map with chaining</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C (simplified string to int map with chaining)
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+typedef struct Entry {
+    char* key;
+    int value;
+    struct Entry* next;
+} Entry;
+
+#define TABLE_SIZE 101
+
+typedef struct {
+    Entry* buckets[TABLE_SIZE];
+} HashTable;
+
+static unsigned int hash_str(const char* s) {
+    unsigned int h = 2166136261u;
+    while (*s) {
+        h ^= (unsigned char)*s++;
+        h *= 16777619u;
+    }
+    return h;
+}
+
+void ht_init(HashTable* ht) {
+    for (int i = 0; i &lt; TABLE_SIZE; i++) {
+        ht-&gt;buckets[i] = NULL;
+    }
+}
+
+void ht_put(HashTable* ht, const char* key, int value) {
+    unsigned int h = hash_str(key);
+    int idx = (int)(h % TABLE_SIZE);
+    Entry* curr = ht-&gt;buckets[idx];
+    while (curr) {
+        if (strcmp(curr-&gt;key, key) == 0) {
+            curr-&gt;value = value; // update
+            return;
+        }
+        curr = curr-&gt;next;
+    }
+    // not found, insert new at head
+    Entry* e = (Entry*)malloc(sizeof(Entry));
+    e-&gt;key = _strdup(key); // or strdup on POSIX
+    e-&gt;value = value;
+    e-&gt;next = ht-&gt;buckets[idx];
+    ht-&gt;buckets[idx] = e;
+}
+
+int* ht_get(HashTable* ht, const char* key) {
+    unsigned int h = hash_str(key);
+    int idx = (int)(h % TABLE_SIZE);
+    Entry* curr = ht-&gt;buckets[idx];
+    while (curr) {
+        if (strcmp(curr-&gt;key, key) == 0) {
+            return &amp;curr-&gt;value;
+        }
+        curr = curr-&gt;next;
+    }
+    return NULL; // not found
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++ (just use std::unordered_map)
+#include &lt;string&gt;
+#include &lt;unordered_map&gt;
+
+void demo_hash() {
+    std::unordered_map&lt;std::string, int&gt; freq;
+    freq["apple"]++;
+    freq["banana"] += 2;
+    int n = freq["apple"]; // if missing, default constructed 0 then incremented
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java (use HashMap)
+import java.util.HashMap;
+import java.util.Map;
+
+class HashDemo {
+    public static void main(String[] args) {
+        Map&lt;String, Integer&gt; freq = new HashMap&lt;&gt;();
+        freq.put("apple", 1);
+        freq.put("banana", 2);
+        int n = freq.getOrDefault("apple", 0);
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript (use Map or plain object)
+function demoHash() {
+    const freq = new Map();
+    freq.set("apple", (freq.get("apple") || 0) + 1);
+    freq.set("banana", (freq.get("banana") || 0) + 2);
+    const n = freq.get("apple") || 0;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C# (use Dictionary&lt;TKey, TValue&gt;)
+using System.Collections.Generic;
+
+class HashDemo {
+    static void Main() {
+        var freq = new Dictionary&lt;string, int&gt;();
+        freq["apple"] = 1;
+        freq["banana"] = 2;
+        int n = freq.ContainsKey("apple") ? freq["apple"] : 0;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python (use dict)
+def demo_hash() -&gt; None:
+    freq: dict[str, int] = {}
+    freq["apple"] = freq.get("apple", 0) + 1
+    freq["banana"] = freq.get("banana", 0) + 2
+    n = freq.get("apple", 0)</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Average time: <strong>O(1)</strong> for put/get with good hashing and resizing. &nbsp;|&nbsp;
+                Extra space: <strong>O(n)</strong> for <code>n</code> entries.
+            </div>
+        </div>
+
+        <!-- ======================= Example 2 ======================= -->
+        <h3>7.6 Example 2 - Count Frequencies (Word Count)</h3>
+        <p>
+            Hash tables are perfect for counting how many times each item appears (frequencies).
+            This pattern shows up constantly in interviews.
+        </p>
+
+        <div class="code-example" data-example="s7-ex2">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 2</span>
+                    <span class="meta">Word frequencies using a hash map</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C (using the HashTable from Example 1)
+void count_words(HashTable* ht, const char* words[], int n) {
+    for (int i = 0; i &lt; n; i++) {
+        const char* w = words[i];
+        int* existing = ht_get(ht, w);
+        if (existing) {
+            (*existing)++;
+        } else {
+            ht_put(ht, w, 1);
+        }
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;string&gt;
+#include &lt;vector&gt;
+#include &lt;unordered_map&gt;
+
+std::unordered_map&lt;std::string, int&gt; countWords(const std::vector&lt;std::string&gt;&amp; words) {
+    std::unordered_map&lt;std::string, int&gt; freq;
+    for (const auto&amp; w : words) {
+        freq[w]++;
+    }
+    return freq;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+Map&lt;String, Integer&gt; countWords(List&lt;String&gt; words) {
+    Map&lt;String, Integer&gt; freq = new HashMap&lt;&gt;();
+    for (String w : words) {
+        freq.put(w, freq.getOrDefault(w, 0) + 1);
+    }
+    return freq;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function countWords(words) {
+    const freq = new Map();
+    for (const w of words) {
+        freq.set(w, (freq.get(w) || 0) + 1);
+    }
+    return freq;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+Dictionary&lt;string, int&gt; CountWords(IEnumerable&lt;string&gt; words) {
+    var freq = new Dictionary&lt;string, int&gt;();
+    foreach (var w in words) {
+        if (freq.ContainsKey(w)) {
+            freq[w]++;
+        } else {
+            freq[w] = 1;
+        }
+    }
+    return freq;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+from collections import Counter
+from typing import Iterable
+
+def count_words(words: Iterable[str]) -&gt; dict[str, int]:
+    return dict(Counter(words))</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n)</strong> average for <code>n</code> words. &nbsp;|&nbsp;
+                Extra space: <strong>O(k)</strong> where <code>k</code> is number of distinct words.
+            </div>
+        </div>
+
+        <!-- ======================= Example 3 ======================= -->
+        <h3>7.7 Example 3 - Detect First Duplicate (Hash Set)</h3>
+        <p>
+            We can detect the first duplicate value in an array by inserting elements into a hash set
+            and checking whether we have seen each element before.
+        </p>
+
+        <div class="code-example" data-example="s7-ex3">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 3</span>
+                    <span class="meta">First duplicate using a hash set</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C (integer hash set using open addressing - simplified)
+#include &lt;stdbool.h&gt;
+
+#define SET_DELETED -1
+
+typedef struct {
+    int* table;
+    int capacity;
+} IntSet;
+
+static int int_hash(int x, int capacity) {
+    // simple hash: ensure non-negative then mod
+    if (x &lt; 0) x = -x;
+    return x % capacity;
+}
+
+// For brevity, constructor and resize logic omitted.
+// Pattern: for each x, probe until empty/own value found.
+
+bool set_insert(IntSet* s, int x);
+bool set_contains(IntSet* s, int x);
+
+int first_duplicate(const int* arr, int n, IntSet* s) {
+    for (int i = 0; i &lt; n; i++) {
+        int x = arr[i];
+        if (set_contains(s, x)) {
+            return x;
+        }
+        set_insert(s, x);
+    }
+    return 0; // or some sentinel indicating no duplicate
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;unordered_set&gt;
+
+int firstDuplicate(const std::vector&lt;int&gt;&amp; arr) {
+    std::unordered_set&lt;int&gt; seen;
+    for (int x : arr) {
+        if (seen.count(x)) {
+            return x;
+        }
+        seen.insert(x);
+    }
+    return 0; // or some sentinel
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+import java.util.HashSet;
+import java.util.Set;
+
+Integer firstDuplicate(int[] arr) {
+    Set&lt;Integer&gt; seen = new HashSet&lt;&gt;();
+    for (int x : arr) {
+        if (seen.contains(x)) {
+            return x;
+        }
+        seen.add(x);
+    }
+    return null; // no duplicate
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function firstDuplicate(arr) {
+    const seen = new Set();
+    for (const x of arr) {
+        if (seen.has(x)) {
+            return x;
+        }
+        seen.add(x);
+    }
+    return null;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+int? FirstDuplicate(int[] arr) {
+    var seen = new HashSet&lt;int&gt;();
+    foreach (var x in arr) {
+        if (!seen.Add(x)) {
+            return x;
+        }
+    }
+    return null;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+from typing import Iterable, Optional
+
+def first_duplicate(arr: Iterable[int]) -&gt; Optional[int]:
+    seen: set[int] = set()
+    for x in arr:
+        if x in seen:
+            return x
+        seen.add(x)
+    return None</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n)</strong> average for <code>n</code> elements. &nbsp;|&nbsp;
+                Extra space: <strong>O(n)</strong> for the set.
+            </div>
+        </div>
+
+        <!-- ======================= Example 4 ======================= -->
+        <h3>7.8 Example 4 - Two-Sum with a Hash Map</h3>
+        <p>
+            Given an array and a target value, find two indices <code>i</code> and <code>j</code>
+            such that <code>arr[i] + arr[j] == target</code>. The hash table stores
+            value-to-index mappings as we scan.
+        </p>
+
+        <div class="code-example" data-example="s7-ex4">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 4</span>
+                    <span class="meta">Two-sum using a hash map</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C (conceptual; assumes an int-&gt;int hash map implementation)
+// Returns 1 if found, 0 otherwise.
+typedef struct IntIntMap IntIntMap;
+
+int two_sum(const int* arr, int n, int target, int* out_i, int* out_j,
+            IntIntMap* map) {
+    // map: value -&gt; index
+    for (int i = 0; i &lt; n; i++) {
+        int x = arr[i];
+        int need = target - x;
+        int idx;
+        if (map_get(map, need, &amp;idx)) { // need exists
+            *out_i = idx;
+            *out_j = i;
+            return 1;
+        }
+        map_put(map, x, i);
+    }
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;unordered_map&gt;
+#include &lt;utility&gt;
+#include &lt;vector&gt;
+
+std::pair&lt;int, int&gt; twoSum(const std::vector&lt;int&gt;&amp; nums, int target) {
+    std::unordered_map&lt;int, int&gt; indexOf; // value -&gt; index
+    for (int i = 0; i &lt; (int)nums.size(); i++) {
+        int need = target - nums[i];
+        auto it = indexOf.find(need);
+        if (it != indexOf.end()) {
+            return {it-&gt;second, i};
+        }
+        indexOf[nums[i]] = i;
+    }
+    return {-1, -1};
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+import java.util.HashMap;
+import java.util.Map;
+
+int[] twoSum(int[] nums, int target) {
+    Map&lt;Integer, Integer&gt; indexOf = new HashMap&lt;&gt;(); // value -&gt; index
+    for (int i = 0; i &lt; nums.length; i++) {
+        int need = target - nums[i];
+        if (indexOf.containsKey(need)) {
+            return new int[] { indexOf.get(need), i };
+        }
+        indexOf.put(nums[i], i);
+    }
+    return new int[] { -1, -1 };
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function twoSum(nums, target) {
+    const indexOf = new Map(); // value -&gt; index
+    for (let i = 0; i &lt; nums.length; i++) {
+        const need = target - nums[i];
+        if (indexOf.has(need)) {
+            return [indexOf.get(need), i];
+        }
+        indexOf.set(nums[i], i);
+    }
+    return [-1, -1];
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+int[] TwoSum(int[] nums, int target) {
+    var indexOf = new Dictionary&lt;int, int&gt;();
+    for (int i = 0; i &lt; nums.Length; i++) {
+        int need = target - nums[i];
+        if (indexOf.TryGetValue(need, out int idx)) {
+            return new[] { idx, i };
+        }
+        indexOf[nums[i]] = i;
+    }
+    return new[] { -1, -1 };
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+from typing import List, Tuple
+
+def two_sum(nums: List[int], target: int) -&gt; Tuple[int, int]:
+    index_of: dict[int, int] = {}
+    for i, x in enumerate(nums):
+        need = target - x
+        if need in index_of:
+            return index_of[need], i
+        index_of[x] = i
+    return -1, -1</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n)</strong> average for <code>n</code> elements. &nbsp;|&nbsp;
+                Extra space: <strong>O(n)</strong> for the map.
+            </div>
+        </div>
+
+        <h2>7.9 Quick Practice</h2>
+        <p>For each of the following, identify the time and space complexity and the main idea:</p>
+        <ol>
+            <li>
+                Counting character frequencies in a string using a hash map.<br />
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>1.</strong> We scan each character once and update a map.<br />
+                        Time: <strong>O(n)</strong> for a string of length <code>n</code>.<br />
+                        Extra space: <strong>O(k)</strong> where <code>k</code> is the number of distinct characters
+                        (at most a constant if we restrict to ASCII).
+                    </div>
+                </details>
+            </li>
+            <li>
+                Checking if two strings are anagrams using a hash map of character counts.<br />
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>2.</strong> Count characters in the first string, subtract counts for the second.<br />
+                        Time: <strong>O(n)</strong> for length <code>n</code> (assuming both are similar length).<br />
+                        Extra space: <strong>O(k)</strong> for character counts.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Using a hash set to determine whether an array contains any duplicates at all.<br />
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>3.</strong> Insert each element into a set; if insertion fails or element already
+                        present, we have a duplicate.<br />
+                        Time: <strong>O(n)</strong> average.<br />
+                        Extra space: <strong>O(n)</strong>.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Using a hash map to group words into anagram groups (e.g., "eat", "tea", "ate").<br />
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>4.</strong> Key = sorted letters or a letter-count signature, value = list of words.<br />
+                        Time: typically <strong>O(n · L log L)</strong> if we sort each word of length <code>L</code>,
+                        or <strong>O(n · L)</strong> with counting signatures.<br />
+                        Extra space: <strong>O(n · L)</strong> for storing words and keys.
+                    </div>
+                </details>
+            </li>
+            <li>
+                What is the trade-off between using a hash table vs. a balanced binary search tree (like a red-black tree)?<br />
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>5.</strong> Hash tables give average <strong>O(1)</strong> for insert / lookup / delete
+                        but do not maintain sorted order, and worst-case operations can be <strong>O(n)</strong>.<br />
+                        Balanced BSTs give <strong>O(log n)</strong> worst-case and keep keys ordered, which is useful
+                        for range queries and ordered traversals, but they are usually slower in practice on simple
+                        lookups than a good hash table.
+                    </div>
+                </details>
+            </li>
+        </ol>
+
+        <div class="top-nav">
+            <a href="problems-section7-hash-tables.html">
+                Problem Set for Section 7 Hash Tables →
+            </a>
+        </div>
+        <div class="next-section">
+            <a href="section6-heaps-priority-queues.html">
+                ← Back to Section 6
+            </a>
+            &nbsp;&nbsp;
+            <a href="section8-dynamic-programming.html">
+                Next: Section 8 — Dynamic Programming →
+            </a>
+        </div>
+    </main>
+</body>
+
+</html>

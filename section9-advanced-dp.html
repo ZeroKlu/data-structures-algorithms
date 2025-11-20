@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Section 9 - Advanced Dynamic Programming Patterns</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css" />
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tab logic, highlight init, prefs, etc.) -->
+    <script src="js/site.js"></script>
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="index.html">← Back to Index</a>
+        </div>
+
+        <div class="kicker">Section 9</div>
+        <h1>Advanced Dynamic Programming Patterns</h1>
+        <p class="tagline">
+            Now that you have the basics of DP, we will look at three important advanced patterns:
+            DP on trees, DP on subsets (bitmask DP), and DP on intervals.
+        </p>
+
+        <h2>9.1 From Basic to Advanced DP</h2>
+        <p>
+            Earlier, we used DP on simple 1D or 2D tables (Fibonacci, knapsack, LCS).
+            Interview problems will often disguise DP inside other structures:
+        </p>
+        <ul class="bullet-tight">
+            <li><strong>Tree DP</strong>: the state is attached to each node of a tree.</li>
+            <li><strong>Subset / bitmask DP</strong>: the state corresponds to a subset of items.</li>
+            <li><strong>Interval DP</strong>: the state is a range <code>[i, j]</code> in an array or string.</li>
+        </ul>
+
+        <h2>9.2 Tree, Subset, and Interval States</h2>
+        <ul>
+            <li>
+                <strong>Tree DP</strong>: typically a post-order DFS that computes a value from children
+                and returns it to the parent. Examples: subtree sums, diameter, independent set on trees.
+            </li>
+            <li>
+                <strong>Subset DP (bitmask DP)</strong>: states look like <code>dp[mask]</code> where
+                <code>mask</code> encodes a subset. Examples: visiting all cities, assigning tasks to people.
+            </li>
+            <li>
+                <strong>Interval DP</strong>: states look like <code>dp[i][j]</code> for an interval
+                <code>[i, j]</code>. Examples: matrix chain multiplication, optimal BST, palindrome partitioning.
+            </li>
+        </ul>
+
+        <div class="callout">
+            <strong>Mental model:</strong> DP is still about subproblems and reuse. Advanced patterns are
+            mostly about getting comfortable with what the <em>state</em> represents.
+        </div>
+
+        <h2>9.3 Code Examples in Multiple Languages</h2>
+        <p>
+            In this section we will implement:
+        </p>
+        <ul class="bullet-tight">
+            <li>Tree DP: maximum root-to-leaf path sum.</li>
+            <li>Bitmask DP: minimum path visiting all cities (TSP-style subset DP).</li>
+            <li>Interval DP: matrix chain multiplication minimum cost.</li>
+        </ul>
+        <p>
+            Each is shown in <strong>C, C++, Java, JavaScript, C#,</strong> and <strong>Python</strong>.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr />
+
+        <!-- ======================= Example 1 ======================= -->
+        <h3>9.4 Example 1 - Tree DP: Max Root-to-Leaf Path Sum</h3>
+        <p>
+            Given a binary tree where each node has an integer value, compute the maximum sum of any
+            path starting at the root and ending at a leaf.
+        </p>
+        <p>
+            Recurrence:
+        </p>
+        <ul>
+            <li>If node is null, treat as negative infinity (or a sentinel that never wins).</li>
+            <li>Otherwise: <code>best(node) = node.val + max(best(left), best(right))</code>.</li>
+        </ul>
+
+        <div class="code-example" data-example="s9-ex1">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 1</span>
+                    <span class="meta">Tree DP on a binary tree</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+#include &lt;limits.h&gt;
+
+typedef struct TreeNode {
+    int val;
+    struct TreeNode* left;
+    struct TreeNode* right;
+} TreeNode;
+
+static int max_int(int a, int b) {
+    return a &gt; b ? a : b;
+}
+
+int max_root_to_leaf(TreeNode* root) {
+    if (!root) {
+        return INT_MIN; // no path
+    }
+    if (!root-&gt;left &amp;&amp; !root-&gt;right) {
+        return root-&gt;val;
+    }
+    int left_best = max_root_to_leaf(root-&gt;left);
+    int right_best = max_root_to_leaf(root-&gt;right);
+    return root-&gt;val + max_int(left_best, right_best);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;algorithm&gt;
+#include &lt;limits&gt;
+
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+};
+
+int maxRootToLeaf(TreeNode* root) {
+    if (!root) {
+        return std::numeric_limits&lt;int&gt;::min();
+    }
+    if (!root-&gt;left &amp;&amp; !root-&gt;right) {
+        return root-&gt;val;
+    }
+    int leftBest = maxRootToLeaf(root-&gt;left);
+    int rightBest = maxRootToLeaf(root-&gt;right);
+    return root-&gt;val + std::max(leftBest, rightBest);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int v) { val = v; }
+}
+
+int maxRootToLeaf(TreeNode root) {
+    if (root == null) {
+        return Integer.MIN_VALUE;
+    }
+    if (root.left == null &amp;&amp; root.right == null) {
+        return root.val;
+    }
+    int leftBest = maxRootToLeaf(root.left);
+    int rightBest = maxRootToLeaf(root.right);
+    return root.val + Math.max(leftBest, rightBest);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+class TreeNode {
+    constructor(val, left = null, right = null) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+function maxRootToLeaf(root) {
+    if (!root) {
+        return Number.NEGATIVE_INFINITY;
+    }
+    if (!root.left &amp;&amp; !root.right) {
+        return root.val;
+    }
+    const leftBest = maxRootToLeaf(root.left);
+    const rightBest = maxRootToLeaf(root.right);
+    return root.val + Math.max(leftBest, rightBest);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+class TreeNode {
+    public int Val;
+    public TreeNode? Left;
+    public TreeNode? Right;
+    public TreeNode(int val) { Val = val; }
+}
+
+int MaxRootToLeaf(TreeNode? root) {
+    if (root == null) {
+        return int.MinValue;
+    }
+    if (root.Left == null &amp;&amp; root.Right == null) {
+        return root.Val;
+    }
+    int leftBest = MaxRootToLeaf(root.Left);
+    int rightBest = MaxRootToLeaf(root.Right);
+    return root.Val + System.Math.Max(leftBest, rightBest);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+from __future__ import annotations
+from dataclasses import dataclass
+from typing import Optional
+
+@dataclass
+class TreeNode:
+    val: int
+    left: Optional["TreeNode"] = None
+    right: Optional["TreeNode"] = None
+
+def max_root_to_leaf(root: Optional[TreeNode]) -&gt; int:
+    if root is None:
+        return float("-inf")
+    if root.left is None and root.right is None:
+        return root.val
+    left_best = max_root_to_leaf(root.left)
+    right_best = max_root_to_leaf(root.right)
+    return root.val + max(left_best, right_best)</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n)</strong> for <code>n</code> nodes (single DFS). &nbsp;|&nbsp;
+                Extra space: <strong>O(h)</strong> recursion stack where <code>h</code> is tree height.
+            </div>
+        </div>
+
+        <!-- ======================= Example 2 ======================= -->
+        <h3>9.5 Example 2 - Bitmask DP: Visit All Cities (TSP Style)</h3>
+        <p>
+            Suppose we have a complete graph of <code>n</code> cities (0 to <code>n - 1</code>) and a matrix
+            <code>dist[i][j]</code>. We want the minimum cost path that starts at city 0 and visits
+            every city exactly once (we will not return to the start for simplicity).
+        </p>
+        <p>
+            State: <code>dp[mask][j]</code> = minimum cost to start at city 0, visit exactly the set of cities
+            in <code>mask</code>, and end at city <code>j</code>. City 0 is always included in the mask.
+        </p>
+        <p>
+            Transition:
+        </p>
+        <ul>
+            <li><code>dp[1 &lt;&lt; 0][0] = 0</code> (just at city 0).</li>
+            <li>
+                For each <code>mask</code>, for each <code>j</code> in <code>mask</code>, for each
+                <code>k</code> not in <code>mask</code>:
+                <code>dp[mask | (1 &lt;&lt; k)][k] = min(dp[mask | (1 &lt;&lt; k)][k], dp[mask][j] + dist[j][k])</code>.
+            </li>
+        </ul>
+
+        <div class="code-example" data-example="s9-ex2">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 2</span>
+                    <span class="meta">Bitmask DP for visiting all cities</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+#include &lt;limits.h&gt;
+
+int tsp_bitmask(int n, int** dist) {
+    int maxMask = 1 &lt;&lt; n;
+    const int INF = INT_MAX / 4;
+
+    int** dp = (int**)malloc(maxMask * sizeof(int*));
+    for (int m = 0; m &lt; maxMask; m++) {
+        dp[m] = (int*)malloc(n * sizeof(int));
+        for (int j = 0; j &lt; n; j++) {
+            dp[m][j] = INF;
+        }
+    }
+    dp[1 &lt;&lt; 0][0] = 0;
+
+    for (int mask = 0; mask &lt; maxMask; mask++) {
+        for (int j = 0; j &lt; n; j++) {
+            if (!(mask &amp; (1 &lt;&lt; j))) continue;
+            int curr = dp[mask][j];
+            if (curr == INF) continue;
+            for (int k = 0; k &lt; n; k++) {
+                if (mask &amp; (1 &lt;&lt; k)) continue;
+                int nextMask = mask | (1 &lt;&lt; k);
+                int cand = curr + dist[j][k];
+                if (cand &lt; dp[nextMask][k]) {
+                    dp[nextMask][k] = cand;
+                }
+            }
+        }
+    }
+
+    int fullMask = maxMask - 1;
+    int best = INF;
+    for (int j = 0; j &lt; n; j++) {
+        if (dp[fullMask][j] &lt; best) {
+            best = dp[fullMask][j];
+        }
+    }
+
+    for (int m = 0; m &lt; maxMask; m++) {
+        free(dp[m]);
+    }
+    free(dp);
+    return best;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;limits&gt;
+#include &lt;algorithm&gt;
+
+int tspBitmask(int n, const std::vector&lt;std::vector&lt;int&gt;&gt;&amp; dist) {
+    int maxMask = 1 &lt;&lt; n;
+    const int INF = std::numeric_limits&lt;int&gt;::max() / 4;
+    std::vector&lt;std::vector&lt;int&gt;&gt; dp(maxMask, std::vector&lt;int&gt;(n, INF));
+
+    dp[1 &lt;&lt; 0][0] = 0;
+
+    for (int mask = 0; mask &lt; maxMask; mask++) {
+        for (int j = 0; j &lt; n; j++) {
+            if (!(mask &amp; (1 &lt;&lt; j))) continue;
+            int curr = dp[mask][j];
+            if (curr == INF) continue;
+            for (int k = 0; k &lt; n; k++) {
+                if (mask &amp; (1 &lt;&lt; k)) continue;
+                int nextMask = mask | (1 &lt;&lt; k);
+                int cand = curr + dist[j][k];
+                dp[nextMask][k] = std::min(dp[nextMask][k], cand);
+            }
+        }
+    }
+
+    int fullMask = maxMask - 1;
+    int best = INF;
+    for (int j = 0; j &lt; n; j++) {
+        best = std::min(best, dp[fullMask][j]);
+    }
+    return best;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+int tspBitmask(int n, int[][] dist) {
+    int maxMask = 1 &lt;&lt; n;
+    final int INF = Integer.MAX_VALUE / 4;
+    int[][] dp = new int[maxMask][n];
+    for (int m = 0; m &lt; maxMask; m++) {
+        for (int j = 0; j &lt; n; j++) {
+            dp[m][j] = INF;
+        }
+    }
+    dp[1 &lt;&lt; 0][0] = 0;
+
+    for (int mask = 0; mask &lt; maxMask; mask++) {
+        for (int j = 0; j &lt; n; j++) {
+            if ((mask &amp; (1 &lt;&lt; j)) == 0) continue;
+            int curr = dp[mask][j];
+            if (curr == INF) continue;
+            for (int k = 0; k &lt; n; k++) {
+                if ((mask &amp; (1 &lt;&lt; k)) != 0) continue;
+                int nextMask = mask | (1 &lt;&lt; k);
+                int cand = curr + dist[j][k];
+                if (cand &lt; dp[nextMask][k]) {
+                    dp[nextMask][k] = cand;
+                }
+            }
+        }
+    }
+
+    int fullMask = maxMask - 1;
+    int best = INF;
+    for (int j = 0; j &lt; n; j++) {
+        if (dp[fullMask][j] &lt; best) {
+            best = dp[fullMask][j];
+        }
+    }
+    return best;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function tspBitmask(n, dist) {
+    const maxMask = 1 &lt;&lt; n;
+    const INF = Number.MAX_SAFE_INTEGER;
+    const dp = Array.from({ length: maxMask }, () =&gt;
+        new Array(n).fill(INF)
+    );
+    dp[1 &lt;&lt; 0][0] = 0;
+
+    for (let mask = 0; mask &lt; maxMask; mask++) {
+        for (let j = 0; j &lt; n; j++) {
+            if (!(mask &amp; (1 &lt;&lt; j))) continue;
+            const curr = dp[mask][j];
+            if (curr === INF) continue;
+            for (let k = 0; k &lt; n; k++) {
+                if (mask &amp; (1 &lt;&lt; k)) continue;
+                const nextMask = mask | (1 &lt;&lt; k);
+                const cand = curr + dist[j][k];
+                if (cand &lt; dp[nextMask][k]) {
+                    dp[nextMask][k] = cand;
+                }
+            }
+        }
+    }
+
+    const fullMask = maxMask - 1;
+    let best = INF;
+    for (let j = 0; j &lt; n; j++) {
+        if (dp[fullMask][j] &lt; best) {
+            best = dp[fullMask][j];
+        }
+    }
+    return best;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+int TspBitmask(int n, int[,] dist) {
+    int maxMask = 1 &lt;&lt; n;
+    int INF = int.MaxValue / 4;
+    var dp = new int[maxMask, n];
+    for (int m = 0; m &lt; maxMask; m++) {
+        for (int j = 0; j &lt; n; j++) {
+            dp[m, j] = INF;
+        }
+    }
+    dp[1 &lt;&lt; 0, 0] = 0;
+
+    for (int mask = 0; mask &lt; maxMask; mask++) {
+        for (int j = 0; j &lt; n; j++) {
+            if ((mask &amp; (1 &lt;&lt; j)) == 0) continue;
+            int curr = dp[mask, j];
+            if (curr == INF) continue;
+            for (int k = 0; k &lt; n; k++) {
+                if ((mask &amp; (1 &lt;&lt; k)) != 0) continue;
+                int nextMask = mask | (1 &lt;&lt; k);
+                int cand = curr + dist[j, k];
+                if (cand &lt; dp[nextMask, k]) {
+                    dp[nextMask, k] = cand;
+                }
+            }
+        }
+    }
+
+    int fullMask = maxMask - 1;
+    int best = INF;
+    for (int j = 0; j &lt; n; j++) {
+        if (dp[fullMask, j] &lt; best) {
+            best = dp[fullMask, j];
+        }
+    }
+    return best;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+from typing import List
+
+def tsp_bitmask(n: int, dist: List[List[int]]) -&gt; int:
+    max_mask = 1 &lt;&lt; n
+    INF = 10**15
+    dp = [[INF] * n for _ in range(max_mask)]
+    dp[1 &lt;&lt; 0][0] = 0
+
+    for mask in range(max_mask):
+        for j in range(n):
+            if not (mask &amp; (1 &lt;&lt; j)):
+                continue
+            curr = dp[mask][j]
+            if curr == INF:
+                continue
+            for k in range(n):
+                if mask &amp; (1 &lt;&lt; k):
+                    continue
+                next_mask = mask | (1 &lt;&lt; k)
+                cand = curr + dist[j][k]
+                if cand &lt; dp[next_mask][k]:
+                    dp[next_mask][k] = cand
+
+    full_mask = max_mask - 1
+    return min(dp[full_mask])</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n² · 2ⁿ)</strong>. &nbsp;|&nbsp;
+                Extra space: <strong>O(n · 2ⁿ)</strong>.
+            </div>
+        </div>
+
+        <!-- ======================= Example 3 ======================= -->
+        <h3>9.6 Example 3 - Interval DP: Matrix Chain Multiplication</h3>
+        <p>
+            We are given matrices <code>A1, A2, ..., An</code> where matrix <code>Ai</code> has dimensions
+            <code>p[i - 1] * p[i]</code>. We want to choose a parenthesization that minimizes the total
+            scalar multiplications.
+        </p>
+        <p>
+            State: <code>dp[i][j]</code> = minimum cost to multiply matrices <code>Ai..Aj</code>.
+        </p>
+        <p>
+            Recurrence for <code>i &lt; j</code>:
+        </p>
+        <p>
+            <code>dp[i][j] = min over k in [i, j - 1] of (dp[i][k] + dp[k + 1][j] + p[i - 1] * p[k] * p[j])</code>.
+        </p>
+
+        <div class="code-example" data-example="s9-ex3">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 3</span>
+                    <span class="meta">Interval DP for optimal matrix multiplication</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+#include &lt;limits.h&gt;
+
+int matrix_chain_order(int n, const int* p) {
+    // p has length n + 1, matrices A1..An
+    int** dp = (int**)malloc((n + 1) * sizeof(int*));
+    for (int i = 0; i &lt;= n; i++) {
+        dp[i] = (int*)malloc((n + 1) * sizeof(int));
+    }
+
+    for (int i = 1; i &lt;= n; i++) {
+        dp[i][i] = 0;
+    }
+
+    for (int len = 2; len &lt;= n; len++) {
+        for (int i = 1; i &lt;= n - len + 1; i++) {
+            int j = i + len - 1;
+            dp[i][j] = INT_MAX;
+            for (int k = i; k &lt; j; k++) {
+                long long cost = (long long)dp[i][k] + dp[k + 1][j]
+                    + (long long)p[i - 1] * p[k] * p[j];
+                if (cost &lt; dp[i][j]) {
+                    dp[i][j] = (int)cost;
+                }
+            }
+        }
+    }
+
+    int result = dp[1][n];
+    for (int i = 0; i &lt;= n; i++) {
+        free(dp[i]);
+    }
+    free(dp);
+    return result;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;limits&gt;
+#include &lt;algorithm&gt;
+
+int matrixChainOrder(const std::vector&lt;int&gt;&amp; p) {
+    int n = (int)p.size() - 1;
+    const int INF = std::numeric_limits&lt;int&gt;::max();
+    std::vector&lt;std::vector&lt;int&gt;&gt; dp(n + 1, std::vector&lt;int&gt;(n + 1, 0));
+
+    for (int len = 2; len &lt;= n; len++) {
+        for (int i = 1; i &lt;= n - len + 1; i++) {
+            int j = i + len - 1;
+            dp[i][j] = INF;
+            for (int k = i; k &lt; j; k++) {
+                long long cost = (long long)dp[i][k] + dp[k + 1][j]
+                    + (long long)p[i - 1] * p[k] * p[j];
+                if (cost &lt; dp[i][j]) {
+                    dp[i][j] = (int)cost;
+                }
+            }
+        }
+    }
+    return dp[1][n];
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+int matrixChainOrder(int[] p) {
+    int n = p.length - 1;
+    final int INF = Integer.MAX_VALUE;
+    int[][] dp = new int[n + 1][n + 1];
+
+    for (int len = 2; len &lt;= n; len++) {
+        for (int i = 1; i &lt;= n - len + 1; i++) {
+            int j = i + len - 1;
+            dp[i][j] = INF;
+            for (int k = i; k &lt; j; k++) {
+                long cost = (long)dp[i][k] + dp[k + 1][j]
+                    + (long)p[i - 1] * p[k] * p[j];
+                if (cost &lt; dp[i][j]) {
+                    dp[i][j] = (int)cost;
+                }
+            }
+        }
+    }
+    return dp[1][n];
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function matrixChainOrder(p) {
+    const n = p.length - 1;
+    const INF = Number.MAX_SAFE_INTEGER;
+    const dp = Array.from({ length: n + 1 }, () =&gt;
+        new Array(n + 1).fill(0)
+    );
+
+    for (let len = 2; len &lt;= n; len++) {
+        for (let i = 1; i &lt;= n - len + 1; i++) {
+            const j = i + len - 1;
+            dp[i][j] = INF;
+            for (let k = i; k &lt; j; k++) {
+                const cost = dp[i][k] + dp[k + 1][j] + p[i - 1] * p[k] * p[j];
+                if (cost &lt; dp[i][j]) {
+                    dp[i][j] = cost;
+                }
+            }
+        }
+    }
+    return dp[1][n];
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+int MatrixChainOrder(int[] p) {
+    int n = p.Length - 1;
+    int INF = int.MaxValue;
+    var dp = new int[n + 1, n + 1];
+
+    for (int len = 2; len &lt;= n; len++) {
+        for (int i = 1; i &lt;= n - len + 1; i++) {
+            int j = i + len - 1;
+            dp[i, j] = INF;
+            for (int k = i; k &lt; j; k++) {
+                long cost = (long)dp[i, k] + dp[k + 1, j]
+                    + (long)p[i - 1] * p[k] * p[j];
+                if (cost &lt; dp[i, j]) {
+                    dp[i, j] = (int)cost;
+                }
+            }
+        }
+    }
+    return dp[1, n];
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+from typing import List
+
+def matrix_chain_order(p: List[int]) -&gt; int:
+    n = len(p) - 1
+    INF = 10**15
+    dp = [[0] * (n + 1) for _ in range(n + 1)]
+
+    for length in range(2, n + 1):
+        for i in range(1, n - length + 2):
+            j = i + length - 1
+            dp[i][j] = INF
+            for k in range(i, j):
+                cost = dp[i][k] + dp[k + 1][j] + p[i - 1] * p[k] * p[j]
+                if cost &lt; dp[i][j]:
+                    dp[i][j] = cost
+    return dp[1][n]</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n³)</strong> for <code>n</code> matrices. &nbsp;|&nbsp;
+                Extra space: <strong>O(n²)</strong>.
+            </div>
+        </div>
+
+        <h2>9.7 Quick Practice</h2>
+        <p>For each of these, decide what the DP state would look like and how you would transition:</p>
+        <ol>
+            <li>
+                Given a tree, compute the size of the largest independent set (no two chosen nodes share an edge).<br />
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>1.</strong> Tree DP.<br />
+                        State per node: <code>dp[node][0]</code> = best if we do not take this node,
+                        <code>dp[node][1]</code> = best if we do take this node.<br />
+                        Transition: if we take node, we cannot take children; if we do not take node,
+                        we can choose best of taking or not taking each child.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Count the number of Hamiltonian paths that start at node 0 in a small graph (say <code>n ≤ 15</code>).<br />
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>2.</strong> Subset / bitmask DP.<br />
+                        State: <code>dp[mask][j]</code> = number of ways to start at 0, visit exactly
+                        the nodes in <code>mask</code>, and end at <code>j</code>.<br />
+                        Transition: extend from smaller masks by adding one new node along an edge.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Given a string, find the minimum cuts needed to partition it into palindromic substrings.<br />
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>3.</strong> Interval DP or 1D DP with palindrome checks.<br />
+                        One approach: precompute <code>isPal[i][j]</code>, then let <code>dp[i]</code> be
+                        min cuts for prefix <code>s[0..i]</code>, or use <code>dp[i][j]</code> directly
+                        as minimum cuts on interval <code>[i, j]</code>.
+                    </div>
+                </details>
+            </li>
+            <li>
+                On a tree, compute for every node the sum of distances to all other nodes.<br />
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>4.</strong> Tree DP with rerooting.<br />
+                        First pass: compute subtree sizes and sum of distances from an arbitrary root.<br />
+                        Second pass: reroot DP, using parent information to compute results for children
+                        in <strong>O(1)</strong> each, for overall <strong>O(n)</strong>.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Why does bitmask DP usually require the constraints to be small (like <code>n ≤ 20</code>)?<br />
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>5.</strong> Because the number of subsets of <code>n</code> items is
+                        <code>2ⁿ</code>. States like <code>dp[mask]</code> or <code>dp[mask][j]</code>
+                        have size proportional to <code>2ⁿ</code>, so time and space blow up quickly
+                        as <code>n</code> grows.
+                    </div>
+                </details>
+            </li>
+        </ol>
+
+        <div class="top-nav">
+            <a href="problems-section9-advanced-dp.html">
+                Problem Set for Section 9 Advanced DP →
+            </a>
+        </div>
+        <div class="next-section">
+            <a href="section8-dynamic-programming.html">
+                ← Back to Section 8
+            </a>
+            &nbsp;&nbsp;
+            <a href="section10-practice.html">
+                Next: Section 10 — Practice Problems →
+            </a>
+        </div>
+    </main>
+</body>
+
+</html>

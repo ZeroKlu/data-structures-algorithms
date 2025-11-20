@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Solutions - Section 1 Foundations (Big-O &amp; Complexity)</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css" />
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tabs, highlight init, prefs, cookies, etc.) -->
+    <script src="js/site.js"></script>
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="section10-practice.html">← Back to Practice Hub</a>
+            &nbsp;&nbsp;
+            <a href="problems-section1-foundations.html">← Back to Section 1 Problems</a>
+            &nbsp;&nbsp;
+            <a href="section1-foundations.html">View Section 1 Lesson →</a>
+        </div>
+
+        <div class="kicker">Section 1 - Solutions</div>
+        <h1>Foundations - Big-O &amp; Complexity (Solutions)</h1>
+        <p class="tagline">
+            Step-by-step answers for the Section 1 problem set, focusing on how to turn informal
+            descriptions and small code snippets into clear time and space complexity.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 1 - Dominant Term                                 -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 1 - Dominant Term</h2>
+            <p>
+                The algorithm on input size <code>n</code> does:
+            </p>
+            <ul>
+                <li>5 steps of setup work (constant).</li>
+                <li>A loop that runs <code>3n</code> times.</li>
+                <li>A nested loop: outer runs <code>n</code>, inner runs <code>2</code> times.</li>
+            </ul>
+
+            <h3>Solution</h3>
+            <p>Write the total work as a function of <code>n</code>:</p>
+            <ul>
+                <li>Setup: <code>5</code> steps.</li>
+                <li>Linear loop: <code>3n</code> steps.</li>
+                <li>Nested loop: outer <code>n</code>, inner <code>2</code> → <code>2n</code> steps.</li>
+            </ul>
+            <p>
+                Total steps:
+                <code>5 + 3n + 2n = 5 + 5n</code>.
+            </p>
+            <p>
+                In Big-O, we:
+            </p>
+            <ul>
+                <li>Drop additive constants: <code>5 + 5n → 5n</code>.</li>
+                <li>Drop constant factors: <code>5n → n</code>.</li>
+            </ul>
+            <p>
+                Final running time: <strong>O(n)</strong>.
+            </p>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 2 - Time Complexity from Code                     -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 2 - Time Complexity from Code</h2>
+            <p>Given the pseudocode:</p>
+
+<pre><code class="language-c">int count_pairs(int arr[], int n) {
+    int count = 0;
+    for (int i = 0; i &lt; n; i++) {
+        for (int j = i + 1; j &lt; n; j++) {
+            if (arr[i] + arr[j] == 0) {
+                count++;
+            }
+        }
+    }
+    return count;
+}</code></pre>
+
+            <p>We want time and space complexity in terms of <code>n</code>.</p>
+
+            <h3>Solution</h3>
+            <p>
+                The outer loop runs for <code>i = 0</code> to <code>n - 1</code>, so it runs <code>n</code> times.
+            </p>
+            <p>
+                For each fixed <code>i</code>, the inner loop runs:
+                <code>j = i + 1, i + 2, ..., n - 1</code> → about <code>n - i - 1</code> iterations.
+            </p>
+            <p>
+                Total number of iterations of the inner body is:
+            </p>
+            <ul>
+                <li>When <code>i = 0</code>: <code>n - 1</code> times.</li>
+                <li>When <code>i = 1</code>: <code>n - 2</code> times.</li>
+                <li>...</li>
+                <li>When <code>i = n - 2</code>: <code>1</code> time.</li>
+                <li>When <code>i = n - 1</code>: <code>0</code> times.</li>
+            </ul>
+            <p>
+                That sum is:
+                <code>(n - 1) + (n - 2) + ... + 1 = n(n - 1)/2</code>,
+                which is <strong>O(n²)</strong>.
+            </p>
+            <p>
+                So:
+                <br />
+                Time complexity: <strong>O(n²)</strong>.
+            </p>
+            <p>
+                Space complexity: the function only uses a few scalar variables
+                (<code>count</code>, <code>i</code>, <code>j</code>) in addition to the input array.
+                There is no extra space that grows with <code>n</code>.
+                <br />
+                Extra space: <strong>O(1)</strong>.
+            </p>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 3 - Comparing Growth Rates                        -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 3 - Comparing Growth Rates</h2>
+            <p>
+                For large <code>n</code>, we want to rank these from slowest-growing
+                to fastest-growing (all logs base 2):
+            </p>
+            <ol>
+                <li><code>n log n</code></li>
+                <li><code>2ⁿ</code></li>
+                <li><code>n²</code></li>
+                <li><code>log n</code></li>
+                <li><code>n³</code></li>
+                <li><code>n</code></li>
+            </ol>
+
+            <h3>Solution</h3>
+            <p>
+                General rule-of-thumb:
+            </p>
+            <ul>
+                <li>Logarithms grow slower than polynomials.</li>
+                <li>Among polynomials, higher powers grow faster (e.g., <code>n³</code> &gt; <code>n²</code>).</li>
+                <li>Exponentials like <code>2ⁿ</code> eventually dominate any polynomial.</li>
+            </ul>
+            <p>
+                Applying that, from slowest to fastest:
+            </p>
+            <ol>
+                <li><code>log n</code></li>
+                <li><code>n</code></li>
+                <li><code>n log n</code></li>
+                <li><code>n²</code></li>
+                <li><code>n³</code></li>
+                <li><code>2ⁿ</code></li>
+            </ol>
+            <p>
+                For Big-O comparisons, <code>2ⁿ</code> is the &quot;explodes fastest&quot; term.
+            </p>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 4 - Space Complexity with an Extra Array          -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 4 - Space Complexity with an Extra Array</h2>
+            <p>
+                Function:
+            </p>
+
+<pre><code class="language-javascript">function buildPrefix(arr) {
+    const n = arr.length;
+    const prefix = new Array(n);
+    prefix[0] = arr[0];
+    for (let i = 1; i &lt; n; i++) {
+        prefix[i] = prefix[i - 1] + arr[i];
+    }
+    return prefix;
+}</code></pre>
+
+            <h3>Solution</h3>
+            <p>
+                The loop runs from <code>i = 1</code> up to <code>n - 1</code>, so it executes
+                <code>n - 1</code> iterations. Each iteration does a constant amount of work:
+                one addition and one assignment.
+            </p>
+            <p>
+                Time complexity:
+                <strong>O(n)</strong>.
+            </p>
+            <p>
+                For space, we create a new array <code>prefix</code> of length <code>n</code>.
+                That is extra memory proportional to the input size.
+            </p>
+            <p>
+                Extra space complexity:
+                <strong>O(n)</strong>.
+            </p>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 5 - Nested Loops with Different Bounds            -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 5 - Nested Loops with Different Bounds</h2>
+            <p>Given the code:</p>
+
+<pre><code class="language-python">def foo(n: int) -&gt; None:
+    i = 1
+    while i &lt;= n:
+        j = 1
+        while j &lt;= i:
+            print(i, j)
+            j *= 2
+        i *= 2</code></pre>
+
+            <h3>Solution</h3>
+            <p><strong>Outer loop (variable i)</strong>:</p>
+            <ul>
+                <li><code>i</code> starts at 1 and doubles each time: 1, 2, 4, 8, ..., up to at most <code>n</code>.</li>
+                <li>Number of iterations ≈ the number of times we can double before exceeding <code>n</code>,
+                    which is about <code>log₂ n</code>.
+                </li>
+            </ul>
+
+            <p><strong>Inner loop (variable j)</strong>:</p>
+            <ul>
+                <li>For a fixed <code>i</code>, we set <code>j = 1</code>, then repeatedly do <code>j *= 2</code>
+                    until <code>j &gt; i</code>.
+                </li>
+                <li>Values of <code>j</code>: 1, 2, 4, ..., up to at most <code>i</code>.</li>
+                <li>Number of inner iterations is about <code>log₂ i</code>.</li>
+            </ul>
+
+            <p><strong>Total work</strong>:</p>
+            <p>
+                We run the inner loop once for each value of <code>i</code> in
+                {1, 2, 4, ..., up to n}. There are about <code>log₂ n</code> such values,
+                and for each one we do about <code>log₂ i</code> inner iterations.
+            </p>
+            <p>
+                Roughly, the total number of print operations is:
+                </p>
+            <ul>
+                <li>
+                    <code>∑ (over i = 1, 2, 4, ..., n) of log₂ i</code>.
+                </li>
+                <li>
+                    The largest term in this sum is <code>log₂ n</code>, and there are about <code>log₂ n</code>
+                    terms → the sum is on the order of <code>(log₂ n) × (log₂ n)</code>.
+                </li>
+            </ul>
+            <p>
+                Therefore, the running time is:
+                <strong>O((log n)²)</strong>.
+            </p>
+            <p>
+                Extra space: we only use <code>i</code>, <code>j</code>, and a few constant-sized values.
+                There is no extra memory proportional to <code>n</code>, so:
+                <br />
+                Extra space: <strong>O(1)</strong>.
+            </p>
+        </section>
+
+        <div class="next-section">
+            <a href="problems-section1-foundations.html">
+                ← Back to Section 1 Problem Set
+            </a>
+            &nbsp;&nbsp;
+            <a href="section10-practice.html">
+                Back to Practice Hub →
+            </a>
+        </div>
+    </main>
+</body>
+
+</html>

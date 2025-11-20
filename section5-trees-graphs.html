@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Section 5 - Trees &amp; Graphs</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css">
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tab logic, highlight init, cookies, etc.) -->
+    <script src="js/site.js"></script>
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="index.html">← Back to Index</a>
+        </div>
+        <div class="kicker">Section 5</div>
+        <h1>Trees &amp; Graphs</h1>
+        <p class="tagline">
+            Trees and graphs generalize linked lists into rich structures that can represent hierarchies,
+            networks, and search spaces. You will see these constantly in interviews and real systems.
+        </p>
+
+        <h2>5.1 Trees vs. Graphs</h2>
+        <p>
+            A <strong>tree</strong> is a connected acyclic graph. In a rooted tree:
+        </p>
+        <ul class="bullet-tight">
+            <li>There is a distinguished <strong>root</strong> node.</li>
+            <li>Each node (except the root) has exactly one parent.</li>
+            <li>There are no cycles.</li>
+        </ul>
+        <p>
+            A <strong>graph</strong> is a set of nodes (vertices) and edges that connect them. Graphs may be:
+        </p>
+        <ul class="bullet-tight">
+            <li>Directed or undirected.</li>
+            <li>Weighted or unweighted.</li>
+            <li>May contain cycles or may be acyclic.</li>
+        </ul>
+
+        <h2>5.2 Common Traversals</h2>
+        <p>
+            For trees, the main traversals are:
+        </p>
+        <ul>
+            <li><strong>Preorder</strong>: visit node, then left, then right.</li>
+            <li><strong>Inorder</strong>: left, node, right (sorted order for BSTs).</li>
+            <li><strong>Postorder</strong>: left, right, node.</li>
+            <li><strong>Level-order</strong>: breadth-first using a queue.</li>
+        </ul>
+        <p>
+            For graphs, the core patterns are:
+        </p>
+        <ul>
+            <li><strong>Depth-first search (DFS)</strong>: use a stack or recursion.</li>
+            <li><strong>Breadth-first search (BFS)</strong>: use a queue.</li>
+        </ul>
+
+        <h2>5.3 Code Examples in Multiple Languages</h2>
+        <p>
+            As before, each example appears in six languages:
+            <strong>C, C++, Java, JavaScript, C#,</strong> and <strong>Python</strong>. Use the language tabs
+            to switch between them. Your language and theme preferences are remembered across sections.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <!-- ======================= Example 1 ======================= -->
+        <h3>5.4 Example 1 - Binary Tree Node &amp; Preorder Traversal</h3>
+        <p>
+            We define a binary tree node and implement a preorder traversal (node, left, right).
+            This is a classic recursive pattern.
+        </p>
+
+        <div class="code-example" data-example="s5-ex1">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 1</span>
+                    <span class="meta">Binary tree node and preorder traversal</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct TreeNode {
+    int value;
+    struct TreeNode* left;
+    struct TreeNode* right;
+} TreeNode;
+
+TreeNode* create_node(int value) {
+    TreeNode* node = (TreeNode*)malloc(sizeof(TreeNode));
+    if (!node) return NULL;
+    node-&gt;value = value;
+    node-&gt;left = NULL;
+    node-&gt;right = NULL;
+    return node;
+}
+
+void preorder(TreeNode* root) {
+    if (root == NULL) return;
+    printf("%d\n", root-&gt;value);
+    preorder(root-&gt;left);
+    preorder(root-&gt;right);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;iostream&gt;
+
+struct TreeNode {
+    int value;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int v) : value(v), left(nullptr), right(nullptr) {}
+};
+
+void preorder(TreeNode* root) {
+    if (!root) return;
+    std::cout &lt;&lt; root-&gt;value &lt;&lt; std::endl;
+    preorder(root-&gt;left);
+    preorder(root-&gt;right);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+class TreeNode {
+    int value;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int value) {
+        this.value = value;
+    }
+}
+
+void preorder(TreeNode root) {
+    if (root == null) return;
+    System.out.println(root.value);
+    preorder(root.left);
+    preorder(root.right);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+class TreeNode {
+    constructor(value, left = null, right = null) {
+        this.value = value;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+function preorder(root) {
+    if (root === null) return;
+    console.log(root.value);
+    preorder(root.left);
+    preorder(root.right);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+class TreeNode {
+    public int Value;
+    public TreeNode? Left;
+    public TreeNode? Right;
+
+    public TreeNode(int value) {
+        Value = value;
+    }
+}
+
+void Preorder(TreeNode? root) {
+    if (root == null) return;
+    System.Console.WriteLine(root.Value);
+    Preorder(root.Left);
+    Preorder(root.Right);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+class TreeNode:
+    def __init__(self, value: int, left: "TreeNode | None" = None,
+                 right: "TreeNode | None" = None) -&gt; None:
+        self.value = value
+        self.left = left
+        self.right = right
+
+def preorder(root: "TreeNode | None") -&gt; None:
+    if root is None:
+        return
+    print(root.value)
+    preorder(root.left)
+    preorder(root.right)</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n)</strong> — each node is visited once. &nbsp;|&nbsp;
+                Extra space: <strong>O(h)</strong> for recursion, where <code>h</code> is tree height.
+            </div>
+        </div>
+
+        <!-- ======================= Example 2 ======================= -->
+        <h3>5.5 Example 2 - Level-Order (BFS) Traversal of a Binary Tree</h3>
+        <p>
+            We perform a breadth-first traversal using a queue, visiting nodes level by level.
+        </p>
+
+        <div class="code-example" data-example="s5-ex2">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 2</span>
+                    <span class="meta">Binary tree level-order traversal</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+// Using a simple array-based queue for demonstration.
+
+typedef struct {
+    TreeNode* data[1024];
+    int head;
+    int tail;
+} NodeQueue;
+
+void queue_init(NodeQueue* q) {
+    q-&gt;head = 0;
+    q-&gt;tail = 0;
+}
+
+int queue_is_empty(NodeQueue* q) {
+    return q-&gt;head == q-&gt;tail;
+}
+
+void queue_push(NodeQueue* q, TreeNode* node) {
+    q-&gt;data[q-&gt;tail++] = node;
+}
+
+TreeNode* queue_pop(NodeQueue* q) {
+    return q-&gt;data[q-&gt;head++];
+}
+
+void level_order(TreeNode* root) {
+    if (root == NULL) return;
+    NodeQueue q;
+    queue_init(&amp;q);
+    queue_push(&amp;q, root);
+
+    while (!queue_is_empty(&amp;q)) {
+        TreeNode* node = queue_pop(&amp;q);
+        printf("%d\n", node-&gt;value);
+        if (node-&gt;left) queue_push(&amp;q, node-&gt;left);
+        if (node-&gt;right) queue_push(&amp;q, node-&gt;right);
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;queue&gt;
+
+void levelOrder(TreeNode* root) {
+    if (!root) return;
+    std::queue&lt;TreeNode*&gt; q;
+    q.push(root);
+
+    while (!q.empty()) {
+        TreeNode* node = q.front();
+        q.pop();
+        std::cout &lt;&lt; node-&gt;value &lt;&lt; std::endl;
+        if (node-&gt;left) q.push(node-&gt;left);
+        if (node-&gt;right) q.push(node-&gt;right);
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+void levelOrder(TreeNode root) {
+    if (root == null) return;
+    java.util.Queue&lt;TreeNode&gt; queue = new java.util.ArrayDeque&lt;&gt;();
+    queue.add(root);
+
+    while (!queue.isEmpty()) {
+        TreeNode node = queue.remove();
+        System.out.println(node.value);
+        if (node.left != null) queue.add(node.left);
+        if (node.right != null) queue.add(node.right);
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function levelOrder(root) {
+    if (root === null) return;
+    const queue = [root];
+    let head = 0;
+
+    while (head &lt; queue.length) {
+        const node = queue[head++];
+        console.log(node.value);
+        if (node.left) queue.push(node.left);
+        if (node.right) queue.push(node.right);
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+void LevelOrder(TreeNode? root) {
+    if (root == null) return;
+    var queue = new Queue&lt;TreeNode&gt;();
+    queue.Enqueue(root);
+
+    while (queue.Count &gt; 0) {
+        var node = queue.Dequeue();
+        System.Console.WriteLine(node.Value);
+        if (node.Left != null) queue.Enqueue(node.Left);
+        if (node.Right != null) queue.Enqueue(node.Right);
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+from collections import deque
+
+def level_order(root: "TreeNode | None") -&gt; None:
+    if root is None:
+        return
+    queue: deque[TreeNode] = deque([root])
+    while queue:
+        node = queue.popleft()
+        print(node.value)
+        if node.left is not None:
+            queue.append(node.left)
+        if node.right is not None:
+            queue.append(node.right)</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n)</strong> — each node is enqueued and dequeued once. &nbsp;|&nbsp;
+                Extra space: <strong>O(n)</strong> in the worst case for the queue.
+            </div>
+        </div>
+
+        <!-- ======================= Example 3 ======================= -->
+        <h3>5.6 Example 3 - Depth-First Search (DFS) on a Graph</h3>
+        <p>
+            We represent a graph as an adjacency list and perform recursive DFS, tracking a visited
+            array to avoid cycles.
+        </p>
+
+        <div class="code-example" data-example="s5-ex3">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 3</span>
+                    <span class="meta">Recursive DFS on adjacency list</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+// Minimal example with fixed-size adjacency list for simplicity.
+
+void dfs_util(int node, int n, int adjacency[][64], int visited[]) {
+    visited[node] = 1;
+    printf("%d\n", node);
+    for (int neighbor = 0; neighbor &lt; n; neighbor++) {
+        if (adjacency[node][neighbor] &amp;&amp; !visited[neighbor]) {
+            dfs_util(neighbor, n, adjacency, visited);
+        }
+    }
+}
+
+void dfs(int start, int n, int adjacency[][64]) {
+    int visited[64] = {0};
+    dfs_util(start, n, adjacency, visited);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;iostream&gt;
+
+void dfs_util(int node, const std::vector&lt;std::vector&lt;int&gt;&gt;&amp; graph,
+              std::vector&lt;bool&gt;&amp; visited) {
+    visited[node] = true;
+    std::cout &lt;&lt; node &lt;&lt; std::endl;
+    for (int neighbor : graph[node]) {
+        if (!visited[neighbor]) {
+            dfs_util(neighbor, graph, visited);
+        }
+    }
+}
+
+void dfs(int start, const std::vector&lt;std::vector&lt;int&gt;&gt;&amp; graph) {
+    int n = (int)graph.size();
+    std::vector&lt;bool&gt; visited(n, false);
+    dfs_util(start, graph, visited);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+void dfsUtil(int node, java.util.List&lt;java.util.List&lt;Integer&gt;&gt; graph,
+             boolean[] visited) {
+    visited[node] = true;
+    System.out.println(node);
+    for (int neighbor : graph.get(node)) {
+        if (!visited[neighbor]) {
+            dfsUtil(neighbor, graph, visited);
+        }
+    }
+}
+
+void dfs(int start, java.util.List&lt;java.util.List&lt;Integer&gt;&gt; graph) {
+    int n = graph.size();
+    boolean[] visited = new boolean[n];
+    dfsUtil(start, graph, visited);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function dfsUtil(node, graph, visited) {
+    visited[node] = true;
+    console.log(node);
+    for (const neighbor of graph[node]) {
+        if (!visited[neighbor]) {
+            dfsUtil(neighbor, graph, visited);
+        }
+    }
+}
+
+function dfs(start, graph) {
+    const n = graph.length;
+    const visited = new Array(n).fill(false);
+    dfsUtil(start, graph, visited);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+void DfsUtil(int node, List&lt;List&lt;int&gt;&gt; graph, bool[] visited) {
+    visited[node] = true;
+    System.Console.WriteLine(node);
+    foreach (var neighbor in graph[node]) {
+        if (!visited[neighbor]) {
+            DfsUtil(neighbor, graph, visited);
+        }
+    }
+}
+
+void Dfs(int start, List&lt;List&lt;int&gt;&gt; graph) {
+    int n = graph.Count;
+    var visited = new bool[n];
+    DfsUtil(start, graph, visited);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+from typing import List
+
+def dfs_util(node: int, graph: List[List[int]], visited: list[bool]) -&gt; None:
+    visited[node] = True
+    print(node)
+    for neighbor in graph[node]:
+        if not visited[neighbor]:
+            dfs_util(neighbor, graph, visited)
+
+def dfs(start: int, graph: List[List[int]]) -&gt; None:
+    n = len(graph)
+    visited = [False] * n
+    dfs_util(start, graph, visited)</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n + m)</strong> where <code>n</code> is nodes and <code>m</code> edges. &nbsp;|&nbsp;
+                Extra space: <strong>O(n)</strong> for visited plus recursion stack depth.
+            </div>
+        </div>
+
+        <!-- ======================= Example 4 ======================= -->
+        <h3>5.7 Example 4 - Shortest Path in Unweighted Graph (BFS)</h3>
+        <p>
+            For an unweighted graph, BFS from a start node finds the shortest path (in number of edges)
+            to every reachable node. We track distance and optionally the previous node to reconstruct paths.
+        </p>
+
+        <div class="code-example" data-example="s5-ex4">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 4</span>
+                    <span class="meta">Shortest distances using BFS</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+// Distances in an unweighted graph using BFS, adjacency matrix version for brevity.
+
+void shortest_distances(int start, int n, int adjacency[][64], int dist[]) {
+    for (int i = 0; i &lt; n; i++) {
+        dist[i] = -1; // -1 means unreachable
+    }
+
+    int queue[64];
+    int head = 0;
+    int tail = 0;
+
+    dist[start] = 0;
+    queue[tail++] = start;
+
+    while (head &lt; tail) {
+        int node = queue[head++];
+        for (int neighbor = 0; neighbor &lt; n; neighbor++) {
+            if (adjacency[node][neighbor] &amp;&amp; dist[neighbor] == -1) {
+                dist[neighbor] = dist[node] + 1;
+                queue[tail++] = neighbor;
+            }
+        }
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;limits&gt;
+
+std::vector&lt;int&gt; shortestDistances(int start,
+    const std::vector&lt;std::vector&lt;int&gt;&gt;&amp; graph) {
+    int n = (int)graph.size();
+    std::vector&lt;int&gt; dist(n, -1);
+    std::queue&lt;int&gt; q;
+
+    dist[start] = 0;
+    q.push(start);
+
+    while (!q.empty()) {
+        int node = q.front();
+        q.pop();
+        for (int neighbor : graph[node]) {
+            if (dist[neighbor] == -1) {
+                dist[neighbor] = dist[node] + 1;
+                q.push(neighbor);
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+java.util.List&lt;Integer&gt; shortestDistances(int start,
+        java.util.List&lt;java.util.List&lt;Integer&gt;&gt; graph) {
+    int n = graph.size();
+    java.util.List&lt;Integer&gt; dist = new java.util.ArrayList&lt;&gt;(n);
+    for (int i = 0; i &lt; n; i++) {
+        dist.add(-1);
+    }
+
+    java.util.Queue&lt;Integer&gt; queue = new java.util.ArrayDeque&lt;&gt;();
+    dist.set(start, 0);
+    queue.add(start);
+
+    while (!queue.isEmpty()) {
+        int node = queue.remove();
+        for (int neighbor : graph.get(node)) {
+            if (dist.get(neighbor) == -1) {
+                dist.set(neighbor, dist.get(node) + 1);
+                queue.add(neighbor);
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function shortestDistances(start, graph) {
+    const n = graph.length;
+    const dist = new Array(n).fill(-1);
+    const queue = [];
+
+    dist[start] = 0;
+    queue.push(start);
+    let head = 0;
+
+    while (head &lt; queue.length) {
+        const node = queue[head++];
+        for (const neighbor of graph[node]) {
+            if (dist[neighbor] === -1) {
+                dist[neighbor] = dist[node] + 1;
+                queue.push(neighbor);
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+List&lt;int&gt; ShortestDistances(int start, List&lt;List&lt;int&gt;&gt; graph) {
+    int n = graph.Count;
+    var dist = new List&lt;int&gt;(n);
+    for (int i = 0; i &lt; n; i++) {
+        dist.Add(-1);
+    }
+
+    var queue = new Queue&lt;int&gt;();
+    dist[start] = 0;
+    queue.Enqueue(start);
+
+    while (queue.Count &gt; 0) {
+        int node = queue.Dequeue();
+        foreach (var neighbor in graph[node]) {
+            if (dist[neighbor] == -1) {
+                dist[neighbor] = dist[node] + 1;
+                queue.Enqueue(neighbor);
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+from collections import deque
+from typing import List
+
+def shortest_distances(start: int, graph: List[List[int]]) -&gt; List[int]:
+    n = len(graph)
+    dist = [-1] * n
+    queue: deque[int] = deque()
+
+    dist[start] = 0
+    queue.append(start)
+
+    while queue:
+        node = queue.popleft()
+        for neighbor in graph[node]:
+            if dist[neighbor] == -1:
+                dist[neighbor] = dist[node] + 1
+                queue.append(neighbor)
+    return dist</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n + m)</strong> — BFS over all edges. &nbsp;|&nbsp;
+                Extra space: <strong>O(n)</strong> for distances and queue.
+            </div>
+        </div>
+
+        <h2>5.8 Quick Practice</h2>
+        <p>For each of these, identify the time and space complexity (including recursion stack where relevant):</p>
+        <ol>
+            <li>
+                Inorder traversal of a binary search tree that contains <code>n</code> nodes.<br>
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>1.</strong> Each node is visited exactly once.<br>
+                        Time: <strong>O(n)</strong>.<br>
+                        Extra space: <strong>O(h)</strong> for recursion, where <code>h</code> is tree height.
+                    </div>
+                </details>
+            </li>
+            <li>
+                DFS on a connected graph with <code>n</code> nodes and <code>m</code> edges, using an
+                adjacency list and recursion.<br>
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>2.</strong> Each edge is inspected at most twice in an undirected graph.<br>
+                        Time: <strong>O(n + m)</strong>.<br>
+                        Extra space: <strong>O(n)</strong> for visited plus recursion stack.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Using BFS from a single source to compute shortest path distances in an unweighted graph.<br>
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>3.</strong> BFS visits each node and edge a constant number of times.<br>
+                        Time: <strong>O(n + m)</strong>.<br>
+                        Extra space: <strong>O(n)</strong> for distance array and queue.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Running level-order traversal on a complete binary tree of height <code>h</code>.<br>
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>4.</strong> A complete tree with height <code>h</code> has about <code>2^(h+1)</code>
+                        nodes, which is <code>O(2^h)</code>.<br>
+                        Time: <strong>O(n)</strong> with <code>n</code> nodes.<br>
+                        Extra space: <strong>O(n)</strong> for the queue in the worst case.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Checking if an undirected graph is connected using either DFS or BFS.<br>
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>5.</strong> You traverse all reachable nodes and edges once.<br>
+                        Time: <strong>O(n + m)</strong>.<br>
+                        Extra space: <strong>O(n)</strong> for visited and the recursion stack (DFS) or queue (BFS).
+                    </div>
+                </details>
+            </li>
+        </ol>
+        
+        <div class="top-nav">
+            <a href="problems-section5-trees.html">
+                Problem Set for Section 5 Trees &amp; Graphs →
+            </a>
+        </div>
+        <div class="next-section">
+            <a href="section4-stacks-queues.html">
+                ← Back to Section 4
+            </a>
+            &nbsp;&nbsp;
+            <a href="section6-heaps-priority-queues.html">
+                Next: Section 6 — Heaps and Priority Queues →
+            </a>
+        </div>
+    </main>
+</body>
+
+</html>

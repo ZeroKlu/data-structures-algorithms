@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Section 2 - Arrays &amp; Strings</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css">
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tab logic, highlight init, etc.) -->
+    <script src="js/site.js"></script>
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="index.html">← Back to Index</a>
+        </div>
+        <div class="kicker">Section 2</div>
+        <h1>Arrays &amp; Strings</h1>
+        <p class="tagline">
+            Arrays and strings are the backbone of many interview problems. In this section we will
+            work with indices, learn two-pointer patterns, and see how in-place updates affect time
+            and space complexity.
+        </p>
+
+        <h2>
+            2.1 Arrays vs. Strings
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-arrays-vs-strings">
+                Dig deeper
+            </button>
+        </h2>
+        <p>
+            An <strong>array</strong> is a contiguous block of memory that stores elements of the same type.
+            You can access any element in <strong>O(1)</strong> time by index, such as <code>arr[i]</code>.
+        </p>
+        <ul class="bullet-tight">
+            <li>Arrays are great for fast indexed access and iteration.</li>
+            <li>In low-level languages (C, C++), you must manage the size and memory yourself.</li>
+            <li>In high-level languages (Java, C#, JavaScript, Python), arrays or lists can resize,
+                but resizing may cost extra work internally.</li>
+        </ul>
+        <p>
+            A <strong>string</strong> is usually an array (or sequence) of characters. Many string problems
+            can be solved by treating the string as an array and applying the same patterns
+            (loops, two pointers, sliding windows).
+        </p>
+
+        <h2>
+            2.2 Common Array Patterns
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-array-patterns">
+                Dig deeper
+            </button>
+        </h2>
+        <p>
+            We will focus on three patterns you will use a lot:
+        </p>
+        <ul>
+            <li><strong>Simple traversal</strong> - walk through every element once.</li>
+            <li><strong>Two pointers (opposite ends)</strong> - move indices toward each other.</li>
+            <li><strong>Two pointers (runner)</strong> - one pointer moves faster than the other.</li>
+        </ul>
+
+        <h2>2.3 Code Examples in Multiple Languages</h2>
+        <p>
+            As in Section 1, each example appears in six languages:
+            <strong>C, C++, Java, JavaScript, C#,</strong> and <strong>Python</strong>. Use the language tabs
+            to switch between them.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark" selected>Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <!-- ======================= Example 1 ======================= -->
+        <h3>
+            2.4 Example 1 - Sum of an Array (O(n))
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s2-ex1">
+                Dig deeper
+            </button>
+        </h3>
+        <p>
+            This function computes the sum of all elements in an integer array. This is a simple
+            traversal pattern, very similar to printing every element.
+        </p>
+
+        <div class="code-example" data-example="s2-ex1">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 1</span>
+                    <span class="meta">Compute the sum of all elements</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+#include &lt;stdio.h&gt;
+
+int sum_array(int arr[], int n) {
+    int sum = 0;
+    for (int i = 0; i &lt; n; i++) {
+        sum += arr[i];
+    }
+    return sum;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+
+int sumArray(const std::vector&lt;int&gt;&amp; arr) {
+    int sum = 0;
+    for (int x : arr) {
+        sum += x;
+    }
+    return sum;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+int sumArray(int[] arr) {
+    int sum = 0;
+    for (int x : arr) {
+        sum += x;
+    }
+    return sum;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function sumArray(arr) {
+    let sum = 0;
+    for (const x of arr) {
+        sum += x;
+    }
+    return sum;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+int SumArray(int[] arr) {
+    var sum = 0;
+    foreach (var x in arr) {
+        sum += x;
+    }
+    return sum;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+def sum_array(arr):
+    total = 0
+    for x in arr:
+        total += x
+    return total</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n)</strong> — one pass over <code>n</code> elements. &nbsp;|&nbsp;
+                Extra space: <strong>O(1)</strong>.
+            </div>
+        </div>
+
+        <!-- ======================= Example 2 ======================= -->
+        <h3>
+            2.5 Example 2 - Reverse an Array In Place (Two Pointers)
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s2-ex2">
+                Dig deeper
+            </button>
+        </h3>
+        <p>
+            This function reverses an array in place using two pointers. One pointer starts at the
+            beginning, the other at the end, and they move toward each other while swapping.
+        </p>
+
+        <div class="code-example" data-example="s2-ex2">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 2</span>
+                    <span class="meta">Reverse an array in place</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+#include &lt;stdio.h&gt;
+
+void reverse_array(int arr[], int n) {
+    int left = 0;
+    int right = n - 1;
+    while (left &lt; right) {
+        int temp = arr[left];
+        arr[left] = arr[right];
+        arr[right] = temp;
+        left++;
+        right--;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+
+void reverseArray(std::vector&lt;int&gt;&amp; arr) {
+    int left = 0;
+    int right = (int)arr.size() - 1;
+    while (left &lt; right) {
+        std::swap(arr[left], arr[right]);
+        left++;
+        right--;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+void reverseArray(int[] arr) {
+    int left = 0;
+    int right = arr.length - 1;
+    while (left &lt; right) {
+        int temp = arr[left];
+        arr[left] = arr[right];
+        arr[right] = temp;
+        left++;
+        right--;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function reverseArray(arr) {
+    let left = 0;
+    let right = arr.length - 1;
+    while (left &lt; right) {
+        const temp = arr[left];
+        arr[left] = arr[right];
+        arr[right] = temp;
+        left++;
+        right--;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+void ReverseArray(int[] arr) {
+    int left = 0;
+    int right = arr.Length - 1;
+    while (left &lt; right) {
+        int temp = arr[left];
+        arr[left] = arr[right];
+        arr[right] = temp;
+        left++;
+        right--;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+def reverse_array(arr):
+    left = 0
+    right = len(arr) - 1
+    while left &lt; right:
+        arr[left], arr[right] = arr[right], arr[left]
+        left += 1
+        right -= 1</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n)</strong> — each element is moved at most once. &nbsp;|&nbsp;
+                Extra space: <strong>O(1)</strong> — in-place swaps.
+            </div>
+        </div>
+
+        <!-- ======================= Example 3 ======================= -->
+        <h3>
+            2.6 Example 3 - Two-Sum in a Sorted Array (Two Pointers)
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s2-ex3">
+                Dig deeper
+            </button>
+        </h3>
+        <p>
+            Given a sorted array and a target sum, this function checks whether there exists a pair
+            of elements that adds up to the target. We use two pointers and adjust them based on the
+            current sum.
+        </p>
+
+        <div class="code-example" data-example="s2-ex3">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 3</span>
+                    <span class="meta">Check if any pair sums to target</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+#include &lt;stdbool.h&gt;
+
+bool has_pair_with_sum(int arr[], int n, int target) {
+    int left = 0;
+    int right = n - 1;
+    while (left &lt; right) {
+        int sum = arr[left] + arr[right];
+        if (sum == target) {
+            return true;
+        } else if (sum &lt; target) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+    return false;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+
+bool hasPairWithSum(const std::vector&lt;int&gt;&amp; arr, int target) {
+    int left = 0;
+    int right = (int)arr.size() - 1;
+    while (left &lt; right) {
+        int sum = arr[left] + arr[right];
+        if (sum == target) {
+            return true;
+        } else if (sum &lt; target) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+    return false;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+boolean hasPairWithSum(int[] arr, int target) {
+    int left = 0;
+    int right = arr.length - 1;
+    while (left &lt; right) {
+        int sum = arr[left] + arr[right];
+        if (sum == target) {
+            return true;
+        } else if (sum &lt; target) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+    return false;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function hasPairWithSum(arr, target) {
+    let left = 0;
+    let right = arr.length - 1;
+    while (left &lt; right) {
+        const sum = arr[left] + arr[right];
+        if (sum === target) {
+            return true;
+        } else if (sum &lt; target) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+    return false;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+bool HasPairWithSum(int[] arr, int target) {
+    int left = 0;
+    int right = arr.Length - 1;
+    while (left &lt; right) {
+        int sum = arr[left] + arr[right];
+        if (sum == target) {
+            return true;
+        } else if (sum &lt; target) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+    return false;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+def has_pair_with_sum(arr, target):
+    left = 0
+    right = len(arr) - 1
+    while left &lt; right:
+        s = arr[left] + arr[right]
+        if s == target:
+            return True
+        elif s &lt; target:
+            left += 1
+        else:
+            right -= 1
+    return False</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n)</strong> — each pointer moves at most <code>n</code> steps. &nbsp;|&nbsp;
+                Extra space: <strong>O(1)</strong>.
+            </div>
+        </div>
+
+        <!-- ======================= Example 4 ======================= -->
+        <h3>
+            2.7 Example 4 - Reverse a String
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s2-ex4">
+                Dig deeper
+            </button>
+        </h3>
+        <p>
+            Many languages treat strings as immutable, so we build a new string instead of modifying
+            the original in place. Internally this often still uses a two-pointer or similar pattern.
+        </p>
+
+        <div class="code-example" data-example="s2-ex4">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 4</span>
+                    <span class="meta">Reverse a string value</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+#include &lt;string.h&gt;
+
+void reverse_string(char* s) {
+    int left = 0;
+    int right = (int)strlen(s) - 1;
+    while (left &lt; right) {
+        char temp = s[left];
+        s[left] = s[right];
+        s[right] = temp;
+        left++;
+        right--;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;string&gt;
+
+std::string reverseString(const std::string&amp; s) {
+    std::string result = s;
+    int left = 0;
+    int right = (int)result.size() - 1;
+    while (left &lt; right) {
+        std::swap(result[left], result[right]);
+        left++;
+        right--;
+    }
+    return result;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+String reverseString(String s) {
+    StringBuilder sb = new StringBuilder(s);
+    sb.reverse();
+    return sb.toString();
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function reverseString(s) {
+    return s.split("").reverse().join("");
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+string ReverseString(string s) {
+    var chars = s.ToCharArray();
+    Array.Reverse(chars);
+    return new string(chars);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+def reverse_string(s: str) -&gt; str:
+    return s[::-1]</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n)</strong> — each character is visited once. &nbsp;|&nbsp;
+                Extra space: typically <strong>O(n)</strong> for the new string.
+            </div>
+        </div>
+
+        <h2>2.8 Quick Practice</h2>
+        <p>For each of these, identify both time and space complexity in terms of <code>n</code>:</p>
+        <ol>
+            <li>
+                Given an array, compute the product of all elements (no zeros, ignore overflow).<br>
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>1.</strong> One pass over the array, multiplying as we go.<br>
+                        Time: <strong>O(n)</strong>.<br>
+                        Extra space: <strong>O(1)</strong>.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Reverse an array in place using two pointers from both ends.<br>
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>2.</strong> Each element is swapped at most once.<br>
+                        Time: <strong>O(n)</strong>.<br>
+                        Extra space: <strong>O(1)</strong>.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Given a sorted array and a target, use two pointers to check for a pair that sums to the target.<br>
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>3.</strong> Both pointers move inward at most <code>n</code> steps.<br>
+                        Time: <strong>O(n)</strong>.<br>
+                        Extra space: <strong>O(1)</strong>.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Build a new array that contains all the elements of the original array in reverse order.<br>
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>4.</strong> One pass to copy elements into the new array.<br>
+                        Time: <strong>O(n)</strong>.<br>
+                        Extra space: <strong>O(n)</strong> for the new array.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Given a string, build a new string that repeats each character twice (for example, "abc" becomes
+                "aabbcc").<br>
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>5.</strong> We visit each character once and write two characters in the result.<br>
+                        Time: <strong>O(n)</strong> (constants do not change the Big-O).<br>
+                        Extra space: <strong>O(n)</strong> for the new string.
+                    </div>
+                </details>
+            </li>
+        </ol>
+        <div class="top-nav">
+            <a href="problems-section2-arrays-strings.html">
+                Problem Set for Section 2 Arrays &amp; Strings →
+            </a>
+        </div>
+        <div class="next-section">
+            <a href="section1-foundations.html">
+                ← Back to Section 1
+            </a>
+            &nbsp;&nbsp;
+            <a href="section3-linked-lists.html">
+                Next: Section 3 — Linked Lists &amp; Recursion →
+            </a>
+        </div>
+
+        <!-- ======================= Deep dive templates ======================= -->
+
+        <div class="deep-dive-template" id="deep-dive-arrays-vs-strings"
+            data-title="Arrays vs. strings in practice" hidden>
+            <p>
+                Conceptually, an array is "a block of slots of the same type", and a string is usually
+                "an array of characters plus some rules". The exact details depend on the language:
+            </p>
+            <ul>
+                <li><strong>C:</strong> arrays are just raw memory; strings are <code>char*</code> with a
+                    terminating <code>'\0'</code> byte.</li>
+                <li><strong>C++:</strong> you have raw arrays, <code>std::vector&lt;T&gt;</code>, and
+                    <code>std::string</code> which manage size and memory for you.</li>
+                <li><strong>Java / C#:</strong> arrays are fixed-size objects; <code>String</code> is immutable,
+                    often backed by a character array internally.</li>
+                <li><strong>JavaScript / Python:</strong> "arrays" are dynamic lists, and strings are immutable
+                    sequences of characters (or code points).</li>
+            </ul>
+            <p>
+                The important complexity facts:
+            </p>
+            <ul>
+                <li><strong>Random access:</strong> arrays and strings both allow O(1) access by index
+                    in typical implementations.</li>
+                <li><strong>Insertion in the middle:</strong> usually O(n), because elements must be shifted.</li>
+                <li><strong>Resizing:</strong> a dynamic array (vector, list, etc.) sometimes has to allocate a
+                    new block and copy elements when it grows.</li>
+            </ul>
+            <p>
+                Many string problems (palindromes, substring search, run-length encoding) boil down to
+                "treat the string as an array" and then apply array techniques: loops, two pointers,
+                sliding windows, and so on.
+            </p>
+            <p>
+                The main extra wrinkle with strings is <strong>encoding</strong> (ASCII vs. Unicode) and
+                <strong>immutability</strong>: modifying a string usually means creating a new one under the hood.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-array-patterns"
+            data-title="Common array and string patterns" hidden>
+            <p>
+                A lot of interview problems look very different on the surface but secretly use the same patterns:
+            </p>
+            <ul>
+                <li><strong>Simple traversal:</strong> one index from 0 to n - 1.
+                    Good for sums, counts, and checks over the whole array.</li>
+                <li><strong>Two pointers (ends):</strong> one index at the left, one at the right.
+                    Common for reversing, checking palindromes, and problems on sorted arrays.</li>
+                <li><strong>Two pointers (runner / fast-slow):</strong> one pointer moves faster than the other.
+                    Shows up in cycle detection (Floyd's algorithm) and some partitioning problems.</li>
+                <li><strong>Sliding window:</strong> maintain a window [left, right) over the array or string,
+                    expand and shrink based on constraints. Very common for substring / subarray problems.</li>
+            </ul>
+            <p>
+                When you read a problem, a good mental checklist is:
+            </p>
+            <ul>
+                <li>Do I need to look at every element at least once? (simple traversal)</li>
+                <li>Am I working with a sorted array or something that feels "ordered" at both ends? (two pointers)</li>
+                <li>Do I care about a contiguous subarray or substring that satisfies some condition? (sliding window)</li>
+            </ul>
+            <p>
+                Recognizing these patterns is more important than memorizing individual solutions.
+                Once you see that a problem is "two pointers on a sorted array", a large part of the
+                solution falls into place automatically.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s2-ex1"
+            data-title="Why the sum-of-array example is O(n)" hidden>
+            <p>
+                In the sum-of-array example, the loop touches each element exactly once. For each element
+                we do a constant amount of work: one addition and one assignment.
+            </p>
+            <p>
+                If the array has n elements, we do about:
+            </p>
+            <p>
+                work(n) = a · n + b
+            </p>
+            <p>
+                for some constants a and b. In Big-O notation that is O(n), because linear growth in n dominates
+                the constant overhead as n becomes large.
+            </p>
+            <p>
+                Implementation details to watch for in real code:
+            </p>
+            <ul>
+                <li><strong>Overflow:</strong> in fixed-width integer types, the sum can overflow; sometimes you
+                    need a wider type.</li>
+                <li><strong>Empty array:</strong> the sum of an empty array is usually defined as 0.</li>
+                <li><strong>Built-ins:</strong> many languages have a one-liner (like <code>sum(arr)</code> in
+                    Python), but that is still O(n) under the hood.</li>
+            </ul>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s2-ex2"
+            data-title="Reasoning about in-place reversal" hidden>
+            <p>
+                The in-place reverse algorithm maintains an invariant:
+            </p>
+            <ul>
+                <li>Everything <em>outside</em> the current [left, right] interval is already in its final position.</li>
+            </ul>
+            <p>
+                At each step:
+            </p>
+            <ul>
+                <li>Swap <code>arr[left]</code> and <code>arr[right]</code>.</li>
+                <li>Move <code>left</code> one step right and <code>right</code> one step left.</li>
+            </ul>
+            <p>
+                Because we always swap symmetric positions and then shrink the interval,
+                no element ever needs to be moved again. Each index is visited at most once, so the total
+                work is still O(n).
+            </p>
+            <p>
+                Compared to building a new reversed array:
+            </p>
+            <ul>
+                <li><strong>In-place version:</strong> O(n) time, O(1) extra space, but it destroys the original order.</li>
+                <li><strong>Copying version:</strong> O(n) time, O(n) extra space, but you keep the original array.</li>
+            </ul>
+            <p>
+                Many interview follow-ups are just this trade-off: "What if I cannot modify the input?"
+                or "What if memory is very limited?".
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s2-ex3"
+            data-title="Why two pointers solve sorted two-sum" hidden>
+            <p>
+                In an unsorted array, the classic two-sum solution uses a hash table:
+                as you scan elements, you check whether <code>target - x</code> has been seen before.
+                That runs in O(n) time and O(n) space.
+            </p>
+            <p>
+                When the array is <strong>sorted</strong>, the ordering lets us do better on space by using
+                two pointers:
+            </p>
+            <ul>
+                <li>If <code>arr[left] + arr[right]</code> is too small, increasing <code>left</code> is the only way
+                    to increase the sum while keeping <code>right</code> fixed.</li>
+                <li>If the sum is too large, decreasing <code>right</code> is the only way to reduce it.</li>
+            </ul>
+            <p>
+                Because the array is sorted, moving the wrong pointer would only push the sum further away from
+                the target. That is why "sorted" is a critical precondition for this algorithm.
+            </p>
+            <p>
+                Each pointer moves inward at most n steps, so the total running time is O(n),
+                and we only use O(1) extra space.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s2-ex4"
+            data-title="Reversing strings and immutability" hidden>
+            <p>
+                In many languages (Java, C#, JavaScript, Python), strings are <strong>immutable</strong>:
+                once created, the contents cannot change. When you "modify" a string, you are really creating
+                a new one in memory.
+            </p>
+            <p>
+                Common patterns:
+            </p>
+            <ul>
+                <li><strong>Builder objects:</strong> Java and C# use types like <code>StringBuilder</code>
+                    to build up strings efficiently before producing a final immutable string.</li>
+                <li><strong>Array of characters:</strong> converting to a character array, reversing,
+                    and then converting back is a direct analog of array reversal.</li>
+                <li><strong>Slicing and joining:</strong> languages like JavaScript and Python offer
+                    concise operations that combine these steps.</li>
+            </ul>
+            <p>
+                Under the hood, most of these still walk the characters from both ends and
+                swap or copy them, which is why the time complexity is O(n).
+            </p>
+            <p>
+                In C, strings are just <code>char*</code> with a terminator byte, so you can reverse them
+                in place like an array of characters, but you must be careful about buffer sizes and the
+                terminating <code>'\0'</code> character.
+            </p>
+            <p>
+                In interview problems that involve Unicode or multibyte encodings, always clarify
+                whether "character" means a byte, a code unit, or a full Unicode code point.
+            </p>
+        </div>
+
+        <!-- ======================= Deep dive modal shell ======================= -->
+
+        <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title"></h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
+    </main>
+</body>
+
+</html>

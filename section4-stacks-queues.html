@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Section 4 - Stacks &amp; Queues</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css">
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tab logic, highlight init, etc.) -->
+    <script src="js/site.js"></script>
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="index.html">← Back to Index</a>
+        </div>
+        <div class="kicker">Section 4</div>
+        <h1>Stacks &amp; Queues</h1>
+        <p class="tagline">
+            Stacks and queues are simple but powerful abstractions built on top of arrays or linked lists.
+            They show up in parsing, search, scheduling, and a huge number of interview problems.
+        </p>
+
+        <h2>4.1 What Is a Stack?</h2>
+        <p>
+            A <strong>stack</strong> is a LIFO structure: last in, first out. You can think of it like a
+            stack of plates on a table.
+        </p>
+        <ul class="bullet-tight">
+            <li><strong>push(x)</strong> puts an item on top.</li>
+            <li><strong>pop()</strong> removes and returns the top item.</li>
+            <li><strong>peek()</strong> returns the top item without removing it.</li>
+        </ul>
+        <p>
+            The typical operations on a stack run in <strong>O(1)</strong> time when implemented on top of
+            a dynamic array or linked list.
+        </p>
+
+        <h2>4.2 What Is a Queue?</h2>
+        <p>
+            A <strong>queue</strong> is a FIFO structure: first in, first out. Think of a line of people
+            waiting to check out.
+        </p>
+        <ul class="bullet-tight">
+            <li><strong>enqueue(x)</strong> adds an item to the back.</li>
+            <li><strong>dequeue()</strong> removes and returns the item at the front.</li>
+            <li><strong>front()</strong> returns the item at the front without removing it.</li>
+        </ul>
+        <p>
+            With a linked list or circular buffer, enqueue and dequeue can both be <strong>O(1)</strong>.
+        </p>
+
+        <h2>4.3 Typical Use Cases</h2>
+        <ul>
+            <li><strong>Stacks</strong>: undo history, call stack, depth-first search (DFS), expression parsing.</li>
+            <li><strong>Queues</strong>: breadth-first search (BFS), task scheduling, producer/consumer patterns.</li>
+        </ul>
+
+        <h2>4.4 Code Examples in Multiple Languages</h2>
+        <p>
+            As before, each example appears in six languages:
+            <strong>C, C++, Java, JavaScript, C#,</strong> and <strong>Python</strong>.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark" selected>Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <!-- ======================= Example 1 ======================= -->
+        <h3>4.5 Example 1 - Stack Push and Pop</h3>
+        <p>
+            This example shows a minimal integer stack interface backed by an array or list. We focus
+            on <code>push</code> and <code>pop</code> and ignore resizing details in lower-level languages.
+        </p>
+
+        <div class="code-example" data-example="s4-ex1">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 1</span>
+                    <span class="meta">Simple integer stack</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+#include &lt;stdbool.h&gt;
+
+#define STACK_MAX 1024
+
+typedef struct {
+    int data[STACK_MAX];
+    int top; // index of next free slot
+} IntStack;
+
+void stack_init(IntStack* s) {
+    s-&gt;top = 0;
+}
+
+bool stack_push(IntStack* s, int value) {
+    if (s-&gt;top &gt;= STACK_MAX) {
+        return false; // overflow
+    }
+    s-&gt;data[s-&gt;top++] = value;
+    return true;
+}
+
+bool stack_pop(IntStack* s, int* out) {
+    if (s-&gt;top == 0) {
+        return false; // underflow
+    }
+    s-&gt;top--;
+    *out = s-&gt;data[s-&gt;top];
+    return true;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;stdexcept&gt;
+
+class IntStack {
+public:
+    void push(int value) {
+        data_.push_back(value);
+    }
+
+    int pop() {
+        if (data_.empty()) {
+            throw std::runtime_error("stack underflow");
+        }
+        int value = data_.back();
+        data_.pop_back();
+        return value;
+    }
+
+    bool empty() const {
+        return data_.empty();
+    }
+
+private:
+    std::vector&lt;int&gt; data_;
+};</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+class IntStack {
+    private java.util.ArrayList&lt;Integer&gt; data = new java.util.ArrayList&lt;&gt;();
+
+    public void push(int value) {
+        data.add(value);
+    }
+
+    public int pop() {
+        if (data.isEmpty()) {
+            throw new IllegalStateException("stack underflow");
+        }
+        return data.remove(data.size() - 1);
+    }
+
+    public boolean isEmpty() {
+        return data.isEmpty();
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+class IntStack {
+    constructor() {
+        this.data = [];
+    }
+
+    push(value) {
+        this.data.push(value);
+    }
+
+    pop() {
+        if (this.data.length === 0) {
+            throw new Error("stack underflow");
+        }
+        return this.data.pop();
+    }
+
+    isEmpty() {
+        return this.data.length === 0;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+class IntStack {
+    private readonly System.Collections.Generic.List&lt;int&gt; _data
+        = new System.Collections.Generic.List&lt;int&gt;();
+
+    public void Push(int value) {
+        _data.Add(value);
+    }
+
+    public int Pop() {
+        if (_data.Count == 0) {
+            throw new System.InvalidOperationException("stack underflow");
+        }
+        int lastIndex = _data.Count - 1;
+        int value = _data[lastIndex];
+        _data.RemoveAt(lastIndex);
+        return value;
+    }
+
+    public bool IsEmpty() {
+        return _data.Count == 0;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+class IntStack:
+    def __init__(self) -&gt; None:
+        self._data: list[int] = []
+
+    def push(self, value: int) -&gt; None:
+        self._data.append(value)
+
+    def pop(self) -&gt; int:
+        if not self._data:
+            raise IndexError("stack underflow")
+        return self._data.pop()
+
+    def is_empty(self) -&gt; bool:
+        return len(self._data) == 0</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time per push/pop: <strong>O(1)</strong> on average. &nbsp;|&nbsp;
+                Extra space: <strong>O(n)</strong> to store <code>n</code> items.
+            </div>
+        </div>
+
+        <!-- ======================= Example 2 ======================= -->
+        <h3>4.6 Example 2 - Queue Enqueue and Dequeue</h3>
+        <p>
+            Here we implement a queue of integers. In the higher-level languages we use built-in
+            collections. In C, we show a simple circular buffer.
+        </p>
+
+        <div class="code-example" data-example="s4-ex2">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 2</span>
+                    <span class="meta">Simple integer queue</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+#include &lt;stdbool.h&gt;
+
+#define QUEUE_MAX 1024
+
+typedef struct {
+    int data[QUEUE_MAX];
+    int head; // index of current front
+    int tail; // index of next free slot
+    int size;
+} IntQueue;
+
+void queue_init(IntQueue* q) {
+    q-&gt;head = 0;
+    q-&gt;tail = 0;
+    q-&gt;size = 0;
+}
+
+bool queue_enqueue(IntQueue* q, int value) {
+    if (q-&gt;size == QUEUE_MAX) {
+        return false; // full
+    }
+    q-&gt;data[q-&gt;tail] = value;
+    q-&gt;tail = (q-&gt;tail + 1) % QUEUE_MAX;
+    q-&gt;size++;
+    return true;
+}
+
+bool queue_dequeue(IntQueue* q, int* out) {
+    if (q-&gt;size == 0) {
+        return false; // empty
+    }
+    *out = q-&gt;data[q-&gt;head];
+    q-&gt;head = (q-&gt;head + 1) % QUEUE_MAX;
+    q-&gt;size--;
+    return true;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;queue&gt;
+
+class IntQueue {
+public:
+    void enqueue(int value) {
+        q_.push(value);
+    }
+
+    int dequeue() {
+        if (q_.empty()) {
+            throw std::runtime_error("queue underflow");
+        }
+        int value = q_.front();
+        q_.pop();
+        return value;
+    }
+
+    bool empty() const {
+        return q_.empty();
+    }
+
+private:
+    std::queue&lt;int&gt; q_;
+};</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+class IntQueue {
+    private java.util.ArrayDeque&lt;Integer&gt; data = new java.util.ArrayDeque&lt;&gt;();
+
+    public void enqueue(int value) {
+        data.addLast(value);
+    }
+
+    public int dequeue() {
+        if (data.isEmpty()) {
+            throw new IllegalStateException("queue underflow");
+        }
+        return data.removeFirst();
+    }
+
+    public boolean isEmpty() {
+        return data.isEmpty();
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+class IntQueue {
+    constructor() {
+        this.data = [];
+        this.head = 0; // for O(1) dequeue
+    }
+
+    enqueue(value) {
+        this.data.push(value);
+    }
+
+    dequeue() {
+        if (this.head &gt;= this.data.length) {
+            throw new Error("queue underflow");
+        }
+        const value = this.data[this.head];
+        this.head += 1;
+        return value;
+    }
+
+    isEmpty() {
+        return this.head &gt;= this.data.length;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+class IntQueue {
+    private readonly System.Collections.Generic.Queue&lt;int&gt; _queue
+        = new System.Collections.Generic.Queue&lt;int&gt;();
+
+    public void Enqueue(int value) {
+        _queue.Enqueue(value);
+    }
+
+    public int Dequeue() {
+        if (_queue.Count == 0) {
+            throw new System.InvalidOperationException("queue underflow");
+        }
+        return _queue.Dequeue();
+    }
+
+    public bool IsEmpty() {
+        return _queue.Count == 0;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+from collections import deque
+
+class IntQueue:
+    def __init__(self) -&gt; None:
+        self._data: deque[int] = deque()
+
+    def enqueue(self, value: int) -&gt; None:
+        self._data.append(value)
+
+    def dequeue(self) -&gt; int:
+        if not self._data:
+            raise IndexError("queue underflow")
+        return self._data.popleft()
+
+    def is_empty(self) -&gt; bool:
+        return len(self._data) == 0</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time per enqueue/dequeue: <strong>O(1)</strong> on average. &nbsp;|&nbsp;
+                Extra space: <strong>O(n)</strong> to store <code>n</code> items.
+            </div>
+        </div>
+
+        <!-- ======================= Example 3 ======================= -->
+        <h3>4.7 Example 3 - Valid Parentheses Using a Stack</h3>
+        <p>
+            Given a string containing parentheses like <code>"()[]{}"</code>, determine if the
+            parentheses are balanced. This is a classic stack problem.
+        </p>
+
+        <div class="code-example" data-example="s4-ex3">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 3</span>
+                    <span class="meta">Check for balanced parentheses</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+#include &lt;stdbool.h&gt;
+#include &lt;string.h&gt;
+
+#define PAREN_STACK_MAX 1024
+
+bool is_matching(char open, char close) {
+    return (open == '(' &amp;&amp; close == ')') ||
+           (open == '[' &amp;&amp; close == ']') ||
+           (open == '{' &amp;&amp; close == '}');
+}
+
+bool is_valid_parentheses(const char* s) {
+    char stack[PAREN_STACK_MAX];
+    int top = 0;
+
+    for (int i = 0; s[i] != '\0'; i++) {
+        char c = s[i];
+        if (c == '(' || c == '[' || c == '{') {
+            if (top &gt;= PAREN_STACK_MAX) return false;
+            stack[top++] = c;
+        } else if (c == ')' || c == ']' || c == '}') {
+            if (top == 0) return false;
+            char open = stack[--top];
+            if (!is_matching(open, c)) return false;
+        }
+    }
+    return top == 0;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;stack&gt;
+#include &lt;string&gt;
+
+bool isMatching(char open, char close) {
+    return (open == '(' &amp;&amp; close == ')') ||
+           (open == '[' &amp;&amp; close == ']') ||
+           (open == '{' &amp;&amp; close == '}');
+}
+
+bool isValidParentheses(const std::string&amp; s) {
+    std::stack&lt;char&gt; st;
+    for (char c : s) {
+        if (c == '(' || c == '[' || c == '{') {
+            st.push(c);
+        } else if (c == ')' || c == ']' || c == '}') {
+            if (st.empty()) return false;
+            char open = st.top();
+            st.pop();
+            if (!isMatching(open, c)) return false;
+        }
+    }
+    return st.empty();
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+boolean isMatching(char open, char close) {
+    return (open == '(' &amp;&amp; close == ')') ||
+           (open == '[' &amp;&amp; close == ']') ||
+           (open == '{' &amp;&amp; close == '}');
+}
+
+boolean isValidParentheses(String s) {
+    java.util.Deque&lt;Character&gt; stack = new java.util.ArrayDeque&lt;&gt;();
+    for (char c : s.toCharArray()) {
+        if (c == '(' || c == '[' || c == '{') {
+            stack.push(c);
+        } else if (c == ')' || c == ']' || c == '}') {
+            if (stack.isEmpty()) return false;
+            char open = stack.pop();
+            if (!isMatching(open, c)) return false;
+        }
+    }
+    return stack.isEmpty();
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function isMatching(open, close) {
+    return (open === "(" &amp;&amp; close === ")") ||
+           (open === "[" &amp;&amp; close === "]") ||
+           (open === "{" &amp;&amp; close === "}");
+}
+
+function isValidParentheses(s) {
+    const stack = [];
+    for (const c of s) {
+        if (c === "(" || c === "[" || c === "{") {
+            stack.push(c);
+        } else if (c === ")" || c === "]" || c === "}") {
+            if (stack.length === 0) return false;
+            const open = stack.pop();
+            if (!isMatching(open, c)) return false;
+        }
+    }
+    return stack.length === 0;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+bool IsMatching(char open, char close) {
+    return (open == '(' &amp;&amp; close == ')') ||
+           (open == '[' &amp;&amp; close == ']') ||
+           (open == '{' &amp;&amp; close == '}');
+}
+
+bool IsValidParentheses(string s) {
+    var stack = new System.Collections.Generic.Stack&lt;char&gt;();
+    foreach (var c in s) {
+        if (c == '(' || c == '[' || c == '{') {
+            stack.Push(c);
+        } else if (c == ')' || c == ']' || c == '}') {
+            if (stack.Count == 0) return false;
+            var open = stack.Pop();
+            if (!IsMatching(open, c)) return false;
+        }
+    }
+    return stack.Count == 0;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+def is_matching(open_c: str, close_c: str) -&gt; bool:
+    return (open_c == "(" and close_c == ")") or \
+           (open_c == "[" and close_c == "]") or \
+           (open_c == "{" and close_c == "}")
+
+def is_valid_parentheses(s: str) -&gt; bool:
+    stack: list[str] = []
+    for c in s:
+        if c in "([{":
+            stack.append(c)
+        elif c in ")]}":
+            if not stack:
+                return False
+            open_c = stack.pop()
+            if not is_matching(open_c, c):
+                return False
+    return not stack</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n)</strong> — each character is pushed and popped at most once. &nbsp;|&nbsp;
+                Extra space: <strong>O(n)</strong> in the worst case for the stack.
+            </div>
+        </div>
+
+        <!-- ======================= Example 4 ======================= -->
+        <h3>4.8 Example 4 - Breadth-First Traversal Using a Queue</h3>
+        <p>
+            A queue is the core of breadth-first search (BFS). Here we show BFS on a simple graph
+            represented as an adjacency list.
+        </p>
+
+        <div class="code-example" data-example="s4-ex4">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 4</span>
+                    <span class="meta">BFS with a queue</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+// For brevity we assume a small graph and reuse IntQueue from above.
+
+void bfs(int start, int adjacency[][QUEUE_MAX], int n, bool visited[]) {
+    IntQueue q;
+    queue_init(&amp;q);
+
+    visited[start] = true;
+    queue_enqueue(&amp;q, start);
+
+    while (!queue_dequeue(&amp;q, &amp;start) == false) {
+        // This simplified C example focuses on the idea:
+        // in practice you would dequeue into a local variable,
+        // then enqueue all neighbors that are not visited.
+    }
+}
+// In C, full BFS plumbing is longer, so the main BFS ideas
+// are better seen in the higher-level versions below.</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;iostream&gt;
+
+void bfs(int start, const std::vector&lt;std::vector&lt;int&gt;&gt;&amp; graph) {
+    int n = (int)graph.size();
+    std::vector&lt;bool&gt; visited(n, false);
+    std::queue&lt;int&gt; q;
+
+    visited[start] = true;
+    q.push(start);
+
+    while (!q.empty()) {
+        int node = q.front();
+        q.pop();
+        std::cout &lt;&lt; node &lt;&lt; std::endl;
+
+        for (int neighbor : graph[node]) {
+            if (!visited[neighbor]) {
+                visited[neighbor] = true;
+                q.push(neighbor);
+            }
+        }
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+void bfs(int start, java.util.List&lt;java.util.List&lt;Integer&gt;&gt; graph) {
+    int n = graph.size();
+    boolean[] visited = new boolean[n];
+    java.util.Queue&lt;Integer&gt; queue = new java.util.ArrayDeque&lt;&gt;();
+
+    visited[start] = true;
+    queue.add(start);
+
+    while (!queue.isEmpty()) {
+        int node = queue.remove();
+        System.out.println(node);
+
+        for (int neighbor : graph.get(node)) {
+            if (!visited[neighbor]) {
+                visited[neighbor] = true;
+                queue.add(neighbor);
+            }
+        }
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function bfs(start, graph) {
+    const n = graph.length;
+    const visited = new Array(n).fill(false);
+    const queue = [];
+
+    visited[start] = true;
+    queue.push(start);
+
+    let head = 0;
+    while (head &lt; queue.length) {
+        const node = queue[head++];
+        console.log(node);
+
+        for (const neighbor of graph[node]) {
+            if (!visited[neighbor]) {
+                visited[neighbor] = true;
+                queue.push(neighbor);
+            }
+        }
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+void Bfs(int start, System.Collections.Generic.List&lt;System.Collections.Generic.List&lt;int&gt;&gt; graph) {
+    int n = graph.Count;
+    var visited = new bool[n];
+    var queue = new System.Collections.Generic.Queue&lt;int&gt;();
+
+    visited[start] = true;
+    queue.Enqueue(start);
+
+    while (queue.Count &gt; 0) {
+        int node = queue.Dequeue();
+        System.Console.WriteLine(node);
+
+        foreach (var neighbor in graph[node]) {
+            if (!visited[neighbor]) {
+                visited[neighbor] = true;
+                queue.Enqueue(neighbor);
+            }
+        }
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+from collections import deque
+from typing import List
+
+def bfs(start: int, graph: List[List[int]]) -&gt; None:
+    n = len(graph)
+    visited = [False] * n
+    queue: deque[int] = deque()
+
+    visited[start] = True
+    queue.append(start)
+
+    while queue:
+        node = queue.popleft()
+        print(node)
+        for neighbor in graph[node]:
+            if not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n + m)</strong> where <code>n</code> is number of nodes and <code>m</code> edges. &nbsp;|&nbsp;
+                Extra space: <strong>O(n)</strong> for the visited array and queue.
+            </div>
+        </div>
+
+        <h2>4.9 Quick Practice</h2>
+        <p>For each of these, describe the time and space complexity in terms of <code>n</code>:</p>
+        <ol>
+            <li>
+                Push <code>n</code> items onto an empty stack one by one.<br>
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>1.</strong> Each push is <strong>O(1)</strong> on average.<br>
+                        Total time: <strong>O(n)</strong>.<br>
+                        Extra space: <strong>O(n)</strong> for the stack.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Enqueue <code>n</code> items into an empty queue, then dequeue all of them.<br>
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>2.</strong> Each enqueue and dequeue is <strong>O(1)</strong> on average.<br>
+                        Total time: <strong>O(n)</strong>.<br>
+                        Extra space: up to <strong>O(n)</strong> for the queue while it is full.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Check whether a parentheses string of length <code>n</code> is balanced using a stack.<br>
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>3.</strong> Each character is processed once and may be pushed or popped once.<br>
+                        Time: <strong>O(n)</strong>.<br>
+                        Extra space: <strong>O(n)</strong> in the worst case (all opens).
+                    </div>
+                </details>
+            </li>
+            <li>
+                Perform BFS on a graph with <code>n</code> nodes and <code>m</code> edges, where the graph
+                is stored as an adjacency list.<br>
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>4.</strong> Each node is enqueued and dequeued at most once, and each edge
+                        is inspected at most once.<br>
+                        Time: <strong>O(n + m)</strong>.<br>
+                        Extra space: <strong>O(n)</strong> for visited and the queue.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Implement a stack using two queues. Consider the time complexity of <code>push</code> and
+                <code>pop</code> if you choose to make one of them cheap and the other more expensive.<br>
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>5.</strong> In one common design, <code>push</code> is <strong>O(1)</strong> and
+                        <code>pop</code> is <strong>O(n)</strong> in the worst case (moving elements between queues).<br>
+                        Overall, each element may be moved a constant number of times, giving an
+                        amortized cost that is still manageable for many use cases.
+                    </div>
+                </details>
+            </li>
+        </ol>
+        
+        <div class="top-nav">
+            <a href="problems-section4-stacks-queues.html">
+                Problem Set for Section 4 Stacks &amp; Queues →
+            </a>
+        </div>
+        <div class="next-section">
+            <a href="section3-linked-lists.html">
+                ← Back to Section 3
+            </a>
+            &nbsp;&nbsp;
+            <a href="section5-trees-graphs.html">
+                Next: Section 5 — Trees &amp; Graphs →
+            </a>
+        </div>
+    </main>
+</body>
+
+</html>

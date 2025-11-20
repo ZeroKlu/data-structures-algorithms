@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Solutions - Section 6 Heaps &amp; Priority Queues</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css" />
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tabs, highlight init, cookies, etc.) -->
+    <script src="js/site.js"></script>
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="section10-practice.html">← Back to Practice Hub</a>
+            &nbsp;&nbsp;
+            <a href="problems-section6-heaps.html">← Back to Section 6 Problems</a>
+            &nbsp;&nbsp;
+            <a href="section6-heaps-priority-queues.html">View Section 6 Lesson →</a>
+        </div>
+
+        <div class="kicker">Section 6 - Solutions</div>
+        <h1>Heaps &amp; Priority Queues - Solutions</h1>
+
+        <p class="tagline">
+            Detailed solutions for the Section 6 problem set: implementing heaps and priority queues,
+            building a heap in O(n), k-selection problems, merging sorted lists, and the kth largest
+            in a stream. Each core solution is shown in C, C++, Java, JavaScript, C#, and Python.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 1 - Implement Min-Heap                            -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 1 — Implement a Min-Heap (Array-Based)</h2>
+            <p>
+                A min-heap is a complete binary tree stored in an array, where for every node
+                <code>i</code>, <code>data[i]</code> is less than or equal to its children.
+                We support:
+            </p>
+            <ul>
+                <li><code>insert(x)</code>: add element and bubble up.</li>
+                <li><code>peek()</code>: read the minimum (<code>data[0]</code>).</li>
+                <li><code>pop()</code>: remove min by swapping last element to root and heapifying down.</li>
+            </ul>
+
+            <div class="code-example" data-example="s6p1">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 1</span>
+                        <span class="meta">Array-based min-heap with insert / peek / pop</span>
+                    </div>
+                </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <!-- C -->
+            <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdlib.h&gt;
+#include &lt;limits.h&gt;
+
+typedef struct {
+    int *data;
+    int size;
+    int capacity;
+} MinHeap;
+
+static void heap_init(MinHeap *h, int cap) {
+    h-&gt;size = 0;
+    h-&gt;capacity = cap;
+    h-&gt;data = (int *)malloc(sizeof(int) * cap);
+}
+
+static void heap_free(MinHeap *h) {
+    free(h-&gt;data);
+    h-&gt;data = NULL;
+    h-&gt;size = h-&gt;capacity = 0;
+}
+
+static void heap_ensure_capacity(MinHeap *h) {
+    if (h-&gt;size &lt; h-&gt;capacity) return;
+    h-&gt;capacity *= 2;
+    h-&gt;data = (int *)realloc(h-&gt;data, sizeof(int) * h-&gt;capacity);
+}
+
+static void heap_swap(int *a, int *b) {
+    int tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
+static void bubble_up(MinHeap *h, int i) {
+    while (i &gt; 0) {
+        int p = (i - 1) / 2;
+        if (h-&gt;data[i] &gt;= h-&gt;data[p]) break;
+        heap_swap(&amp;h-&gt;data[i], &amp;h-&gt;data[p]);
+        i = p;
+    }
+}
+
+static void heapify_down(MinHeap *h, int i) {
+    int n = h-&gt;size;
+    for (;;) {
+        int smallest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+        if (left &lt; n &amp;&amp; h-&gt;data[left] &lt; h-&gt;data[smallest]) {
+            smallest = left;
+        }
+        if (right &lt; n &amp;&amp; h-&gt;data[right] &lt; h-&gt;data[smallest]) {
+            smallest = right;
+        }
+        if (smallest == i) break;
+        heap_swap(&amp;h-&gt;data[i], &amp;h-&gt;data[smallest]);
+        i = smallest;
+    }
+}
+
+void heap_insert(MinHeap *h, int x) {
+    heap_ensure_capacity(h);
+    h-&gt;data[h-&gt;size] = x;
+    bubble_up(h, h-&gt;size);
+    h-&gt;size++;
+}
+
+int heap_peek(MinHeap *h) {
+    return (h-&gt;size == 0) ? INT_MIN : h-&gt;data[0];
+}
+
+int heap_pop(MinHeap *h) {
+    if (h-&gt;size == 0) return INT_MIN;
+    int root = h-&gt;data[0];
+    h-&gt;size--;
+    if (h-&gt;size &gt; 0) {
+        h-&gt;data[0] = h-&gt;data[h-&gt;size];
+        heapify_down(h, 0);
+    }
+    return root;
+}</code></pre>
+            </div>
+
+            <!-- C++ -->
+            <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;stdexcept&gt;
+using namespace std;
+
+class MinHeap {
+    vector&lt;int&gt; data;
+
+    void bubbleUp(int i) {
+        while (i &gt; 0) {
+            int p = (i - 1) / 2;
+            if (data[i] &gt;= data[p]) break;
+            swap(data[i], data[p]);
+            i = p;
+        }
+    }
+
+    void heapifyDown(int i) {
+        int n = (int)data.size();
+        while (true) {
+            int smallest = i;
+            int left = 2 * i + 1;
+            int right = 2 * i + 2;
+            if (left &lt; n &amp;&amp; data[left] &lt; data[smallest]) smallest = left;
+            if (right &lt; n &amp;&amp; data[right] &lt; data[smallest]) smallest = right;
+            if (smallest == i) break;
+            swap(data[i], data[smallest]);
+            i = smallest;
+        }
+    }
+
+public:
+    void insert(int x) {
+        data.push_back(x);
+        bubbleUp((int)data.size() - 1);
+    }
+
+    int peek() const {
+        if (data.empty()) throw runtime_error("empty heap");
+        return data[0];
+    }
+
+    int pop() {
+        if (data.empty()) throw runtime_error("empty heap");
+        int root = data[0];
+        data[0] = data.back();
+        data.pop_back();
+        if (!data.empty()) heapifyDown(0);
+        return root;
+    }
+
+    bool empty() const { return data.empty(); }
+};</code></pre>
+            </div>
+
+            <!-- Java -->
+            <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+class MinHeap {
+    private int[] data;
+    private int size;
+
+    public MinHeap(int capacity) {
+        data = new int[capacity];
+        size = 0;
+    }
+
+    private void ensureCapacity() {
+        if (size &lt; data.length) return;
+        int[] nd = new int[data.length * 2];
+        System.arraycopy(data, 0, nd, 0, data.length);
+        data = nd;
+    }
+
+    private void swap(int i, int j) {
+        int tmp = data[i];
+        data[i] = data[j];
+        data[j] = tmp;
+    }
+
+    private void bubbleUp(int i) {
+        while (i &gt; 0) {
+            int p = (i - 1) / 2;
+            if (data[i] &gt;= data[p]) break;
+            swap(i, p);
+            i = p;
+        }
+    }
+
+    private void heapifyDown(int i) {
+        int n = size;
+        while (true) {
+            int smallest = i;
+            int left = 2 * i + 1;
+            int right = 2 * i + 2;
+            if (left &lt; n &amp;&amp; data[left] &lt; data[smallest]) smallest = left;
+            if (right &lt; n &amp;&amp; data[right] &lt; data[smallest]) smallest = right;
+            if (smallest == i) break;
+            swap(i, smallest);
+            i = smallest;
+        }
+    }
+
+    public void insert(int x) {
+        ensureCapacity();
+        data[size] = x;
+        bubbleUp(size);
+        size++;
+    }
+
+    public Integer peek() {
+        return size == 0 ? null : data[0];
+    }
+
+    public Integer pop() {
+        if (size == 0) return null;
+        int root = data[0];
+        size--;
+        if (size &gt; 0) {
+            data[0] = data[size];
+            heapifyDown(0);
+        }
+        return root;
+    }
+}</code></pre>
+            </div>
+
+            <!-- JavaScript -->
+            <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+class MinHeap {
+    constructor() {
+        this.data = [];
+    }
+
+    insert(x) {
+        this.data.push(x);
+        this._bubbleUp(this.data.length - 1);
+    }
+
+    peek() {
+        return this.data.length ? this.data[0] : null;
+    }
+
+    pop() {
+        if (this.data.length === 0) return null;
+        if (this.data.length === 1) return this.data.pop();
+        const root = this.data[0];
+        this.data[0] = this.data.pop();
+        this._heapify(0);
+        return root;
+    }
+
+    _bubbleUp(i) {
+        while (i &gt; 0) {
+            const parent = Math.floor((i - 1) / 2);
+            if (this.data[i] &gt;= this.data[parent]) break;
+            [this.data[i], this.data[parent]] = [this.data[parent], this.data[i]];
+            i = parent;
+        }
+    }
+
+    _heapify(i) {
+        const n = this.data.length;
+        while (true) {
+            let smallest = i;
+            const left = 2 * i + 1;
+            const right = 2 * i + 2;
+
+            if (left &lt; n &amp;&amp; this.data[left] &lt; this.data[smallest]) smallest = left;
+            if (right &lt; n &amp;&amp; this.data[right] &lt; this.data[smallest]) smallest = right;
+            if (smallest === i) break;
+
+            [this.data[i], this.data[smallest]] = [this.data[smallest], this.data[i]];
+            i = smallest;
+        }
+    }
+}</code></pre>
+            </div>
+
+            <!-- C# -->
+            <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System;
+using System.Collections.Generic;
+
+class MinHeap {
+    private readonly List&lt;int&gt; data = new List&lt;int&gt;();
+
+    private void Swap(int i, int j) {
+        int tmp = data[i];
+        data[i] = data[j];
+        data[j] = tmp;
+    }
+
+    private void BubbleUp(int i) {
+        while (i &gt; 0) {
+            int p = (i - 1) / 2;
+            if (data[i] &gt;= data[p]) break;
+            Swap(i, p);
+            i = p;
+        }
+    }
+
+    private void HeapifyDown(int i) {
+        int n = data.Count;
+        while (true) {
+            int smallest = i;
+            int left = 2 * i + 1;
+            int right = 2 * i + 2;
+            if (left &lt; n &amp;&amp; data[left] &lt; data[smallest]) smallest = left;
+            if (right &lt; n &amp;&amp; data[right] &lt; data[smallest]) smallest = right;
+            if (smallest == i) break;
+            Swap(i, smallest);
+            i = smallest;
+        }
+    }
+
+    public void Insert(int x) {
+        data.Add(x);
+        BubbleUp(data.Count - 1);
+    }
+
+    public int? Peek() {
+        return data.Count == 0 ? (int?)null : data[0];
+    }
+
+    public int? Pop() {
+        if (data.Count == 0) return null;
+        if (data.Count == 1) {
+            int v = data[0];
+            data.RemoveAt(0);
+            return v;
+        }
+        int root = data[0];
+        data[0] = data[^1];
+        data.RemoveAt(data.Count - 1);
+        HeapifyDown(0);
+        return root;
+    }
+}</code></pre>
+            </div>
+
+            <!-- Python -->
+            <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import List, Optional
+
+class MinHeap:
+    def __init__(self) -&gt; None:
+        self.data: List[int] = []
+
+    def _bubble_up(self, i: int) -&gt; None:
+        while i &gt; 0:
+            p = (i - 1) // 2
+            if self.data[i] &gt;= self.data[p]:
+                break
+            self.data[i], self.data[p] = self.data[p], self.data[i]
+            i = p
+
+    def _heapify(self, i: int) -&gt; None:
+        n = len(self.data)
+        while True:
+            smallest = i
+            left = 2 * i + 1
+            right = 2 * i + 2
+            if left &lt; n and self.data[left] &lt; self.data[smallest]:
+                smallest = left
+            if right &lt; n and self.data[right] &lt; self.data[smallest]:
+                smallest = right
+            if smallest == i:
+                break
+            self.data[i], self.data[smallest] = self.data[smallest], self.data[i]
+            i = smallest
+
+    def insert(self, x: int) -&gt; None:
+        self.data.append(x)
+        self._bubble_up(len(self.data) - 1)
+
+    def peek(self) -&gt; Optional[int]:
+        return self.data[0] if self.data else None
+
+    def pop(self) -&gt; Optional[int]:
+        if not self.data:
+            return None
+        if len(self.data) == 1:
+            return self.data.pop()
+        root = self.data[0]
+        self.data[0] = self.data.pop()
+        self._heapify(0)
+        return root</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>insert</strong> and <strong>pop</strong> are <strong>O(log n)</strong> (height of heap),
+                <strong>peek</strong> is <strong>O(1)</strong>.  
+                Extra space: <strong>O(n)</strong> for the underlying array.
+            </div>
+        </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 2 - Build Heap in O(n)                            -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 2 — Build a Heap in O(n)</h2>
+            <p>
+                To build a heap from an arbitrary array, we start from the last non-leaf index
+                <code>i = floor(n/2) - 1</code> and run <code>heapify</code> on each index down to 0.
+                Lower levels have more nodes but shallower heaps; upper levels have deeper heaps but
+                few nodes, so the total work adds up to linear.
+            </p>
+
+            <div class="code-example" data-example="s6p2">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 2</span>
+                        <span class="meta">Bottom-up heap construction</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdlib.h&gt;
+
+static void heapify(int arr[], int n, int i) {
+    int smallest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left &lt; n &amp;&amp; arr[left] &lt; arr[smallest]) smallest = left;
+    if (right &lt; n &amp;&amp; arr[right] &lt; arr[smallest]) smallest = right;
+
+    if (smallest != i) {
+        int tmp = arr[i];
+        arr[i] = arr[smallest];
+        arr[smallest] = tmp;
+        heapify(arr, n, smallest);
+    }
+}
+
+void buildHeap(int arr[], int n) {
+    int start = n / 2 - 1;
+    for (int i = start; i &gt;= 0; i--) {
+        heapify(arr, n, i);
+    }
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+using namespace std;
+
+static void heapify(vector&lt;int&gt; &amp;arr, int n, int i) {
+    int smallest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+    if (left &lt; n &amp;&amp; arr[left] &lt; arr[smallest]) smallest = left;
+    if (right &lt; n &amp;&amp; arr[right] &lt; arr[smallest]) smallest = right;
+    if (smallest != i) {
+        swap(arr[i], arr[smallest]);
+        heapify(arr, n, smallest);
+    }
+}
+
+void buildHeap(vector&lt;int&gt; &amp;arr) {
+    int n = (int)arr.size();
+    for (int i = n / 2 - 1; i &gt;= 0; i--) {
+        heapify(arr, n, i);
+    }
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+class HeapUtils {
+    private static void heapify(int[] arr, int n, int i) {
+        int smallest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+        if (left &lt; n &amp;&amp; arr[left] &lt; arr[smallest]) smallest = left;
+        if (right &lt; n &amp;&amp; arr[right] &lt; arr[smallest]) smallest = right;
+        if (smallest != i) {
+            int tmp = arr[i];
+            arr[i] = arr[smallest];
+            arr[smallest] = tmp;
+            heapify(arr, n, smallest);
+        }
+    }
+
+    public static void buildHeap(int[] arr) {
+        int n = arr.length;
+        for (int i = n / 2 - 1; i &gt;= 0; i--) {
+            heapify(arr, n, i);
+        }
+    }
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function heapify(arr, n, i) {
+    let smallest = i;
+    const left = 2 * i + 1;
+    const right = 2 * i + 2;
+
+    if (left &lt; n &amp;&amp; arr[left] &lt; arr[smallest]) smallest = left;
+    if (right &lt; n &amp;&amp; arr[right] &lt; arr[smallest]) smallest = right;
+
+    if (smallest !== i) {
+        [arr[i], arr[smallest]] = [arr[smallest], arr[i]];
+        heapify(arr, n, smallest);
+    }
+}
+
+function buildHeap(arr) {
+    const n = arr.length;
+    for (let i = Math.floor(n / 2) - 1; i &gt;= 0; i--) {
+        heapify(arr, n, i);
+    }
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System;
+
+class HeapUtils {
+    private static void Heapify(int[] arr, int n, int i) {
+        int smallest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+        if (left &lt; n &amp;&amp; arr[left] &lt; arr[smallest]) smallest = left;
+        if (right &lt; n &amp;&amp; arr[right] &lt; arr[smallest]) smallest = right;
+        if (smallest != i) {
+            int tmp = arr[i];
+            arr[i] = arr[smallest];
+            arr[smallest] = tmp;
+            Heapify(arr, n, smallest);
+        }
+    }
+
+    public static void BuildHeap(int[] arr) {
+        int n = arr.Length;
+        for (int i = n / 2 - 1; i &gt;= 0; i--) {
+            Heapify(arr, n, i);
+        }
+    }
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import List
+
+def heapify(arr: List[int], n: int, i: int) -&gt; None:
+    smallest = i
+    left = 2 * i + 1
+    right = 2 * i + 2
+
+    if left &lt; n and arr[left] &lt; arr[smallest]:
+        smallest = left
+    if right &lt; n and arr[right] &lt; arr[smallest]:
+        smallest = right
+
+    if smallest != i:
+        arr[i], arr[smallest] = arr[smallest], arr[i]
+        heapify(arr, n, smallest)
+
+def build_heap(arr: List[int]) -&gt; None:
+    n = len(arr)
+    start = n // 2 - 1
+    for i in range(start, -1, -1):
+        heapify(arr, n, i)</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: bottom-up heapify touches each node a constant amortized number of times → <strong>O(n)</strong>.  
+                    Extra space: in-place, so <strong>O(1)</strong> extra.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 3 - K Smallest Elements                            -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 3 — Find the K Smallest Elements</h2>
+            <p>
+                The key pattern: maintain a <strong>max-heap of size k</strong>.  
+                Push each number; if heap grows beyond k, remove the current maximum.
+                The heap then contains the k smallest elements seen so far.
+            </p>
+
+            <div class="code-example" data-example="s6p3">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 3</span>
+                        <span class="meta">K smallest using max-heap of size k</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C (conceptual using a max-heap similar to Problem 1) -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C (conceptual using a MaxHeap similar to MinHeap from Problem 1)
+
+typedef struct {
+    int *data;
+    int size;
+    int capacity;
+} MaxHeap;
+
+// Assume MaxHeap has init, free, insert (push), peek (top), and pop (remove max)
+// implemented like MinHeap but with comparisons reversed.
+
+void kSmallest(const int *arr, int n, int k, MaxHeap *heap, int *outCount) {
+    // heap is assumed initialized
+    for (int i = 0; i &lt; n; i++) {
+        if (heap-&gt;size &lt; k) {
+            maxheap_insert(heap, arr[i]);
+        } else if (arr[i] &lt; maxheap_peek(heap)) {
+            maxheap_pop(heap);
+            maxheap_insert(heap, arr[i]);
+        }
+    }
+    // Now heap contains the k smallest elements (unordered).
+    *outCount = heap-&gt;size;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;queue&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+vector&lt;int&gt; kSmallest(const vector&lt;int&gt; &amp;arr, int k) {
+    priority_queue&lt;int&gt; pq; // max-heap
+    for (int x : arr) {
+        if ((int)pq.size() &lt; k) {
+            pq.push(x);
+        } else if (x &lt; pq.top()) {
+            pq.pop();
+            pq.push(x);
+        }
+    }
+    vector&lt;int&gt; result;
+    while (!pq.empty()) {
+        result.push_back(pq.top());
+        pq.pop();
+    }
+    return result; // any order is acceptable
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.*;
+
+List&lt;Integer&gt; kSmallest(int[] arr, int k) {
+    PriorityQueue&lt;Integer&gt; pq =
+        new PriorityQueue&lt;&gt;((a, b) -&gt; b - a); // max-heap
+
+    for (int x : arr) {
+        if (pq.size() &lt; k) {
+            pq.add(x);
+        } else if (x &lt; pq.peek()) {
+            pq.poll();
+            pq.add(x);
+        }
+    }
+    return new ArrayList&lt;&gt;(pq);
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+// Simple max-heap for integers:
+class MaxHeap {
+    constructor() { this.data = []; }
+
+    _bubbleUp(i) {
+        while (i &gt; 0) {
+            const p = Math.floor((i - 1) / 2);
+            if (this.data[i] &lt;= this.data[p]) break;
+            [this.data[i], this.data[p]] = [this.data[p], this.data[i]];
+            i = p;
+        }
+    }
+
+    _heapify(i) {
+        const n = this.data.length;
+        while (true) {
+            let largest = i;
+            const left = 2 * i + 1;
+            const right = 2 * i + 2;
+            if (left &lt; n &amp;&amp; this.data[left] &gt; this.data[largest]) largest = left;
+            if (right &lt; n &amp;&amp; this.data[right] &gt; this.data[largest]) largest = right;
+            if (largest === i) break;
+            [this.data[i], this.data[largest]] = [this.data[largest], this.data[i]];
+            i = largest;
+        }
+    }
+
+    push(x) {
+        this.data.push(x);
+        this._bubbleUp(this.data.length - 1);
+    }
+
+    peek() {
+        return this.data.length ? this.data[0] : null;
+    }
+
+    pop() {
+        if (!this.data.length) return null;
+        if (this.data.length === 1) return this.data.pop();
+        const root = this.data[0];
+        this.data[0] = this.data.pop();
+        this._heapify(0);
+        return root;
+    }
+
+    size() { return this.data.length; }
+}
+
+function kSmallest(arr, k) {
+    const heap = new MaxHeap();
+    for (const x of arr) {
+        if (heap.size() &lt; k) {
+            heap.push(x);
+        } else if (x &lt; heap.peek()) {
+            heap.pop();
+            heap.push(x);
+        }
+    }
+    return heap.data.slice(); // k smallest, any order
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System;
+using System.Collections.Generic;
+
+IList&lt;int&gt; KSmallest(int[] arr, int k) {
+    var pq = new PriorityQueue&lt;int, int&gt;(
+        Comparer&lt;int&gt;.Create((a, b) =&gt; b.CompareTo(a))  // max-heap
+    );
+    foreach (var x in arr) {
+        if (pq.Count &lt; k) {
+            pq.Enqueue(x, x);
+        } else if (x &lt; pq.Peek()) {
+            pq.Dequeue();
+            pq.Enqueue(x, x);
+        }
+    }
+    var result = new List&lt;int&gt;();
+    while (pq.Count &gt; 0) {
+        result.Add(pq.Dequeue());
+    }
+    return result;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+import heapq
+from typing import List
+
+def k_smallest(nums: List[int], k: int) -&gt; List[int]:
+    if k == 0:
+        return []
+    # Python has min-heap, so store negatives to simulate max-heap
+    heap: List[int] = []
+    for x in nums:
+        if len(heap) &lt; k:
+            heapq.heappush(heap, -x)
+        elif x &lt; -heap[0]:
+            heapq.heapreplace(heap, -x)
+    return [-x for x in heap]</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: each of n elements potentially adjusts the heap → <strong>O(n log k)</strong>.  
+                    Extra space: heap stores at most k elements → <strong>O(k)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 4 - Merge K Sorted Lists                           -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 4 — Merge K Sorted Lists</h2>
+            <p>
+                Maintain a min-heap keyed by node value, initially containing the head of each non-empty list.
+                Repeatedly extract the smallest node and push its successor (if any).
+            </p>
+
+            <div class="code-example" data-example="s6p4">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 4</span>
+                        <span class="meta">Min-heap over list heads</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C (sketch using array-based min-heap of pointers) -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C (sketch) — assume ListNode { int val; struct ListNode *next; }
+// and a MinHeap of ListNode* keyed by node-&gt;val.
+
+typedef struct ListNode {
+    int val;
+    struct ListNode *next;
+} ListNode;
+
+typedef struct {
+    ListNode **data;
+    int size;
+    int capacity;
+} NodeMinHeap;
+
+// Assume NodeMinHeap has init, push, pop, peek implemented
+// like the int MinHeap but comparing node-&gt;val.
+
+ListNode *mergeKLists(ListNode **lists, int k) {
+    NodeMinHeap h;
+    // node_heap_init(&amp;h, k) ...
+    for (int i = 0; i &lt; k; i++) {
+        if (lists[i] != NULL) {
+            node_heap_push(&amp;h, lists[i]);
+        }
+    }
+    ListNode dummy = {0, NULL};
+    ListNode *tail = &dummy;
+
+    while (h.size &gt; 0) {
+        ListNode *node = node_heap_pop(&amp;h);
+        tail-&gt;next = node;
+        tail = tail-&gt;next;
+        if (node-&gt;next != NULL) {
+            node_heap_push(&amp;h, node-&gt;next);
+        }
+    }
+    // node_heap_free(&amp;h) ...
+    return dummy.next;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;queue&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int v) : val(v), next(nullptr) {}
+};
+
+struct Cmp {
+    bool operator()(ListNode *a, ListNode *b) const {
+        return a-&gt;val &gt; b-&gt;val;  // min-heap
+    }
+};
+
+ListNode *mergeKLists(vector&lt;ListNode *&gt; &amp;lists) {
+    priority_queue&lt;ListNode *, vector&lt;ListNode *&gt;, Cmp&gt; pq;
+    for (auto node : lists) {
+        if (node) pq.push(node);
+    }
+    ListNode dummy(0);
+    ListNode *tail = &dummy;
+
+    while (!pq.empty()) {
+        ListNode *node = pq.top();
+        pq.pop();
+        tail-&gt;next = node;
+        tail = tail-&gt;next;
+        if (node-&gt;next) {
+            pq.push(node-&gt;next);
+        }
+    }
+    return dummy.next;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.*;
+
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int v) { val = v; }
+}
+
+ListNode mergeKLists(ListNode[] lists) {
+    PriorityQueue&lt;ListNode&gt; pq =
+        new PriorityQueue&lt;&gt;(Comparator.comparingInt(a -&gt; a.val));
+
+    for (ListNode node : lists) {
+        if (node != null) pq.add(node);
+    }
+
+    ListNode dummy = new ListNode(0);
+    ListNode cur = dummy;
+
+    while (!pq.isEmpty()) {
+        ListNode node = pq.poll();
+        cur.next = node;
+        cur = cur.next;
+        if (node.next != null) {
+            pq.add(node.next);
+        }
+    }
+    return dummy.next;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+class ListNode {
+    constructor(val, next = null) {
+        this.val = val;
+        this.next = next;
+    }
+}
+
+// Minimal min-heap of ListNode* by node.val
+class NodeMinHeap {
+    constructor() { this.data = []; }
+    _bubbleUp(i) {
+        while (i &gt; 0) {
+            const p = Math.floor((i - 1) / 2);
+            if (this.data[i].val &gt;= this.data[p].val) break;
+            [this.data[i], this.data[p]] = [this.data[p], this.data[i]];
+            i = p;
+        }
+    }
+    _heapify(i) {
+        const n = this.data.length;
+        while (true) {
+            let smallest = i;
+            const left = 2 * i + 1;
+            const right = 2 * i + 2;
+            if (left &lt; n &amp;&amp; this.data[left].val &lt; this.data[smallest].val) smallest = left;
+            if (right &lt; n &amp;&amp; this.data[right].val &lt; this.data[smallest].val) smallest = right;
+            if (smallest === i) break;
+            [this.data[i], this.data[smallest]] = [this.data[smallest], this.data[i]];
+            i = smallest;
+        }
+    }
+    push(node) {
+        this.data.push(node);
+        this._bubbleUp(this.data.length - 1);
+    }
+    pop() {
+        if (!this.data.length) return null;
+        if (this.data.length === 1) return this.data.pop();
+        const root = this.data[0];
+        this.data[0] = this.data.pop();
+        this._heapify(0);
+        return root;
+    }
+    get size() { return this.data.length; }
+}
+
+function mergeKLists(lists) {
+    const heap = new NodeMinHeap();
+    for (const node of lists) {
+        if (node) heap.push(node);
+    }
+    const dummy = new ListNode(0);
+    let cur = dummy;
+    while (heap.size &gt; 0) {
+        const node = heap.pop();
+        cur.next = node;
+        cur = cur.next;
+        if (node.next) heap.push(node.next);
+    }
+    return dummy.next;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+class ListNode {
+    public int val;
+    public ListNode? next;
+    public ListNode(int v) { val = v; }
+}
+
+ListNode? MergeKLists(ListNode?[] lists) {
+    var pq = new PriorityQueue&lt;ListNode, int&gt;();
+    foreach (var node in lists) {
+        if (node != null) pq.Enqueue(node, node.val);
+    }
+
+    var dummy = new ListNode(0);
+    var cur = dummy;
+
+    while (pq.Count &gt; 0) {
+        var node = pq.Dequeue();
+        cur.next = node;
+        cur = cur.next;
+        if (node.next != null) {
+            pq.Enqueue(node.next, node.next.val);
+        }
+    }
+    return dummy.next;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+import heapq
+from typing import List, Optional, Tuple
+
+class ListNode:
+    def __init__(self, val: int = 0, next: "Optional[ListNode]" = None):
+        self.val = val
+        self.next = next
+
+def merge_k_lists(lists: List[Optional[ListNode]]) -&gt; Optional[ListNode]:
+    heap: List[Tuple[int, int, ListNode]] = []
+    seq = 0  # to avoid comparing ListNode objects
+    for node in lists:
+        if node is not None:
+            heapq.heappush(heap, (node.val, seq, node))
+            seq += 1
+
+    dummy = ListNode(0)
+    cur = dummy
+    while heap:
+        _, _, node = heapq.heappop(heap)
+        cur.next = node
+        cur = cur.next
+        if node.next is not None:
+            heapq.heappush(heap, (node.next.val, seq, node.next))
+            seq += 1
+    return dummy.next</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Let N be the total number of nodes across all lists.  
+                    Time: each extract/insert on a heap of size k → <strong>O(log k)</strong>, done N times → <strong>O(N log k)</strong>.  
+                    Extra space: heap stores at most k nodes → <strong>O(k)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 5 - Kth Largest in a Stream                        -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 5 — Kth Largest Element in a Stream</h2>
+            <p>
+                Maintain a <strong>min-heap of size k</strong>.  
+                The root of the heap is always the kth largest element seen so far.
+            </p>
+
+            <div class="code-example" data-example="s6p5">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 5</span>
+                        <span class="meta">Streaming kth-largest with a fixed-size min-heap</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C (sketch using MinHeap from Problem 1) -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C (sketch) using MinHeap from Problem 1
+typedef struct {
+    int k;
+    MinHeap heap; // min-heap of size at most k
+} KthLargest;
+
+void kth_init(KthLargest *obj, int k, const int *nums, int n) {
+    obj-&gt;k = k;
+    heap_init(&amp;obj-&gt;heap, k &gt; 0 ? k : 1);
+    for (int i = 0; i &lt; n; i++) {
+        // add operation:
+        if (obj-&gt;heap.size &lt; k) {
+            heap_insert(&amp;obj-&gt;heap, nums[i]);
+        } else if (k &gt; 0 &amp;&amp; nums[i] &gt; heap_peek(&amp;obj-&gt;heap)) {
+            heap_pop(&amp;obj-&gt;heap);
+            heap_insert(&amp;obj-&gt;heap, nums[i]);
+        }
+    }
+}
+
+int kth_add(KthLargest *obj, int val) {
+    if (obj-&gt;k == 0) return 0; // undefined, placeholder
+    if (obj-&gt;heap.size &lt; obj-&gt;k) {
+        heap_insert(&amp;obj-&gt;heap, val);
+    } else if (val &gt; heap_peek(&amp;obj-&gt;heap)) {
+        heap_pop(&amp;obj-&gt;heap);
+        heap_insert(&amp;obj-&gt;heap, val);
+    }
+    return heap_peek(&amp;obj-&gt;heap);
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;queue&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+class KthLargest {
+    int k;
+    priority_queue&lt;int, vector&lt;int&gt;, greater&lt;int&gt; &gt; pq; // min-heap
+
+public:
+    KthLargest(int k_, const vector&lt;int&gt; &amp;nums) : k(k_) {
+        for (int x : nums) {
+            add(x);
+        }
+    }
+
+    int add(int val) {
+        if ((int)pq.size() &lt; k) {
+            pq.push(val);
+        } else if (val &gt; pq.top()) {
+            pq.pop();
+            pq.push(val);
+        }
+        return pq.top();
+    }
+};</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.*;
+
+class KthLargest {
+    private final int k;
+    private final PriorityQueue&lt;Integer&gt; pq; // min-heap
+
+    public KthLargest(int k, int[] nums) {
+        this.k = k;
+        this.pq = new PriorityQueue&lt;&gt;();
+        for (int x : nums) {
+            add(x);
+        }
+    }
+
+    public int add(int val) {
+        if (pq.size() &lt; k) {
+            pq.add(val);
+        } else if (val &gt; pq.peek()) {
+            pq.poll();
+            pq.add(val);
+        }
+        return pq.peek();
+    }
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+class MinHeapK {
+    constructor() { this.data = []; }
+
+    _bubbleUp(i) {
+        while (i &gt; 0) {
+            const p = Math.floor((i - 1) / 2);
+            if (this.data[i] &gt;= this.data[p]) break;
+            [this.data[i], this.data[p]] = [this.data[p], this.data[i]];
+            i = p;
+        }
+    }
+
+    _heapify(i) {
+        const n = this.data.length;
+        while (true) {
+            let smallest = i;
+            const left = 2 * i + 1;
+            const right = 2 * i + 2;
+            if (left &lt; n &amp;&amp; this.data[left] &lt; this.data[smallest]) smallest = left;
+            if (right &lt; n &amp;&amp; this.data[right] &lt; this.data[smallest]) smallest = right;
+            if (smallest === i) break;
+            [this.data[i], this.data[smallest]] = [this.data[smallest], this.data[i]];
+            i = smallest;
+        }
+    }
+
+    push(x) {
+        this.data.push(x);
+        this._bubbleUp(this.data.length - 1);
+    }
+
+    pop() {
+        if (!this.data.length) return null;
+        if (this.data.length === 1) return this.data.pop();
+        const root = this.data[0];
+        this.data[0] = this.data.pop();
+        this._heapify(0);
+        return root;
+    }
+
+    peek() {
+        return this.data.length ? this.data[0] : null;
+    }
+
+    size() { return this.data.length; }
+}
+
+class KthLargest {
+    constructor(k, nums) {
+        this.k = k;
+        this.heap = new MinHeapK();
+        for (const x of nums) {
+            this.add(x);
+        }
+    }
+
+    add(val) {
+        if (this.heap.size() &lt; this.k) {
+            this.heap.push(val);
+        } else if (val &gt; this.heap.peek()) {
+            this.heap.pop();
+            this.heap.push(val);
+        }
+        return this.heap.peek();
+    }
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System;
+using System.Collections.Generic;
+
+class KthLargest {
+    private readonly int k;
+    private readonly PriorityQueue&lt;int, int&gt; pq; // min-heap
+
+    public KthLargest(int k, int[] nums) {
+        this.k = k;
+        pq = new PriorityQueue&lt;int, int&gt;();
+        foreach (var n in nums) {
+            Add(n);
+        }
+    }
+
+    public int Add(int val) {
+        if (pq.Count &lt; k) {
+            pq.Enqueue(val, val);
+        } else {
+            int min = pq.Peek();
+            if (val &gt; min) {
+                pq.Dequeue();
+                pq.Enqueue(val, val);
+            }
+        }
+        return pq.Peek();
+    }
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+import heapq
+from typing import List
+
+class KthLargest:
+    def __init__(self, k: int, nums: List[int]) -&gt; None:
+        self.k = k
+        self.heap: List[int] = []
+        for n in nums:
+            self.add(n)
+
+    def add(self, val: int) -&gt; int:
+        if len(self.heap) &lt; self.k:
+            heapq.heappush(self.heap, val)
+        elif val &gt; self.heap[0]:
+            heapq.heapreplace(self.heap, val)
+        return self.heap[0]</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time per <code>add</code>: heap operations on size k → <strong>O(log k)</strong>.  
+                    Extra space: heap stores k elements → <strong>O(k)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <div class="next-section">
+            <a href="problems-section6-heaps.html">
+                ← Back to Section 6 Problem Set
+            </a>
+            &nbsp;&nbsp;
+            <a href="section10-practice.html">
+                Back to Practice Hub →
+            </a>
+        </div>
+    </main>
+</body>
+
+</html>

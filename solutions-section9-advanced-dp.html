@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Solutions - Section 9 Advanced DP Patterns</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css" />
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts -->
+    <script src="js/site.js"></script>
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="section10-practice.html">← Back to Practice Hub</a>
+            &nbsp;&nbsp;
+            <a href="problems-section9-advanced-dp.html">← Back to Section 9 Problems</a>
+            &nbsp;&nbsp;
+            <a href="section9-advanced-dp.html">View Section 9 Lesson →</a>
+        </div>
+
+        <div class="kicker">Section 9 - Solutions</div>
+        <h1>Advanced Dynamic Programming Patterns - Solutions</h1>
+
+        <p class="tagline">
+            Higher-level DP patterns: LIS in O(n log n), 0/1 knapsack, partition equal subset, bitmask TSP, and interval DP for cutting a stick.
+            Each solution is shown in C, C++, Java, JavaScript, C#, and Python.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 1 - LIS O(n log n)                               -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 1 - Longest Increasing Subsequence (O(n log n))</h2>
+            <p>
+                Maintain an array <code>tails</code> where <code>tails[len]</code> is the smallest possible tail
+                value of an increasing subsequence of length <code>len + 1</code>. For each number x, binary-search
+                in <code>tails</code> the first element &gt;= x and replace it with x (or append if none).
+            </p>
+
+            <div class="code-example" data-example="s9p1">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 1</span>
+                        <span class="meta">Binary search over tails array</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdlib.h&gt;
+
+static int lower_bound_int(int *arr, int len, int x) {
+    int lo = 0, hi = len; // [lo, hi)
+    while (lo &lt; hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] &lt; x) {
+            lo = mid + 1;
+        } else {
+            hi = mid;
+        }
+    }
+    return lo;
+}
+
+int lengthOfLIS(int *nums, int numsSize) {
+    if (numsSize == 0) return 0;
+    int *tails = (int *)malloc(numsSize * sizeof(int));
+    int len = 0; // current length of tails
+    for (int i = 0; i &lt; numsSize; i++) {
+        int x = nums[i];
+        int pos = lower_bound_int(tails, len, x);
+        if (pos == len) {
+            tails[len++] = x;
+        } else {
+            tails[pos] = x;
+        }
+    }
+    free(tails);
+    return len;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+int lengthOfLIS(const vector&lt;int&gt; &amp;nums) {
+    vector&lt;int&gt; tails;
+    for (int x : nums) {
+        auto it = lower_bound(tails.begin(), tails.end(), x);
+        if (it == tails.end()) {
+            tails.push_back(x);
+        } else {
+            *it = x;
+        }
+    }
+    return (int)tails.size();
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.*;
+
+int lengthOfLIS(int[] nums) {
+    int[] tails = new int[nums.length];
+    int len = 0;
+    for (int x : nums) {
+        int lo = 0, hi = len;
+        while (lo &lt; hi) {
+            int mid = (lo + hi) / 2;
+            if (tails[mid] &lt; x) {
+                lo = mid + 1;
+            } else {
+                hi = mid;
+            }
+        }
+        tails[lo] = x;
+        if (lo == len) {
+            len++;
+        }
+    }
+    return len;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function lengthOfLIS(nums) {
+    const tails = [];
+    for (const x of nums) {
+        let lo = 0, hi = tails.length;
+        while (lo &lt; hi) {
+            const mid = (lo + hi) &gt;&gt; 1;
+            if (tails[mid] &lt; x) {
+                lo = mid + 1;
+            } else {
+                hi = mid;
+            }
+        }
+        tails[lo] = x;
+    }
+    return tails.length;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System;
+using System.Collections.Generic;
+
+int LengthOfLIS(int[] nums) {
+    var tails = new List&lt;int&gt;();
+    foreach (int x in nums) {
+        int lo = 0, hi = tails.Count;
+        while (lo &lt; hi) {
+            int mid = (lo + hi) / 2;
+            if (tails[mid] &lt; x) {
+                lo = mid + 1;
+            } else {
+                hi = mid;
+            }
+        }
+        if (lo == tails.Count) {
+            tails.Add(x);
+        } else {
+            tails[lo] = x;
+        }
+    }
+    return tails.Count;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from bisect import bisect_left
+from typing import List
+
+def length_of_lis(nums: List[int]) -&gt; int:
+    tails: List[int] = []
+    for x in nums:
+        i = bisect_left(tails, x)
+        if i == len(tails):
+            tails.append(x)
+        else:
+            tails[i] = x
+    return len(tails)</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: <strong>O(n log n)</strong>. Extra space: <strong>O(n)</strong> for tails.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 2 - 0/1 Knapsack                                  -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 2 - 0/1 Knapsack (Classic DP)</h2>
+            <p>
+                Let <code>dp[w]</code> be the maximum value we can achieve with capacity <code>w</code>.
+                For each item, iterate capacity backward so each item is used at most once.
+            </p>
+
+            <div class="code-example" data-example="s9p2">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 2</span>
+                        <span class="meta">1D knapsack DP over capacity</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <!-- C -->
+            <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdlib.h&gt;
+
+int knapSack(int W, int *weight, int *value, int n) {
+    int *dp = (int *)calloc(W + 1, sizeof(int));
+    for (int i = 0; i &lt; n; i++) {
+        int wt = weight[i];
+        int val = value[i];
+        for (int w = W; w &gt;= wt; w--) {
+            int cand = dp[w - wt] + val;
+            if (cand &gt; dp[w]) {
+                dp[w] = cand;
+            }
+        }
+    }
+    int ans = dp[W];
+    free(dp);
+    return ans;
+}</code></pre>
+            </div>
+
+            <!-- C++ -->
+            <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+using namespace std;
+
+int knapSack(int W, const vector&lt;int&gt; &amp;weight, const vector&lt;int&gt; &amp;value) {
+    vector&lt;int&gt; dp(W + 1, 0);
+    int n = (int)weight.size();
+    for (int i = 0; i &lt; n; i++) {
+        int wt = weight[i];
+        int val = value[i];
+        for (int w = W; w &gt;= wt; w--) {
+            dp[w] = max(dp[w], dp[w - wt] + val);
+        }
+    }
+    return dp[W];
+}</code></pre>
+            </div>
+
+            <!-- Java -->
+            <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+int knapSack(int W, int[] weight, int[] value) {
+    int[] dp = new int[W + 1];
+    for (int i = 0; i &lt; weight.length; i++) {
+        int wt = weight[i];
+        int val = value[i];
+        for (int w = W; w &gt;= wt; w--) {
+            dp[w] = Math.max(dp[w], dp[w - wt] + val);
+        }
+    }
+    return dp[W];
+}</code></pre>
+            </div>
+
+            <!-- JavaScript -->
+            <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function knapSack(W, weight, value) {
+    const dp = new Array(W + 1).fill(0);
+    for (let i = 0; i &lt; weight.length; i++) {
+        const wt = weight[i];
+        const val = value[i];
+        for (let w = W; w &gt;= wt; w--) {
+            dp[w] = Math.max(dp[w], dp[w - wt] + val);
+        }
+    }
+    return dp[W];
+}</code></pre>
+            </div>
+
+            <!-- C# -->
+            <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+int KnapSack(int W, int[] weight, int[] value) {
+    int[] dp = new int[W + 1];
+    for (int i = 0; i &lt; weight.Length; i++) {
+        int wt = weight[i];
+        int val = value[i];
+        for (int w = W; w &gt;= wt; w--) {
+            dp[w] = Math.Max(dp[w], dp[w - wt] + val);
+        }
+    }
+    return dp[W];
+}</code></pre>
+            </div>
+
+            <!-- Python -->
+            <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import List
+
+def knap_sack(W: int, weight: List[int], value: List[int]) -&gt; int:
+    dp = [0] * (W + 1)
+    for wt, val in zip(weight, value):
+        for w in range(W, wt - 1, -1):
+            dp[w] = max(dp[w], dp[w - wt] + val)
+    return dp[W]</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n * W)</strong>. Extra space: <strong>O(W)</strong>.
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 3 - Partition Equal Subset Sum                    -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 3 - Partition Equal Subset Sum</h2>
+            <p>
+                Let total be the sum of all elements. If total is odd, answer is false.
+                Otherwise target is <code>total / 2</code>. Use a boolean subset-sum DP to check
+                whether a subset sums to target.
+            </p>
+
+            <div class="code-example" data-example="s9p3">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 3</span>
+                        <span class="meta">Boolean DP for subset sum</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdbool.h&gt;
+#include &lt;stdlib.h&gt;
+
+bool canPartition(int *nums, int numsSize) {
+    int total = 0;
+    for (int i = 0; i &lt; numsSize; i++) {
+        total += nums[i];
+    }
+    if (total % 2 != 0) return false;
+    int target = total / 2;
+
+    bool *dp = (bool *)calloc(target + 1, sizeof(bool));
+    dp[0] = true;
+    for (int i = 0; i &lt; numsSize; i++) {
+        int x = nums[i];
+        for (int s = target; s &gt;= x; s--) {
+            if (dp[s - x]) dp[s] = true;
+        }
+    }
+    bool ans = dp[target];
+    free(dp);
+    return ans;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+using namespace std;
+
+bool canPartition(const vector&lt;int&gt; &amp;nums) {
+    int total = 0;
+    for (int x : nums) total += x;
+    if (total % 2 != 0) return false;
+    int target = total / 2;
+
+    vector&lt;bool&gt; dp(target + 1, false);
+    dp[0] = true;
+    for (int x : nums) {
+        for (int s = target; s &gt;= x; s--) {
+            if (dp[s - x]) dp[s] = true;
+        }
+    }
+    return dp[target];
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+boolean canPartition(int[] nums) {
+    int total = 0;
+    for (int x : nums) total += x;
+    if ((total &amp; 1) == 1) return false;
+    int target = total / 2;
+
+    boolean[] dp = new boolean[target + 1];
+    dp[0] = true;
+    for (int x : nums) {
+        for (int s = target; s &gt;= x; s--) {
+            if (dp[s - x]) dp[s] = true;
+        }
+    }
+    return dp[target];
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function canPartition(nums) {
+    const total = nums.reduce((a, b) =&gt; a + b, 0);
+    if (total % 2 !== 0) return false;
+    const target = total / 2;
+    const dp = new Array(target + 1).fill(false);
+    dp[0] = true;
+
+    for (const x of nums) {
+        for (let s = target; s &gt;= x; s--) {
+            if (dp[s - x]) dp[s] = true;
+        }
+    }
+    return dp[target];
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System;
+
+bool CanPartition(int[] nums) {
+    int total = 0;
+    foreach (var x in nums) total += x;
+    if ((total &amp; 1) == 1) return false;
+    int target = total / 2;
+
+    bool[] dp = new bool[target + 1];
+    dp[0] = true;
+    foreach (var x in nums) {
+        for (int s = target; s &gt;= x; s--) {
+            if (dp[s - x]) dp[s] = true;
+        }
+    }
+    return dp[target];
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import List
+
+def can_partition(nums: List[int]) -&gt; bool:
+    total = sum(nums)
+    if total % 2 == 1:
+        return False
+    target = total // 2
+    dp = [False] * (target + 1)
+    dp[0] = True
+    for x in nums:
+        for s in range(target, x - 1, -1):
+            if dp[s - x]:
+                dp[s] = True
+    return dp[target]</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: <strong>O(n * target)</strong>, where target = total / 2.  
+                    Extra space: <strong>O(target)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 4 - Bitmask DP: Traveling Over Subsets            -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 4 - Bitmask DP: Traveling Over Subsets (TSP)</h2>
+            <p>
+                Let <code>dp[mask][i]</code> be the minimum cost to start at city 0, visit exactly the cities
+                in <code>mask</code>, and end at city <code>i</code>. We transition by trying the next city j
+                not yet in the mask.
+            </p>
+
+            <div class="code-example" data-example="s9p4">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 4</span>
+                        <span class="meta">Bitmask DP for small-n TSP</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <!-- C -->
+            <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;limits.h&gt;
+#include &lt;stdlib.h&gt;
+
+int tsp(int **cost, int n) {
+    int maxMask = 1 &lt;&lt; n;
+    int **dp = (int **)malloc(maxMask * sizeof(int *));
+    for (int mask = 0; mask &lt; maxMask; mask++) {
+        dp[mask] = (int *)malloc(n * sizeof(int));
+        for (int i = 0; i &lt; n; i++) {
+            dp[mask][i] = INT_MAX / 2;
+        }
+    }
+    dp[1][0] = 0; // mask 1: only city 0 visited
+
+    for (int mask = 1; mask &lt; maxMask; mask++) {
+        for (int i = 0; i &lt; n; i++) {
+            if (!(mask &amp; (1 &lt;&lt; i))) continue;
+            int curCost = dp[mask][i];
+            if (curCost == INT_MAX / 2) continue;
+            for (int j = 0; j &lt; n; j++) {
+                if (mask &amp; (1 &lt;&lt; j)) continue;
+                int nextMask = mask | (1 &lt;&lt; j);
+                int cand = curCost + cost[i][j];
+                if (cand &lt; dp[nextMask][j]) {
+                    dp[nextMask][j] = cand;
+                }
+            }
+        }
+    }
+
+    int fullMask = maxMask - 1;
+    int ans = INT_MAX;
+    for (int i = 0; i &lt; n; i++) {
+        int cand = dp[fullMask][i] + cost[i][0];
+        if (cand &lt; ans) ans = cand;
+    }
+
+    for (int mask = 0; mask &lt; maxMask; mask++) {
+        free(dp[mask]);
+    }
+    free(dp);
+    return ans;
+}</code></pre>
+            </div>
+
+            <!-- C++ -->
+            <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;limits&gt;
+using namespace std;
+
+int tsp(const vector&lt;vector&lt;int&gt; &gt; &amp;cost) {
+    int n = (int)cost.size();
+    int maxMask = 1 &lt;&lt; n;
+    const int INF = numeric_limits&lt;int&gt;::max() / 2;
+    vector&lt;vector&lt;int&gt; &gt; dp(maxMask, vector&lt;int&gt;(n, INF));
+
+    dp[1][0] = 0; // start at city 0
+
+    for (int mask = 1; mask &lt; maxMask; mask++) {
+        for (int i = 0; i &lt; n; i++) {
+            if (!(mask &amp; (1 &lt;&lt; i))) continue;
+            int curCost = dp[mask][i];
+            if (curCost == INF) continue;
+            for (int j = 0; j &lt; n; j++) {
+                if (mask &amp; (1 &lt;&lt; j)) continue;
+                int nextMask = mask | (1 &lt;&lt; j);
+                int cand = curCost + cost[i][j];
+                if (cand &lt; dp[nextMask][j]) {
+                    dp[nextMask][j] = cand;
+                }
+            }
+        }
+    }
+
+    int fullMask = maxMask - 1;
+    int ans = INF;
+    for (int i = 0; i &lt; n; i++) {
+        int cand = dp[fullMask][i] + cost[i][0];
+        if (cand &lt; ans) ans = cand;
+    }
+    return ans;
+}</code></pre>
+            </div>
+
+            <!-- Java -->
+            <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.Arrays;
+
+int tsp(int[][] cost) {
+    int n = cost.length;
+    int maxMask = 1 &lt;&lt; n;
+    int INF = Integer.MAX_VALUE / 2;
+    int[][] dp = new int[maxMask][n];
+    for (int[] row : dp) {
+        Arrays.fill(row, INF);
+    }
+    dp[1][0] = 0; // only city 0 visited
+
+    for (int mask = 1; mask &lt; maxMask; mask++) {
+        for (int i = 0; i &lt; n; i++) {
+            if ((mask &amp; (1 &lt;&lt; i)) == 0) continue;
+            int curCost = dp[mask][i];
+            if (curCost == INF) continue;
+            for (int j = 0; j &lt; n; j++) {
+                if ((mask &amp; (1 &lt;&lt; j)) != 0) continue;
+                int nextMask = mask | (1 &lt;&lt; j);
+                int cand = curCost + cost[i][j];
+                if (cand &lt; dp[nextMask][j]) {
+                    dp[nextMask][j] = cand;
+                }
+            }
+        }
+    }
+
+    int fullMask = maxMask - 1;
+    int ans = INF;
+    for (int i = 0; i &lt; n; i++) {
+        int cand = dp[fullMask][i] + cost[i][0];
+        if (cand &lt; ans) ans = cand;
+    }
+    return ans;
+}</code></pre>
+            </div>
+
+            <!-- JavaScript -->
+            <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function tsp(cost) {
+    const n = cost.length;
+    const maxMask = 1 &lt;&lt; n;
+    const INF = 1e9;
+    const dp = Array.from({ length: maxMask }, () =&gt; new Array(n).fill(INF));
+    dp[1][0] = 0;
+
+    for (let mask = 1; mask &lt; maxMask; mask++) {
+        for (let i = 0; i &lt; n; i++) {
+            if ((mask &amp; (1 &lt;&lt; i)) === 0) continue;
+            const curCost = dp[mask][i];
+            if (curCost === INF) continue;
+            for (let j = 0; j &lt; n; j++) {
+                if (mask &amp; (1 &lt;&lt; j)) continue;
+                const nextMask = mask | (1 &lt;&lt; j);
+                const cand = curCost + cost[i][j];
+                if (cand &lt; dp[nextMask][j]) {
+                    dp[nextMask][j] = cand;
+                }
+            }
+        }
+    }
+
+    const fullMask = maxMask - 1;
+    let ans = INF;
+    for (let i = 0; i &lt; n; i++) {
+        const cand = dp[fullMask][i] + cost[i][0];
+        if (cand &lt; ans) ans = cand;
+    }
+    return ans;
+}</code></pre>
+            </div>
+
+            <!-- C# -->
+            <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System;
+
+int Tsp(int[][] cost) {
+    int n = cost.Length;
+    int maxMask = 1 &lt;&lt; n;
+    int INF = int.MaxValue / 2;
+    int[,] dp = new int[maxMask, n];
+    for (int mask = 0; mask &lt; maxMask; mask++) {
+        for (int i = 0; i &lt; n; i++) {
+            dp[mask, i] = INF;
+        }
+    }
+    dp[1, 0] = 0;
+
+    for (int mask = 1; mask &lt; maxMask; mask++) {
+        for (int i = 0; i &lt; n; i++) {
+            if ((mask &amp; (1 &lt;&lt; i)) == 0) continue;
+            int curCost = dp[mask, i];
+            if (curCost == INF) continue;
+            for (int j = 0; j &lt; n; j++) {
+                if ((mask &amp; (1 &lt;&lt; j)) != 0) continue;
+                int nextMask = mask | (1 &lt;&lt; j);
+                int cand = curCost + cost[i][j];
+                if (cand &lt; dp[nextMask, j]) {
+                    dp[nextMask, j] = cand;
+                }
+            }
+        }
+    }
+
+    int fullMask = maxMask - 1;
+    int ans = INF;
+    for (int i = 0; i &lt; n; i++) {
+        int cand = dp[fullMask, i] + cost[i][0];
+        if (cand &lt; ans) ans = cand;
+    }
+    return ans;
+}</code></pre>
+            </div>
+
+            <!-- Python -->
+            <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import List
+
+def tsp(cost: List[List[int]]) -&gt; int:
+    n = len(cost)
+    max_mask = 1 &lt;&lt; n
+    INF = 10**9
+    dp = [[INF] * n for _ in range(max_mask)]
+    dp[1][0] = 0
+
+    for mask in range(1, max_mask):
+        for i in range(n):
+            if not (mask &amp; (1 &lt;&lt; i)):
+                continue
+            cur = dp[mask][i]
+            if cur == INF:
+                continue
+            for j in range(n):
+                if mask &amp; (1 &lt;&lt; j):
+                    continue
+                next_mask = mask | (1 &lt;&lt; j)
+                cand = cur + cost[i][j]
+                if cand &lt; dp[next_mask][j]:
+                    dp[next_mask][j] = cand
+
+    full_mask = max_mask - 1
+    ans = INF
+    for i in range(n):
+        cand = dp[full_mask][i] + cost[i][0]
+        ans = min(ans, cand)
+    return ans</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n² * 2ⁿ)</strong>. Extra space: <strong>O(n * 2ⁿ)</strong>.
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 5 - Interval DP: Minimum Cost to Cut a Stick       -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 5 - Interval DP: Minimum Cost to Cut a Stick</h2>
+            <p>
+                Sort all cut positions and add 0 and n as boundaries. Let <code>dp[i][j]</code> be the minimum cost
+                to cut the segment between <code>cuts[i]</code> and <code>cuts[j]</code>. Try all possible first cuts k
+                between i and j.
+            </p>
+
+            <div class="code-example" data-example="s9p5">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 5</span>
+                        <span class="meta">Interval DP over sorted cut points</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdlib.h&gt;
+
+static int int_cmp(const void *a, const void *b) {
+    int x = *(const int *)a;
+    int y = *(const int *)b;
+    return (x &gt; y) - (x &lt; y);
+}
+
+int minCost(int n, int *cuts, int cutsSize) {
+    int m = cutsSize + 2;
+    int *pos = (int *)malloc(m * sizeof(int));
+    pos[0] = 0;
+    for (int i = 0; i &lt; cutsSize; i++) pos[i + 1] = cuts[i];
+    pos[m - 1] = n;
+    qsort(pos + 1, cutsSize, sizeof(int), int_cmp);
+
+    int **dp = (int **)malloc(m * sizeof(int *));
+    for (int i = 0; i &lt; m; i++) {
+        dp[i] = (int *)calloc(m, sizeof(int));
+    }
+
+    for (int len = 2; len &lt; m; len++) {
+        for (int i = 0; i + len &lt; m; i++) {
+            int j = i + len;
+            int best = INT_MAX;
+            for (int k = i + 1; k &lt; j; k++) {
+                int cand = dp[i][k] + dp[k][j] + (pos[j] - pos[i]);
+                if (cand &lt; best) best = cand;
+            }
+            dp[i][j] = (best == INT_MAX ? 0 : best);
+        }
+    }
+
+    int ans = dp[0][m - 1];
+    for (int i = 0; i &lt; m; i++) free(dp[i]);
+    free(dp);
+    free(pos);
+    return ans;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+#include &lt;limits&gt;
+using namespace std;
+
+int minCost(int n, vector&lt;int&gt; cuts) {
+    cuts.push_back(0);
+    cuts.push_back(n);
+    sort(cuts.begin(), cuts.end());
+    int m = (int)cuts.size();
+    const int INF = numeric_limits&lt;int&gt;::max() / 2;
+    vector&lt;vector&lt;int&gt; &gt; dp(m, vector&lt;int&gt;(m, 0));
+
+    for (int len = 2; len &lt; m; len++) {
+        for (int i = 0; i + len &lt; m; i++) {
+            int j = i + len;
+            int best = INF;
+            for (int k = i + 1; k &lt; j; k++) {
+                int cand = dp[i][k] + dp[k][j] + (cuts[j] - cuts[i]);
+                best = min(best, cand);
+            }
+            dp[i][j] = (best == INF ? 0 : best);
+        }
+    }
+    return dp[0][m - 1];
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.Arrays;
+
+int minCost(int n, int[] cuts) {
+    int m = cuts.length + 2;
+    int[] pos = new int[m];
+    pos[0] = 0;
+    pos[m - 1] = n;
+    System.arraycopy(cuts, 0, pos, 1, cuts.length);
+    Arrays.sort(pos, 1, m - 1);
+
+    int[][] dp = new int[m][m];
+
+    for (int len = 2; len &lt; m; len++) {
+        for (int i = 0; i + len &lt; m; i++) {
+            int j = i + len;
+            int best = Integer.MAX_VALUE;
+            for (int k = i + 1; k &lt; j; k++) {
+                int cand = dp[i][k] + dp[k][j] + (pos[j] - pos[i]);
+                best = Math.min(best, cand);
+            }
+            dp[i][j] = (best == Integer.MAX_VALUE ? 0 : best);
+        }
+    }
+    return dp[0][m - 1];
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function minCost(n, cuts) {
+    const pos = [0, ...cuts.slice(), n];
+    pos.sort((a, b) =&gt; a - b);
+    const m = pos.length;
+    const dp = Array.from({ length: m }, () =&gt; new Array(m).fill(0));
+
+    for (let len = 2; len &lt; m; len++) {
+        for (let i = 0; i + len &lt; m; i++) {
+            const j = i + len;
+            let best = Number.POSITIVE_INFINITY;
+            for (let k = i + 1; k &lt; j; k++) {
+                const cand = dp[i][k] + dp[k][j] + (pos[j] - pos[i]);
+                if (cand &lt; best) best = cand;
+            }
+            dp[i][j] = best === Number.POSITIVE_INFINITY ? 0 : best;
+        }
+    }
+    return dp[0][m - 1];
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System;
+
+int MinCost(int n, int[] cuts) {
+    int m = cuts.Length + 2;
+    int[] pos = new int[m];
+    pos[0] = 0;
+    pos[m - 1] = n;
+    Array.Copy(cuts, 0, pos, 1, cuts.Length);
+    Array.Sort(pos, 1, m - 1);
+
+    int[,] dp = new int[m, m];
+
+    for (int len = 2; len &lt; m; len++) {
+        for (int i = 0; i + len &lt; m; i++) {
+            int j = i + len;
+            int best = int.MaxValue;
+            for (int k = i + 1; k &lt; j; k++) {
+                int cand = dp[i, k] + dp[k, j] + (pos[j] - pos[i]);
+                if (cand &lt; best) best = cand;
+            }
+            dp[i, j] = best == int.MaxValue ? 0 : best;
+        }
+    }
+    return dp[0, m - 1];
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import List
+
+def min_cost(n: int, cuts: List[int]) -&gt; int:
+    pos = [0] + sorted(cuts) + [n]
+    m = len(pos)
+    dp = [[0] * m for _ in range(m)]
+    for length in range(2, m):
+        for i in range(0, m - length):
+            j = i + length
+            best = float("inf")
+            for k in range(i + 1, j):
+                cand = dp[i][k] + dp[k][j] + (pos[j] - pos[i])
+                if cand &lt; best:
+                    best = cand
+            dp[i][j] = 0 if best == float("inf") else best
+    return dp[0][m - 1]</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: <strong>O(m³)</strong> where m = number of cuts + 2.  
+                    Extra space: <strong>O(m²)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <div class="next-section">
+            <a href="problems-section9-advanced-dp.html">← Back to Section 9 Problem Set</a>
+            &nbsp;&nbsp;
+            <a href="section10-practice.html">Back to Practice Hub →</a>
+        </div>
+    </main>
+</body>
+
+</html>

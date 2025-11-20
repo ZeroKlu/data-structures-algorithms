@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Problems - Section 5 Trees &amp; BSTs</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css" />
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tabs, highlight init, prefs, etc.) -->
+    <script src="js/site.js"></script>
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="section10-practice.html">← Back to Practice Hub</a>
+            &nbsp;&nbsp;
+            <a href="section5-trees-graphs.html">View Section 5 Lesson →</a>
+        </div>
+
+        <div class="kicker">Section 5 - Problem Set</div>
+        <h1>Trees &amp; Binary Search Trees (BSTs)</h1>
+        <p class="tagline">
+            These problems build your skills with tree traversals, height and balance checks,
+            BST properties, path sums, and lowest common ancestor patterns.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr />
+
+        <!-- Problem 1 -->
+        <section class="problem">
+            <h2>Problem 1 - Tree Traversals (Preorder, Inorder, Postorder)</h2>
+            <p>
+                Consider a binary tree node structure:
+            </p>
+
+<pre><code class="language-java">class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int v) { val = v; }
+}</code></pre>
+
+            <p>
+                Implement the three classic depth-first traversals:
+            </p>
+            <ul>
+                <li><strong>Preorder</strong>: root, left, right</li>
+                <li><strong>Inorder</strong>: left, root, right</li>
+                <li><strong>Postorder</strong>: left, right, root</li>
+            </ul>
+            <p>
+                Use recursion for simplicity and return a list of values for each traversal.
+                What is the time complexity and extra space complexity (in terms of the number of nodes <code>n</code>)?
+            </p>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    For recursion, the function at each node:
+                    <ul>
+                        <li>Visits the current node.</li>
+                        <li>Recursively visits the left subtree.</li>
+                        <li>Recursively visits the right subtree.</li>
+                    </ul>
+                    The difference between traversals is just the order of these steps.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Example implementation (Python):
+<pre><code class="language-python">from typing import List, Optional
+
+class TreeNode:
+    def __init__(self, val: int = 0, left: "Optional[TreeNode]" = None,
+                 right: "Optional[TreeNode]" = None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def preorder(root: Optional[TreeNode]) -&gt; List[int]:
+    if root is None:
+        return []
+    return [root.val] + preorder(root.left) + preorder(root.right)
+
+def inorder(root: Optional[TreeNode]) -&gt; List[int]:
+    if root is None:
+        return []
+    return inorder(root.left) + [root.val] + inorder(root.right)
+
+def postorder(root: Optional[TreeNode]) -&gt; List[int]:
+    if root is None:
+        return []
+    return postorder(root.left) + postorder(root.right) + [root.val]</code></pre>
+                    Each node is visited exactly once in each traversal.
+                    Time complexity: <strong>O(n)</strong> per traversal.<br />
+                    Extra space:
+                    <ul>
+                        <li>Output list stores <code>n</code> values → <strong>O(n)</strong>.</li>
+                        <li>Recursion stack can be as deep as the height <code>h</code> of the tree → <strong>O(h)</strong>.</li>
+                    </ul>
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 2 -->
+        <section class="problem">
+            <h2>Problem 2 - Height of a Binary Tree &amp; Balance Check</h2>
+            <p>
+                The <strong>height</strong> of a binary tree is the number of edges on the longest path from the root
+                to a leaf (some definitions use number of nodes; be clear which one you choose).
+            </p>
+            <ol>
+                <li>Write a function to compute the height of a binary tree.</li>
+                <li>
+                    Write a function that returns <code>true</code> if the tree is <strong>height-balanced</strong>:
+                    for every node, the heights of the left and right subtrees differ by at most 1.
+                </li>
+            </ol>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    When checking balance, avoid recomputing subtree heights from scratch for every node
+                    (that would be O(n²)). Instead, have a helper that returns both:
+                    <ul>
+                        <li>Whether the subtree is balanced.</li>
+                        <li>The height of the subtree.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Example solution (C++):
+<pre><code class="language-cpp">#include &lt;algorithm&gt;
+#include &lt;cstdlib&gt;
+
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+int height(TreeNode* root) {
+    if (!root) return -1; // height of empty tree is -1 by this definition
+    return 1 + std::max(height(root-&gt;left), height(root-&gt;right));
+}
+
+struct Info {
+    bool balanced;
+    int height;
+};
+
+Info check(TreeNode* root) {
+    if (!root) return {true, -1};
+    Info leftInfo = check(root-&gt;left);
+    if (!leftInfo.balanced) return {false, 0};
+    Info rightInfo = check(root-&gt;right);
+    if (!rightInfo.balanced) return {false, 0};
+
+    bool bal = std::abs(leftInfo.height - rightInfo.height) &lt;= 1;
+    int h = 1 + std::max(leftInfo.height, rightInfo.height);
+    return {bal, h};
+}
+
+bool isBalanced(TreeNode* root) {
+    return check(root).balanced;
+}</code></pre>
+                    Each node is processed once, combining information from children.<br />
+                    Time: <strong>O(n)</strong> for <code>n</code> nodes.<br />
+                    Extra space: recursion stack up to tree height <code>h</code> → <strong>O(h)</strong>.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 3 -->
+        <section class="problem">
+            <h2>Problem 3 - Validate a Binary Search Tree (BST)</h2>
+            <p>
+                A binary search tree satisfies:
+            </p>
+            <ul>
+                <li>All nodes in the left subtree of a node have values &lt; the node&apos;s value.</li>
+                <li>All nodes in the right subtree have values &gt; the node&apos;s value.</li>
+            </ul>
+            <p>
+                Write a function <code>isValidBST(root)</code> that returns <code>true</code> if a binary tree is a valid BST,
+                and <code>false</code> otherwise.
+            </p>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    A local comparison with just the parent is not enough. You need to maintain a valid
+                    range <code>(min, max)</code> for each node and ensure the node&apos;s value lies in that range.
+                    Alternatively, use an inorder traversal and check that the values are strictly increasing.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Range-check approach (Java):
+<pre><code class="language-java">class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int v) { val = v; }
+}
+
+boolean isValidBST(TreeNode root) {
+    return helper(root, null, null);
+}
+
+boolean helper(TreeNode node, Integer low, Integer high) {
+    if (node == null) return true;
+    if (low != null &amp;&amp; node.val &lt;= low) return false;
+    if (high != null &amp;&amp; node.val &gt;= high) return false;
+    return helper(node.left, low, node.val)
+        &amp;&amp; helper(node.right, node.val, high);
+}</code></pre>
+                    Each node is visited once and constant work is done per node.<br />
+                    Time complexity: <strong>O(n)</strong>.<br />
+                    Extra space: recursion stack up to height <code>h</code> → <strong>O(h)</strong>.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 4 -->
+        <section class="problem">
+            <h2>Problem 4 - Path Sum from Root to Leaf</h2>
+            <p>
+                Given a binary tree and an integer <code>targetSum</code>, determine if the tree has a
+                root-to-leaf path such that the sum of the node values along the path equals <code>targetSum</code>.
+            </p>
+
+            <p>Example:</p>
+            <pre><code class="language-text">    5
+   / \
+  4   8
+ /   / \
+11  13  4
+/  \       \
+7    2       1</code></pre>
+            <p>
+                <code>targetSum = 22</code> → true (path 5 → 4 → 11 → 2).
+            </p>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Use DFS. At each node, subtract the node&apos;s value from <code>targetSum</code> and
+                    pass the new target down. When you reach a leaf, check whether the remaining sum equals 0.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Example solution (C#):
+<pre><code class="language-csharp">class TreeNode {
+    public int Val;
+    public TreeNode? Left;
+    public TreeNode? Right;
+    public TreeNode(int val) { Val = val; }
+}
+
+bool HasPathSum(TreeNode? root, int targetSum) {
+    if (root == null) return false;
+    // If it is a leaf
+    if (root.Left == null &amp;&amp; root.Right == null) {
+        return root.Val == targetSum;
+    }
+    int remaining = targetSum - root.Val;
+    return HasPathSum(root.Left, remaining) ||
+           HasPathSum(root.Right, remaining);
+}</code></pre>
+                    Each node is visited at most once.<br />
+                    Time complexity: <strong>O(n)</strong>.<br />
+                    Extra space: recursion depth up to height <code>h</code> → <strong>O(h)</strong>.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 5 -->
+        <section class="problem">
+            <h2>Problem 5 - Lowest Common Ancestor (LCA) in a BST</h2>
+            <p>
+                In a binary search tree, the <strong>lowest common ancestor (LCA)</strong> of two nodes
+                <code>p</code> and <code>q</code> is the lowest node that has both <code>p</code> and
+                <code>q</code> as descendants (a node can be a descendant of itself).
+            </p>
+            <p>
+                Given the root of a BST and two nodes <code>p</code> and <code>q</code>, find their LCA.
+            </p>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Use the BST property:
+                    <ul>
+                        <li>If both <code>p.val</code> and <code>q.val</code> are less than <code>root.val</code>, LCA is in the left subtree.</li>
+                        <li>If both are greater, LCA is in the right subtree.</li>
+                        <li>Otherwise, the current node is the LCA.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Example solution (JavaScript):
+<pre><code class="language-javascript">class TreeNode {
+    constructor(val, left = null, right = null) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+function lowestCommonAncestor(root, p, q) {
+    let node = root;
+    const pv = p.val;
+    const qv = q.val;
+    while (node !== null) {
+        if (pv &lt; node.val &amp;&amp; qv &lt; node.val) {
+            node = node.left;
+        } else if (pv &gt; node.val &amp;&amp; qv &gt; node.val) {
+            node = node.right;
+        } else {
+            return node;
+        }
+    }
+    return null;
+}</code></pre>
+                    At each step, we move one level down; in a tree with height <code>h</code>, we take at most <code>h</code> steps.<br />
+                    Time complexity: <strong>O(h)</strong>, <strong>O(log n)</strong> on average for a balanced BST.<br />
+                    Extra space: iterative version uses only a few pointers → <strong>O(1)</strong>.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 6 -->
+        <section class="problem">
+            <h2>Problem 6 - Serialize and Deserialize a Binary Tree (Conceptual)</h2>
+            <p>
+                You want to convert a binary tree into a string (serialize) and then reconstruct the exact same tree
+                from that string (deserialize). The format is up to you.
+            </p>
+            <ol>
+                <li>Describe one way to serialize a binary tree into a string.</li>
+                <li>Describe how to deserialize it back into a tree.</li>
+                <li>What is the time complexity of both operations?</li>
+            </ol>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    One common approach is to use preorder traversal with a special marker (for example, <code>#</code>)
+                    for null children, separating values with commas. During deserialization, read tokens in order
+                    and rebuild the tree recursively.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Example approach (pseudocode similar to Python):
+<pre><code class="language-python"># Serialize using preorder traversal with '#' for nulls.
+
+def serialize(root):
+    vals = []
+    def dfs(node):
+        if node is None:
+            vals.append('#')
+            return
+        vals.append(str(node.val))
+        dfs(node.left)
+        dfs(node.right)
+    dfs(root)
+    return ','.join(vals)
+
+def deserialize(data):
+    vals = iter(data.split(','))
+
+    def dfs():
+        v = next(vals)
+        if v == '#':
+            return None
+        node = TreeNode(int(v))
+        node.left = dfs()
+        node.right = dfs()
+        return node
+
+    return dfs()</code></pre>
+                    In both serialization and deserialization, each node is visited exactly once
+                    (plus a constant amount of work).<br />
+                    Time complexity: <strong>O(n)</strong> for <code>n</code> nodes in both operations.<br />
+                    Extra space:
+                    <ul>
+                        <li>String size is O(n).</li>
+                        <li>Recursion stack is O(h) where <code>h</code> is the tree height.</li>
+                    </ul>
+                </div>
+            </details>
+        </section>
+
+        <div class="next-section">
+            <a href="section5-trees-graphs.html">
+                ← Back to Section 5 Lesson
+            </a>
+            &nbsp;&nbsp;
+            <a href="solutions-section5-trees.html">
+                View detailed Solutions
+            </a>
+            &nbsp;&nbsp;
+            <a href="section10-practice.html">
+                Back to Practice Hub →
+            </a>
+        </div>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Problems - Section 7 Hash Tables</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css" />
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts -->
+    <script src="js/site.js"></script>
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="section10-practice.html">← Back to Practice Hub</a>
+            &nbsp;&nbsp;
+            <a href="section7-hash-tables.html">View Section 7 Lesson →</a>
+        </div>
+
+        <div class="kicker">Section 7 - Problem Set</div>
+        <h1>Hash Tables</h1>
+        <p class="tagline">
+            These problems focus on frequency maps, sets, collision-heavy scenarios, and using hash tables
+            to turn O(n²) ideas into O(n) solutions.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr />
+
+        <!-- Problem 1 -->
+        <section class="problem">
+            <h2>Problem 1 - First Non-Repeating Character in a String</h2>
+            <p>
+                Given a string <code>s</code>, return the index of the first non-repeating character.
+                If there is no such character, return <code>-1</code>.
+            </p>
+
+            <p>Example:</p>
+            <ul>
+                <li><code>"leetcode"</code> → index <code>0</code> (<code>'l'</code>)</li>
+                <li><code>"loveleetcode"</code> → index <code>2</code> (<code>'v'</code>)</li>
+                <li><code>"aabb"</code> → <code>-1</code></li>
+            </ul>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Make one pass to count frequencies, and a second pass to find the first index whose
+                    frequency is exactly 1.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+<pre><code class="language-python">def first_uniq_char(s: str) -&gt; int:
+    freq = {}
+    for ch in s:
+        freq[ch] = freq.get(ch, 0) + 1
+    for i, ch in enumerate(s):
+        if freq[ch] == 1:
+            return i
+    return -1</code></pre>
+                    Time: two passes over length <code>n</code> → <strong>O(n)</strong>.<br />
+                    Space: at most one entry per distinct character → <strong>O(min(n, alphabet))</strong>.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 2 -->
+        <section class="problem">
+            <h2>Problem 2 - Group Anagrams</h2>
+            <p>
+                Given an array of strings <code>strs</code>, group the anagrams together.
+                Return a list of groups (order of groups does not matter).
+            </p>
+
+            <p>Example:</p>
+            <pre><code class="language-text">Input:  ["eat","tea","tan","ate","nat","bat"]
+Output: [["eat","tea","ate"],["tan","nat"],["bat"]]</code></pre>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Key idea: two strings are anagrams if they have the same <strong>signature</strong>.
+                    The signature can be:
+                    <ul>
+                        <li>The sorted characters.</li>
+                        <li>Or a frequency vector (for fixed alphabet).</li>
+                    </ul>
+                    Use the signature as the hash map key.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Sorted-string key approach (JavaScript):
+<pre><code class="language-javascript">function groupAnagrams(strs) {
+    const map = new Map();
+    for (const s of strs) {
+        const key = s.split("").sort().join("");
+        if (!map.has(key)) {
+            map.set(key, []);
+        }
+        map.get(key).push(s);
+    }
+    return Array.from(map.values());
+}</code></pre>
+                    Let <code>n</code> be the number of strings and <code>m</code> the max length.<br />
+                    Sorting each string costs O(m log m), so total time is <strong>O(n m log m)</strong>.<br />
+                    Extra space: O(n m) for storing strings and keys.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 3 -->
+        <section class="problem">
+            <h2>Problem 3 - Longest Consecutive Sequence</h2>
+            <p>
+                Given an unsorted array of integers <code>nums</code>, return the length of the longest
+                sequence of consecutive integers (in any order).
+            </p>
+
+            <p>Example:</p>
+            <ul>
+                <li><code>[100,4,200,1,3,2]</code> → longest consecutive sequence is <code>[1,2,3,4]</code>, length <code>4</code>.</li>
+            </ul>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Use a set. For each number <code>x</code>, only attempt to build a sequence starting at
+                    <code>x</code> if <code>x - 1</code> is not in the set.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+<pre><code class="language-java">int longestConsecutive(int[] nums) {
+    java.util.HashSet&lt;Integer&gt; set = new java.util.HashSet&lt;&gt;();
+    for (int x : nums) set.add(x);
+
+    int best = 0;
+    for (int x : set) {
+        if (!set.contains(x - 1)) {
+            int cur = x;
+            int length = 1;
+            while (set.contains(cur + 1)) {
+                cur++;
+                length++;
+            }
+            best = Math.max(best, length);
+        }
+    }
+    return best;
+}</code></pre>
+                    Each number is added to the set once, and each sequence is walked only forward; total
+                    work is linear in the number of distinct elements.<br />
+                    Time: <strong>O(n)</strong> expected.<br />
+                    Space: <strong>O(n)</strong> for the set.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 4 -->
+        <section class="problem">
+            <h2>Problem 4 - Subarray Sum Equals K</h2>
+            <p>
+                Given an integer array <code>nums</code> and an integer <code>k</code>, return the total number of
+                continuous subarrays whose sum equals <code>k</code>.
+            </p>
+
+            <p>Example:</p>
+            <ul>
+                <li><code>nums = [1,1,1], k = 2</code> → <code>2</code> subarrays (<code>[1,1]</code> at positions <code>[0..1]</code> and <code>[1..2]</code>)</li>
+            </ul>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Let <code>prefix[i]</code> be the sum of numbers up to index <code>i</code>.
+                    We want <code>prefix[j] - prefix[i] = k</code> → <code>prefix[i] = prefix[j] - k</code>.
+                    Use a hash map from prefix sum to count of occurrences so far.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+<pre><code class="language-python">def subarray_sum(nums, k):
+    count = 0
+    prefix = 0
+    freq = {0: 1}  # empty prefix
+
+    for x in nums:
+        prefix += x
+        need = prefix - k
+        count += freq.get(need, 0)
+        freq[prefix] = freq.get(prefix, 0) + 1
+
+    return count</code></pre>
+                    We update the prefix sum and hash map once per element.<br />
+                    Time: <strong>O(n)</strong>.<br />
+                    Extra space: <strong>O(n)</strong> in the worst case for distinct prefix sums.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 5 -->
+        <section class="problem">
+            <h2>Problem 5 - Two-Sum Variants: Indices and Uniqueness</h2>
+            <p>
+                Revisit the two-sum problem with two extra twists:
+            </p>
+            <ol>
+                <li>
+                    Return the <strong>indices</strong> <code>(i, j)</code> (0-based) such that
+                    <code>nums[i] + nums[j] == target</code>. If multiple answers exist, return any.
+                </li>
+                <li>
+                    Return <strong>the number of unique pairs</strong> <code>(a, b)</code> (values, not indices)
+                    such that <code>a + b == target</code>.
+                </li>
+            </ol>
+
+            <details class="practice-details">
+                <summary>Hint for (1)...</summary>
+                <div>
+                    Use a map from value to index as you scan from left to right. At each step, check if
+                    <code>target - nums[i]</code> is in the map.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Hint for (2)...</summary>
+                <div>
+                    Use a set to record which values have been seen, and another set (or logic) to avoid counting
+                    the same pair more than once (for example, always order the pair as <code>(min, max)</code>).
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Indices (C++):
+<pre><code class="language-cpp">#include &lt;unordered_map&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+vector&lt;int&gt; twoSumIndices(const vector&lt;int&gt;&amp; nums, int target) {
+    unordered_map&lt;int, int&gt; mp; // value -&gt; index
+    for (int i = 0; i &lt; (int)nums.size(); i++) {
+        int need = target - nums[i];
+        auto it = mp.find(need);
+        if (it != mp.end()) {
+            return {it-&gt;second, i};
+        }
+        mp[nums[i]] = i;
+    }
+    return {}; // no solution
+}</code></pre>
+
+                    Count unique value pairs (JavaScript):
+<pre><code class="language-javascript">function countUniquePairs(nums, target) {
+    const seen = new Set();
+    const pairs = new Set(); // store "a,b" strings with a &lt;= b
+
+    for (const x of nums) {
+        const y = target - x;
+        if (seen.has(y)) {
+            const a = Math.min(x, y);
+            const b = Math.max(x, y);
+            pairs.add(a + "," + b);
+        }
+        seen.add(x);
+    }
+    return pairs.size;
+}</code></pre>
+                    Both algorithms do a single pass over the array with O(1) hash operations → <strong>O(n)</strong> time.
+                    Extra space is O(n) for the maps/sets.
+                </div>
+            </details>
+        </section>
+
+        <div class="next-section">
+            <a href="section7-hash-tables.html">← Back to Section 7 Lesson</a>
+            &nbsp;&nbsp;
+            <a href="solutions-section7-hash-tables.html">
+                View detailed Solutions
+            </a>
+            &nbsp;&nbsp;
+            <a href="section10-practice.html">Back to Practice Hub →</a>
+        </div>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Solutions - Section 4 Stacks &amp; Queues</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css" />
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tabs, highlight init, prefs, etc.) -->
+    <script src="js/site.js"></script>
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="section10-practice.html">← Back to Practice Hub</a>
+            &nbsp;&nbsp;
+            <a href="problems-section4-stacks-queues.html">← Back to Section 4 Problems</a>
+            &nbsp;&nbsp;
+            <a href="section4-stacks-queues.html">View Section 4 Lesson →</a>
+        </div>
+
+        <div class="kicker">Section 4 - Solutions</div>
+        <h1>Stacks &amp; Queues - Detailed Solutions</h1>
+        <p class="tagline">
+            These solutions correspond to the Section 4 problem set (Valid Parentheses, Queue via two stacks,
+            monotonic stack patterns, BFS traversal, and sliding window maximum).
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 1 - Valid Parentheses                             -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 1 - Valid Parentheses</h2>
+            <p>
+                Given a string <code>s</code> containing just the characters
+                <code>'('</code>, <code>')'</code>, <code>'{'</code>, <code>'}'</code>,
+                <code>'['</code>, and <code>']'</code>, determine if the input string is valid.
+            </p>
+            <p>The string is valid if:</p>
+            <ul>
+                <li>Open brackets are closed by the same type of brackets.</li>
+                <li>Open brackets are closed in the correct order.</li>
+            </ul>
+
+            <h3>Idea</h3>
+            <p>
+                Use a stack of opening brackets. When you see a closing bracket, the stack must not be empty and the
+                top of the stack must be the matching opening bracket. At the end, the stack must be empty.
+            </p>
+
+            <div class="code-example" data-example="p1">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Solution 1</span>
+                        <span class="meta">Stack of opening brackets</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdbool.h&gt;
+#include &lt;string.h&gt;
+
+bool isValid(const char *s) {
+    int n = (int)strlen(s);
+    char stack[10000];
+    int top = -1;
+
+    for (int i = 0; i &lt; n; i++) {
+        char c = s[i];
+        if (c == '(' || c == '[' || c == '{') {
+            stack[++top] = c;
+        } else {
+            if (top &lt; 0) return false;
+            char open = stack[top--];
+            if ((c == ')' &amp;&amp; open != '(') ||
+                (c == ']' &amp;&amp; open != '[') ||
+                (c == '}' &amp;&amp; open != '{')) {
+                return false;
+            }
+        }
+    }
+    return top == -1;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;stack&gt;
+#include &lt;string&gt;
+using namespace std;
+
+bool isValid(const string&amp; s) {
+    stack&lt;char&gt; st;
+    for (char c : s) {
+        if (c == '(' || c == '[' || c == '{') {
+            st.push(c);
+        } else {
+            if (st.empty()) return false;
+            char open = st.top();
+            st.pop();
+            if ((c == ')' &amp;&amp; open != '(') ||
+                (c == ']' &amp;&amp; open != '[') ||
+                (c == '}' &amp;&amp; open != '{')) {
+                return false;
+            }
+        }
+    }
+    return st.empty();
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.Deque;
+import java.util.ArrayDeque;
+
+boolean isValid(String s) {
+    Deque&lt;Character&gt; stack = new ArrayDeque&lt;&gt;();
+    for (char c : s.toCharArray()) {
+        if (c == '(' || c == '[' || c == '{') {
+            stack.push(c);
+        } else {
+            if (stack.isEmpty()) return false;
+            char open = stack.pop();
+            if ((c == ')' &amp;&amp; open != '(') ||
+                (c == ']' &amp;&amp; open != '[') ||
+                (c == '}' &amp;&amp; open != '{')) {
+                return false;
+            }
+        }
+    }
+    return stack.isEmpty();
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function isValid(s) {
+    const stack = [];
+    const match = {
+        ')': '(',
+        ']': '[',
+        '}': '{'
+    };
+    for (const ch of s) {
+        if (ch === '(' || ch === '[' || ch === '{') {
+            stack.push(ch);
+        } else {
+            if (stack.length === 0) return false;
+            const top = stack.pop();
+            if (top !== match[ch]) return false;
+        }
+    }
+    return stack.length === 0;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+bool IsValid(string s) {
+    var stack = new Stack&lt;char&gt;();
+    var match = new Dictionary&lt;char, char&gt; {
+        { ')', '(' },
+        { ']', '[' },
+        { '}', '{' }
+    };
+
+    foreach (char c in s) {
+        if (c == '(' || c == '[' || c == '{') {
+            stack.Push(c);
+        } else {
+            if (stack.Count == 0) return false;
+            char open = stack.Pop();
+            if (!match.TryGetValue(c, out char want) || open != want) {
+                return false;
+            }
+        }
+    }
+    return stack.Count == 0;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import Dict
+
+def is_valid(s: str) -&gt; bool:
+    stack: list[str] = []
+    match: Dict[str, str] = {')': '(', ']': '[', '}': '{'}
+    for ch in s:
+        if ch in '([{':
+            stack.append(ch)
+        else:
+            if not stack:
+                return False
+            open_ch = stack.pop()
+            if match.get(ch) != open_ch:
+                return False
+    return not stack</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: <strong>O(n)</strong> where <code>n</code> is the length of <code>s</code> (each char
+                    is pushed/popped at most once). &nbsp;|&nbsp;
+                    Extra space: stack can hold up to <code>n</code> chars → <strong>O(n)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 2 - Queue Using Two Stacks                        -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 2 - Implement a Queue Using Two Stacks</h2>
+            <p>
+                Design a queue that supports the operations <code>enqueue(x)</code>, <code>dequeue()</code>,
+                and <code>front()</code> using two stacks. All operations should be amortized O(1).
+            </p>
+
+            <h3>Idea</h3>
+            <p>
+                Maintain an <code>in</code> stack for enqueue and an <code>out</code> stack for dequeue/front.
+                Enqueue pushes onto <code>in</code>. For a dequeue/front on an empty <code>out</code>, move all
+                elements from <code>in</code> to <code>out</code> once. Each item moves at most once → amortized
+                O(1) per operation.
+            </p>
+
+            <div class="code-example" data-example="p2">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Solution 2</span>
+                        <span class="meta">Two stacks with lazy transfer</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C (simple array stack implementation) -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdbool.h&gt;
+
+typedef struct {
+    int data[10000];
+    int top;
+} Stack;
+
+void stackInit(Stack *s) { s-&gt;top = -1; }
+bool stackEmpty(Stack *s) { return s-&gt;top &lt; 0; }
+void stackPush(Stack *s, int x) { s-&gt;data[++s-&gt;top] = x; }
+int stackPop(Stack *s) { return s-&gt;data[s-&gt;top--]; }
+int stackPeek(Stack *s) { return s-&gt;data[s-&gt;top]; }
+
+typedef struct {
+    Stack in;
+    Stack out;
+} MyQueue;
+
+void myQueueInit(MyQueue *q) {
+    stackInit(&amp;q-&gt;in);
+    stackInit(&amp;q-&gt;out);
+}
+
+static void moveInToOut(MyQueue *q) {
+    if (stackEmpty(&amp;q-&gt;out)) {
+        while (!stackEmpty(&amp;q-&gt;in)) {
+            stackPush(&amp;q-&gt;out, stackPop(&amp;q-&gt;in));
+        }
+    }
+}
+
+void enqueue(MyQueue *q, int x) {
+    stackPush(&amp;q-&gt;in, x);
+}
+
+int dequeue(MyQueue *q) {
+    moveInToOut(q);
+    return stackPop(&amp;q-&gt;out);
+}
+
+int front(MyQueue *q) {
+    moveInToOut(q);
+    return stackPeek(&amp;q-&gt;out);
+}
+
+bool empty(MyQueue *q) {
+    return stackEmpty(&amp;q-&gt;in) &amp;&amp; stackEmpty(&amp;q-&gt;out);
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;stack&gt;
+using namespace std;
+
+class MyQueue {
+    stack&lt;int&gt; in, out;
+
+    void moveInToOut() {
+        if (out.empty()) {
+            while (!in.empty()) {
+                out.push(in.top());
+                in.pop();
+            }
+        }
+    }
+
+public:
+    void enqueue(int x) {
+        in.push(x);
+    }
+
+    int dequeue() {
+        moveInToOut();
+        int v = out.top();
+        out.pop();
+        return v;
+    }
+
+    int front() {
+        moveInToOut();
+        return out.top();
+    }
+
+    bool empty() const {
+        return in.empty() &amp;&amp; out.empty();
+    }
+};</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.Deque;
+import java.util.ArrayDeque;
+
+class MyQueue {
+    private Deque&lt;Integer&gt; in = new ArrayDeque&lt;&gt;();
+    private Deque&lt;Integer&gt; out = new ArrayDeque&lt;&gt;();
+
+    private void moveInToOut() {
+        if (out.isEmpty()) {
+            while (!in.isEmpty()) {
+                out.push(in.pop());
+            }
+        }
+    }
+
+    public void enqueue(int x) {
+        in.push(x);
+    }
+
+    public int dequeue() {
+        moveInToOut();
+        return out.pop();
+    }
+
+    public int front() {
+        moveInToOut();
+        return out.peek();
+    }
+
+    public boolean empty() {
+        return in.isEmpty() &amp;&amp; out.isEmpty();
+    }
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+class MyQueue {
+    constructor() {
+        this._in = [];
+        this._out = [];
+    }
+
+    _moveInToOut() {
+        if (this._out.length === 0) {
+            while (this._in.length &gt; 0) {
+                this._out.push(this._in.pop());
+            }
+        }
+    }
+
+    enqueue(x) {
+        this._in.push(x);
+    }
+
+    dequeue() {
+        this._moveInToOut();
+        return this._out.pop();
+    }
+
+    front() {
+        this._moveInToOut();
+        return this._out[this._out.length - 1];
+    }
+
+    empty() {
+        return this._in.length === 0 &amp;&amp; this._out.length === 0;
+    }
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+class MyQueue {
+    private Stack&lt;int&gt; _in = new Stack&lt;int&gt;();
+    private Stack&lt;int&gt; _out = new Stack&lt;int&gt;();
+
+    private void MoveInToOut() {
+        if (_out.Count == 0) {
+            while (_in.Count &gt; 0) {
+                _out.Push(_in.Pop());
+            }
+        }
+    }
+
+    public void Enqueue(int x) {
+        _in.Push(x);
+    }
+
+    public int Dequeue() {
+        MoveInToOut();
+        return _out.Pop();
+    }
+
+    public int Front() {
+        MoveInToOut();
+        return _out.Peek();
+    }
+
+    public bool Empty() {
+        return _in.Count == 0 &amp;&amp; _out.Count == 0;
+    }
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+class MyQueue:
+    def __init__(self) -&gt; None:
+        self._in: list[int] = []
+        self._out: list[int] = []
+
+    def _move_in_to_out(self) -&gt; None:
+        if not self._out:
+            while self._in:
+                self._out.append(self._in.pop())
+
+    def enqueue(self, x: int) -&gt; None:
+        self._in.append(x)
+
+    def dequeue(self) -&gt; int:
+        self._move_in_to_out()
+        return self._out.pop()
+
+    def front(self) -&gt; int:
+        self._move_in_to_out()
+        return self._out[-1]
+
+    def empty(self) -&gt; bool:
+        return not self._in and not self._out</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Amortized time per operation: <strong>O(1)</strong> (each element moves between stacks at most once).
+                    &nbsp;|&nbsp; Extra space: stacks store all elements → <strong>O(n)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 3 - Next Greater Element                          -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 3 - Next Greater Element (Monotonic Stack)</h2>
+            <p>
+                Given an array <code>nums</code> of length <code>n</code>, for each element compute the value
+                of the next element to the right that is strictly greater. If no such element exists, store <code>-1</code>.
+            </p>
+
+            <h3>Idea</h3>
+            <p>
+                Scan from right to left. Maintain a stack of candidates for the next greater value. For each element,
+                pop smaller or equal values from the stack. The stack top (if any) is the next greater element. Then
+                push the current value.
+            </p>
+
+            <div class="code-example" data-example="p3">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Solution 3</span>
+                        <span class="meta">Monotonic decreasing stack</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdlib.h&gt;
+
+int* nextGreaterElements(const int *nums, int n) {
+    int *ans = (int*)malloc(sizeof(int) * n);
+    int *stack = (int*)malloc(sizeof(int) * n);
+    int top = -1;
+
+    for (int i = n - 1; i &gt;= 0; i--) {
+        int x = nums[i];
+        while (top &gt;= 0 &amp;&amp; stack[top] &lt;= x) {
+            top--;
+        }
+        ans[i] = (top &gt;= 0) ? stack[top] : -1;
+        stack[++top] = x;
+    }
+
+    free(stack);
+    return ans;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;stack&gt;
+using namespace std;
+
+vector&lt;int&gt; nextGreaterElements(const vector&lt;int&gt;&amp; nums) {
+    int n = (int)nums.size();
+    vector&lt;int&gt; ans(n, -1);
+    stack&lt;int&gt; st; // will store values, decreasing
+
+    for (int i = n - 1; i &gt;= 0; i--) {
+        int x = nums[i];
+        while (!st.empty() &amp;&amp; st.top() &lt;= x) {
+            st.pop();
+        }
+        ans[i] = st.empty() ? -1 : st.top();
+        st.push(x);
+    }
+    return ans;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.Deque;
+import java.util.ArrayDeque;
+
+int[] nextGreaterElements(int[] nums) {
+    int n = nums.length;
+    int[] ans = new int[n];
+    java.util.Arrays.fill(ans, -1);
+    Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;(); // stores values
+
+    for (int i = n - 1; i &gt;= 0; i--) {
+        int x = nums[i];
+        while (!stack.isEmpty() &amp;&amp; stack.peek() &lt;= x) {
+            stack.pop();
+        }
+        ans[i] = stack.isEmpty() ? -1 : stack.peek();
+        stack.push(x);
+    }
+    return ans;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function nextGreaterElements(nums) {
+    const n = nums.length;
+    const ans = new Array(n).fill(-1);
+    const stack = []; // values
+
+    for (let i = n - 1; i &gt;= 0; i--) {
+        const x = nums[i];
+        while (stack.length &gt; 0 &amp;&amp; stack[stack.length - 1] &lt;= x) {
+            stack.pop();
+        }
+        ans[i] = stack.length &gt; 0 ? stack[stack.length - 1] : -1;
+        stack.push(x);
+    }
+    return ans;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+int[] NextGreaterElements(int[] nums) {
+    int n = nums.Length;
+    int[] ans = new int[n];
+    for (int i = 0; i &lt; n; i++) ans[i] = -1;
+
+    var stack = new Stack&lt;int&gt;(); // values
+
+    for (int i = n - 1; i &gt;= 0; i--) {
+        int x = nums[i];
+        while (stack.Count &gt; 0 &amp;&amp; stack.Peek() &lt;= x) {
+            stack.Pop();
+        }
+        ans[i] = stack.Count == 0 ? -1 : stack.Peek();
+        stack.Push(x);
+    }
+    return ans;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import List
+
+def next_greater_elements(nums: List[int]) -&gt; List[int]:
+    n = len(nums)
+    ans = [-1] * n
+    stack: list[int] = []  # values
+
+    for i in range(n - 1, -1, -1):
+        x = nums[i]
+        while stack and stack[-1] &lt;= x:
+            stack.pop()
+        ans[i] = stack[-1] if stack else -1
+        stack.append(x)
+    return ans</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: <strong>O(n)</strong> — each value is pushed and popped at most once. &nbsp;|&nbsp;
+                    Extra space: stack up to <code>n</code> plus result → <strong>O(n)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 4 - Daily Temperatures                            -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 4 - Daily Temperatures (Monotonic Stack of Indices)</h2>
+            <p>
+                You are given an array <code>temps</code> where <code>temps[i]</code> is the temperature on day
+                <code>i</code>. For each day, find how many days you would have to wait until a warmer temperature.
+                If there is no future day with a warmer temperature, use <code>0</code>.
+            </p>
+
+            <h3>Idea</h3>
+            <p>
+                Maintain a stack of indices with decreasing temperatures. When the current temperature is higher than
+                the temperature at the top index, you found the next warmer day for that index.
+            </p>
+
+            <div class="code-example" data-example="p4">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Solution 4</span>
+                        <span class="meta">Monotonic stack of indices</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdlib.h&gt;
+
+int* dailyTemperatures(const int *temps, int n) {
+    int *ans = (int*)calloc(n, sizeof(int));
+    int *stack = (int*)malloc(sizeof(int) * n);
+    int top = -1;
+
+    for (int i = 0; i &lt; n; i++) {
+        while (top &gt;= 0 &amp;&amp; temps[i] &gt; temps[stack[top]]) {
+            int idx = stack[top--];
+            ans[idx] = i - idx;
+        }
+        stack[++top] = i;
+    }
+
+    free(stack);
+    return ans;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;stack&gt;
+using namespace std;
+
+vector&lt;int&gt; dailyTemperatures(const vector&lt;int&gt;&amp; temps) {
+    int n = (int)temps.size();
+    vector&lt;int&gt; ans(n, 0);
+    stack&lt;int&gt; st; // indices
+
+    for (int i = 0; i &lt; n; i++) {
+        while (!st.empty() &amp;&amp; temps[i] &gt; temps[st.top()]) {
+            int idx = st.top();
+            st.pop();
+            ans[idx] = i - idx;
+        }
+        st.push(i);
+    }
+    return ans;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.Deque;
+import java.util.ArrayDeque;
+
+int[] dailyTemperatures(int[] temps) {
+    int n = temps.length;
+    int[] ans = new int[n];
+    Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;(); // indices
+
+    for (int i = 0; i &lt; n; i++) {
+        while (!stack.isEmpty() &amp;&amp; temps[i] &gt; temps[stack.peek()]) {
+            int idx = stack.pop();
+            ans[idx] = i - idx;
+        }
+        stack.push(i);
+    }
+    return ans;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function dailyTemperatures(temps) {
+    const n = temps.length;
+    const ans = new Array(n).fill(0);
+    const stack = []; // indices
+
+    for (let i = 0; i &lt; n; i++) {
+        while (stack.length &gt; 0 &amp;&amp; temps[i] &gt; temps[stack[stack.length - 1]]) {
+            const idx = stack.pop();
+            ans[idx] = i - idx;
+        }
+        stack.push(i);
+    }
+    return ans;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+int[] DailyTemperatures(int[] temps) {
+    int n = temps.Length;
+    int[] ans = new int[n];
+    var stack = new Stack&lt;int&gt;(); // indices
+
+    for (int i = 0; i &lt; n; i++) {
+        while (stack.Count &gt; 0 &amp;&amp; temps[i] &gt; temps[stack.Peek()]) {
+            int idx = stack.Pop();
+            ans[idx] = i - idx;
+        }
+        stack.Push(i);
+    }
+    return ans;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import List
+
+def daily_temperatures(temps: List[int]) -&gt; List[int]:
+    n = len(temps)
+    ans = [0] * n
+    stack: list[int] = []  # indices
+
+    for i, t in enumerate(temps):
+        while stack and t &gt; temps[stack[-1]]:
+            idx = stack.pop()
+            ans[idx] = i - idx
+        stack.append(i)
+    return ans</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: <strong>O(n)</strong> — each index is pushed and popped at most once. &nbsp;|&nbsp;
+                    Extra space: stack up to <code>n</code> plus result → <strong>O(n)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 5 - Level Order Traversal (BFS)                   -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 5 - Level Order Traversal (BFS Using a Queue)</h2>
+            <p>
+                Given the root of a binary tree, return its level order traversal (breadth-first search):
+                a list of lists of node values, one list per level from top to bottom.
+            </p>
+
+            <h3>Idea</h3>
+            <p>
+                Use a queue. Enqueue the root, then process nodes level by level using the queue size
+                at the start of each level. For each node, enqueue its non-null children.
+            </p>
+
+            <div class="code-example" data-example="p5">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Solution 5</span>
+                        <span class="meta">BFS with a queue</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C (simple pointer-based queue omitted for brevity; pseudocode structure) -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+// A minimal tree node definition and BFS outline.
+// In a real program you would implement a proper queue.
+typedef struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+} TreeNode;
+
+// For brevity, this shows the BFS structure using an array queue.
+#include &lt;stdlib.h&gt;
+
+int** levelOrder(TreeNode *root, int *returnSize, int **returnColumnSizes) {
+    if (!root) {
+        *returnSize = 0;
+        *returnColumnSizes = NULL;
+        return NULL;
+    }
+
+    TreeNode **queue = (TreeNode**)malloc(sizeof(TreeNode*) * 10000);
+    int head = 0, tail = 0;
+    queue[tail++] = root;
+
+    int capacity = 1000;
+    int **result = (int**)malloc(sizeof(int*) * capacity);
+    int *colSizes = (int*)malloc(sizeof(int) * capacity);
+    int levels = 0;
+
+    while (head &lt; tail) {
+        int levelSize = tail - head;
+        int *level = (int*)malloc(sizeof(int) * levelSize);
+        for (int i = 0; i &lt; levelSize; i++) {
+            TreeNode *node = queue[head++];
+            level[i] = node-&gt;val;
+            if (node-&gt;left) queue[tail++] = node-&gt;left;
+            if (node-&gt;right) queue[tail++] = node-&gt;right;
+        }
+        result[levels] = level;
+        colSizes[levels] = levelSize;
+        levels++;
+    }
+
+    *returnSize = levels;
+    *returnColumnSizes = colSizes;
+    free(queue);
+    return result;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+vector&lt;vector&lt;int&gt;&gt; levelOrder(TreeNode *root) {
+    vector&lt;vector&lt;int&gt;&gt; result;
+    if (!root) return result;
+
+    queue&lt;TreeNode*&gt; q;
+    q.push(root);
+
+    while (!q.empty()) {
+        int levelSize = (int)q.size();
+        vector&lt;int&gt; level;
+        level.reserve(levelSize);
+        for (int i = 0; i &lt; levelSize; i++) {
+            TreeNode *node = q.front();
+            q.pop();
+            level.push_back(node-&gt;val);
+            if (node-&gt;left) q.push(node-&gt;left);
+            if (node-&gt;right) q.push(node-&gt;right);
+        }
+        result.push_back(move(level));
+    }
+    return result;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int v) { val = v; }
+}
+
+List&lt;List&lt;Integer&gt;&gt; levelOrder(TreeNode root) {
+    List&lt;List&lt;Integer&gt;&gt; result = new ArrayList&lt;&gt;();
+    if (root == null) return result;
+
+    Queue&lt;TreeNode&gt; q = new ArrayDeque&lt;&gt;();
+    q.add(root);
+
+    while (!q.isEmpty()) {
+        int size = q.size();
+        List&lt;Integer&gt; level = new ArrayList&lt;&gt;(size);
+        for (int i = 0; i &lt; size; i++) {
+            TreeNode node = q.remove();
+            level.add(node.val);
+            if (node.left != null) q.add(node.left);
+            if (node.right != null) q.add(node.right);
+        }
+        result.add(level);
+    }
+    return result;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function levelOrder(root) {
+    const result = [];
+    if (!root) return result;
+
+    const q = [];
+    q.push(root);
+
+    while (q.length &gt; 0) {
+        const size = q.length;
+        const level = [];
+        for (let i = 0; i &lt; size; i++) {
+            const node = q.shift();
+            level.push(node.val);
+            if (node.left) q.push(node.left);
+            if (node.right) q.push(node.right);
+        }
+        result.push(level);
+    }
+    return result;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+class TreeNode {
+    public int Val;
+    public TreeNode? Left;
+    public TreeNode? Right;
+    public TreeNode(int val) { Val = val; }
+}
+
+IList&lt;IList&lt;int&gt;&gt; LevelOrder(TreeNode? root) {
+    var result = new List&lt;IList&lt;int&gt;&gt;();
+    if (root == null) return result;
+
+    var q = new Queue&lt;TreeNode&gt;();
+    q.Enqueue(root);
+
+    while (q.Count &gt; 0) {
+        int levelSize = q.Count;
+        var level = new List&lt;int&gt;();
+        for (int i = 0; i &lt; levelSize; i++) {
+            var node = q.Dequeue();
+            level.Add(node.Val);
+            if (node.Left != null) q.Enqueue(node.Left);
+            if (node.Right != null) q.Enqueue(node.Right);
+        }
+        result.Add(level);
+    }
+    return result;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from collections import deque
+from typing import List, Optional
+
+class TreeNode:
+    def __init__(self, val: int, left: "TreeNode | None" = None,
+                 right: "TreeNode | None" = None) -&gt; None:
+        self.val = val
+        self.left = left
+        self.right = right
+
+def level_order(root: Optional[TreeNode]) -&gt; List[List[int]]:
+    result: List[List[int]] = []
+    if root is None:
+        return result
+
+    q: deque[TreeNode] = deque([root])
+    while q:
+        level_size = len(q)
+        level: List[int] = []
+        for _ in range(level_size):
+            node = q.popleft()
+            level.append(node.val)
+            if node.left:
+                q.append(node.left)
+            if node.right:
+                q.append(node.right)
+        result.append(level)
+    return result</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: <strong>O(n)</strong> where <code>n</code> is the number of nodes (each visited once).
+                    &nbsp;|&nbsp;
+                    Extra space: queue holds up to <code>O(n)</code> nodes in the worst case, plus output →
+                    <strong>O(n)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 6 - Sliding Window Maximum                        -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 6 - Sliding Window Maximum (Deque as a Monotonic Queue)</h2>
+            <p>
+                Given an array <code>nums</code> and a window size <code>k</code>, return an array
+                <code>maxes</code> where <code>maxes[i]</code> is the maximum value in
+                <code>nums[i .. i + k - 1]</code>.
+            </p>
+
+            <h3>Idea</h3>
+            <p>
+                Maintain a deque of indices in decreasing order of their values in the window.
+                The front of the deque is the index of the maximum. As you slide:
+            </p>
+            <ul>
+                <li>Remove indices from the front that fall out of the window.</li>
+                <li>Remove indices from the back while their values are smaller than the new element.</li>
+            </ul>
+
+            <div class="code-example" data-example="p6">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Solution 6</span>
+                        <span class="meta">Monotonic deque</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdlib.h&gt;
+
+// Returns array of length n - k + 1.
+int* maxSlidingWindow(const int *nums, int n, int k) {
+    if (n == 0 || k == 0) return NULL;
+
+    int outLen = n - k + 1;
+    int *result = (int*)malloc(sizeof(int) * outLen);
+    int *dequeIdx = (int*)malloc(sizeof(int) * n);
+    int front = 0, back = 0; // [front, back)
+
+    int outPos = 0;
+    for (int i = 0; i &lt; n; i++) {
+        // Remove indices out of this window
+        while (front &lt; back &amp;&amp; dequeIdx[front] &lt;= i - k) {
+            front++;
+        }
+        // Remove smaller values from the back
+        while (front &lt; back &amp;&amp; nums[dequeIdx[back - 1]] &lt;= nums[i]) {
+            back--;
+        }
+        dequeIdx[back++] = i;
+
+        if (i &gt;= k - 1) {
+            result[outPos++] = nums[dequeIdx[front]];
+        }
+    }
+
+    free(dequeIdx);
+    return result;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;deque&gt;
+using namespace std;
+
+vector&lt;int&gt; maxSlidingWindow(const vector&lt;int&gt;&amp; nums, int k) {
+    int n = (int)nums.size();
+    vector&lt;int&gt; result;
+    if (n == 0 || k == 0) return result;
+
+    deque&lt;int&gt; dq; // indices
+    for (int i = 0; i &lt; n; i++) {
+        while (!dq.empty() &amp;&amp; dq.front() &lt;= i - k) {
+            dq.pop_front();
+        }
+        while (!dq.empty() &amp;&amp; nums[dq.back()] &lt;= nums[i]) {
+            dq.pop_back();
+        }
+        dq.push_back(i);
+        if (i &gt;= k - 1) {
+            result.push_back(nums[dq.front()]);
+        }
+    }
+    return result;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.Deque;
+import java.util.ArrayDeque;
+
+int[] maxSlidingWindow(int[] nums, int k) {
+    int n = nums.length;
+    if (n == 0 || k == 0) return new int[0];
+
+    int[] res = new int[n - k + 1];
+    Deque&lt;Integer&gt; dq = new ArrayDeque&lt;&gt;(); // indices
+    int idx = 0;
+
+    for (int i = 0; i &lt; n; i++) {
+        while (!dq.isEmpty() &amp;&amp; dq.peekFirst() &lt;= i - k) {
+            dq.removeFirst();
+        }
+        while (!dq.isEmpty() &amp;&amp; nums[dq.peekLast()] &lt;= nums[i]) {
+            dq.removeLast();
+        }
+        dq.addLast(i);
+
+        if (i &gt;= k - 1) {
+            res[idx++] = nums[dq.peekFirst()];
+        }
+    }
+    return res;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function maxSlidingWindow(nums, k) {
+    const n = nums.length;
+    if (n === 0 || k === 0) return [];
+    const deque = []; // indices
+    const result = [];
+
+    for (let i = 0; i &lt; n; i++) {
+        while (deque.length &gt; 0 &amp;&amp; deque[0] &lt;= i - k) {
+            deque.shift();
+        }
+        while (deque.length &gt; 0 &amp;&amp; nums[deque[deque.length - 1]] &lt;= nums[i]) {
+            deque.pop();
+        }
+        deque.push(i);
+        if (i &gt;= k - 1) {
+            result.push(nums[deque[0]]);
+        }
+    }
+    return result;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+int[] MaxSlidingWindow(int[] nums, int k) {
+    int n = nums.Length;
+    if (n == 0 || k == 0) return System.Array.Empty&lt;int&gt;();
+
+    var result = new int[n - k + 1];
+    var dq = new LinkedList&lt;int&gt;(); // indices
+    int idx = 0;
+
+    for (int i = 0; i &lt; n; i++) {
+        while (dq.Count &gt; 0 &amp;&amp; dq.First!.Value &lt;= i - k) {
+            dq.RemoveFirst();
+        }
+        while (dq.Count &gt; 0 &amp;&amp; nums[dq.Last!.Value] &lt;= nums[i]) {
+            dq.RemoveLast();
+        }
+        dq.AddLast(i);
+        if (i &gt;= k - 1) {
+            result[idx++] = nums[dq.First!.Value];
+        }
+    }
+    return result;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from collections import deque
+from typing import List
+
+def max_sliding_window(nums: List[int], k: int) -&gt; List[int]:
+    n = len(nums)
+    if n == 0 or k == 0:
+        return []
+
+    dq: deque[int] = deque()  # indices
+    result: List[int] = []
+
+    for i, x in enumerate(nums):
+        while dq and dq[0] &lt;= i - k:
+            dq.popleft()
+        while dq and nums[dq[-1]] &lt;= x:
+            dq.pop()
+        dq.append(i)
+        if i &gt;= k - 1:
+            result.append(nums[dq[0]])
+    return result</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: <strong>O(n)</strong> — each index is pushed and popped at most once from the deque.
+                    &nbsp;|&nbsp; Extra space: deque plus result → <strong>O(n)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <div class="next-section">
+            <a href="problems-section4-stacks-queues.html">
+                ← Back to Section 4 Problem Set
+            </a>
+            &nbsp;&nbsp;
+            <a href="section10-practice.html">
+                Back to Practice Hub →
+            </a>
+        </div>
+    </main>
+</body>
+
+</html>

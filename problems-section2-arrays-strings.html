@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Problems - Section 2 Arrays &amp; Strings</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css" />
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tabs, highlight init, prefs, etc.) -->
+    <script src="js/site.js"></script>
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="section10-practice.html">← Back to Practice Hub</a>
+            &nbsp;&nbsp;
+            <a href="section2-arrays-strings.html">View Section 2 Lesson →</a>
+        </div>
+
+        <div class="kicker">Section 2 - Problem Set</div>
+        <h1>Arrays &amp; Strings</h1>
+        <p class="tagline">
+            These problems build your fluency with arrays and strings: indexing, in-place updates,
+            two-pointer patterns, and sliding windows.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr />
+
+        <!-- Problem 1 -->
+        <section class="problem">
+            <h2>Problem 1 - Reverse an Array In-Place</h2>
+            <p>
+                Given an array of integers <code>arr</code>, reverse the array <strong>in-place</strong> so that
+                the elements appear in the opposite order. You must use O(1) extra space.
+            </p>
+
+            <p>Example:</p>
+            <ul>
+                <li>Input: <code>[1, 2, 3, 4]</code></li>
+                <li>Output: <code>[4, 3, 2, 1]</code></li>
+            </ul>
+
+            <p>
+                Write the algorithm in pseudocode or any language, and give the time and space complexity.
+            </p>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Use two indices: one starting at the beginning and one at the end. Swap and move inward
+                    until they cross.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    One possible approach (JavaScript):
+<pre><code class="language-javascript">function reverseInPlace(arr) {
+    let i = 0;
+    let j = arr.length - 1;
+    while (i &lt; j) {
+        const tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+        i++;
+        j--;
+    }
+}</code></pre>
+                    Time complexity: the loop runs about <code>n / 2</code> times, so <strong>O(n)</strong>.<br />
+                    Extra space: we only use a few variables, so <strong>O(1)</strong>.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 2 -->
+        <section class="problem">
+            <h2>Problem 2 - Two-Sum (Brute Force vs. Hash Map)</h2>
+            <p>
+                You are given an array of integers <code>nums</code> and an integer <code>target</code>.
+                Determine whether there exist two distinct indices <code>i</code> and <code>j</code> such that
+                <code>nums[i] + nums[j] == target</code>.
+            </p>
+
+            <ol>
+                <li>Describe the brute-force solution and its time complexity.</li>
+                <li>Describe a faster solution using a hash set or map and its time complexity.</li>
+            </ol>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Brute force: try all pairs. Faster: as you scan the array, keep track of numbers seen so far.
+                    For each number <code>x</code>, check if <code>target - x</code> has been seen.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    <strong>Brute force:</strong><br />
+                    Check all pairs <code>(i, j)</code> with <code>i &lt; j</code>:
+<pre><code class="language-python">def two_sum_bruteforce(nums, target):
+    n = len(nums)
+    for i in range(n):
+        for j in range(i + 1, n):
+            if nums[i] + nums[j] == target:
+                return True
+    return False</code></pre>
+                    Time: there are about <code>n(n - 1)/2</code> pairs → <strong>O(n²)</strong>.<br />
+                    Space: <strong>O(1)</strong> extra.<br /><br />
+
+                    <strong>Hash-based:</strong><br />
+                    Scan once, keeping a set of seen numbers:
+<pre><code class="language-javascript">function twoSumExists(nums, target) {
+    const seen = new Set();
+    for (const x of nums) {
+        const need = target - x;
+        if (seen.has(need)) {
+            return true;
+        }
+        seen.add(x);
+    }
+    return false;
+}</code></pre>
+                    Time: each element is processed once and set operations are expected O(1), so
+                    <strong>O(n)</strong>.<br />
+                    Extra space: up to <code>n</code> elements in the set → <strong>O(n)</strong>.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 3 -->
+        <section class="problem">
+            <h2>Problem 3 - Move Zeros to the End</h2>
+            <p>
+                Given an integer array <code>nums</code>, move all zeros to the end of the array while keeping
+                the relative order of the non-zero elements. Do this in-place with O(1) extra space.
+            </p>
+
+            <p>Example:</p>
+            <ul>
+                <li>Input: <code>[0, 1, 0, 3, 12]</code></li>
+                <li>Output: <code>[1, 3, 12, 0, 0]</code></li>
+            </ul>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Use a pointer to track the position where the next non-zero should be written.
+                    First compact non-zeros to the front, then fill the rest with zeros.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    One approach (C#):
+<pre><code class="language-csharp">void MoveZeroes(int[] nums) {
+    int write = 0;
+    // First pass: write non-zero elements
+    for (int read = 0; read &lt; nums.Length; read++) {
+        if (nums[read] != 0) {
+            nums[write] = nums[read];
+            write++;
+        }
+    }
+    // Second pass: fill the rest with zeros
+    while (write &lt; nums.Length) {
+        nums[write] = 0;
+        write++;
+    }
+}</code></pre>
+                    Time complexity: two passes over <code>n</code> elements → <strong>O(n)</strong>.<br />
+                    Extra space: only a couple of indices → <strong>O(1)</strong>.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 4 -->
+        <section class="problem">
+            <h2>Problem 4 - Check for Anagram</h2>
+            <p>
+                Two strings <code>s</code> and <code>t</code> are anagrams if they contain the same characters
+                with the same frequencies, in any order. For example, <code>"listen"</code> and
+                <code>"silent"</code> are anagrams.
+            </p>
+
+            <p>
+                Write a function that returns <code>true</code> if <code>s</code> and <code>t</code> are anagrams,
+                and <code>false</code> otherwise. Assume the strings use only lowercase English letters
+                <code>'a'</code>-<code>'z'</code>.
+            </p>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    You can sort both strings and compare, or count character frequencies using a fixed-size
+                    array of length 26.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    Frequency-count approach (Java):
+<pre><code class="language-java">boolean isAnagram(String s, String t) {
+    if (s.length() != t.length()) return false;
+    int[] freq = new int[26];
+    for (int i = 0; i &lt; s.length(); i++) {
+        freq[s.charAt(i) - 'a']++;
+        freq[t.charAt(i) - 'a']--;
+    }
+    for (int f : freq) {
+        if (f != 0) return false;
+    }
+    return true;
+}</code></pre>
+                    Time: we scan the strings once (plus a fixed-size 26 loop) → <strong>O(n)</strong>, where
+                    <code>n</code> is the length of the strings.<br />
+                    Extra space: the frequency array is size 26 (constant) → <strong>O(1)</strong>.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 5 -->
+        <section class="problem">
+            <h2>Problem 5 - Longest Substring Without Repeating Characters</h2>
+            <p>
+                Given a string <code>s</code>, find the length of the longest substring without repeating characters.
+            </p>
+
+            <p>Examples:</p>
+            <ul>
+                <li><code>"abcabcbb"</code> → <code>3</code> (<code>"abc"</code>)</li>
+                <li><code>"bbbbb"</code> → <code>1</code> (<code>"b"</code>)</li>
+                <li><code>"pwwkew"</code> → <code>3</code> (<code>"wke"</code>)</li>
+            </ul>
+
+            <p>
+                Describe a sliding-window solution and its time complexity.
+            </p>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Maintain a window with no duplicates using two indices <code>left</code> and <code>right</code>,
+                    and a map from character to its most recent index. When you see a repeat, move <code>left</code>
+                    forward.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    One solution (Python):
+<pre><code class="language-python">def length_of_longest_substring(s: str) -&gt; int:
+    last_pos = {}
+    left = 0
+    best = 0
+    for right, ch in enumerate(s):
+        if ch in last_pos and last_pos[ch] &gt;= left:
+            left = last_pos[ch] + 1
+        last_pos[ch] = right
+        best = max(best, right - left + 1)
+    return best</code></pre>
+                    The window defined by <code>[left, right]</code> always has no duplicates.<br />
+                    Each index moves at most forward once, so total work is proportional to <code>n</code>.<br />
+                    Time complexity: <strong>O(n)</strong>.<br />
+                    Extra space: at most one entry per distinct character → <strong>O(min(n, alphabet))</strong>.
+                </div>
+            </details>
+        </section>
+
+        <hr />
+
+        <!-- Problem 6 -->
+        <section class="problem">
+            <h2>Problem 6 - Rotate Array (Right by k)</h2>
+            <p>
+                Given an array <code>nums</code> and an integer <code>k</code>, rotate the array to the right
+                by <code>k</code> steps, where <code>k</code> can be larger than <code>n</code>.
+            </p>
+
+            <p>Example:</p>
+            <ul>
+                <li>Input: <code>nums = [1, 2, 3, 4, 5, 6, 7], k = 3</code></li>
+                <li>Output: <code>[5, 6, 7, 1, 2, 3, 4]</code></li>
+            </ul>
+
+            <p>
+                Implement an in-place solution that uses O(1) extra space.
+            </p>
+
+            <details class="practice-details">
+                <summary>Hint...</summary>
+                <div>
+                    Normalize <code>k</code> with <code>k % n</code>. One trick: reverse the whole array, then
+                    reverse the first <code>k</code> elements, then reverse the remaining <code>n - k</code>.
+                </div>
+            </details>
+
+            <details class="practice-details">
+                <summary>Show answer...</summary>
+                <div>
+                    One solution (C++):
+<pre><code class="language-cpp">void reverseRange(std::vector&lt;int&gt;&amp; nums, int l, int r) {
+    while (l &lt; r) {
+        std::swap(nums[l], nums[r]);
+        l++;
+        r--;
+    }
+}
+
+void rotate(std::vector&lt;int&gt;&amp; nums, int k) {
+    int n = (int)nums.size();
+    if (n == 0) return;
+    k %= n;
+    if (k == 0) return;
+
+    // Reverse whole array
+    reverseRange(nums, 0, n - 1);
+    // Reverse first k
+    reverseRange(nums, 0, k - 1);
+    // Reverse the rest
+    reverseRange(nums, k, n - 1);
+}</code></pre>
+                    Time: each reverse is O(n), and we do three reversals → still <strong>O(n)</strong>.<br />
+                    Extra space: swaps happen in-place → <strong>O(1)</strong>.
+                </div>
+            </details>
+        </section>
+
+        <div class="next-section">
+            <a href="section2-arrays-strings.html">
+                ← Back to Section 2 Lesson
+            </a>
+            &nbsp;&nbsp;
+            <a href="solutions-section2-arrays-strings.html">
+                View detailed Solutions
+            </a>
+            &nbsp;&nbsp;
+            <a href="section10-practice.html">
+                Back to Practice Hub →
+            </a>
+        </div>
+    </main>
+</body>
+
+</html>

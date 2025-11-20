@@ -1,0 +1,551 @@
+:root {
+  --bg: #111827;
+  --bg-alt: #1f2937;
+  --border: #4b5563;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --accent: #3b82f6;
+  --accent-soft: #1d4ed8;
+  --code-bg: #0b1120;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 2rem 1.5rem 3rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #111827 0, #020617 55%);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  background: rgba(15, 23, 42, 0.9);
+  border-radius: 18px;
+  padding: 2.25rem 2rem 2.5rem;
+  border: 1px solid #1f2937;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+}
+
+h1, h2, h3 {
+  font-weight: 650;
+  line-height: 1.2;
+  color: #f9fafb;
+}
+
+h1 {
+  font-size: 1.9rem;
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+h2 {
+  font-size: 1.35rem;
+  margin-top: 1.8rem;
+  margin-bottom: 0.4rem;
+}
+
+h3 {
+  font-size: 1.1rem;
+  margin-top: 1.6rem;
+  margin-bottom: 0.25rem;
+}
+
+p {
+  margin: 0.35rem 0;
+  color: var(--text);
+}
+
+ul {
+  margin: 0.25rem 0 0.75rem 1.3rem;
+  padding: 0;
+}
+
+code {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.9em;
+  background: rgba(15, 23, 42, 0.85);
+  padding: 0.15em 0.3em;
+  border-radius: 4px;
+}
+
+pre {
+  margin: 0;
+  background: var(--code-bg);
+  color: #e5e7eb;
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+  border-radius: 0 0 12px 12px;
+  font-size: 0.87rem;
+}
+
+pre code {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  display: block;
+  white-space: pre;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid rgba(55, 65, 81, 0.9);
+  margin: 1.8rem 0 1.2rem;
+}
+
+.kicker {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 0.25rem;
+}
+
+.tagline {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-bottom: 1.3rem;
+}
+
+.callout {
+  margin: 1rem 0 1.2rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  background: radial-gradient(circle at top left, rgba(37, 99, 235, 0.32), rgba(15, 23, 42, 0.9));
+  font-size: 0.9rem;
+}
+
+.callout strong {
+  color: #bfdbfe;
+}
+
+.bullet-tight li {
+  margin-bottom: 0.1rem;
+}
+
+/* ───────── Code tab component ───────── */
+
+.code-example {
+  margin: 1.25rem 0 1.75rem;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.code-example-header {
+  padding: 0.6rem 0.9rem 0.4rem;
+  border-bottom: 1px solid #1f2937;
+  background: radial-gradient(circle at top left, #111827, #020617);
+}
+
+.code-example-title {
+  font-size: 0.9rem;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.code-example-title span.label {
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  font-size: 0.78rem;
+  color: #9ca3af;
+}
+
+.code-example-title span.meta {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  opacity: 0.95;
+}
+
+.tab-bar {
+  display: flex;
+  gap: 0.15rem;
+  padding: 0.35rem 0.9rem 0.4rem;
+  border-bottom: 1px solid #111827;
+  background: #020617;
+}
+
+.tab-button {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.78rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+.tab-button:hover {
+  border-color: rgba(55, 65, 81, 0.9);
+  background: #020617;
+  color: #e5e7eb;
+}
+
+.tab-button.active {
+  border-color: rgba(59, 130, 246, 0.9);
+  background: radial-gradient(circle at top, var(--accent-soft), #0b1120);
+  color: #eff6ff;
+}
+
+.tab-button span.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.5);
+}
+
+.tab-button.active span.dot {
+  background: #bfdbfe;
+}
+
+.code-panel {
+  /* visible by default; JS will hide non-selected ones */
+  display: block;
+}
+
+.code-panel.hidden {
+  display: none;
+}
+
+.code-panel pre {
+  border-top: 1px solid #111827;
+}
+
+.complexity-note {
+  font-size: 0.83rem;
+  color: var(--muted);
+  padding: 0.4rem 0.9rem 0.6rem;
+  border-top: 1px solid #111827;
+  background: #020617;
+}
+
+/* ───────── Practice answers (collapsibles) ───────── */
+
+.practice-details {
+  margin: 0.4rem 0;
+  border-radius: 10px;
+  border: 1px solid rgba(55, 65, 81, 0.9);
+  background: #020617;
+}
+
+.practice-details summary {
+  cursor: pointer;
+  padding: 0.45rem 0.7rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+  list-style: none;
+}
+
+.practice-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.practice-details summary::before {
+  content: "▸ ";
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.practice-details[open] summary::before {
+  content: "▾ ";
+}
+
+.practice-details div {
+  padding: 0.3rem 0.9rem 0.6rem;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+/* ───────── Theme picker styling ───────── */
+
+.theme-picker {
+  margin: 0.5rem 0 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.theme-picker label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* Dark, rounded select using the native arrow */
+#theme-select {
+  /* let the browser draw its own arrow */
+  appearance: auto;
+  -webkit-appearance: auto;
+  -moz-appearance: auto;
+
+  background-color: #0f172a;
+  color: var(--text);
+
+  border: 1px solid #334155;
+  border-radius: 8px;
+
+  padding: 0.45rem 1.2rem 0.45rem 0.7rem;
+  font-size: 0.85rem;
+  font-family: inherit;
+  cursor: pointer;
+
+  background-image: none;
+}
+
+#theme-select:hover {
+  border-color: rgba(59, 130, 246, 0.75);
+}
+
+#theme-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.35);
+}
+
+/* Dark dropdown list */
+#theme-select option {
+  background: #0f172a;
+  color: var(--text);
+}
+
+/* ───────── Course index / lesson cards ───────── */
+
+.course-section {
+  margin-top: 1.5rem;
+}
+
+.course-grid {
+  margin-top: 0.75rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .course-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.lesson-card {
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: radial-gradient(circle at top left, #020617, #020617);
+  padding: 0.9rem 1rem 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.lesson-card--coming-soon {
+  opacity: 0.85;
+}
+
+.lesson-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.lesson-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--muted);
+}
+
+.lesson-status {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid #4b5563;
+  color: #e5e7eb;
+}
+
+.lesson-status--complete {
+  border-color: rgba(34, 197, 94, 0.7);
+  color: #bbf7d0;
+}
+
+.lesson-title {
+  margin: 0.15rem 0 0.25rem;
+  font-size: 1.05rem;
+}
+
+.lesson-title a {
+  color: #e5e7eb;
+  text-decoration: none;
+}
+
+.lesson-title a:hover {
+  color: #bfdbfe;
+  text-decoration: underline;
+}
+
+.lesson-description {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 0.55rem;
+}
+
+.lesson-meta {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+/* ───────── Section navigation links ───────── */
+
+.top-nav {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.8rem;
+}
+
+.top-nav a {
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color 0.12s ease;
+}
+
+.top-nav a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.next-section {
+  margin-top: 2rem;
+  text-align: right;
+}
+
+.next-section a {
+  display: inline-block;
+  font-size: 0.95rem;
+  color: #bfdbfe;
+  background: #1e3a8a;
+  padding: 0.55rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #3b82f6;
+  text-decoration: none;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.next-section a:hover {
+  background: #3b82f6;
+  color: #f0f9ff;
+}
+
+.gapped {
+  margin-bottom: 1rem;
+}
+
+/* ───────── Deep dive modal + triggers ───────── */
+
+.deep-dive-trigger {
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid #374151;
+  background: #020617;
+  color: var(--muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  vertical-align: middle;
+}
+
+.deep-dive-trigger.inline {
+  font-size: 0.7rem;
+}
+
+.deep-dive-trigger:hover {
+  border-color: rgba(59, 130, 246, 0.9);
+  color: #e5e7eb;
+  background: #020617;
+}
+
+.deep-dive-trigger:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.6);
+}
+
+/* Backdrop that covers the page when a modal is open */
+.deep-dive-backdrop {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.85);
+  z-index: 50;
+}
+
+/* When open, we switch to flex layout */
+.deep-dive-backdrop.is-open {
+  display: flex;
+}
+
+/* Modal content */
+.deep-dive-modal {
+  position: relative;
+  width: min(640px, 95vw);
+  max-height: 80vh;
+  overflow-y: auto;
+  background: #020617;
+  border-radius: 16px;
+  border: 1px solid #1f2937;
+  padding: 1.25rem 1.5rem 1.4rem;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.8);
+}
+
+.deep-dive-modal h2 {
+  font-size: 1.2rem;
+  margin: 0 0 0.75rem;
+}
+
+.deep-dive-body p,
+.deep-dive-body ul,
+.deep-dive-body li {
+  font-size: 0.92rem;
+}
+
+.deep-dive-body ul {
+  margin-left: 1.1rem;
+}
+
+/* Close button */
+.deep-dive-close {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.deep-dive-close:hover {
+  color: #e5e7eb;
+}
+
+/* Templates are hidden by default */
+.deep-dive-template[hidden] {
+  display: none !important;
+}

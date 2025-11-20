@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Section 8 - Dynamic Programming</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css" />
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tab logic, highlight init, prefs, etc.) -->
+    <script src="js/site.js"></script>
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="index.html">← Back to Index</a>
+        </div>
+
+        <div class="kicker">Section 8</div>
+        <h1>Dynamic Programming</h1>
+        <p class="tagline">
+            Dynamic programming (DP) is a way to solve problems by breaking them into overlapping subproblems
+            and reusing previous results instead of recomputing them.
+        </p>
+
+        <h2>8.1 When to Use Dynamic Programming</h2>
+        <p>
+            A problem is a good candidate for dynamic programming if:
+        </p>
+        <ul class="bullet-tight">
+            <li>You can define the answer in terms of answers to smaller subproblems.</li>
+            <li>Those subproblems <strong>overlap</strong> (you would recompute them many times with naive recursion).</li>
+            <li>There is an optimal substructure: an optimal solution is built from optimal solutions to subproblems.</li>
+        </ul>
+
+        <h2>8.2 Two Common Styles</h2>
+        <ul>
+            <li>
+                <strong>Top-down (memoization)</strong>:
+                write a recursive function and cache results in a table or map.
+            </li>
+            <li>
+                <strong>Bottom-up (tabulation)</strong>:
+                fill in a table iteratively from the smallest subproblems up to the full answer.
+            </li>
+        </ul>
+
+        <div class="callout">
+            <strong>Key idea:</strong> Do work for each distinct subproblem once, store the result,
+            and reuse it.
+        </div>
+
+        <h2>8.3 Code Examples in Multiple Languages</h2>
+        <p>
+            We will look at four classic DP examples:
+        </p>
+        <ul class="bullet-tight">
+            <li>Fibonacci numbers (simple 1D DP).</li>
+            <li>Climbing stairs (same recurrence, different story).</li>
+            <li>0/1 knapsack (classic optimization DP).</li>
+            <li>Longest common subsequence (2D DP).</li>
+        </ul>
+        <p>
+            Each appears in <strong>C, C++, Java, JavaScript, C#,</strong> and <strong>Python</strong>.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr />
+
+        <!-- ======================= Example 1 ======================= -->
+        <h3>8.4 Example 1 - Fibonacci, Bottom-Up DP</h3>
+        <p>
+            The naive recursive Fibonacci is exponential because it recomputes subproblems.
+            Here we compute from the bottom up in linear time.
+        </p>
+
+        <div class="code-example" data-example="s8-ex1">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 1</span>
+                    <span class="meta">Fibonacci with bottom-up DP</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+#include &lt;stdio.h&gt;
+
+long long fib_dp(int n) {
+    if (n &lt;= 1) return n;
+    long long prev2 = 0; // F(0)
+    long long prev1 = 1; // F(1)
+    for (int i = 2; i &lt;= n; i++) {
+        long long curr = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = curr;
+    }
+    return prev1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+long long fib_dp(int n) {
+    if (n &lt;= 1) return n;
+    long long prev2 = 0; // F(0)
+    long long prev1 = 1; // F(1)
+    for (int i = 2; i &lt;= n; i++) {
+        long long curr = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = curr;
+    }
+    return prev1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+long fibDp(int n) {
+    if (n &lt;= 1) return n;
+    long prev2 = 0; // F(0)
+    long prev1 = 1; // F(1)
+    for (int i = 2; i &lt;= n; i++) {
+        long curr = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = curr;
+    }
+    return prev1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function fibDp(n) {
+    if (n &lt;= 1) return n;
+    let prev2 = 0; // F(0)
+    let prev1 = 1; // F(1)
+    for (let i = 2; i &lt;= n; i++) {
+        const curr = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = curr;
+    }
+    return prev1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+long FibDp(int n) {
+    if (n &lt;= 1) return n;
+    long prev2 = 0; // F(0)
+    long prev1 = 1; // F(1)
+    for (int i = 2; i &lt;= n; i++) {
+        long curr = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = curr;
+    }
+    return prev1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+def fib_dp(n: int) -&gt; int:
+    if n &lt;= 1:
+        return n
+    prev2 = 0  # F(0)
+    prev1 = 1  # F(1)
+    for _ in range(2, n + 1):
+        curr = prev1 + prev2
+        prev2 = prev1
+        prev1 = curr
+    return prev1</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n)</strong>. &nbsp;|&nbsp;
+                Extra space: <strong>O(1)</strong> (we keep only two previous values).
+            </div>
+        </div>
+
+        <!-- ======================= Example 2 ======================= -->
+        <h3>8.5 Example 2 - Climbing Stairs</h3>
+        <p>
+            You can climb 1 or 2 steps at a time. How many distinct ways are there to climb
+            to step <code>n</code>? This has the same recurrence as Fibonacci:
+        </p>
+        <p>
+            <code>ways(n) = ways(n - 1) + ways(n - 2)</code>, with base cases <code>ways(0) = 1</code>,
+            <code>ways(1) = 1</code>.
+        </p>
+
+        <div class="code-example" data-example="s8-ex2">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 2</span>
+                    <span class="meta">Climbing stairs DP</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+long long climb_stairs(int n) {
+    if (n &lt;= 1) return 1;
+    long long prev2 = 1; // ways(0)
+    long long prev1 = 1; // ways(1)
+    for (int i = 2; i &lt;= n; i++) {
+        long long curr = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = curr;
+    }
+    return prev1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+long long climbStairs(int n) {
+    if (n &lt;= 1) return 1;
+    long long prev2 = 1; // ways(0)
+    long long prev1 = 1; // ways(1)
+    for (int i = 2; i &lt;= n; i++) {
+        long long curr = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = curr;
+    }
+    return prev1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+long climbStairs(int n) {
+    if (n &lt;= 1) return 1;
+    long prev2 = 1; // ways(0)
+    long prev1 = 1; // ways(1)
+    for (int i = 2; i &lt;= n; i++) {
+        long curr = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = curr;
+    }
+    return prev1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function climbStairs(n) {
+    if (n &lt;= 1) return 1;
+    let prev2 = 1; // ways(0)
+    let prev1 = 1; // ways(1)
+    for (let i = 2; i &lt;= n; i++) {
+        const curr = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = curr;
+    }
+    return prev1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+long ClimbStairs(int n) {
+    if (n &lt;= 1) return 1;
+    long prev2 = 1; // ways(0)
+    long prev1 = 1; // ways(1)
+    for (int i = 2; i &lt;= n; i++) {
+        long curr = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = curr;
+    }
+    return prev1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+def climb_stairs(n: int) -&gt; int:
+    if n &lt;= 1:
+        return 1
+    prev2 = 1  # ways(0)
+    prev1 = 1  # ways(1)
+    for _ in range(2, n + 1):
+        curr = prev1 + prev2
+        prev2 = prev1
+        prev1 = curr
+    return prev1</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n)</strong>. &nbsp;|&nbsp;
+                Extra space: <strong>O(1)</strong>.
+            </div>
+        </div>
+
+        <!-- ======================= Example 3 ======================= -->
+        <h3>8.6 Example 3 - 0/1 Knapsack (Value Maximization)</h3>
+        <p>
+            Given <code>n</code> items with weights <code>w[i]</code> and values <code>v[i]</code> and a capacity
+            <code>W</code>, choose a subset of items with maximum total value such that total weight
+            is at most <code>W</code>.
+        </p>
+        <p>
+            Classic DP recurrence (0/1 means each item is either taken or not taken):
+        </p>
+        <p>
+            <code>dp[i][c] = max(dp[i - 1][c], dp[i - 1][c - w[i]] + v[i])</code> if <code>w[i] &lt;= c</code>,
+            otherwise <code>dp[i][c] = dp[i - 1][c]</code>.
+        </p>
+        <p>
+            Here we show a 1D optimization where we roll the table down to a single array over capacity.
+        </p>
+
+        <div class="code-example" data-example="s8-ex3">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 3</span>
+                    <span class="meta">0/1 knapsack with 1D DP</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+#include &lt;string.h&gt; // for memset
+
+int knapsack_01(int n, int W, const int* w, const int* v) {
+    int* dp = (int*)malloc((W + 1) * sizeof(int));
+    if (!dp) return 0;
+    memset(dp, 0, (W + 1) * sizeof(int));
+
+    for (int i = 0; i &lt; n; i++) {
+        for (int c = W; c &gt;= w[i]; c--) {
+            int with_item = dp[c - w[i]] + v[i];
+            if (with_item &gt; dp[c]) {
+                dp[c] = with_item;
+            }
+        }
+    }
+    int result = dp[W];
+    free(dp);
+    return result;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+
+int knapSack01(int n, int W, const std::vector&lt;int&gt;&amp; w,
+               const std::vector&lt;int&gt;&amp; v) {
+    std::vector&lt;int&gt; dp(W + 1, 0);
+    for (int i = 0; i &lt; n; i++) {
+        for (int c = W; c &gt;= w[i]; c--) {
+            int withItem = dp[c - w[i]] + v[i];
+            if (withItem &gt; dp[c]) {
+                dp[c] = withItem;
+            }
+        }
+    }
+    return dp[W];
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+int knapSack01(int n, int W, int[] w, int[] v) {
+    int[] dp = new int[W + 1];
+    for (int i = 0; i &lt; n; i++) {
+        for (int c = W; c &gt;= w[i]; c--) {
+            int withItem = dp[c - w[i]] + v[i];
+            if (withItem &gt; dp[c]) {
+                dp[c] = withItem;
+            }
+        }
+    }
+    return dp[W];
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function knapSack01(n, W, w, v) {
+    const dp = new Array(W + 1).fill(0);
+    for (let i = 0; i &lt; n; i++) {
+        for (let c = W; c &gt;= w[i]; c--) {
+            const withItem = dp[c - w[i]] + v[i];
+            if (withItem &gt; dp[c]) {
+                dp[c] = withItem;
+            }
+        }
+    }
+    return dp[W];
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+int KnapSack01(int n, int W, int[] w, int[] v) {
+    var dp = new int[W + 1];
+    for (int i = 0; i &lt; n; i++) {
+        for (int c = W; c &gt;= w[i]; c--) {
+            int withItem = dp[c - w[i]] + v[i];
+            if (withItem &gt; dp[c]) {
+                dp[c] = withItem;
+            }
+        }
+    }
+    return dp[W];
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+from typing import List
+
+def knapsack_01(n: int, W: int, w: List[int], v: List[int]) -&gt; int:
+    dp = [0] * (W + 1)
+    for i in range(n):
+        for c in range(W, w[i] - 1, -1):
+            with_item = dp[c - w[i]] + v[i]
+            if with_item &gt; dp[c]:
+                dp[c] = with_item
+    return dp[W]</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n · W)</strong>. &nbsp;|&nbsp;
+                Extra space: <strong>O(W)</strong>.
+            </div>
+        </div>
+
+        <!-- ======================= Example 4 ======================= -->
+        <h3>8.7 Example 4 - Longest Common Subsequence (LCS)</h3>
+        <p>
+            Given two strings <code>s</code> and <code>t</code>, the longest common subsequence is the
+           longest sequence of characters that appears in both in the same order (not necessarily
+            contiguously).
+        </p>
+        <p>
+            2D DP recurrence (1-based indexing):
+        </p>
+        <ul>
+            <li>If <code>s[i - 1] == t[j - 1]</code>, then <code>dp[i][j] = dp[i - 1][j - 1] + 1</code>.</li>
+            <li>Otherwise, <code>dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])</code>.</li>
+        </ul>
+
+        <div class="code-example" data-example="s8-ex4">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 4</span>
+                    <span class="meta">LCS length with 2D DP</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C
+#include &lt;stdlib.h&gt;
+
+int lcs_length(const char* s, const char* t) {
+    int n = (int)strlen(s);
+    int m = (int)strlen(t);
+    int** dp = (int**)malloc((n + 1) * sizeof(int*));
+    for (int i = 0; i &lt;= n; i++) {
+        dp[i] = (int*)malloc((m + 1) * sizeof(int));
+    }
+    for (int i = 0; i &lt;= n; i++) {
+        for (int j = 0; j &lt;= m; j++) {
+            if (i == 0 || j == 0) {
+                dp[i][j] = 0;
+            } else if (s[i - 1] == t[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            } else {
+                int a = dp[i - 1][j];
+                int b = dp[i][j - 1];
+                dp[i][j] = (a &gt; b) ? a : b;
+            }
+        }
+    }
+    int result = dp[n][m];
+    for (int i = 0; i &lt;= n; i++) {
+        free(dp[i]);
+    }
+    free(dp);
+    return result;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++
+#include &lt;string&gt;
+#include &lt;vector&gt;
+
+int lcsLength(const std::string&amp; s, const std::string&amp; t) {
+    int n = (int)s.size();
+    int m = (int)t.size();
+    std::vector&lt;std::vector&lt;int&gt;&gt; dp(n + 1, std::vector&lt;int&gt;(m + 1, 0));
+    for (int i = 1; i &lt;= n; i++) {
+        for (int j = 1; j &lt;= m; j++) {
+            if (s[i - 1] == t[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            } else {
+                dp[i][j] = std::max(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+    return dp[n][m];
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java
+int lcsLength(String s, String t) {
+    int n = s.length();
+    int m = t.length();
+    int[][] dp = new int[n + 1][m + 1];
+    for (int i = 1; i &lt;= n; i++) {
+        for (int j = 1; j &lt;= m; j++) {
+            if (s.charAt(i - 1) == t.charAt(j - 1)) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            } else {
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+    return dp[n][m];
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript
+function lcsLength(s, t) {
+    const n = s.length;
+    const m = t.length;
+    const dp = Array.from({ length: n + 1 }, () =&gt;
+        new Array(m + 1).fill(0)
+    );
+    for (let i = 1; i &lt;= n; i++) {
+        for (let j = 1; j &lt;= m; j++) {
+            if (s[i - 1] === t[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            } else {
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+    return dp[n][m];
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C#
+int LcsLength(string s, string t) {
+    int n = s.Length;
+    int m = t.Length;
+    var dp = new int[n + 1, m + 1];
+    for (int i = 1; i &lt;= n; i++) {
+        for (int j = 1; j &lt;= m; j++) {
+            if (s[i - 1] == t[j - 1]) {
+                dp[i, j] = dp[i - 1, j - 1] + 1;
+            } else {
+                dp[i, j] = System.Math.Max(dp[i - 1, j], dp[i, j - 1]);
+            }
+        }
+    }
+    return dp[n, m];
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python
+def lcs_length(s: str, t: str) -&gt; int:
+    n, m = len(s), len(t)
+    dp = [[0] * (m + 1) for _ in range(n + 1)]
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            if s[i - 1] == t[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] + 1
+            else:
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+    return dp[n][m]</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n · m)</strong> for strings of lengths <code>n</code> and <code>m</code>. &nbsp;|&nbsp;
+                Extra space: <strong>O(n · m)</strong> for the table (can be optimized to <strong>O(min(n, m))</strong>).
+            </div>
+        </div>
+
+        <h2>8.8 Quick Practice</h2>
+        <p>For each of the following, think about whether DP is appropriate and what the state/table would be:</p>
+        <ol>
+            <li>
+                Compute the number of unique paths in an <code>m × n</code> grid moving only right or down.<br />
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>1.</strong> Yes, DP works well.<br />
+                        State: <code>dp[i][j]</code> = number of ways to reach cell <code>(i, j)</code>.<br />
+                        Recurrence: <code>dp[i][j] = dp[i - 1][j] + dp[i][j - 1]</code> with first row/column = 1.<br />
+                        Time: <strong>O(m · n)</strong>. Space: <strong>O(m · n)</strong> (or <strong>O(min(m, n))</strong> with optimization).
+                    </div>
+                </details>
+            </li>
+            <li>
+                Determine if a subset of an array can sum exactly to a target value (subset sum problem).<br />
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>2.</strong> Yes, classic DP.<br />
+                        State: <code>dp[i][s]</code> = whether we can reach sum <code>s</code> using first <code>i</code> items.<br />
+                        Recurrence: either take or skip item <code>i</code>.<br />
+                        Time: <strong>O(n · S)</strong> where <code>S</code> is the target sum. Space: <strong>O(n · S)</strong> or <strong>O(S)</strong> optimized.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Find the minimum number of coins to make a given amount, given unlimited copies of coin denominations.<br />
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>3.</strong> Yes, unbounded knapsack style DP.<br />
+                        State: <code>dp[amount]</code> = minimum coins to make that amount (or infinity if impossible).<br />
+                        Recurrence: <code>dp[a] = min(dp[a], dp[a - coin] + 1)</code> for each coin and amount.<br />
+                        Time: <strong>O(n · A)</strong> where <code>A</code> is the target amount and <code>n</code> the number of coin types.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Given a string, split it into dictionary words to minimize the number of pieces (word break with cost).<br />
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>4.</strong> Yes, DP on prefixes.<br />
+                        State: <code>dp[i]</code> = minimum pieces needed to segment prefix <code>s[0..i)</code>.<br />
+                        Recurrence: try all dictionary words that end at <code>i</code>, update <code>dp[i]</code> from <code>dp[j]</code> where <code>j</code> is the start of the word.<br />
+                        Time depends on dictionary and matching method, often around <strong>O(n²)</strong> with naive checks.
+                    </div>
+                </details>
+            </li>
+            <li>
+                Why is naive recursion for Fibonacci <code>F(n)</code> exponential, while the DP versions above are linear?<br />
+                <details class="practice-details">
+                    <summary>Show answer...</summary>
+                    <div>
+                        <strong>5.</strong> Naive recursion recomputes the same subproblems many times, leading to roughly
+                        <strong>O(φⁿ)</strong> calls (exponential).<br />
+                        DP computes each <code>F(k)</code> exactly once and stores it, so total work is proportional
+                        to <code>n</code>, giving <strong>O(n)</strong> time.
+                    </div>
+                </details>
+            </li>
+        </ol>
+
+        <div class="top-nav">
+            <a href="problems-section8-dynamic-programming.html">
+                Problem Set for Section 8 Dynamic Programming →
+            </a>
+        </div>
+        <div class="next-section">
+            <a href="section7-hash-tables.html">
+                ← Back to Section 7
+            </a>
+            &nbsp;&nbsp;
+            <a href="section9-advanced-dp.html">
+                Next: Section 9 — Advanced DP Patterns →
+            </a>
+        </div>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Solutions - Section 3 Linked Lists</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css" />
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tabs, highlight init, prefs, cookies, etc.) -->
+    <script src="js/site.js"></script>
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="section10-practice.html">← Back to Practice Hub</a>
+            &nbsp;&nbsp;
+            <a href="problems-section3-linked-lists.html">← Back to Section 3 Problems</a>
+            &nbsp;&nbsp;
+            <a href="section3-linked-lists.html">View Section 3 Lesson →</a>
+        </div>
+
+        <div class="kicker">Section 3 - Solutions</div>
+        <h1>Linked Lists - Detailed Solutions</h1>
+        <p class="tagline">
+            Multi-language implementations for core linked list patterns:
+            basic pointer operations, reversal, cycle detection, middle-of-list,
+            merging sorted lists, and removing the N-th node from the end.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 1 - Basic Singly Linked List Operations           -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 1 - Basic Singly Linked List Operations</h2>
+            <p>
+                We assume the node definition:
+            </p>
+<pre><code class="language-c">typedef struct ListNode {
+    int val;
+    struct ListNode* next;
+} ListNode;</code></pre>
+
+            <p>
+                We want to implement three operations:
+            </p>
+            <ol>
+                <li>Insert a new node with value <code>x</code> at the head.</li>
+                <li>Insert a new node with value <code>x</code> after a given node <code>p</code>.</li>
+                <li>Delete the node immediately after a given node <code>p</code> (if it exists).</li>
+            </ol>
+            <p>
+                The key idea is that if we already have a pointer to the correct place, we only
+                need to adjust a constant number of pointers, independent of the list length.
+            </p>
+
+            <div class="code-example" data-example="s3p1">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 1</span>
+                        <span class="meta">Insert-head, insert-after, delete-after</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdlib.h&gt;
+
+typedef struct ListNode {
+    int val;
+    struct ListNode* next;
+} ListNode;
+
+// Insert at head: head pointer is updated via pointer-to-pointer
+void insert_head(ListNode** head, int x) {
+    ListNode* node = (ListNode*)malloc(sizeof(ListNode));
+    node-&gt;val = x;
+    node-&gt;next = *head;
+    *head = node;
+}
+
+// Insert after node p (if p is non-NULL)
+void insert_after(ListNode* p, int x) {
+    if (!p) return;
+    ListNode* node = (ListNode*)malloc(sizeof(ListNode));
+    node-&gt;val = x;
+    node-&gt;next = p-&gt;next;
+    p-&gt;next = node;
+}
+
+// Delete node immediately after p (if it exists)
+void delete_after(ListNode* p) {
+    if (!p || !p-&gt;next) return;
+    ListNode* doomed = p-&gt;next;
+    p-&gt;next = doomed-&gt;next;
+    free(doomed);
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;cstdlib&gt;
+
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode(int v) : val(v), next(nullptr) {}
+};
+
+// Insert at head: modify head by reference
+void insertHead(ListNode*& head, int x) {
+    ListNode* node = new ListNode(x);
+    node-&gt;next = head;
+    head = node;
+}
+
+// Insert after p
+void insertAfter(ListNode* p, int x) {
+    if (!p) return;
+    ListNode* node = new ListNode(x);
+    node-&gt;next = p-&gt;next;
+    p-&gt;next = node;
+}
+
+// Delete after p
+void deleteAfter(ListNode* p) {
+    if (!p || !p-&gt;next) return;
+    ListNode* doomed = p-&gt;next;
+    p-&gt;next = doomed-&gt;next;
+    delete doomed;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int v) { val = v; }
+}
+
+// Insert at head: return new head
+ListNode insertHead(ListNode head, int x) {
+    ListNode node = new ListNode(x);
+    node.next = head;
+    return node;
+}
+
+// Insert after node p (if non-null)
+void insertAfter(ListNode p, int x) {
+    if (p == null) return;
+    ListNode node = new ListNode(x);
+    node.next = p.next;
+    p.next = node;
+}
+
+// Delete node immediately after p
+void deleteAfter(ListNode p) {
+    if (p == null || p.next == null) return;
+    ListNode doomed = p.next;
+    p.next = doomed.next;
+    // In Java, garbage collector reclaims doomed
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+class ListNode {
+    constructor(val, next = null) {
+        this.val = val;
+        this.next = next;
+    }
+}
+
+// Insert at head: return new head
+function insertHead(head, x) {
+    const node = new ListNode(x, head);
+    return node;
+}
+
+function insertAfter(p, x) {
+    if (!p) return;
+    const node = new ListNode(x, p.next);
+    p.next = node;
+}
+
+function deleteAfter(p) {
+    if (!p || !p.next) return;
+    const doomed = p.next;
+    p.next = doomed.next;
+    // doomed is now unreachable and will be GCed
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+class ListNode {
+    public int Val;
+    public ListNode? Next;
+    public ListNode(int val, ListNode? next = null) {
+        Val = val;
+        Next = next;
+    }
+}
+
+ListNode InsertHead(ListNode? head, int x) {
+    return new ListNode(x, head);
+}
+
+void InsertAfter(ListNode? p, int x) {
+    if (p == null) return;
+    var node = new ListNode(x, p.Next);
+    p.Next = node;
+}
+
+void DeleteAfter(ListNode? p) {
+    if (p == null || p.Next == null) return;
+    var doomed = p.Next;
+    p.Next = doomed.Next;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import Optional
+
+class ListNode:
+    def __init__(self, val: int = 0, next: "Optional[ListNode]" = None) -&gt; None:
+        self.val = val
+        self.next = next
+
+def insert_head(head: Optional[ListNode], x: int) -&gt; ListNode:
+    return ListNode(x, head)
+
+def insert_after(p: Optional[ListNode], x: int) -&gt; None:
+    if p is None:
+        return
+    node = ListNode(x, p.next)
+    p.next = node
+
+def delete_after(p: Optional[ListNode]) -&gt; None:
+    if p is None or p.next is None:
+        return
+    doomed = p.next
+    p.next = doomed.next</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    All three operations touch a constant number of pointers → time <strong>O(1)</strong>.
+                    Extra space is also <strong>O(1)</strong> (aside from the node allocated on insert).
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 2 - Reverse a Singly Linked List                  -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 2 - Reverse a Singly Linked List</h2>
+            <p>
+                We reverse the list in-place by iterating once and flipping each node&apos;s
+                <code>next</code> pointer to point backward. We maintain three pointers:
+                <code>prev</code>, <code>curr</code>, and <code>next</code>.
+            </p>
+
+            <div class="code-example" data-example="s3p2">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 2</span>
+                        <span class="meta">Iterative in-place reversal</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+typedef struct ListNode {
+    int val;
+    struct ListNode* next;
+} ListNode;
+
+ListNode* reverse_list(ListNode* head) {
+    ListNode* prev = NULL;
+    ListNode* curr = head;
+
+    while (curr != NULL) {
+        ListNode* nxt = curr-&gt;next;
+        curr-&gt;next = prev;
+        prev = curr;
+        curr = nxt;
+    }
+    return prev;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode(int v) : val(v), next(nullptr) {}
+};
+
+ListNode* reverseList(ListNode* head) {
+    ListNode* prev = nullptr;
+    ListNode* curr = head;
+
+    while (curr != nullptr) {
+        ListNode* nxt = curr-&gt;next;
+        curr-&gt;next = prev;
+        prev = curr;
+        curr = nxt;
+    }
+    return prev;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int v) { val = v; }
+}
+
+ListNode reverseList(ListNode head) {
+    ListNode prev = null;
+    ListNode curr = head;
+
+    while (curr != null) {
+        ListNode nxt = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = nxt;
+    }
+    return prev;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+class ListNode {
+    constructor(val, next = null) {
+        this.val = val;
+        this.next = next;
+    }
+}
+
+function reverseList(head) {
+    let prev = null;
+    let curr = head;
+
+    while (curr !== null) {
+        const nxt = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = nxt;
+    }
+    return prev;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+class ListNode {
+    public int Val;
+    public ListNode? Next;
+    public ListNode(int val) { Val = val; }
+}
+
+ListNode? ReverseList(ListNode? head) {
+    ListNode? prev = null;
+    ListNode? curr = head;
+
+    while (curr != null) {
+        var nxt = curr.Next;
+        curr.Next = prev;
+        prev = curr;
+        curr = nxt;
+    }
+    return prev;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import Optional
+
+class ListNode:
+    def __init__(self, val: int = 0,
+                 next: "Optional[ListNode]" = None) -&gt; None:
+        self.val = val
+        self.next = next
+
+def reverse_list(head: Optional[ListNode]) -&gt; Optional[ListNode]:
+    prev: Optional[ListNode] = None
+    curr = head
+    while curr is not None:
+        nxt = curr.next
+        curr.next = prev
+        prev = curr
+        curr = nxt
+    return prev</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    We visit each node once → time <strong>O(n)</strong>.
+                    We only use a few pointers → extra space <strong>O(1)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 3 - Detect a Cycle (Floyd's Tortoise and Hare)    -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 3 - Detect a Cycle (Floyd&apos;s Tortoise and Hare)</h2>
+            <p>
+                Use two pointers: one moves one step at a time (slow), the other moves two steps
+                at a time (fast). If a cycle exists, they will eventually meet. If fast hits
+                <code>NULL</code>, there is no cycle.
+            </p>
+
+            <div class="code-example" data-example="s3p3">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 3</span>
+                        <span class="meta">Floyd&apos;s cycle detection</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdbool.h&gt;
+
+typedef struct ListNode {
+    int val;
+    struct ListNode* next;
+} ListNode;
+
+bool has_cycle(ListNode* head) {
+    if (head == NULL) return false;
+    ListNode* slow = head;
+    ListNode* fast = head;
+    while (fast != NULL &amp;&amp; fast-&gt;next != NULL) {
+        slow = slow-&gt;next;
+        fast = fast-&gt;next-&gt;next;
+        if (slow == fast) return true;
+    }
+    return false;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode(int v) : val(v), next(nullptr) {}
+};
+
+bool hasCycle(ListNode* head) {
+    if (!head) return false;
+    ListNode* slow = head;
+    ListNode* fast = head;
+
+    while (fast &amp;&amp; fast-&gt;next) {
+        slow = slow-&gt;next;
+        fast = fast-&gt;next-&gt;next;
+        if (slow == fast) return true;
+    }
+    return false;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int v) { val = v; }
+}
+
+boolean hasCycle(ListNode head) {
+    if (head == null) return false;
+    ListNode slow = head;
+    ListNode fast = head;
+    while (fast != null &amp;&amp; fast.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
+        if (slow == fast) return true;
+    }
+    return false;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+class ListNode {
+    constructor(val, next = null) {
+        this.val = val;
+        this.next = next;
+    }
+}
+
+function hasCycle(head) {
+    if (!head) return false;
+    let slow = head;
+    let fast = head;
+    while (fast !== null &amp;&amp; fast.next !== null) {
+        slow = slow.next;
+        fast = fast.next.next;
+        if (slow === fast) return true;
+    }
+    return false;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+class ListNode {
+    public int Val;
+    public ListNode? Next;
+    public ListNode(int val) { Val = val; }
+}
+
+bool HasCycle(ListNode? head) {
+    if (head == null) return false;
+    var slow = head;
+    var fast = head;
+    while (fast != null &amp;&amp; fast.Next != null) {
+        slow = slow!.Next!;
+        fast = fast.Next.Next!;
+        if (slow == fast) return true;
+    }
+    return false;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import Optional
+
+class ListNode:
+    def __init__(self, val: int = 0,
+                 next: "Optional[ListNode]" = None) -&gt; None:
+        self.val = val
+        self.next = next
+
+def has_cycle(head: Optional[ListNode]) -&gt; bool:
+    if head is None:
+        return False
+    slow = head
+    fast = head
+    while fast is not None and fast.next is not None:
+        slow = slow.next
+        fast = fast.next.next
+        if slow is fast:
+            return True
+    return False</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Both pointers traverse at most a constant multiple of the list length →
+                    time <strong>O(n)</strong>. Extra space is just a few pointers → <strong>O(1)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 4 - Find the Middle of a Linked List              -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 4 - Find the Middle of a Linked List</h2>
+            <p>
+                Use slow/fast pointers again. Slow moves one step each iteration, fast moves two.
+                When fast reaches the end, slow is at the middle. With this pattern, for even-length
+                lists we return the second middle node by convention.
+            </p>
+
+            <div class="code-example" data-example="s3p4">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 4</span>
+                        <span class="meta">Slow/fast pointers to find middle</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+typedef struct ListNode {
+    int val;
+    struct ListNode* next;
+} ListNode;
+
+ListNode* middle_node(ListNode* head) {
+    ListNode* slow = head;
+    ListNode* fast = head;
+
+    while (fast != NULL &amp;&amp; fast-&gt;next != NULL) {
+        slow = slow-&gt;next;
+        fast = fast-&gt;next-&gt;next;
+    }
+    return slow;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode(int v) : val(v), next(nullptr) {}
+};
+
+ListNode* middleNode(ListNode* head) {
+    ListNode* slow = head;
+    ListNode* fast = head;
+
+    while (fast &amp;&amp; fast-&gt;next) {
+        slow = slow-&gt;next;
+        fast = fast-&gt;next-&gt;next;
+    }
+    return slow;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int v) { val = v; }
+}
+
+ListNode middleNode(ListNode head) {
+    ListNode slow = head;
+    ListNode fast = head;
+
+    while (fast != null &amp;&amp; fast.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    return slow;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+class ListNode {
+    constructor(val, next = null) {
+        this.val = val;
+        this.next = next;
+    }
+}
+
+function middleNode(head) {
+    let slow = head;
+    let fast = head;
+
+    while (fast !== null &amp;&amp; fast.next !== null) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    return slow;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+class ListNode {
+    public int Val;
+    public ListNode? Next;
+    public ListNode(int val) { Val = val; }
+}
+
+ListNode? MiddleNode(ListNode? head) {
+    var slow = head;
+    var fast = head;
+
+    while (fast != null &amp;&amp; fast.Next != null) {
+        slow = slow!.Next;
+        fast = fast.Next.Next;
+    }
+    return slow;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import Optional
+
+class ListNode:
+    def __init__(self, val: int = 0,
+                 next: "Optional[ListNode]" = None) -&gt; None:
+        self.val = val
+        self.next = next
+
+def middle_node(head: Optional[ListNode]) -&gt; Optional[ListNode]:
+    slow = head
+    fast = head
+    while fast is not None and fast.next is not None:
+        slow = slow.next
+        fast = fast.next.next
+    return slow</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Each pointer traverses at most O(n) steps → time <strong>O(n)</strong>.
+                    Extra space is constant → <strong>O(1)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 5 - Merge Two Sorted Linked Lists                 -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 5 - Merge Two Sorted Linked Lists</h2>
+            <p>
+                Use a dummy head and a tail pointer. At each step, compare the current nodes
+                from <code>l1</code> and <code>l2</code>, attach the smaller one to
+                <code>tail</code>, and advance that list. At the end, attach the remainder.
+            </p>
+
+            <div class="code-example" data-example="s3p5">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 5</span>
+                        <span class="meta">Dummy head plus tail pointer</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+typedef struct ListNode {
+    int val;
+    struct ListNode* next;
+} ListNode;
+
+ListNode* merge_two_lists(ListNode* l1, ListNode* l2) {
+    ListNode dummy;
+    dummy.next = NULL;
+    ListNode* tail = &amp;dummy;
+
+    ListNode* a = l1;
+    ListNode* b = l2;
+    while (a != NULL &amp;&amp; b != NULL) {
+        if (a-&gt;val &lt;= b-&gt;val) {
+            tail-&gt;next = a;
+            a = a-&gt;next;
+        } else {
+            tail-&gt;next = b;
+            b = b-&gt;next;
+        }
+        tail = tail-&gt;next;
+    }
+    if (a != NULL) tail-&gt;next = a;
+    if (b != NULL) tail-&gt;next = b;
+
+    return dummy.next;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode(int v) : val(v), next(nullptr) {}
+};
+
+ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+    ListNode dummy(0);
+    ListNode* tail = &amp;dummy;
+
+    ListNode* a = l1;
+    ListNode* b = l2;
+    while (a &amp;&amp; b) {
+        if (a-&gt;val &lt;= b-&gt;val) {
+            tail-&gt;next = a;
+            a = a-&gt;next;
+        } else {
+            tail-&gt;next = b;
+            b = b-&gt;next;
+        }
+        tail = tail-&gt;next;
+    }
+    if (a) tail-&gt;next = a;
+    if (b) tail-&gt;next = b;
+
+    return dummy.next;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int v) { val = v; }
+}
+
+ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+    ListNode dummy = new ListNode(0);
+    ListNode tail = dummy;
+
+    ListNode a = l1;
+    ListNode b = l2;
+    while (a != null &amp;&amp; b != null) {
+        if (a.val &lt;= b.val) {
+            tail.next = a;
+            a = a.next;
+        } else {
+            tail.next = b;
+            b = b.next;
+        }
+        tail = tail.next;
+    }
+    if (a != null) tail.next = a;
+    if (b != null) tail.next = b;
+
+    return dummy.next;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+class ListNode {
+    constructor(val, next = null) {
+        this.val = val;
+        this.next = next;
+    }
+}
+
+function mergeTwoLists(l1, l2) {
+    const dummy = new ListNode(0);
+    let tail = dummy;
+
+    let a = l1;
+    let b = l2;
+    while (a !== null &amp;&amp; b !== null) {
+        if (a.val &lt;= b.val) {
+            tail.next = a;
+            a = a.next;
+        } else {
+            tail.next = b;
+            b = b.next;
+        }
+        tail = tail.next;
+    }
+    if (a !== null) tail.next = a;
+    if (b !== null) tail.next = b;
+
+    return dummy.next;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+class ListNode {
+    public int Val;
+    public ListNode? Next;
+    public ListNode(int val) { Val = val; }
+}
+
+ListNode? MergeTwoLists(ListNode? l1, ListNode? l2) {
+    var dummy = new ListNode(0);
+    var tail = dummy;
+
+    var a = l1;
+    var b = l2;
+    while (a != null &amp;&amp; b != null) {
+        if (a.Val &lt;= b.Val) {
+            tail.Next = a;
+            a = a.Next;
+        } else {
+            tail.Next = b;
+            b = b.Next;
+        }
+        tail = tail.Next!;
+    }
+    if (a != null) tail.Next = a;
+    if (b != null) tail.Next = b;
+
+    return dummy.Next;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import Optional
+
+class ListNode:
+    def __init__(self, val: int = 0,
+                 next: "Optional[ListNode]" = None) -&gt; None:
+        self.val = val
+        self.next = next
+
+def merge_two_lists(l1: Optional[ListNode],
+                    l2: Optional[ListNode]) -&gt; Optional[ListNode]:
+    dummy = ListNode(0)
+    tail = dummy
+
+    a = l1
+    b = l2
+    while a is not None and b is not None:
+        if a.val &lt;= b.val:
+            tail.next = a
+            a = a.next
+        else:
+            tail.next = b
+            b = b.next
+        tail = tail.next
+    if a is not None:
+        tail.next = a
+    if b is not None:
+        tail.next = b
+
+    return dummy.next</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Each node from both lists is processed exactly once →
+                    time <strong>O(n + m)</strong>. We only use a few pointers →
+                    extra space <strong>O(1)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr />
+
+        <!-- ========================================================= -->
+        <!-- Problem 6 - Remove N-th Node From the End                 -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 6 - Remove N-th Node From the End</h2>
+            <p>
+                Use a dummy head and two pointers. Advance the fast pointer
+                <code>n + 1</code> steps ahead of slow so there is a gap of
+                <code>n</code> nodes. Then move both until fast hits the end.
+                Slow will be just before the node to remove.
+            </p>
+
+            <div class="code-example" data-example="s3p6">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 6</span>
+                        <span class="meta">One-pass two-pointer removal</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+typedef struct ListNode {
+    int val;
+    struct ListNode* next;
+} ListNode;
+
+ListNode* remove_nth_from_end(ListNode* head, int n) {
+    ListNode dummy;
+    dummy.val = 0;
+    dummy.next = head;
+
+    ListNode* fast = &amp;dummy;
+    ListNode* slow = &amp;dummy;
+
+    for (int i = 0; i &lt;= n; i++) {
+        if (fast == NULL) return head; // n too large
+        fast = fast-&gt;next;
+    }
+
+    while (fast != NULL) {
+        fast = fast-&gt;next;
+        slow = slow-&gt;next;
+    }
+
+    ListNode* doomed = slow-&gt;next;
+    if (doomed != NULL) {
+        slow-&gt;next = doomed-&gt;next;
+        free(doomed);
+    }
+    return dummy.next;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode(int v) : val(v), next(nullptr) {}
+};
+
+ListNode* removeNthFromEnd(ListNode* head, int n) {
+    ListNode dummy(0);
+    dummy.next = head;
+    ListNode* fast = &amp;dummy;
+    ListNode* slow = &amp;dummy;
+
+    for (int i = 0; i &lt;= n; i++) {
+        if (!fast) return head; // n too large
+        fast = fast-&gt;next;
+    }
+
+    while (fast) {
+        fast = fast-&gt;next;
+        slow = slow-&gt;next;
+    }
+
+    ListNode* doomed = slow-&gt;next;
+    slow-&gt;next = doomed-&gt;next;
+    delete doomed;
+
+    return dummy.next;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int v) { val = v; }
+}
+
+ListNode removeNthFromEnd(ListNode head, int n) {
+    ListNode dummy = new ListNode(0);
+    dummy.next = head;
+    ListNode fast = dummy;
+    ListNode slow = dummy;
+
+    for (int i = 0; i &lt;= n; i++) {
+        if (fast == null) return head; // n too large
+        fast = fast.next;
+    }
+
+    while (fast != null) {
+        fast = fast.next;
+        slow = slow.next;
+    }
+
+    ListNode doomed = slow.next;
+    slow.next = doomed.next;
+    // doomed node is eventually GCed
+
+    return dummy.next;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+class ListNode {
+    constructor(val, next = null) {
+        this.val = val;
+        this.next = next;
+    }
+}
+
+function removeNthFromEnd(head, n) {
+    const dummy = new ListNode(0, head);
+    let fast = dummy;
+    let slow = dummy;
+
+    for (let i = 0; i &lt;= n; i++) {
+        if (fast === null) return head; // n too large
+        fast = fast.next;
+    }
+
+    while (fast !== null) {
+        fast = fast.next;
+        slow = slow.next;
+    }
+
+    const doomed = slow.next;
+    if (doomed !== null) {
+        slow.next = doomed.next;
+    }
+    return dummy.next;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+class ListNode {
+    public int Val;
+    public ListNode? Next;
+    public ListNode(int val) { Val = val; }
+}
+
+ListNode? RemoveNthFromEnd(ListNode? head, int n) {
+    var dummy = new ListNode(0) { Next = head };
+    var fast = dummy;
+    var slow = dummy;
+
+    for (int i = 0; i &lt;= n; i++) {
+        if (fast == null) return head; // n too large
+        fast = fast.Next!;
+    }
+
+    while (fast != null) {
+        fast = fast.Next!;
+        slow = slow.Next!;
+    }
+
+    var doomed = slow.Next;
+    if (doomed != null) {
+        slow.Next = doomed.Next;
+    }
+    return dummy.Next;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import Optional
+
+class ListNode:
+    def __init__(self, val: int = 0,
+                 next: "Optional[ListNode]" = None) -&gt; None:
+        self.val = val
+        self.next = next
+
+def remove_nth_from_end(head: Optional[ListNode], n: int) -&gt; Optional[ListNode]:
+    dummy = ListNode(0, head)
+    fast: Optional[ListNode] = dummy
+    slow: Optional[ListNode] = dummy
+
+    for _ in range(n + 1):
+        if fast is None:
+            return head
+        fast = fast.next
+
+    while fast is not None:
+        fast = fast.next
+        slow = slow.next  # type: ignore[assignment]
+
+    doomed = slow.next  # type: ignore[assignment]
+    if doomed is not None:
+        slow.next = doomed.next  # type: ignore[assignment]
+    return dummy.next</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    We traverse the list with a single pass (fast and slow) →
+                    time <strong>O(n)</strong>. We only use a few pointers and a dummy node →
+                    extra space <strong>O(1)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <div class="next-section">
+            <a href="problems-section3-linked-lists.html">
+                ← Back to Section 3 Problem Set
+            </a>
+            &nbsp;&nbsp;
+            <a href="section10-practice.html">
+                Back to Practice Hub →
+            </a>
+        </div>
+    </main>
+</body>
+
+</html>
