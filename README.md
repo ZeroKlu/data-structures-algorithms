@@ -42,4 +42,4 @@
 ### Who do I talk to?
 
 * Any questions/feedback can be addressed to the following
-    * [Zero Klu](mailto:zeroklu@protonmail.com?subject=Data%20Structures%20and%20Algorithms%20Tutorial&body=Hi%20ZeroKlu,%20I%20have%20a%20question%20or%20feedback%20for%20the%20Data%20Structures%20and%20Algorithms%20Tutorial.)
+    * [Zero Klu](mailto:zeroklu@protonmail.com?subject=Data%20Structures%20and%20Algorithms%20Tutorial&body=Hi%20ZeroKlu,%0d%0A%0d%0A%20I%20have%20a%20question%20or%20feedback%20for%20the%20Data%20Structures%20and%20Algorithms%20Tutorial.)
