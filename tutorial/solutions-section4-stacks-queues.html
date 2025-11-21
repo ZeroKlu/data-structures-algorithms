@@ -88,6 +88,10 @@
                         <span class="label">Solution 1</span>
                         <span class="meta">Stack of opening brackets</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s4p1">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -286,6 +290,10 @@ def is_valid(s: str) -&gt; bool:
                         <span class="label">Solution 2</span>
                         <span class="meta">Two stacks with lazy transfer</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s4p2">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -564,16 +572,20 @@ class MyQueue:
                         <span class="label">Solution 3</span>
                         <span class="meta">Monotonic decreasing stack</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s4p3">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
-                <div class="tab-bar">
-                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
-                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
-                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
-                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
-                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
-                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
-                </div>
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
 
                 <!-- C -->
                 <div class="code-panel" data-lang-panel="c">
@@ -743,6 +755,10 @@ def next_greater_elements(nums: List[int]) -&gt; List[int]:
                         <span class="label">Solution 4</span>
                         <span class="meta">Monotonic stack of indices</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s4p4">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -913,6 +929,10 @@ def daily_temperatures(temps: List[int]) -&gt; List[int]:
                         <span class="label">Solution 5</span>
                         <span class="meta">BFS with a queue</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s4p5">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -1178,6 +1198,10 @@ def level_order(root: Optional[TreeNode]) -&gt; List[List[int]]:
                         <span class="label">Solution 6</span>
                         <span class="meta">Monotonic deque</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s4p6">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -1380,6 +1404,435 @@ def max_sliding_window(nums: List[int], k: int) -&gt; List[int]:
                 Back to Practice Hub →
             </a>
         </div>
+
+        <!-- ======================= Understand-the-algorithm templates ======================= -->
+
+        <div class="deep-dive-template" id="understand-s4p1"
+            data-title="Step-by-step: Validate parentheses with a stack" hidden>
+            <p>
+                We want to check that every opening bracket has a matching closing bracket of the same type,
+                and that they close in the correct order. A stack is perfect for tracking the &quot;currently open&quot;
+                brackets.
+            </p>
+            <ol>
+                <li>
+                    <strong>Initialize an empty stack:</strong>
+                    <p>
+                        The stack will contain only opening brackets: <code>'('</code>, <code>'['</code>, <code>'{'</code>.
+                        The top of the stack is always the most recent unmatched opening bracket.
+                    </p>
+                </li>
+                <li>
+                    <strong>Process the string left to right:</strong>
+                    <ul>
+                        <li>If the current character is an <em>opening</em> bracket, push it onto the stack.</li>
+                        <li>If it is a <em>closing</em> bracket, we must match it with the top of the stack.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Handling closing brackets safely:</strong>
+                    <ul>
+                        <li>
+                            If a closing bracket appears when the stack is empty, there is no opening bracket to match it →
+                            the string is invalid.
+                        </li>
+                        <li>
+                            Otherwise, pop the top opening bracket and check that it is the correct partner
+                            (e.g., <code>'('</code> with <code>')'</code>, <code>'['</code> with <code>']'</code>).
+                            If it doesn&apos;t match, return <code>false</code>.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>End of string: is the stack empty?</strong>
+                    <p>
+                        After processing all characters:
+                    </p>
+                    <ul>
+                        <li>
+                            If the stack is empty, every opening bracket had a matching closing bracket in the right order →
+                            return <code>true</code>.
+                        </li>
+                        <li>
+                            If the stack is non-empty, some openings were never closed → return <code>false</code>.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Why this guarantees correctness:</strong>
+                    <p>
+                        The stack enforces <em>LIFO</em> (last-in, first-out) behavior. The last opening bracket we saw
+                        must be the first one to be closed. Matching each closing bracket with the top of the stack
+                        enforces both correct pairing and correct nesting order.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s4p2"
+            data-title="Step-by-step: Queue using two stacks (amortized O(1))" hidden>
+            <p>
+                The challenge is to simulate FIFO queue behavior using two LIFO stacks.
+                We solve this by separating responsibilities into an <code>in</code> stack and an <code>out</code> stack.
+            </p>
+            <ol>
+                <li>
+                    <strong>Two stacks, two roles:</strong>
+                    <ul>
+                        <li><code>in</code> stack: where we push new elements on <code>enqueue(x)</code>.</li>
+                        <li><code>out</code> stack: where we pop elements for <code>dequeue()</code> and peek for <code>front()</code>.</li>
+                    </ul>
+                    <p>
+                        Conceptually, <code>in</code> holds the &quot;back&quot; of the queue, and <code>out</code> holds the &quot;front&quot;.
+                    </p>
+                </li>
+                <li>
+                    <strong>Enqueue is simple:</strong>
+                    <p>
+                        To enqueue <code>x</code>, just push it onto <code>in</code>. This is O(1) time.
+                        No work is done on <code>out</code> during enqueue.
+                    </p>
+                </li>
+                <li>
+                    <strong>Front/dequeue with lazy transfer:</strong>
+                    <ul>
+                        <li>
+                            If <code>out</code> is <strong>not</strong> empty, the queue front is simply <code>out.top()</code>.
+                            Dequeue pops from <code>out</code>.
+                        </li>
+                        <li>
+                            If <code>out</code> <strong>is</strong> empty, we must refill it:
+                            repeatedly pop from <code>in</code> and push onto <code>out</code>.
+                        </li>
+                    </ul>
+                    <p>
+                        This reversal makes the oldest element (the bottom of <code>in</code>) end up on top of <code>out</code>,
+                        which matches the queue front.
+                    </p>
+                </li>
+                <li>
+                    <strong>Why amortized O(1) time?</strong>
+                    <p>
+                        Each element moves at most twice:
+                    </p>
+                    <ul>
+                        <li>Once from &quot;nowhere&quot; into <code>in</code> on enqueue.</li>
+                        <li>Once from <code>in</code> to <code>out</code> during a transfer, and eventually out of the queue.</li>
+                    </ul>
+                    <p>
+                        There is no way for an element to bounce back and forth. So the total number of stack operations is
+                        O(number of operations), yielding amortized O(1) time.
+                    </p>
+                </li>
+                <li>
+                    <strong>Empty check:</strong>
+                    <p>
+                        The queue is empty exactly when <em>both</em> stacks are empty:
+                        <code>in.empty() &amp;&amp; out.empty()</code>.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s4p3"
+            data-title="Step-by-step: Next greater element via a monotonic stack" hidden>
+            <p>
+                We want, for each index <code>i</code>, the value of the next strictly larger element to the right.
+                A monotonic stack lets us solve this in linear time by scanning from right to left.
+            </p>
+            <ol>
+                <li>
+                    <strong>Why scan from right to left?</strong>
+                    <p>
+                        When we stand at position <code>i</code>, the next greater element must lie somewhere
+                        in <code>[i+1 .. n-1]</code>. By scanning from right to left, we&apos;ve already processed all
+                        those positions and stored useful information in the stack.
+                    </p>
+                </li>
+                <li>
+                    <strong>What the stack stores:</strong>
+                    <ul>
+                        <li>The stack holds candidate values for &quot;next greater&quot;.</li>
+                        <li>It is kept in <em>strictly decreasing</em> order from bottom to top.</li>
+                    </ul>
+                    <p>
+                        That means the top of the stack is always the smallest candidate that is still greater than
+                        all elements to its right that survived popping.
+                    </p>
+                </li>
+                <li>
+                    <strong>Processing index i:</strong>
+                    <ol>
+                        <li>Let <code>x = nums[i]</code>.</li>
+                        <li>
+                            While the stack is not empty and <code>stack.top() &lt;= x</code>,
+                            pop — those values cannot be &quot;next greater&quot; for <code>x</code> or for any earlier
+                            elements, because <code>x</code> is closer and at least as large.
+                        </li>
+                        <li>
+                            After popping, if the stack is non-empty, its top is the next greater value for <code>x</code>;
+                            if empty, there is no greater value to the right → store <code>-1</code>.
+                        </li>
+                        <li>Push <code>x</code> onto the stack as a candidate for earlier indices.</li>
+                    </ol>
+                </li>
+                <li>
+                    <strong>Why this is O(n):</strong>
+                    <p>
+                        Each element is pushed onto the stack once, and can be popped at most once.
+                        There are at most <code>2n</code> stack operations, so the algorithm is linear.
+                    </p>
+                </li>
+                <li>
+                    <strong>Intuition:</strong>
+                    <p>
+                        The stack summarizes the &quot;future&quot; for each position:
+                        it keeps only the important larger elements in decreasing order, discarding any element that
+                        is dominated by a closer or larger element.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s4p4"
+            data-title="Step-by-step: Daily temperatures with a stack of indices" hidden>
+            <p>
+                For each day, we want the number of days until a warmer temperature. This is a classic
+                next-greater-element variant, but instead of storing the next value, we store the distance in days.
+            </p>
+            <ol>
+                <li>
+                    <strong>Monotonic stack of indices:</strong>
+                    <p>
+                        We use a stack that holds <em>indices</em>, not temperatures. For indices on the stack:
+                    </p>
+                    <ul>
+                        <li>Their temperatures are in strictly decreasing order from bottom to top.</li>
+                        <li>
+                            Each index on the stack hasn&apos;t yet found a warmer day to its right.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Scan from left to right:</strong>
+                    <p>
+                        For each day <code>i</code> with temperature <code>temps[i]</code>:
+                    </p>
+                    <ul>
+                        <li>
+                            While the stack is not empty and <code>temps[i] &gt; temps[stack.top()]</code>:
+                            <ul>
+                                <li>Let <code>idx = stack.pop()</code> be a previous cooler day.</li>
+                                <li>
+                                    We just found the next warmer day for <code>idx</code> at <code>i</code>,
+                                    so <code>ans[idx] = i - idx</code>.
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Push <code>i</code> onto the stack.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Days that never get popped:</strong>
+                    <p>
+                        If some indices remain in the stack after the loop finishes, there is no warmer day for them
+                        in the future. They are already initialized to 0 in the answer, which is exactly what we want.
+                    </p>
+                </li>
+                <li>
+                    <strong>Why decreasing order matters:</strong>
+                    <p>
+                        Keeping temperatures strictly decreasing means:
+                    </p>
+                    <ul>
+                        <li>
+                            As soon as we encounter a warmer day, it will be warmer than every index on the stack
+                            that is cooler or equal.
+                        </li>
+                        <li>
+                            So a single pass through the array suffices to resolve all previous cooler days that
+                            need this new warmer day.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Complexity reasoning:</strong>
+                    <p>
+                        Each day&apos;s index is pushed once and popped at most once.
+                        No index ever returns to the stack after being popped, giving overall O(n) time.
+                        The stack and answer arrays consume O(n) extra space.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s4p5"
+            data-title="Step-by-step: Level-order traversal (BFS) with a queue" hidden>
+            <p>
+                Level-order traversal is just breadth-first search (BFS) on a tree, visiting nodes one level at a time
+                from top to bottom.
+            </p>
+            <ol>
+                <li>
+                    <strong>Use a queue for BFS:</strong>
+                    <p>
+                        A queue naturally models &quot;first come, first served&quot;:
+                        nodes discovered earlier are processed earlier. This aligns perfectly with level-by-level traversal.
+                    </p>
+                </li>
+                <li>
+                    <strong>Start with the root:</strong>
+                    <ul>
+                        <li>If the root is <code>null</code>, the result is an empty list.</li>
+                        <li>Otherwise, enqueue the root node to start the BFS.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Process level by level using queue size:</strong>
+                    <ol>
+                        <li>
+                            At the beginning of each level, record <code>levelSize = queue.size()</code>.
+                            These are exactly the nodes on the current level.
+                        </li>
+                        <li>
+                            Create an empty <code>level</code> list.
+                        </li>
+                        <li>
+                            Repeat <code>levelSize</code> times:
+                            <ul>
+                                <li>Dequeue a node.</li>
+                                <li>Add its value to <code>level</code>.</li>
+                                <li>Enqueue its non-null left and right children.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            After consuming <code>levelSize</code> nodes, append <code>level</code> to the result.
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    <strong>When does BFS stop?</strong>
+                    <p>
+                        The loop continues until the queue becomes empty, meaning there are no more nodes to visit.
+                    </p>
+                </li>
+                <li>
+                    <strong>Why this gives level order:</strong>
+                    <p>
+                        Because children are enqueued <em>after</em> their parents and processed in FIFO order, all nodes
+                        at depth <code>d</code> are processed (and grouped) before nodes at depth <code>d+1</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Complexity:</strong>
+                    <p>
+                        Each node is:
+                    </p>
+                    <ul>
+                        <li>Enqueued once when discovered.</li>
+                        <li>Dequeued once when processed.</li>
+                    </ul>
+                    <p>
+                        So the total time is O(n), and the queue and result lists need O(n) space in the worst case.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s4p6"
+            data-title="Step-by-step: Sliding window maximum with a monotonic deque" hidden>
+            <p>
+                We want the maximum in every window of length <code>k</code> as we slide across the array.
+                Doing a full scan per window would be O(nk). The trick is to keep a deque of <em>indices</em>
+                that always represents the window&apos;s candidates for the maximum.
+            </p>
+            <ol>
+                <li>
+                    <strong>What the deque stores:</strong>
+                    <ul>
+                        <li>
+                            It stores indices in <em>decreasing order of their values</em>:
+                            <code>nums[dq[0]] &gt;= nums[dq[1]] &gt;= ...</code>
+                        </li>
+                        <li>
+                            All indices are within the current window range <code>[i - k + 1 .. i]</code>.
+                        </li>
+                        <li>The front <code>dq[0]</code> is always the index of the current window&apos;s maximum.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Step 1 — Remove indices that fall out of the window:</strong>
+                    <p>
+                        For a new index <code>i</code>, the window left boundary is <code>i - k + 1</code>.
+                        Any index <code>j &lt; i - k + 1</code> is no longer in the window.
+                    </p>
+                    <ul>
+                        <li>
+                            While the front of the deque <code>dq[0]</code> is too old (i.e., <code>dq[0] &lt;= i - k</code>),
+                            pop it from the front.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Step 2 — Maintain decreasing values at the back:</strong>
+                    <p>
+                        The new element <code>nums[i]</code> should join the deque as a candidate.
+                        But any existing candidate with a value less than or equal to <code>nums[i]</code> can never become
+                        a window maximum in the future, because <code>nums[i]</code> is:
+                    </p>
+                    <ul>
+                        <li>To the right of them (will stay in the window at least as long).</li>
+                        <li>Greater or equal in value.</li>
+                    </ul>
+                    <p>
+                        Therefore, while the back of the deque has indices <code>j</code> with
+                        <code>nums[j] &lt;= nums[i]</code>, pop them from the back.
+                    </p>
+                </li>
+                <li>
+                    <strong>Step 3 — Add the new index and record the max:</strong>
+                    <ul>
+                        <li>Append <code>i</code> to the back of the deque.</li>
+                        <li>
+                            Once <code>i &gt;= k - 1</code>, the current window is full, and the maximum is
+                            <code>nums[dq[0]]</code>. Append that value to the output.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Why the algorithm is O(n):</strong>
+                    <p>
+                        Each index is:
+                    </p>
+                    <ul>
+                        <li>Pushed onto the deque exactly once.</li>
+                        <li>Popped from either the front or back at most once.</li>
+                    </ul>
+                    <p>
+                        That means the total number of deque operations is O(n), so the overall time is linear.
+                    </p>
+                </li>
+                <li>
+                    <strong>Intuition:</strong>
+                    <p>
+                        The deque acts like a &quot;compressed&quot; representation of window values:
+                        it keeps only those elements that are still relevant candidates for being the maximum,
+                        discarding anything that becomes dominated by a newer, larger value.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <!-- ======================= Modal shell reused by all buttons ======================= -->
+
+        <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title"></h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
     </main>
 </body>
 
