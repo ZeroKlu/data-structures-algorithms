@@ -735,7 +735,7 @@ def subarray_sum(nums: List[int], k: int) -&gt; int:
                 <li>Return the number of <strong>unique value pairs</strong> <code>(a, b)</code> such that <code>a + b == target</code>.</li>
             </ol>
 
-            <!-- ----------------- Part 1: indices -------------------- -->
+            <!-- ================ Part 1: indices ================ -->
             <h3>Part 1 - Return Indices (Any One Pair)</h3>
             <p>
                 Use a map from value to index. For each element, check if <code>target - nums[i]</code> is
@@ -869,7 +869,7 @@ def two_sum_indices(nums: List[int], target: int) -&gt; List[int]:
                 </div>
             </div>
 
-            <!-- ----------------- Part 2: unique pairs ---------------- -->
+            <!-- ================ Part 2: unique pairs ================ -->
             <h3>Part 2 - Count Unique Value Pairs</h3>
             <p>
                 Use a set <code>seen</code> for values we have visited, and another set (or encoding) to
