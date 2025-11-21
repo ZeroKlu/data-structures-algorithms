@@ -5,7 +5,18 @@
 ### What is this repository for?
 
 * Short tutorial on data structures and algorithms
-* Includes multi-language code samples, Big-O analysis, and quick practice questions
+* Includes multi-language code samples, Big-O analysis, quick practice questions,
+  and problem sets with hints and solutions.
+* Lessons:
+    * Foundations - Big-O and Complexity
+    * Arrays & Strings
+    * Linked Lists
+    * Stacks & Queues
+    * Trees & Graphs
+    * Heaps & Priority Queues
+    * Hash Tables
+    * Dynamic Programming
+    * Advanced DP Patterns
 
 ### Project Information
 
@@ -13,8 +24,8 @@
 
 ### Setup/Requirements
 
-* List of requirements for project:
-    * No special requirements
+* No special requirements for this project
+* HTML tutorial files display best in Chromium-based browsers
 
 ### Known Conflicts/Compatibility Notes
 
@@ -26,7 +37,7 @@
 
 ### Version History
 
-* 11/20/2025 - Initial release
+* 11/21/2025 - Initial release (v1.0.0)
 
 ### Who do I talk to?
 
