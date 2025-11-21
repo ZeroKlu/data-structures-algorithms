@@ -28,6 +28,8 @@
 
     <!-- Site scripts (tabs, highlight init, prefs, cookies, etc.) -->
     <script src="js/site.js"></script>
+
+    <!-- Favicon -->
     <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
 </head>
 
@@ -77,6 +79,10 @@
                         <span class="label">Problem 1</span>
                         <span class="meta">Preorder, Inorder, Postorder traversals</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s5p1">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -385,6 +391,10 @@ def postorder(root: Optional[TreeNode]) -&gt; List[int]:
                         <span class="label">Problem 2</span>
                         <span class="meta">Height and height-balanced check</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s5p2">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -649,6 +659,10 @@ def is_balanced(root: Optional[TreeNode]) -&gt; bool:
                         <span class="label">Problem 3</span>
                         <span class="meta">Range-based BST validation</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s5p3">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -831,6 +845,10 @@ def is_valid_bst(root: Optional[TreeNode]) -&gt; bool:
                         <span class="label">Problem 4</span>
                         <span class="meta">Root-to-leaf path sum equals target</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s5p4">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -998,6 +1016,10 @@ def has_path_sum(root: Optional[TreeNode], target_sum: int) -&gt; bool:
                         <span class="label">Problem 5</span>
                         <span class="meta">Iterative LCA using BST property</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s5p5">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -1200,6 +1222,10 @@ def lowest_common_ancestor(root: Optional[TreeNode],
                         <span class="label">Problem 6</span>
                         <span class="meta">Preorder with null markers</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s5p6">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -1560,6 +1586,430 @@ class Codec:
                 Back to Practice Hub →
             </a>
         </div>
+
+        <!-- ======================= Understand-the-algorithm templates ======================= -->
+
+        <div class="deep-dive-template" id="understand-s5p1"
+            data-title="Step-by-step: Tree traversals (preorder, inorder, postorder)" hidden>
+            <p>
+                Traversals are about visiting every node in a binary tree in a particular order.
+                The three classic DFS orders differ only in <em>when</em> you process the current node
+                relative to its children.
+            </p>
+            <ol>
+                <li>
+                    <strong>Think recursively:</strong>
+                    <p>
+                        Every node &quot;sees&quot; a smaller tree: itself as the root, plus its left and right subtrees.
+                        A recursive function can process a node and then recursively process its children.
+                    </p>
+                </li>
+                <li>
+                    <strong>Preorder (root, left, right):</strong>
+                    <ul>
+                        <li>Visit the current node first.</li>
+                        <li>Then traverse the left subtree.</li>
+                        <li>Then traverse the right subtree.</li>
+                    </ul>
+                    <p>
+                        This order is useful when you want to serialize the structure, or when the parent
+                        must be handled before its children.
+                    </p>
+                </li>
+                <li>
+                    <strong>Inorder (left, root, right):</strong>
+                    <ul>
+                        <li>Traverse the left subtree.</li>
+                        <li>Visit the current node.</li>
+                        <li>Traverse the right subtree.</li>
+                    </ul>
+                    <p>
+                        For a valid BST, inorder traversal visits values in <em>sorted</em> ascending order,
+                        which is why it is fundamental for BST-related tasks.
+                    </p>
+                </li>
+                <li>
+                    <strong>Postorder (left, right, root):</strong>
+                    <ul>
+                        <li>Traverse the left subtree.</li>
+                        <li>Traverse the right subtree.</li>
+                        <li>Visit the current node last.</li>
+                    </ul>
+                    <p>
+                        This is often used when you need to compute something bottom-up (e.g., subtree sizes,
+                        heights, or when freeing nodes from memory).
+                    </p>
+                </li>
+                <li>
+                    <strong>Base case and combination:</strong>
+                    <p>
+                        The base case is always &quot;if node is null, do nothing&quot;.
+                        At a non-null node, you just follow the chosen order of:
+                        &quot;recurse left&quot;, &quot;recurse right&quot;, and &quot;process node&quot;.
+                        Since each node is visited exactly once per traversal, the time is O(n).
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s5p2"
+            data-title="Step-by-step: Height and balance of a binary tree" hidden>
+            <p>
+                A tree is height-balanced if every node’s left and right subtrees differ in height by at most 1,
+                and <em>both</em> subtrees are themselves balanced.
+                We can compute height and balance together in a single bottom-up pass.
+            </p>
+            <ol>
+                <li>
+                    <strong>Define height precisely:</strong>
+                    <p>
+                        In this implementation, an empty tree has height <code>-1</code>,
+                        and a leaf node has height <code>0</code>.
+                        Every edge down the tree increases height by 1.
+                    </p>
+                </li>
+                <li>
+                    <strong>What information we need from children:</strong>
+                    <p>
+                        For each node, we need:
+                    </p>
+                    <ul>
+                        <li>The height of its left subtree.</li>
+                        <li>The height of its right subtree.</li>
+                        <li>Whether each subtree is already balanced.</li>
+                    </ul>
+                    <p>
+                        This naturally suggests a helper that returns a pair: <code>(balanced, height)</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Recursive strategy for a node:</strong>
+                    <ol>
+                        <li>If the node is <code>null</code>, it is balanced with height <code>-1</code>.</li>
+                        <li>Recursively compute info for the left subtree.</li>
+                        <li>If the left subtree is unbalanced, you can immediately propagate &quot;unbalanced&quot; up.</li>
+                        <li>Recursively compute info for the right subtree.</li>
+                        <li>If the right subtree is unbalanced, propagate &quot;unbalanced&quot; up.</li>
+                        <li>
+                            Otherwise, compare left and right heights. If the difference is more than 1,
+                            mark this node as unbalanced; otherwise balanced.
+                        </li>
+                        <li>The height at this node is <code>1 + max(leftHeight, rightHeight)</code>.</li>
+                    </ol>
+                </li>
+                <li>
+                    <strong>Why this is efficient:</strong>
+                    <p>
+                        Each node is processed once, and its height is computed once.
+                        We avoid recomputing subtree heights many times, unlike a naive solution that
+                        would call a separate <code>height()</code> inside every balance check.
+                    </p>
+                </li>
+                <li>
+                    <strong>Common pitfalls:</strong>
+                    <ul>
+                        <li>Forgetting to short-circuit when a subtree is already unbalanced.</li>
+                        <li>Using inconsistent height definitions (e.g., empty tree height 0 in one place and -1 in another).</li>
+                    </ul>
+                    <p>
+                        Keeping a consistent height convention and bundling height+balance together
+                        keeps the implementation simple and correct.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s5p3"
+            data-title="Step-by-step: Validating a BST using value ranges" hidden>
+            <p>
+                The key idea: in a BST, every node must be within a valid range that comes from all of its ancestors,
+                not just its direct parent. We carry that range down the recursion.
+            </p>
+            <ol>
+                <li>
+                    <strong>BST property recap:</strong>
+                    <ul>
+                        <li>All values in the left subtree of a node with value <code>v</code> must be <em>strictly less</em> than <code>v</code>.</li>
+                        <li>All values in the right subtree must be <em>strictly greater</em> than <code>v</code>.</li>
+                    </ul>
+                    <p>
+                        This constraint applies recursively at <em>every</em> node.
+                    </p>
+                </li>
+                <li>
+                    <strong>Why parent-only checks are not enough:</strong>
+                    <p>
+                        It is not sufficient to only check that <code>node.left.val &lt; node.val</code>
+                        and <code>node.right.val &gt; node.val</code>.
+                        A violation can happen deeper in the subtree relative to an ancestor’s value.
+                    </p>
+                </li>
+                <li>
+                    <strong>Carrying a valid range (low, high):</strong>
+                    <ul>
+                        <li>
+                            For each node, we keep track of the minimum exclusive bound <code>low</code> and maximum
+                            exclusive bound <code>high</code>.
+                        </li>
+                        <li>The node’s value must satisfy <code>low &lt; node.val &lt; high</code>.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>How the range updates while recursing:</strong>
+                    <ol>
+                        <li>At the root, the range is <code>(-∞, +∞)</code>.</li>
+                        <li>
+                            When we go to the left child of value <code>v</code>, its range becomes
+                            <code>(low, v)</code> because it must be smaller than <code>v</code> while still respecting the lower bound.
+                        </li>
+                        <li>
+                            When we go to the right child, its range becomes
+                            <code>(v, high)</code>.
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    <strong>Base and failure cases:</strong>
+                    <ul>
+                        <li>If we reach a <code>null</code> node, it is valid by definition.</li>
+                        <li>
+                            If <code>node.val</code> is outside its range (≤ <code>low</code> or ≥ <code>high</code>),
+                            we immediately return <code>false</code>.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Why this guarantees correctness:</strong>
+                    <p>
+                        Every node’s value is checked against all relevant constraints coming from its ancestors
+                        via the (low, high) bounds. If any node violates the global BST ordering,
+                        it will violate its local range and cause the whole check to fail.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s5p4"
+            data-title="Step-by-step: Root-to-leaf path sum via DFS" hidden>
+            <p>
+                We want to know whether there exists a root-to-leaf path whose node values add up to a target sum.
+                A simple DFS with a &quot;remaining sum&quot; variable is enough.
+            </p>
+            <ol>
+                <li>
+                    <strong>What counts as a valid path?</strong>
+                    <ul>
+                        <li>The path must start at the root.</li>
+                        <li>The path must end at a <em>leaf</em> (a node with no children).</li>
+                        <li>The sum of all values on that path must equal <code>targetSum</code>.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Recursive viewpoint:</strong>
+                    <p>
+                        If you are at a node with value <code>v</code> and a remaining sum <code>S</code> that you need to achieve:
+                    </p>
+                    <ul>
+                        <li>The next remaining sum for its children is <code>S - v</code>.</li>
+                        <li>
+                            You then ask either child: &quot;Is there a root-to-leaf path starting from you that sums to this new remaining value?&quot;
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Base cases:</strong>
+                    <ul>
+                        <li>If the node is <code>null</code>, there is no path, so return <code>false</code>.</li>
+                        <li>
+                            If the node is a leaf (no left or right child), check whether
+                            <code>node.val == remainingSum</code>. If so, we found a valid path.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Recursive step:</strong>
+                    <ol>
+                        <li>Compute <code>remaining = targetSum - node.val</code>.</li>
+                        <li>
+                            Recursively test the left subtree with <code>remaining</code>.</li>
+                        <li>
+                            Recursively test the right subtree with <code>remaining</code>.</li>
+                        <li>
+                            If either recursive call returns <code>true</code>, there exists a satisfying path.
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    <strong>Why this covers all root-to-leaf paths:</strong>
+                    <p>
+                        DFS explores <em>every</em> path from root to each leaf exactly once.
+                        For each path, we keep track of the remaining sum as we go down.
+                        If a path would ever overshoot the target, the equality check at the leaf simply fails.
+                    </p>
+                </li>
+                <li>
+                    <strong>Time and space intuition:</strong>
+                    <p>
+                        Each node is visited at most once, so the time is O(n). The recursion depth is bounded
+                        by the height of the tree, so the extra stack space is O(h).
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s5p5"
+            data-title="Step-by-step: LCA in a BST using the ordering property" hidden>
+            <p>
+                For a general binary tree, lowest common ancestor (LCA) requires a more complex search.
+                In a BST, the node values are ordered, which gives us a simple, iterative O(h) solution.
+            </p>
+            <ol>
+                <li>
+                    <strong>BST ordering recap:</strong>
+                    <ul>
+                        <li>Left subtree values &lt; node value.</li>
+                        <li>Right subtree values &gt; node value.</li>
+                    </ul>
+                    <p>
+                        This means if we know two target values <code>p</code> and <code>q</code>,
+                        we can compare them directly to the current node’s value to decide which direction to move.
+                    </p>
+                </li>
+                <li>
+                    <strong>Key observation for LCA:</strong>
+                    <p>
+                        For the LCA node <code>L</code>:
+                    </p>
+                    <ul>
+                        <li><code>p</code> and <code>q</code> must lie in different subtrees of <code>L</code>, or</li>
+                        <li>One of them is equal to <code>L</code> itself, and the other lies in one of its subtrees.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Walking down the tree:</strong>
+                    <ol>
+                        <li>Start at <code>node = root</code>.</li>
+                        <li>
+                            If both <code>p.val</code> and <code>q.val</code> are <em>less</em> than <code>node.val</code>,
+                            then both targets must lie in the left subtree → move <code>node = node.left</code>.
+                        </li>
+                        <li>
+                            If both <code>p.val</code> and <code>q.val</code> are <em>greater</em> than <code>node.val</code>,
+                            they must lie in the right subtree → move <code>node = node.right</code>.
+                        </li>
+                        <li>
+                            Otherwise (they are on different sides, or one equals <code>node.val</code>),
+                            the current <code>node</code> is the first point where paths to <code>p</code> and <code>q</code> diverge:
+                            that is the LCA.
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    <strong>Why the first divergence is the LCA:</strong>
+                    <p>
+                        As long as <code>p</code> and <code>q</code> are both on the same side of the current node,
+                        we know that their common ancestor must lie deeper in that direction.
+                        The moment they split (or one equals the current node), we have found the lowest node that has
+                        both in its subtree.
+                    </p>
+                </li>
+                <li>
+                    <strong>Advantages of this method:</strong>
+                    <ul>
+                        <li>Purely iterative, so constant extra space.</li>
+                        <li>Runs in O(h) time where <code>h</code> is the height of the BST (O(log n) if balanced).</li>
+                        <li>No need to store paths or use hash sets of ancestors.</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s5p6"
+            data-title="Step-by-step: Serialize &amp; deserialize a tree with preorder + null markers" hidden>
+            <p>
+                We want a way to turn a tree into a string (serialize) and then rebuild the <em>exact</em> same tree
+                from that string (deserialize). Preorder traversal with explicit null markers is a simple and robust approach.
+            </p>
+            <ol>
+                <li>
+                    <strong>What information we must preserve:</strong>
+                    <p>
+                        It’s not enough to preserve just the node values; we must also preserve the tree’s <em>shape</em>.
+                        Two different shapes can have the same values in different places.
+                    </p>
+                </li>
+                <li>
+                    <strong>Preorder with a special null symbol:</strong>
+                    <ul>
+                        <li>Visit nodes in preorder: <code>root, left, right</code>.</li>
+                        <li>Whenever you see a <code>null</code> child, output a special marker (e.g. <code>#</code>).</li>
+                        <li>Separate tokens by commas so they are easy to parse later.</li>
+                    </ul>
+                    <p>
+                        Example: a tree might serialize to something like <code>1,2,#,#,3,#,#</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Why this representation is unambiguous:</strong>
+                    <p>
+                        For each non-null node token, we know the <em>next</em> tokens describe, in order,
+                        the entire left subtree and then the entire right subtree, including their null markers.
+                        This recursive structure uniquely determines both shape and values.
+                    </p>
+                </li>
+                <li>
+                    <strong>Serialization algorithm (DFS):</strong>
+                    <ol>
+                        <li>If the current node is <code>null</code>, append <code>"#,"</code> and return.</li>
+                        <li>Otherwise, append its value plus a comma.</li>
+                        <li>Recursively serialize the left child.</li>
+                        <li>Recursively serialize the right child.</li>
+                    </ol>
+                </li>
+                <li>
+                    <strong>Deserialization algorithm (consume tokens):</strong>
+                    <ol>
+                        <li>Split the serialized string on commas into a list/queue of tokens.</li>
+                        <li>Recursively build the tree:
+                            <ul>
+                                <li>Take the next token.</li>
+                                <li>If it is <code>#</code> (or empty), return <code>null</code>.</li>
+                                <li>Otherwise, create a node with that value.</li>
+                                <li>Recursively build its left child from the remaining tokens.</li>
+                                <li>Recursively build its right child from the remaining tokens.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    <strong>Why serialize and deserialize are inverses:</strong>
+                    <p>
+                        The preorder process defines a unique token sequence for a given tree.
+                        The deserializer consumes tokens in exactly the same recursive pattern they were produced in.
+                        As a result, every node and every null pointer is reconstructed in its original position.
+                    </p>
+                </li>
+                <li>
+                    <strong>Complexity intuition:</strong>
+                    <p>
+                        Each node contributes exactly one value token and two null markers over the whole recursion,
+                        so both serialization and deserialization touch each node a constant number of times → O(n) time.
+                        The output string and token list are both O(n) in size.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <!-- ======================= Modal shell reused by all buttons ======================= -->
+
+        <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title"></h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
     </main>
 </body>
 
