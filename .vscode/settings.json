@@ -2,6 +2,7 @@
     "cSpell.words": [
         "aabb",
         "aabbcc",
+        "abcabcabc",
         "abcabcbb",
         "arraycopy",
         "atoi",
@@ -65,5 +66,12 @@
         "subproblems",
         "Timebox",
         "uthash"
-    ]
+    ],
+    "files.associations": {
+        ".fantomasignore": "ignore",
+        ".config": "xml",
+        "vector": "cpp",
+        "iostream": "cpp",
+        "xstring": "cpp"
+    }
 }

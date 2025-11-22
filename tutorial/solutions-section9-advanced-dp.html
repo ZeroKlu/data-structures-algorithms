@@ -80,6 +80,10 @@
                         <span class="label">Problem 1</span>
                         <span class="meta">Binary search over tails array</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s9p1">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -266,20 +270,23 @@ def length_of_lis(nums: List[int]) -&gt; int:
                         <span class="label">Problem 2</span>
                         <span class="meta">1D knapsack DP over capacity</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s9p2">
+                        Understand the Algorithm
+                    </button>
                 </div>
-            </div>
 
-            <div class="tab-bar">
-                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
-                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
-                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
-                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
-                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
-                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
-            </div>
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
 
-            <!-- C -->
-            <div class="code-panel" data-lang-panel="c">
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
 <pre><code class="language-c">// C
 #include &lt;stdlib.h&gt;
 
@@ -299,10 +306,10 @@ int knapSack(int W, int *weight, int *value, int n) {
     free(dp);
     return ans;
 }</code></pre>
-            </div>
+                </div>
 
-            <!-- C++ -->
-            <div class="code-panel hidden" data-lang-panel="cpp">
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
 <pre><code class="language-cpp">// C++
 #include &lt;vector&gt;
 using namespace std;
@@ -319,10 +326,10 @@ int knapSack(int W, const vector&lt;int&gt; &amp;weight, const vector&lt;int&gt;
     }
     return dp[W];
 }</code></pre>
-            </div>
+                </div>
 
-            <!-- Java -->
-            <div class="code-panel hidden" data-lang-panel="java">
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
 <pre><code class="language-java">// Java
 int knapSack(int W, int[] weight, int[] value) {
     int[] dp = new int[W + 1];
@@ -335,10 +342,10 @@ int knapSack(int W, int[] weight, int[] value) {
     }
     return dp[W];
 }</code></pre>
-            </div>
+                </div>
 
-            <!-- JavaScript -->
-            <div class="code-panel hidden" data-lang-panel="js">
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
 <pre><code class="language-javascript">// JavaScript
 function knapSack(W, weight, value) {
     const dp = new Array(W + 1).fill(0);
@@ -351,10 +358,10 @@ function knapSack(W, weight, value) {
     }
     return dp[W];
 }</code></pre>
-            </div>
+                </div>
 
-            <!-- C# -->
-            <div class="code-panel hidden" data-lang-panel="cs">
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
 <pre><code class="language-csharp">// C#
 int KnapSack(int W, int[] weight, int[] value) {
     int[] dp = new int[W + 1];
@@ -367,10 +374,10 @@ int KnapSack(int W, int[] weight, int[] value) {
     }
     return dp[W];
 }</code></pre>
-            </div>
+                </div>
 
-            <!-- Python -->
-            <div class="code-panel hidden" data-lang-panel="py">
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
 <pre><code class="language-python"># Python
 from typing import List
 
@@ -380,10 +387,11 @@ def knap_sack(W: int, weight: List[int], value: List[int]) -&gt; int:
         for w in range(W, wt - 1, -1):
             dp[w] = max(dp[w], dp[w - wt] + val)
     return dp[W]</code></pre>
-            </div>
+                </div>
 
-            <div class="complexity-note">
-                Time: <strong>O(n * W)</strong>. Extra space: <strong>O(W)</strong>.
+                <div class="complexity-note">
+                    Time: <strong>O(n * W)</strong>. Extra space: <strong>O(W)</strong>.
+                </div>
             </div>
         </section>
 
@@ -407,6 +415,10 @@ def knap_sack(W: int, weight: List[int], value: List[int]) -&gt; int:
                         <span class="label">Problem 3</span>
                         <span class="meta">Boolean DP for subset sum</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s9p3">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -576,20 +588,23 @@ def can_partition(nums: List[int]) -&gt; bool:
                         <span class="label">Problem 4</span>
                         <span class="meta">Bitmask DP for small-n TSP</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s9p4">
+                        Understand the Algorithm
+                    </button>
                 </div>
-            </div>
 
-            <div class="tab-bar">
-                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
-                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
-                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
-                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
-                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
-                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
-            </div>
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
 
-            <!-- C -->
-            <div class="code-panel" data-lang-panel="c">
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
 <pre><code class="language-c">// C
 #include &lt;limits.h&gt;
 #include &lt;stdlib.h&gt;
@@ -634,10 +649,10 @@ int tsp(int **cost, int n) {
     free(dp);
     return ans;
 }</code></pre>
-            </div>
+                </div>
 
-            <!-- C++ -->
-            <div class="code-panel hidden" data-lang-panel="cpp">
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
 <pre><code class="language-cpp">// C++
 #include &lt;vector&gt;
 #include &lt;limits&gt;
@@ -675,10 +690,10 @@ int tsp(const vector&lt;vector&lt;int&gt; &gt; &amp;cost) {
     }
     return ans;
 }</code></pre>
-            </div>
+                </div>
 
-            <!-- Java -->
-            <div class="code-panel hidden" data-lang-panel="java">
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
 <pre><code class="language-java">// Java
 import java.util.Arrays;
 
@@ -716,10 +731,10 @@ int tsp(int[][] cost) {
     }
     return ans;
 }</code></pre>
-            </div>
+                </div>
 
-            <!-- JavaScript -->
-            <div class="code-panel hidden" data-lang-panel="js">
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
 <pre><code class="language-javascript">// JavaScript
 function tsp(cost) {
     const n = cost.length;
@@ -752,10 +767,10 @@ function tsp(cost) {
     }
     return ans;
 }</code></pre>
-            </div>
+                </div>
 
-            <!-- C# -->
-            <div class="code-panel hidden" data-lang-panel="cs">
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
 <pre><code class="language-csharp">// C#
 using System;
 
@@ -795,10 +810,10 @@ int Tsp(int[][] cost) {
     }
     return ans;
 }</code></pre>
-            </div>
+                </div>
 
-            <!-- Python -->
-            <div class="code-panel hidden" data-lang-panel="py">
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
 <pre><code class="language-python"># Python
 from typing import List
 
@@ -830,10 +845,11 @@ def tsp(cost: List[List[int]]) -&gt; int:
         cand = dp[full_mask][i] + cost[i][0]
         ans = min(ans, cand)
     return ans</code></pre>
-            </div>
+                </div>
 
-            <div class="complexity-note">
-                Time: <strong>O(n² * 2ⁿ)</strong>. Extra space: <strong>O(n * 2ⁿ)</strong>.
+                <div class="complexity-note">
+                    Time: <strong>O(n² * 2ⁿ)</strong>. Extra space: <strong>O(n * 2ⁿ)</strong>.
+                </div>
             </div>
         </section>
 
@@ -857,6 +873,10 @@ def tsp(cost: List[List[int]]) -&gt; int:
                         <span class="label">Problem 5</span>
                         <span class="meta">Interval DP over sorted cut points</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s9p5">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -872,6 +892,7 @@ def tsp(cost: List[List[int]]) -&gt; int:
                 <div class="code-panel" data-lang-panel="c">
 <pre><code class="language-c">// C
 #include &lt;stdlib.h&gt;
+#include &lt;limits.h&gt;
 
 static int int_cmp(const void *a, const void *b) {
     int x = *(const int *)a;
@@ -1060,6 +1081,355 @@ def min_cost(n: int, cuts: List[int]) -&gt; int:
             &nbsp;&nbsp;
             <a href="section10-practice.html">Back to Practice Hub →</a>
         </div>
+
+        <!-- ======================= Understand-the-algorithm templates ======================= -->
+
+        <div class="deep-dive-template" id="understand-s9p1"
+            data-title="Step-by-step: Longest Increasing Subsequence in O(n log n)" hidden>
+            <p>
+                The goal is to find the length of the longest strictly increasing subsequence (LIS).
+                The classic DP is O(n²); this “tails” trick makes it O(n log n).
+            </p>
+            <ol>
+                <li>
+                    <strong>What tails[k] means:</strong>
+                    <p>
+                        We maintain an array <code>tails</code> where <code>tails[len]</code> is the <em>smallest
+                        possible tail value</em> of an increasing subsequence of length <code>len + 1</code>.
+                    </p>
+                    <p>
+                        Smaller tails are better because they leave more room to extend the subsequence later.
+                    </p>
+                </li>
+                <li>
+                    <strong>Processing each number x:</strong>
+                    <ul>
+                        <li>
+                            We binary-search the first index <code>i</code> in <code>tails</code>
+                            such that <code>tails[i] &gt;= x</code>.
+                        </li>
+                        <li>
+                            If such <code>i</code> exists, we replace <code>tails[i]</code> with <code>x</code>
+                            (we found a smaller tail for that length).
+                        </li>
+                        <li>
+                            If no such <code>i</code> exists, we append <code>x</code> to <code>tails</code>,
+                            increasing the LIS length by 1.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Why this works:</strong>
+                    <p>
+                        Replacing a tail with a smaller value never hurts existing subsequences, and it may
+                        allow longer subsequences in the future. The length of <code>tails</code> is always equal
+                        to the length of the current best LIS.
+                    </p>
+                </li>
+                <li>
+                    <strong>No need to reconstruct the sequence:</strong>
+                    <p>
+                        This method only returns the length of the LIS. Reconstructing the actual subsequence
+                        requires extra bookkeeping (storing predecessors or indices).
+                    </p>
+                </li>
+                <li>
+                    <strong>Complexity:</strong>
+                    <p>
+                        For each of the <code>n</code> elements we do a binary search on
+                        <code>tails</code> of size at most <code>n</code>, giving
+                        <code>O(n log n)</code> time and <code>O(n)</code> space.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s9p2"
+            data-title="Step-by-step: 0/1 Knapsack with 1D DP" hidden>
+            <p>
+                We want the maximum value we can carry in a knapsack with capacity <code>W</code>, where each item
+                can be taken at most once (0/1 choice).
+            </p>
+            <ol>
+                <li>
+                    <strong>Define the state:</strong>
+                    <p>
+                        Let <code>dp[w]</code> be the maximum value achievable with capacity exactly <code>w</code>
+                        (or up to <code>w</code>, since we can always leave space unused).
+                    </p>
+                </li>
+                <li>
+                    <strong>Item-by-item updates:</strong>
+                    <p>
+                        For each item <code>i</code> with weight <code>wt</code> and value <code>val</code>,
+                        we decide whether to include it for each capacity.
+                    </p>
+                    <ul>
+                        <li>
+                            If we do <em>not</em> take the item, <code>dp[w]</code> stays the same.
+                        </li>
+                        <li>
+                            If we do take the item, we must have had capacity <code>w - wt</code> before,
+                            so the new candidate value is <code>dp[w - wt] + val</code>.
+                        </li>
+                        <li>
+                            We take the better of the two: <code>dp[w] = max(dp[w], dp[w - wt] + val)</code>.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Why the loop is backwards in w:</strong>
+                    <p>
+                        We iterate <code>w</code> from <code>W</code> down to <code>wt</code>.
+                        This ensures that each item is used at most once: when we read <code>dp[w - wt]</code>,
+                        it still corresponds to a state <em>before</em> processing the current item.
+                    </p>
+                    <p>
+                        If we looped <em>forward</em> in <code>w</code>, the current item could be counted multiple
+                        times (turning it into an unbounded knapsack).
+                    </p>
+                </li>
+                <li>
+                    <strong>Initialization:</strong>
+                    <p>
+                        <code>dp[w]</code> is initialized to 0 for all <code>w</code>, representing taking no items.
+                    </p>
+                </li>
+                <li>
+                    <strong>Answer:</strong>
+                    <p>
+                        After processing all items, <code>dp[W]</code> holds the best value we can achieve with
+                        capacity <code>W</code>.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s9p3"
+            data-title="Step-by-step: Partition Equal Subset Sum" hidden>
+            <p>
+                We want to know if we can split the array into two subsets with equal sum. This is equivalent to
+                asking if there is a subset whose sum is exactly half of the total.
+            </p>
+            <ol>
+                <li>
+                    <strong>Check total parity first:</strong>
+                    <p>
+                        Compute <code>total = sum(nums)</code>.
+                        If <code>total</code> is odd, we can immediately return <code>false</code>, because
+                        two equal integers cannot sum to an odd number.
+                    </p>
+                </li>
+                <li>
+                    <strong>Subset-sum target:</strong>
+                    <p>
+                        Let <code>target = total / 2</code>. We now just need to know if there exists a subset of
+                        <code>nums</code> that sums to <code>target</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Define the state:</strong>
+                    <p>
+                        Let <code>dp[s]</code> be a boolean: can we form sum <code>s</code> using some subset of
+                        the processed numbers?
+                    </p>
+                    <p>
+                        Initially, <code>dp[0] = true</code> (we can always form sum 0 by taking no elements),
+                        and all other <code>dp[s]</code> are false.
+                    </p>
+                </li>
+                <li>
+                    <strong>Transition for each number x:</strong>
+                    <ul>
+                        <li>
+                            We traverse sums <code>s</code> from <code>target</code> down to <code>x</code>.
+                        </li>
+                        <li>
+                            If <code>dp[s - x]</code> was reachable before, then <code>dp[s]</code> becomes true
+                            by including <code>x</code>.
+                        </li>
+                        <li>
+                            In code: <code>if (dp[s - x]) dp[s] = true;</code>.
+                        </li>
+                    </ul>
+                    <p>
+                        Going backwards ensures each number is used at most once (0/1 subset sum).
+                    </p>
+                </li>
+                <li>
+                    <strong>Early success:</strong>
+                    <p>
+                        As soon as <code>dp[target]</code> becomes true, we know the partition is possible,
+                        although the code here simply finishes and returns <code>dp[target]</code> at the end.
+                    </p>
+                </li>
+                <li>
+                    <strong>Complexity:</strong>
+                    <p>
+                        Time is <code>O(n * target)</code>, where <code>target = total/2</code>.
+                        Space is <code>O(target)</code>.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s9p4"
+            data-title="Step-by-step: Bitmask DP for TSP" hidden>
+            <p>
+                This is the classic dynamic programming solution for a small Traveling Salesman Problem (TSP),
+                using bitmasks to represent which cities have been visited.
+            </p>
+            <ol>
+                <li>
+                    <strong>Bitmask representation:</strong>
+                    <p>
+                        For <code>n</code> cities, a mask from <code>0</code> to <code>2ⁿ - 1</code> tells us which
+                        cities are visited. Bit <code>i</code> is 1 if city <code>i</code> is included.
+                        For example, mask <code>1011₂</code> means cities 0, 1, and 3 are visited.
+                    </p>
+                </li>
+                <li>
+                    <strong>Define the state:</strong>
+                    <p>
+                        <code>dp[mask][i]</code> = minimum cost to:
+                    </p>
+                    <ul>
+                        <li>start at city 0,</li>
+                        <li>visit exactly the set of cities in <code>mask</code>,</li>
+                        <li>and finish at city <code>i</code>.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Base case:</strong>
+                    <p>
+                        Initially we have visited only city 0 and are standing there:
+                        <code>dp[1 &lt;&lt; 0][0] = 0</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Transition:</strong>
+                    <p>
+                        From state <code>(mask, i)</code>, we can go to a city <code>j</code> not yet in
+                        <code>mask</code>:
+                    </p>
+                    <ul>
+                        <li>
+                            Let <code>nextMask = mask | (1 &lt;&lt; j)</code>.
+                        </li>
+                        <li>
+                            Candidate cost:
+                            <code>dp[nextMask][j] = min(dp[nextMask][j], dp[mask][i] + cost[i][j])</code>.
+                        </li>
+                    </ul>
+                    <p>
+                        We do this for all masks and all possible endpoints <code>i</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Closing the tour:</strong>
+                    <p>
+                        After filling the table, all cities are visited at mask <code>fullMask = 2ⁿ - 1</code>.
+                        We must return to city 0 to complete the cycle, so the answer is:
+                    </p>
+                    <p>
+                        <code>min over i of dp[fullMask][i] + cost[i][0]</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>When is this practical?</strong>
+                    <p>
+                        Complexity is <code>O(n² * 2ⁿ)</code>, so this only works for relatively small
+                        <code>n</code> (typically <code>n ≤ 20</code> or so), but it’s a powerful pattern for
+                        “visit all subsets” problems.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s9p5"
+            data-title="Step-by-step: Interval DP for Minimum Cost to Cut a Stick" hidden>
+            <p>
+                We have a stick of length <code>n</code> and must perform cuts at given positions. Each cut costs the
+                current length of the stick being cut. We want the minimum total cost.
+            </p>
+            <ol>
+                <li>
+                    <strong>Add boundaries and sort cuts:</strong>
+                    <p>
+                        Put all cut positions into an array, add 0 and <code>n</code>, and sort:
+                        <code>pos = [0, sorted(cuts...), n]</code>.
+                        Now every subproblem is about some segment <code>[pos[i], pos[j]]</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Define the state:</strong>
+                    <p>
+                        Let <code>dp[i][j]</code> be the minimum cost to completely cut the segment
+                        from <code>pos[i]</code> to <code>pos[j]</code> (using only cuts strictly between them).
+                    </p>
+                    <p>
+                        Our final answer is <code>dp[0][m - 1]</code>, where <code>m = len(pos)</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>What happens when we cut first at k:</strong>
+                    <p>
+                        If we choose a first cut at position <code>pos[k]</code> for <code>i &lt; k &lt; j</code>,
+                        then:
+                    </p>
+                    <ul>
+                        <li>
+                            We pay a cost equal to the length of the current stick segment:
+                            <code>pos[j] - pos[i]</code>.
+                        </li>
+                        <li>
+                            We then recursively solve the left segment <code>[i, k]</code> and right segment
+                            <code>[k, j]</code>, contributing <code>dp[i][k] + dp[k][j]</code>.
+                        </li>
+                    </ul>
+                    <p>
+                        So the total cost for choosing <code>k</code> first is:
+                        <code>dp[i][k] + dp[k][j] + (pos[j] - pos[i])</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Recurrence:</strong>
+                    <p>
+                        We take the best (minimum) over all possible first cuts:
+                    </p>
+                    <p>
+                        <code>dp[i][j] = min over k in (i, j) of dp[i][k] + dp[k][j] + (pos[j] - pos[i])</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Base cases and order:</strong>
+                    <p>
+                        If there are no cuts strictly between <code>i</code> and <code>j</code>, then
+                        <code>dp[i][j] = 0</code> (no cost). We fill the table by increasing interval length
+                        (<code>len = 2..m-1</code>) so that smaller segments are solved before bigger ones.
+                    </p>
+                </li>
+                <li>
+                    <strong>Complexity:</strong>
+                    <p>
+                        There are <code>O(m²)</code> intervals and for each we may try O(m) split points,
+                        giving <code>O(m³)</code> time and <code>O(m²)</code> space, where
+                        <code>m = #cuts + 2</code>.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <!-- ======================= Modal shell reused by all buttons ======================= -->
+
+        <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title">&nbsp;</h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
     </main>
 </body>
 

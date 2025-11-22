@@ -79,6 +79,10 @@
                         <span class="label">Problem 1</span>
                         <span class="meta">First unique character index</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s7p1">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -230,6 +234,10 @@ def first_uniq_char(s: str) -&gt; int:
                         <span class="label">Problem 2</span>
                         <span class="meta">Group anagrams by sorted-string key</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s7p2">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -393,6 +401,10 @@ def group_anagrams(strs: List[str]) -&gt; List[List[str]]:
                         <span class="label">Problem 3</span>
                         <span class="meta">O(n) expected using a hash set</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s7p3">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -571,6 +583,10 @@ def longest_consecutive(nums: List[int]) -&gt; int:
                         <span class="label">Problem 4</span>
                         <span class="meta">Prefix sums + frequency map</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s7p4">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -748,6 +764,10 @@ def subarray_sum(nums: List[int], k: int) -&gt; int:
                         <span class="label">Problem 5A</span>
                         <span class="meta">Two-sum indices using a hash map</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s7p5a">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -882,6 +902,10 @@ def two_sum_indices(nums: List[int], target: int) -&gt; List[int]:
                         <span class="label">Problem 5B</span>
                         <span class="meta">Count unique value pairs summing to target</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s7p5b">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -1035,6 +1059,453 @@ def count_unique_pairs(nums: List[int], target: int) -&gt; int:
             &nbsp;&nbsp;
             <a href="section10-practice.html">Back to Practice Hub →</a>
         </div>
+
+        <!-- ======================= Understand-the-algorithm templates ======================= -->
+
+        <div class="deep-dive-template" id="understand-s7p1"
+            data-title="Step-by-step: First non-repeating character using frequency counts" hidden>
+            <p>
+                We want the index of the <em>first</em> character that appears exactly once in the string.
+                A hash table (or fixed-size array for ASCII) lets us count frequencies in a single pass.
+            </p>
+            <ol>
+                <li>
+                    <strong>Two phases, one idea:</strong>
+                    <ul>
+                        <li>Phase 1: count how many times each character appears.</li>
+                        <li>Phase 2: walk the string again and return the first index whose character has count 1.</li>
+                    </ul>
+                    <p>
+                        Separating counting from selection keeps the logic simple and still runs in linear time.
+                    </p>
+                </li>
+                <li>
+                    <strong>Phase 1 – build the frequency map:</strong>
+                    <p>
+                        Initialize a map <code>freq</code> (or an array of size 256 for byte characters).
+                        For each character <code>ch</code> in the string:
+                    </p>
+                    <ul>
+                        <li>Increment <code>freq[ch]</code> by 1.</li>
+                    </ul>
+                    <p>
+                        After this pass, <code>freq[ch]</code> tells you exactly how many times <code>ch</code> appears.
+                    </p>
+                </li>
+                <li>
+                    <strong>Phase 2 – find the first index with count 1:</strong>
+                    <p>
+                        Scan the string again from left to right, keeping an index <code>i</code>:
+                    </p>
+                    <ul>
+                        <li>Look up <code>freq[s[i]]</code>.</li>
+                        <li>If it is equal to 1, then this is the first non-repeating character; return <code>i</code>.</li>
+                    </ul>
+                    <p>
+                        If you finish the loop without finding any such character, return <code>-1</code> to indicate
+                        that there is no non-repeating character.
+                    </p>
+                </li>
+                <li>
+                    <strong>Why we need the second pass:</strong>
+                    <p>
+                        The first pass tells us <em>which</em> characters are unique, but not <em>which one appears first</em>.
+                        The second pass preserves the original order and picks the earliest unique character.
+                    </p>
+                </li>
+                <li>
+                    <strong>Complexity intuition:</strong>
+                    <p>
+                        Each character is processed a constant number of times (once in counting, once in checking),
+                        so the running time is O(n) where n is the length of the string.
+                        The extra space is O(A) where A is the alphabet size (often treated as constant for ASCII/Unicode blocks).
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s7p2"
+            data-title="Step-by-step: Grouping anagrams by a shared signature" hidden>
+            <p>
+                The core question: how can we tell that two words are anagrams using a hash table?
+                The trick is to map every anagram group to a common <em>signature</em>.
+            </p>
+            <ol>
+                <li>
+                    <strong>What makes two words anagrams?</strong>
+                    <ul>
+                        <li>They contain exactly the same characters.</li>
+                        <li>Each character appears the same number of times in both words.</li>
+                        <li>Only the <em>order</em> of characters may differ.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Use a canonical representation (signature):</strong>
+                    <p>
+                        The simplest signature is the sorted version of the string:
+                    </p>
+                    <ul>
+                        <li><code>"eat" → "aet"</code></li>
+                        <li><code>"tea" → "aet"</code></li>
+                        <li><code>"ate" → "aet"</code></li>
+                    </ul>
+                    <p>
+                        All anagrams of each other sort to the <em>same</em> string. Non-anagrams will usually
+                        have different sorted forms.
+                    </p>
+                </li>
+                <li>
+                    <strong>Hashing by signature:</strong>
+                    <ol>
+                        <li>Initialize a map <code>groups</code> from string key → list of original words.</li>
+                        <li>For each word <code>s</code>:
+                            <ul>
+                                <li>Compute <code>key = sorted(s)</code>.</li>
+                                <li>Append <code>s</code> to <code>groups[key]</code>.</li>
+                            </ul>
+                        </li>
+                        <li>At the end, each map entry corresponds to one anagram group.</li>
+                    </ol>
+                </li>
+                <li>
+                    <strong>Why this is correct:</strong>
+                    <p>
+                        If two words are anagrams, their sorted forms are identical, so they land in the same bucket.
+                        If they are not anagrams, their sorted forms differ in at least one position and thus produce
+                        different keys, separating them into different groups.
+                    </p>
+                </li>
+                <li>
+                    <strong>Alternative signatures:</strong>
+                    <p>
+                        Instead of sorting, you can also use a character-count vector (e.g., counts of 26 letters)
+                        as the key. This avoids the <code>O(m log m)</code> sorting cost and can run in
+                        <code>O(m)</code> per string, at the cost of a slightly more complex key type.
+                    </p>
+                </li>
+                <li>
+                    <strong>Complexity intuition:</strong>
+                    <p>
+                        Let n be the number of words and m the average length.
+                        Sorting each word costs <code>O(m log m)</code>, done n times, giving
+                        <code>O(n · m log m)</code> time overall. The extra space holds all strings plus their keys,
+                        which is <code>O(n · m)</code>.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s7p3"
+            data-title="Step-by-step: Longest consecutive sequence with a hash set" hidden>
+            <p>
+                We want the length of the longest run of consecutive integers (like 4,5,6,7) in an unsorted array,
+                ideally in O(n) time. A hash set lets us test membership in O(1) expected time.
+            </p>
+            <ol>
+                <li>
+                    <strong>Put all numbers into a set:</strong>
+                    <p>
+                        First, insert every number into a hash set <code>S</code>:
+                    </p>
+                    <ul>
+                        <li>This removes duplicates automatically.</li>
+                        <li>It lets us ask “is x in the array?” in constant expected time.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Only start from sequence beginnings:</strong>
+                    <p>
+                        For each number <code>x</code> in the set, we ask:
+                    </p>
+                    <ul>
+                        <li>If <code>x - 1</code> is also in the set, then <code>x</code> is in the <em>middle</em>
+                            of a sequence starting earlier. We <em>skip</em> it.</li>
+                        <li>If <code>x - 1</code> is <em>not</em> in the set, then <code>x</code> might be the
+                            <em>start</em> of a new consecutive run.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Growing a sequence from each start:</strong>
+                    <p>
+                        When we find a start <code>x</code> (i.e., <code>x - 1</code> not in <code>S</code>):</p>
+                    <ol>
+                        <li>Initialize <code>cur = x</code> and <code>length = 1</code>.</li>
+                        <li>While <code>cur + 1</code> is in <code>S</code>:
+                            <ul>
+                                <li>Increment <code>cur</code>.</li>
+                                <li>Increment <code>length</code>.</li>
+                            </ul>
+                        </li>
+                        <li>Update the global best length.</li>
+                    </ol>
+                </li>
+                <li>
+                    <strong>Why we stay O(n):</strong>
+                    <p>
+                        Each number is part of exactly one “forward walk” from some sequence start.
+                        We never scan backwards, and we never restart a sequence in the middle because we skip
+                        numbers that have <code>x - 1</code> in the set. So each value gets visited at most a
+                        constant number of times, keeping the total work linear.
+                    </p>
+                </li>
+                <li>
+                    <strong>Edge cases:</strong>
+                    <ul>
+                        <li>Empty array → answer 0.</li>
+                        <li>All numbers identical → set has size 1, sequence length 1.</li>
+                        <li>Already sorted array → still works in O(n).</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Complexity intuition:</strong>
+                    <p>
+                        Building the set is O(n). The scan over the set is O(n), and each inner while loop
+                        advances <code>cur</code> at most once per distinct number overall. So the expected time
+                        is O(n), with O(n) extra space for the set.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s7p4"
+            data-title="Step-by-step: Subarray sum equals K via prefix sums" hidden>
+            <p>
+                The goal is to count how many contiguous subarrays sum to <code>k</code> without using a slow
+                double loop. Prefix sums plus a frequency map let us do this in one pass.
+            </p>
+            <ol>
+                <li>
+                    <strong>Define a prefix sum:</strong>
+                    <p>
+                        Let <code>prefix[i]</code> be the sum of elements from index 0 through i.
+                        Then the sum of a subarray from <code>l</code> to <code>r</code> is:
+                    </p>
+                    <p>
+                        <code>sum(l..r) = prefix[r] - prefix[l - 1]</code> (with <code>prefix[-1] = 0</code>).
+                    </p>
+                </li>
+                <li>
+                    <strong>Rewriting the condition:</strong>
+                    <p>
+                        We want <code>sum(l..r) = k</code>, so:
+                    </p>
+                    <p>
+                        <code>prefix[r] - prefix[l - 1] = k</code> ⇒
+                        <code>prefix[l - 1] = prefix[r] - k</code>.
+                    </p>
+                    <p>
+                        For each current prefix sum <code>prefix</code>, any earlier prefix equal to
+                        <code>prefix - k</code> gives us a subarray ending here with sum k.
+                    </p>
+                </li>
+                <li>
+                    <strong>Using a frequency map:</strong>
+                    <ol>
+                        <li>Maintain a running <code>prefix</code> sum as you iterate the array.</li>
+                        <li>Maintain a map <code>freq</code> where <code>freq[value]</code> is how many times we've
+                            seen that prefix sum so far.</li>
+                        <li>Initialize <code>freq[0] = 1</code> to handle subarrays that start at index 0.</li>
+                        <li>At each new element <code>x</code>:
+                            <ul>
+                                <li>Update <code>prefix += x</code>.</li>
+                                <li>Let <code>need = prefix - k</code>.</li>
+                                <li>If <code>need</code> is in the map, add <code>freq[need]</code> to the answer.</li>
+                                <li>Then increment <code>freq[prefix]</code> by 1.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    <strong>Why this counts <em>all</em> subarrays:</strong>
+                    <p>
+                        At the moment we are at index <code>r</code> with prefix <code>prefix[r]</code>:
+                    </p>
+                    <ul>
+                        <li>Every earlier index <code>l - 1</code> such that
+                            <code>prefix[l - 1] = prefix[r] - k</code> gives a valid subarray <code>l..r</code>.</li>
+                        <li>The map tells us how many such <code>l - 1</code> indices we have seen.</li>
+                    </ul>
+                    <p>
+                        We add all of them to the count in one step, instead of scanning backwards.
+                    </p>
+                </li>
+                <li>
+                    <strong>Initialization detail: prefix 0 appears once:</strong>
+                    <p>
+                        Setting <code>freq[0] = 1</code> before processing any elements accounts for subarrays
+                        that start at index 0. For example, if <code>prefix[r] == k</code>, then
+                        <code>need = prefix[r] - k = 0</code>, and this adds 1 to the answer as desired.
+                    </p>
+                </li>
+                <li>
+                    <strong>Complexity intuition:</strong>
+                    <p>
+                        We process each element once, and each step performs O(1) expected hash map operations.
+                        This yields O(n) time and O(n) space in the worst case for distinct prefix sums.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s7p5a"
+            data-title="Step-by-step: Two-sum indices using a value→index map" hidden>
+            <p>
+                We want to find any pair of indices <code>(i, j)</code> such that
+                <code>nums[i] + nums[j] == target</code> without using a quadratic double loop.
+                A hash map of value → index lets us do this in one pass.
+            </p>
+            <ol>
+                <li>
+                    <strong>Rewriting the condition:</strong>
+                    <p>
+                        For each number <code>x = nums[i]</code>, we want some earlier number <code>y</code> such that:
+                    </p>
+                    <p>
+                        <code>x + y = target</code> ⇒ <code>y = target - x</code>.
+                    </p>
+                    <p>
+                        So whenever we look at <code>x</code>, we should check if we've already seen
+                        <code>target - x</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Using a hash map:</strong>
+                    <ol>
+                        <li>Initialize an empty map <code>index_of</code> from number → its index.</li>
+                        <li>Iterate over indices <code>i</code> from 0 to n - 1:
+                            <ul>
+                                <li>Let <code>x = nums[i]</code>.</li>
+                                <li>Compute <code>need = target - x</code>.</li>
+                                <li>
+                                    If <code>need</code> is already in <code>index_of</code>, we’ve found a solution:
+                                    <code>(index_of[need], i)</code>.
+                                </li>
+                                <li>Otherwise, store <code>index_of[x] = i</code> and move on.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    <strong>Why this is correct:</strong>
+                    <p>
+                        When we process index <code>i</code>, the map contains all earlier elements at indices
+                        <code>&lt; i</code>. If there exists a valid pair <code>(j, i)</code>, then when we reach
+                        <code>i</code>, <code>nums[j]</code> is already in the map, and we detect it via
+                        <code>need = target - nums[i]</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Order of insertion matters:</strong>
+                    <p>
+                        We always check the map <em>before</em> inserting the current element. This ensures we never
+                        match an element with itself unless the problem explicitly allows using the same index twice
+                        (most two-sum variants do not).
+                    </p>
+                </li>
+                <li>
+                    <strong>Handling duplicates:</strong>
+                    <p>
+                        If the array has duplicates, the map naturally handles them:
+                    </p>
+                    <ul>
+                        <li>For pairs like <code>2 + 2 = 4</code>, the first <code>2</code> gets stored, and when we
+                            encounter the second <code>2</code>, we see that <code>need = 2</code> is already present.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Complexity intuition:</strong>
+                    <p>
+                        Each element is processed once, with O(1) expected map operations (lookup + optional insert).
+                        The time is O(n), and the map stores at most n entries, so space is also O(n).
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s7p5b"
+            data-title="Step-by-step: Counting unique two-sum value pairs" hidden>
+            <p>
+                Now we want the number of <em>distinct value pairs</em> <code>(a, b)</code> such that
+                <code>a + b == target</code>, regardless of how many times each pair appears in the array.
+                We need to avoid double-counting.
+            </p>
+            <ol>
+                <li>
+                    <strong>Separate concerns: seen values vs. seen pairs:</strong>
+                    <ul>
+                        <li><code>seen</code>: a set of values we have visited so far while scanning the array.</li>
+                        <li><code>pairs</code>: a set of <em>unique pairs</em> that we have already counted.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Single pass over the array:</strong>
+                    <ol>
+                        <li>For each number <code>x</code> in the array:
+                            <ul>
+                                <li>Let <code>y = target - x</code>.</li>
+                                <li>If <code>y</code> is already in <code>seen</code>, then <code>(x, y)</code> is a
+                                    valid two-sum pair.</li>
+                                <li>Normalize the pair to avoid order issues:
+                                    <code>a = min(x, y)</code>, <code>b = max(x, y)</code>.</li>
+                                <li>Insert normalized pair <code>(a, b)</code> into <code>pairs</code>.</li>
+                                <li>Regardless, add <code>x</code> to <code>seen</code>.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    <strong>Why normalization matters:</strong>
+                    <p>
+                        Without normalization, pairs <code>(2, 5)</code> and <code>(5, 2)</code> would be considered
+                        different, even though they represent the same value pair. By always storing
+                        <code>(min, max)</code>, we guarantee:
+                    </p>
+                    <ul>
+                        <li>Each unordered pair is represented in exactly one way.</li>
+                        <li>Duplicates from different indices collapse into one set entry.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Handling duplicates in the input:</strong>
+                    <p>
+                        Duplicates do not cause double-counting because:
+                    </p>
+                    <ul>
+                        <li>Every time we encounter <code>x</code>, we only form a pair if <code>y</code> has appeared
+                            before (in <code>seen</code>).</li>
+                        <li>The normalized pair <code>(a, b)</code> is inserted into <code>pairs</code> at most once,
+                            since sets ignore repeated insertions.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>What the final answer represents:</strong>
+                    <p>
+                        At the end, <code>pairs</code> contains exactly one representative for each distinct value
+                        pair that sums to the target. The answer is just <code>size(pairs)</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Complexity intuition:</strong>
+                    <p>
+                        We scan the array once and perform O(1) expected operations on the <code>seen</code> and
+                        <code>pairs</code> sets per element. This gives O(n) expected time and O(n) extra space in
+                        the worst case (when many pairs exist).
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <!-- ======================= Modal shell reused by all buttons ======================= -->
+
+        <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title">&nbsp;</h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
     </main>
 </body>
 

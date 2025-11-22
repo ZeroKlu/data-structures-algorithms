@@ -80,6 +80,10 @@
                         <span class="label">Problem 1</span>
                         <span class="meta">Bottom-up Fibonacci-style DP</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s8p1">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -210,6 +214,10 @@ def climb_stairs(n: int) -&gt; int:
                         <span class="label">Problem 2</span>
                         <span class="meta">Rob or skip with rolling DP</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s8p2">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -366,6 +374,10 @@ def rob(nums: List[int]) -&gt; int:
                         <span class="label">Problem 3</span>
                         <span class="meta">Unbounded knapsack style DP over amount</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s8p3">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -527,6 +539,10 @@ def coin_change(coins: List[int], amount: int) -&gt; int:
                         <span class="label">Problem 4</span>
                         <span class="meta">2D DP on grid cells</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s8p4">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -571,6 +587,9 @@ int uniquePaths(int m, int n) {
                 <!-- C++ -->
                 <div class="code-panel hidden" data-lang-panel="cpp">
 <pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+using namespace std;
+
 int uniquePaths(int m, int n) {
     vector&lt;vector&lt;int&gt; &gt; dp(m, vector&lt;int&gt;(n, 1));
     for (int i = 1; i &lt; m; i++) {
@@ -673,6 +692,10 @@ def unique_paths(m: int, n: int) -&gt; int:
                         <span class="label">Problem 5</span>
                         <span class="meta">2D DP over prefixes of the strings</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s8p5">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -753,7 +776,7 @@ int longestCommonSubsequence(String text1, String text2) {
 
     for (int i = 1; i &lt;= m; i++) {
         for (int j = 1; j &lt;= n; j++) {
-            if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
+            if (text1.charAt(i - 1) == text2.charAt(j - 1]) {
                 dp[i][j] = dp[i - 1][j - 1] + 1;
             } else {
                 dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
@@ -833,6 +856,345 @@ def lcs_length(text1: str, text2: str) -&gt; int:
             &nbsp;&nbsp;
             <a href="section10-practice.html">Back to Practice Hub →</a>
         </div>
+
+        <!-- ======================= Understand-the-algorithm templates ======================= -->
+
+        <div class="deep-dive-template" id="understand-s8p1"
+            data-title="Step-by-step: Climbing Stairs as Fibonacci" hidden>
+            <p>
+                We want to count how many distinct ways there are to climb to step <code>n</code> if we can move
+                either 1 or 2 steps at a time. This naturally leads to a one-dimensional DP.
+            </p>
+            <ol>
+                <li>
+                    <strong>Define the state:</strong>
+                    <p>
+                        Let <code>dp[i]</code> be the number of ways to reach exactly step <code>i</code>.
+                        Our final answer is <code>dp[n]</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Figure out the transition:</strong>
+                    <p>
+                        To land on step <code>i</code>, we could have:
+                    </p>
+                    <ul>
+                        <li>Come from step <code>i - 1</code> using a 1-step move.</li>
+                        <li>Come from step <code>i - 2</code> using a 2-step move.</li>
+                    </ul>
+                    <p>
+                        So every way to reach <code>i</code> comes from one of those two steps:
+                        <code>dp[i] = dp[i - 1] + dp[i - 2]</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Base cases:</strong>
+                    <ul>
+                        <li><code>dp[1] = 1</code>: only one way (single 1-step).</li>
+                        <li><code>dp[2] = 2</code>: either (1+1) or (2).</li>
+                    </ul>
+                    <p>
+                        You can think of <code>dp[0] = 1</code> as “one way to stand at the bottom”,
+                        which also makes the recurrence consistent.
+                    </p>
+                </li>
+                <li>
+                    <strong>Bottom-up computation:</strong>
+                    <p>
+                        We fill <code>dp[3], dp[4], ..., dp[n]</code> using the recurrence.
+                        This is exactly the Fibonacci sequence, shifted by one index.
+                    </p>
+                </li>
+                <li>
+                    <strong>Space optimization:</strong>
+                    <p>
+                        Each <code>dp[i]</code> depends only on <code>dp[i - 1]</code> and <code>dp[i - 2]</code>,
+                        so we do not need the whole array. Keeping two variables
+                        (<code>prev1, prev2</code>) is enough, which gives <code>O(1)</code> extra space.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s8p2"
+            data-title="Step-by-step: House Robber with rolling DP" hidden>
+            <p>
+                You are given a row of houses with values. Robbing adjacent houses triggers the alarm, so you must
+                choose a subset of non-adjacent houses with maximum total amount.
+            </p>
+            <ol>
+                <li>
+                    <strong>Define the state:</strong>
+                    <p>
+                        Let <code>dp[i]</code> be the maximum amount you can rob from the first
+                        <code>i + 1</code> houses (indices <code>0..i</code>).
+                    </p>
+                </li>
+                <li>
+                    <strong>Choices at house i:</strong>
+                    <ul>
+                        <li>
+                            <strong>Skip house i:</strong> then the best you can do is <code>dp[i - 1]</code>.
+                        </li>
+                        <li>
+                            <strong>Rob house i:</strong> you cannot rob house <code>i - 1</code>, so add
+                            <code>nums[i]</code> to <code>dp[i - 2]</code>.
+                        </li>
+                    </ul>
+                    <p>
+                        Therefore the recurrence is:
+                        <code>dp[i] = max(dp[i - 1], dp[i - 2] + nums[i])</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Base cases:</strong>
+                    <ul>
+                        <li>If there are no houses, the answer is 0.</li>
+                        <li>For one house, <code>dp[0] = nums[0]</code>.</li>
+                        <li>
+                            For two houses,
+                            <code>dp[1] = max(nums[0], nums[1])</code>,
+                            because you can only take one of them.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Iterative computation:</strong>
+                    <p>
+                        Starting from <code>i = 2</code>, we apply the recurrence for each house,
+                        tracking the best total so far.
+                    </p>
+                </li>
+                <li>
+                    <strong>Space optimization:</strong>
+                    <p>
+                        Each step only needs the previous two values (<code>dp[i - 1]</code> and
+                        <code>dp[i - 2]</code>). We store them in <code>prev1</code> and <code>prev2</code>,
+                        updating as we move along, so extra space is <code>O(1)</code>.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s8p3"
+            data-title="Step-by-step: Coin Change (minimum coins)" hidden>
+            <p>
+                We want the minimum number of coins needed to form a given amount, or -1 if it is impossible.
+                This is an unbounded knapsack-style DP because we can reuse coins.
+            </p>
+            <ol>
+                <li>
+                    <strong>Define the state:</strong>
+                    <p>
+                        Let <code>dp[x]</code> be the minimum number of coins needed to make amount <code>x</code>.
+                        Our goal is <code>dp[amount]</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Initialization:</strong>
+                    <ul>
+                        <li><code>dp[0] = 0</code>: zero coins are needed to form amount 0.</li>
+                        <li>
+                            For all <code>x &gt; 0</code>, initialize <code>dp[x]</code> to a large “infinity”
+                            value (e.g. <code>amount + 1</code>) meaning “not yet reachable”.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Transition for each coin:</strong>
+                    <p>
+                        For a given coin value <code>c</code>, consider all amounts <code>x</code> from
+                        <code>c</code> up to <code>amount</code>:
+                    </p>
+                    <ul>
+                        <li>
+                            If we <em>use</em> this coin as the last coin to make <code>x</code>, we first
+                            need to make <code>x - c</code>, which costs <code>dp[x - c]</code> coins.
+                        </li>
+                        <li>
+                            Then using this coin gives a candidate cost
+                            <code>dp[x - c] + 1</code>.
+                        </li>
+                        <li>
+                            We take the minimum over all possibilities:
+                            <code>dp[x] = min(dp[x], dp[x - c] + 1)</code>.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Order of loops:</strong>
+                    <p>
+                        We loop over each coin and then over amounts increasing from <code>coin</code>
+                        to <code>amount</code>. This ensures that when computing <code>dp[x]</code>, the value
+                        <code>dp[x - coin]</code> is already the best known solution.
+                    </p>
+                </li>
+                <li>
+                    <strong>Checking for impossibility:</strong>
+                    <p>
+                        If after filling the table <code>dp[amount]</code> is still larger than
+                        <code>amount</code> (or equal to our sentinel), we return <code>-1</code>, meaning
+                        that no combination of coins reaches that total.
+                    </p>
+                </li>
+                <li>
+                    <strong>Complexity:</strong>
+                    <p>
+                        We do work for each coin and each amount from 0 to <code>amount</code>, giving
+                        <code>O(n * amount)</code> time and <code>O(amount)</code> extra space.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s8p4"
+            data-title="Step-by-step: Unique paths in a grid" hidden>
+            <p>
+                We want to count how many ways there are to move from the top-left to the bottom-right of an
+                <code>m × n</code> grid, moving only right or down.
+            </p>
+            <ol>
+                <li>
+                    <strong>Grid interpretation:</strong>
+                    <p>
+                        Think of each cell <code>(i, j)</code> as a subproblem: “How many ways are there to reach
+                        this cell from the start?”
+                    </p>
+                </li>
+                <li>
+                    <strong>Define the state:</strong>
+                    <p>
+                        Let <code>dp[i][j]</code> be the number of unique paths to cell <code>(i, j)</code>.
+                        We want <code>dp[m - 1][n - 1]</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Transition relationship:</strong>
+                    <ul>
+                        <li>
+                            To get to cell <code>(i, j)</code>, we must have come either from above
+                            <code>(i - 1, j)</code> or from the left <code>(i, j - 1)</code>.
+                        </li>
+                        <li>
+                            Therefore,
+                            <code>dp[i][j] = dp[i - 1][j] + dp[i][j - 1]</code>.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Base cases:</strong>
+                    <ul>
+                        <li>
+                            First row: you can only move right, so <code>dp[0][j] = 1</code> for all <code>j</code>.
+                        </li>
+                        <li>
+                            First column: you can only move down, so <code>dp[i][0] = 1</code> for all <code>i</code>.
+                        </li>
+                    </ul>
+                    <p>
+                        These define the borders of the DP table.
+                    </p>
+                </li>
+                <li>
+                    <strong>Bottom-up fill:</strong>
+                    <p>
+                        After initializing the first row and column, we fill the remaining cells row by row
+                        (or column by column), always using previously computed values above and to the left.
+                    </p>
+                </li>
+                <li>
+                    <strong>Optimization note:</strong>
+                    <p>
+                        Each <code>dp[i][j]</code> depends only on <code>dp[i - 1][j]</code> (previous row)
+                        and <code>dp[i][j - 1]</code> (current row). This means we could compress the 2D table
+                        into a single 1D array of length <code>n</code> if we wanted <code>O(n)</code> space.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s8p5"
+            data-title="Step-by-step: Longest Common Subsequence (LCS)" hidden>
+            <p>
+                Longest Common Subsequence looks for the longest sequence of characters that appears in order
+                (not necessarily contiguously) in both strings. A 2D DP over prefixes is the standard solution.
+            </p>
+            <ol>
+                <li>
+                    <strong>Prefix viewpoint:</strong>
+                    <p>
+                        Let <code>text1[0..i-1]</code> be the first <code>i</code> characters of <code>text1</code>,
+                        and similarly for <code>text2</code>. We build answers for all prefix pairs.
+                    </p>
+                </li>
+                <li>
+                    <strong>Define the state:</strong>
+                    <p>
+                        Let <code>dp[i][j]</code> be the LCS length of
+                        <code>text1[0..i-1]</code> and <code>text2[0..j-1]</code>.
+                        Our final answer is <code>dp[m][n]</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>When characters match:</strong>
+                    <p>
+                        If <code>text1[i - 1] == text2[j - 1]</code>, then that character extends the LCS
+                        of the previous prefixes:
+                    </p>
+                    <p>
+                        <code>dp[i][j] = dp[i - 1][j - 1] + 1</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>When characters do not match:</strong>
+                    <p>
+                        If the last characters differ, the LCS must either:
+                    </p>
+                    <ul>
+                        <li>Exclude <code>text1[i - 1]</code> and use <code>dp[i - 1][j]</code>, or</li>
+                        <li>Exclude <code>text2[j - 1]</code> and use <code>dp[i][j - 1]</code>.</li>
+                    </ul>
+                    <p>
+                        We take the better of these two options:
+                        <code>dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Base cases:</strong>
+                    <p>
+                        If either prefix is empty, the LCS is 0:
+                        <code>dp[0][j] = 0</code> and <code>dp[i][0] = 0</code> for all <code>i, j</code>.
+                        This is why we allocate the table with an extra row and column.
+                    </p>
+                </li>
+                <li>
+                    <strong>Table filling order:</strong>
+                    <p>
+                        We iterate <code>i</code> from 1..m and nested inside, <code>j</code> from 1..n,
+                        applying the rules above. Each cell only depends on earlier rows/columns.
+                    </p>
+                </li>
+                <li>
+                    <strong>Complexity and variations:</strong>
+                    <p>
+                        The table has <code>(m + 1) * (n + 1)</code> cells, each filled in constant time,
+                        so time is <code>O(m * n)</code>. If we only need the length, we can compress to
+                        2 rows (or even 1 row with care) to reduce space to <code>O(min(m, n))</code>.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <!-- ======================= Modal shell reused by all buttons ======================= -->
+
+        <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title">&nbsp;</h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
     </main>
 </body>
 

@@ -29,8 +29,6 @@
 
     <!-- Site scripts (tabs, highlight init, cookies, etc.) -->
     <script src="js/site.js"></script>
-
-    <!-- Favicon -->
     <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
 </head>
 
@@ -87,19 +85,23 @@
                         <span class="label">Problem 1</span>
                         <span class="meta">Array-based min-heap with insert / peek / pop</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s6p1">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
-            <div class="tab-bar">
-                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
-                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
-                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
-                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
-                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
-                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
-            </div>
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
 
-            <!-- C -->
-            <div class="code-panel" data-lang-panel="c">
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
 <pre><code class="language-c">// C
 #include &lt;stdlib.h&gt;
 #include &lt;limits.h&gt;
@@ -182,10 +184,10 @@ int heap_pop(MinHeap *h) {
     }
     return root;
 }</code></pre>
-            </div>
+                </div>
 
-            <!-- C++ -->
-            <div class="code-panel hidden" data-lang-panel="cpp">
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
 <pre><code class="language-cpp">// C++
 #include &lt;vector&gt;
 #include &lt;stdexcept&gt;
@@ -239,10 +241,10 @@ public:
 
     bool empty() const { return data.empty(); }
 };</code></pre>
-            </div>
+                </div>
 
-            <!-- Java -->
-            <div class="code-panel hidden" data-lang-panel="java">
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
 <pre><code class="language-java">// Java
 class MinHeap {
     private int[] data;
@@ -311,10 +313,10 @@ class MinHeap {
         return root;
     }
 }</code></pre>
-            </div>
+                </div>
 
-            <!-- JavaScript -->
-            <div class="code-panel hidden" data-lang-panel="js">
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
 <pre><code class="language-javascript">// JavaScript
 class MinHeap {
     constructor() {
@@ -364,10 +366,10 @@ class MinHeap {
         }
     }
 }</code></pre>
-            </div>
+                </div>
 
-            <!-- C# -->
-            <div class="code-panel hidden" data-lang-panel="cs">
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
 <pre><code class="language-csharp">// C#
 using System;
 using System.Collections.Generic;
@@ -427,10 +429,10 @@ class MinHeap {
         return root;
     }
 }</code></pre>
-            </div>
+                </div>
 
-            <!-- Python -->
-            <div class="code-panel hidden" data-lang-panel="py">
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
 <pre><code class="language-python"># Python
 from typing import List, Optional
 
@@ -477,14 +479,14 @@ class MinHeap:
         self.data[0] = self.data.pop()
         self._heapify(0)
         return root</code></pre>
-            </div>
+                </div>
 
-            <div class="complexity-note">
-                Time: <strong>insert</strong> and <strong>pop</strong> are <strong>O(log n)</strong> (height of heap),
-                <strong>peek</strong> is <strong>O(1)</strong>.  
-                Extra space: <strong>O(n)</strong> for the underlying array.
+                <div class="complexity-note">
+                    Time: <strong>insert</strong> and <strong>pop</strong> are <strong>O(log n)</strong> (height of heap),
+                    <strong>peek</strong> is <strong>O(1)</strong>.  
+                    Extra space: <strong>O(n)</strong> for the underlying array.
+                </div>
             </div>
-        </div>
         </section>
 
         <hr>
@@ -508,6 +510,10 @@ class MinHeap:
                         <span class="label">Problem 2</span>
                         <span class="meta">Bottom-up heap construction</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s6p2">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -708,6 +714,10 @@ def build_heap(arr: List[int]) -&gt; None:
                         <span class="label">Problem 3</span>
                         <span class="meta">K smallest using max-heap of size k</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s6p3">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -930,6 +940,10 @@ def k_smallest(nums: List[int], k: int) -&gt; List[int]:
                         <span class="label">Problem 4</span>
                         <span class="meta">Min-heap over list heads</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s6p4">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -1189,7 +1203,7 @@ def merge_k_lists(lists: List[Optional[ListNode]]) -&gt; Optional[ListNode]:
 
                 <div class="complexity-note">
                     Let N be the total number of nodes across all lists.  
-                    Time: each extract/insert on a heap of size k → <strong>O(log k)</strong>, done N times → <strong>O(N log k)</strong>.  
+                    Time: each extract/insert on a heap of size k → <strong>O(N log k)</strong>.  
                     Extra space: heap stores at most k nodes → <strong>O(k)</strong>.
                 </div>
             </div>
@@ -1214,6 +1228,10 @@ def merge_k_lists(lists: List[Optional[ListNode]]) -&gt; Optional[ListNode]:
                         <span class="label">Problem 5</span>
                         <span class="meta">Streaming kth-largest with a fixed-size min-heap</span>
                     </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s6p5">
+                        Understand the Algorithm
+                    </button>
                 </div>
 
                 <div class="tab-bar">
@@ -1459,6 +1477,476 @@ class KthLargest:
                 Back to Practice Hub →
             </a>
         </div>
+
+        <!-- ======================= Understand-the-algorithm templates ======================= -->
+
+        <div class="deep-dive-template" id="understand-s6p1"
+            data-title="Step-by-step: Implementing an array-based min-heap" hidden>
+            <p>
+                The goal is to store a complete binary tree inside an array and maintain the
+                <strong>min-heap invariant</strong>: every node is less than or equal to its children.
+            </p>
+
+            <ol>
+                <li>
+                    <strong>Mental model of the array:</strong>
+                    <ul>
+                        <li>The array represents a binary tree level by level (breadth-first order).</li>
+                        <li>Index formulas (0-based):
+                            <ul>
+                                <li>Parent of <code>i</code>: <code>(i - 1) / 2</code>.</li>
+                                <li>Left child of <code>i</code>: <code>2 * i + 1</code>.</li>
+                                <li>Right child of <code>i</code>: <code>2 * i + 2</code>.</li>
+                            </ul>
+                        </li>
+                        <li>The minimum element is always at index <code>0</code>.</li>
+                    </ul>
+                </li>
+
+                <li>
+                    <strong>Insert(x) — bubble up:</strong>
+                    <ol>
+                        <li>Place <code>x</code> at the end of the array (<code>data[size]</code>).</li>
+                        <li>
+                            While <code>x</code> is smaller than its parent, swap it with its parent and
+                            move one level up.
+                        </li>
+                        <li>
+                            Stop when you reach the root or when the parent is already ≤ the current node.
+                        </li>
+                    </ol>
+                    <p>
+                        Each swap moves <code>x</code> up one level. The heap height is <code>O(log n)</code>,
+                        so insertion is <code>O(log n)</code>.
+                    </p>
+                </li>
+
+                <li>
+                    <strong>Pop() — remove the minimum:</strong>
+                    <ol>
+                        <li>The minimum is at <code>data[0]</code>; save it as the result.</li>
+                        <li>Move the last element in the array to <code>data[0]</code>.</li>
+                        <li>Decrease <code>size</code> by 1 (we logically remove the last slot).</li>
+                        <li>
+                            Now the root might violate the heap invariant; we fix it by
+                            <strong>heapifying down</strong>:
+                            <ol>
+                                <li>Compare the current node with its left and right children.</li>
+                                <li>Find the smallest among the three.</li>
+                                <li>
+                                    If one of the children is smaller than the current node, swap with the
+                                    smallest child and continue from that child’s index.
+                                </li>
+                                <li>Stop when no child is smaller or you are at a leaf.</li>
+                            </ol>
+                        </li>
+                    </ol>
+                    <p>
+                        Each swap moves the misplaced value down one level; again, at most <code>O(log n)</code>
+                        swaps.
+                    </p>
+                </li>
+
+                <li>
+                    <strong>Peek() — get the minimum without removing it:</strong>
+                    <p>
+                        The minimum is always at the root (<code>data[0]</code>), so
+                        <code>peek()</code> is just an <code>O(1)</code> read. You only need to decide
+                        what to return when the heap is empty (sentinel or <code>null</code>).
+                    </p>
+                </li>
+
+                <li>
+                    <strong>Capacity &amp; resizing:</strong>
+                    <ul>
+                        <li>
+                            In languages with manual memory management, you track <code>size</code> and
+                            <code>capacity</code>.
+                        </li>
+                        <li>
+                            When the array is full, allocate a new array with (for example) 2× capacity,
+                            copy the elements, and free the old one.
+                        </li>
+                    </ul>
+                    <p>
+                        This keeps amortized insertion cost <code>O(1)</code> for capacity growth plus
+                        <code>O(log n)</code> for the heap operations.
+                    </p>
+                </li>
+
+                <li>
+                    <strong>Common pitfalls:</strong>
+                    <ul>
+                        <li>Off-by-one errors in the parent/child formulas.</li>
+                        <li>Forgetting to update <code>size</code> after insert/pop.</li>
+                        <li>Not handling the empty-heap case in <code>peek</code> and <code>pop</code>.</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s6p2"
+            data-title="Step-by-step: Building a heap in O(n) with bottom-up heapify" hidden>
+            <p>
+                Instead of inserting elements one by one (which costs <code>O(n log n)</code>),
+                we transform an existing array into a heap in <strong>linear time</strong> using
+                bottom-up heapify.
+            </p>
+
+            <ol>
+                <li>
+                    <strong>View the array as a complete tree:</strong>
+                    <ul>
+                        <li>
+                            The array already has <code>n</code> elements; pretend it is a tree with the
+                            same parent/child index relationships as in the heap.
+                        </li>
+                        <li>Leaves are at indices <code>n/2</code> to <code>n - 1</code>.</li>
+                        <li>
+                            Nodes at indices <code>0</code> to <code>n/2 - 1</code> are internal nodes
+                            that can have children.
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <strong>Key idea:</strong>
+                    <p>
+                        Leaves are trivially heaps (size 1). If both children of a node are roots of heaps,
+                        we can call <code>heapify</code> on that node to turn the whole subtree into a heap.
+                    </p>
+                </li>
+
+                <li>
+                    <strong>The algorithm:</strong>
+                    <ol>
+                        <li>Let <code>start = n/2 - 1</code> (last index that can have children).</li>
+                        <li>
+                            For <code>i</code> from <code>start</code> down to <code>0</code>:
+                            <ul>
+                                <li>Call <code>heapify(arr, n, i)</code>.</li>
+                                <li>
+                                    This may swap <code>arr[i]</code> down the tree until the min-heap
+                                    property is restored for that subtree.
+                                </li>
+                            </ul>
+                        </li>
+                    </ol>
+                </li>
+
+                <li>
+                    <strong>Why we go from bottom up:</strong>
+                    <ul>
+                        <li>
+                            When we call <code>heapify</code> on a node, we assume its children’s subtrees
+                            are already valid heaps.
+                        </li>
+                        <li>
+                            By processing indices from <code>n/2 - 1</code> down to <code>0</code>, we guarantee
+                            that all children have been fixed before their parent.
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <strong>Why total time is O(n):</strong>
+                    <p>
+                        Intuitively:
+                    </p>
+                    <ul>
+                        <li>Nodes near the bottom have very small subtrees and cheap <code>heapify</code>.</li>
+                        <li>Nodes near the top have larger subtrees but there are very few of them.</li>
+                        <li>
+                            If you sum “number of nodes at depth d × cost per node at depth d”, the total
+                            is bounded by a constant times <code>n</code>.
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <strong>Comparing with insert-based build:</strong>
+                    <ul>
+                        <li>
+                            Insert <code>n</code> elements one by one: each insert costs <code>O(log n)</code>,
+                            total <code>O(n log n)</code>.
+                        </li>
+                        <li>
+                            Bottom-up build: a single pass of <code>heapify</code> calls, total
+                            <code>O(n)</code>.
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <strong>Edge cases:</strong>
+                    <ul>
+                        <li><code>n &lt;= 1</code>: the array is already a heap.</li>
+                        <li>
+                            Make sure <code>start = n/2 - 1</code> uses integer division so you don’t
+                            get fractional indices.
+                        </li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s6p3"
+            data-title="Step-by-step: Using a max-heap of size k to find k smallest elements" hidden>
+            <p>
+                We want the <strong>k smallest</strong> elements from an array of size <code>n</code>,
+                but we don’t need them fully sorted. A <strong>max-heap of size k</strong> lets us keep
+                only the useful candidates.
+            </p>
+
+            <ol>
+                <li>
+                    <strong>What the heap stores:</strong>
+                    <ul>
+                        <li>
+                            At any point, the heap contains the current “best” <code>k</code> elements:
+                            the smallest <code>k</code> numbers seen so far.
+                        </li>
+                        <li>
+                            Because we want to quickly drop the worst of these candidates (the largest),
+                            we make it a <strong>max-heap</strong>.
+                        </li>
+                        <li>
+                            The heap root is the largest of the current top-k, i.e., the “kth smallest so far”.
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <strong>Processing each element x:</strong>
+                    <ol>
+                        <li>
+                            If the heap has fewer than <code>k</code> elements, just push <code>x</code>.
+                            We haven’t even collected k candidates yet.
+                        </li>
+                        <li>
+                            Otherwise, compare <code>x</code> to the heap root:
+                            <ul>
+                                <li>If <code>x</code> is <strong>smaller</strong> than the root, it’s better.</li>
+                                <li>Pop the root (the current worst candidate) and push <code>x</code>.</li>
+                                <li>If <code>x</code> is larger or equal, we ignore it.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </li>
+
+                <li>
+                    <strong>End result:</strong>
+                    <p>
+                        After scanning the array once, the heap contains exactly <code>k</code> elements:
+                        the <strong>k smallest</strong> numbers (in any order).
+                    </p>
+                </li>
+
+                <li>
+                    <strong>Why the complexity is O(n log k):</strong>
+                    <ul>
+                        <li>The heap size is limited to <code>k</code>.</li>
+                        <li>
+                            Each push/pop is <code>O(log k)</code>, and we do at most one such operation per
+                            element.
+                        </li>
+                        <li>Total: <code>O(n log k)</code>, which is better than sorting when <code>k &lt; n</code>.</li>
+                    </ul>
+                </li>
+
+                <li>
+                    <strong>Why max-heap, not min-heap:</strong>
+                    <p>
+                        We are trying to keep the smallest elements. The one we most want to discard is the
+                        <em>largest</em> among the kept elements, so that should be at the top of the heap.
+                        That’s exactly what a max-heap gives us.
+                    </p>
+                </li>
+
+                <li>
+                    <strong>Edge cases:</strong>
+                    <ul>
+                        <li>If <code>k = 0</code>, the answer is just an empty list.</li>
+                        <li>If <code>k &ge; n</code>, you can just return all elements.</li>
+                        <li>
+                            Always guard against popping from an empty heap when implementing the structure
+                            by hand.
+                        </li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s6p4"
+            data-title="Step-by-step: Merging k sorted lists with a min-heap" hidden>
+            <p>
+                We have <code>k</code> sorted linked lists and want a single sorted list containing all nodes.
+                A <strong>min-heap</strong> keeps track of the smallest current head among the lists.
+            </p>
+
+            <ol>
+                <li>
+                    <strong>What goes in the heap:</strong>
+                    <ul>
+                        <li>
+                            We store <strong>pointers to nodes</strong> (or indices) rather than values alone.
+                        </li>
+                        <li>Each heap element is one “frontier” node from one list.</li>
+                        <li>The heap is ordered by <code>node.val</code> (min-heap).</li>
+                    </ul>
+                </li>
+
+                <li>
+                    <strong>Initialization:</strong>
+                    <ol>
+                        <li>For each list, if its head is not null, push that head node into the heap.</li>
+                        <li>
+                            After this, the heap contains at most <code>k</code> nodes: the current smallest
+                            element from each non-empty list.
+                        </li>
+                    </ol>
+                </li>
+
+                <li>
+                    <strong>Main loop:</strong>
+                    <ol>
+                        <li>Pop the smallest node from the heap; call it <code>node</code>.</li>
+                        <li>Append <code>node</code> to the result list (using a dummy head + tail pointer).</li>
+                        <li>
+                            If <code>node.next</code> is not null, push <code>node.next</code> into the heap.
+                        </li>
+                        <li>Repeat until the heap is empty.</li>
+                    </ol>
+                </li>
+
+                <li>
+                    <strong>Why this produces a fully sorted list:</strong>
+                    <p>
+                        At each step, all remaining nodes not yet added to the result are somewhere
+                        in the lists. The heap holds the smallest current head from each list, so the
+                        smallest remaining overall value must be at the top of the heap. By always popping
+                        that node, we append elements in ascending order.
+                    </p>
+                </li>
+
+                <li>
+                    <strong>Complexity intuition:</strong>
+                    <ul>
+                        <li>
+                            Let <code>N</code> be the total number of nodes across all lists, and heap size
+                            is at most <code>k</code>.
+                        </li>
+                        <li>
+                            Each node is pushed once and popped once; each heap operation is
+                            <code>O(log k)</code>.
+                        </li>
+                        <li>Total time: <code>O(N log k)</code>. Extra heap space: <code>O(k)</code>.</li>
+                    </ul>
+                </li>
+
+                <li>
+                    <strong>Common issues:</strong>
+                    <ul>
+                        <li>Forgetting to check <code>node.next</code> for null before pushing.</li>
+                        <li>Not updating the tail pointer correctly when building the result.</li>
+                        <li>
+                            In some languages, you may need a tie-breaker (like an increasing index)
+                            to avoid comparing node pointers directly when values are equal.
+                        </li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s6p5"
+            data-title="Step-by-step: Kth largest in a stream with a fixed-size min-heap" hidden>
+            <p>
+                We see numbers one by one and need to report the <strong>kth largest</strong> at all times.
+                A <strong>min-heap of size k</strong> is the perfect data structure for this.
+            </p>
+
+            <ol>
+                <li>
+                    <strong>Invariant of the heap:</strong>
+                    <ul>
+                        <li>The heap always stores the <strong>k largest</strong> values seen so far (or fewer while warming up).</li>
+                        <li>The smallest of these k values — the heap root — is the <strong>kth largest overall</strong>.</li>
+                    </ul>
+                </li>
+
+                <li>
+                    <strong>Initialization with an initial array:</strong>
+                    <ol>
+                        <li>Start with an empty min-heap.</li>
+                        <li>
+                            For each initial value <code>x</code>, call the same logic you use for
+                            <code>add()</code> (see next step).
+                        </li>
+                    </ol>
+                </li>
+
+                <li>
+                    <strong>The add(val) operation:</strong>
+                    <ol>
+                        <li>If heap size &lt; <code>k</code>, push <code>val</code> directly.</li>
+                        <li>
+                            Otherwise, compare <code>val</code> to the heap root
+                            (<code>heap[0]</code> in array-based min-heap):
+                            <ul>
+                                <li>If <code>val</code> is ≤ root, it’s not in the top k; ignore it.</li>
+                                <li>
+                                    If <code>val</code> is &gt; root, pop the root (old kth largest) and
+                                    push <code>val</code> (new better candidate).
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            After this, the root of the heap is the current kth largest value; return it.
+                        </li>
+                    </ol>
+                </li>
+
+                <li>
+                    <strong>Why this works:</strong>
+                    <p>
+                        The heap always tracks the k biggest values seen so far. If a new value is not
+                        larger than the smallest of these (the root), then it cannot belong in the top k.
+                        If it is larger, we replace the current smallest among the top k with it.
+                    </p>
+                </li>
+
+                <li>
+                    <strong>Complexity:</strong>
+                    <ul>
+                        <li>Heap size is capped at <code>k</code>.</li>
+                        <li>Each <code>add</code> does at most one push and one pop → <code>O(log k)</code>.</li>
+                        <li>Extra space: <code>O(k)</code> for the heap.</li>
+                    </ul>
+                </li>
+
+                <li>
+                    <strong>Special cases:</strong>
+                    <ul>
+                        <li>If <code>k = 1</code>, the heap just tracks the maximum.</li>
+                        <li>
+                            Handling <code>k = 0</code> is typically undefined; production code should either
+                            disallow it or define clear semantics.
+                        </li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <!-- ======================= Modal shell reused by all buttons ======================= -->
+
+        <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title">&nbsp;</h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
     </main>
 </body>
 
