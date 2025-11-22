@@ -8,6 +8,13 @@
             "type": "java",
             "name": "section2",
             "request": "launch",
+            "mainClass": "code_samples.section2.problems.section2",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
+            "name": "section2",
+            "request": "launch",
             "mainClass": "code_samples.section2.lesson.section2",
             "projectName": "data-structures-algorithms_76b8ffa0"
         },
