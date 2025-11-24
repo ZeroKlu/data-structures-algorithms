@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Section 12 - Search and Sort Algorithms</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css">
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tab logic, highlight init, prefs, etc.) -->
+    <script src="js/site.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="index.html">← Back to Index</a>
+        </div>
+
+        <div class="kicker">Section 12</div>
+        <h1>Search and Sort Algorithms</h1>
+        <p class="tagline">
+            Learn how to reason about time and space complexity, then see Big-O in action with
+            linear search, binary search, and the classic sorting algorithms.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <!-- ========================= 0.1 Big-O ========================= -->
+        <h2>
+            0.1 What Big-O Complexity Means
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s0-big-o">
+                Dig deeper
+            </button>
+            <button type="button" class="deep-dive-trigger secondary" data-deep-id="understand-s12-big-o">
+                Understand Big-O
+            </button>
+        </h2>
+        <p>
+            Big-O notation describes how the running time or memory usage of an algorithm
+            grows as the size of the input <code>n</code> grows. It ignores constant factors
+            and focuses on the <em>shape</em> of the growth.
+        </p>
+        <ul class="bullet-tight">
+            <li><strong>O(1)</strong> - constant time (e.g., reading <code>arr[k]</code>).</li>
+            <li><strong>O(log n)</strong> - logarithmic (e.g., binary search).</li>
+            <li><strong>O(n)</strong> - linear (e.g., scanning an array once).</li>
+            <li><strong>O(n log n)</strong> - “fast” sorts like mergesort / quicksort average.</li>
+            <li><strong>O(n²)</strong> - simple double loops (e.g., bubble / selection sort).</li>
+            <li><strong>O(2ⁿ)</strong>, <strong>O(n!)</strong> - brute force over subsets / permutations.</li>
+        </ul>
+
+        <div class="callout">
+            <strong>Mental model:</strong> when <code>n</code> doubles, what happens to the
+            running time? Big-O gives you a rough multiplier (e.g., &ldquo;about 4x slower&rdquo;)
+            instead of an exact number of steps.
+        </div>
+
+        <hr>
+
+        <!-- ======================= 0.2 Linear Search ======================= -->
+        <h2>
+            0.2 Example - Linear Search (O(n))
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s0-linear">
+                Dig deeper
+            </button>
+            <button type="button" class="deep-dive-trigger inline secondary" data-deep-id="understand-s12-linear">
+                Understand the algorithm
+            </button>
+        </h2>
+        <p>
+            Given an array and a target value, <strong>linear search</strong> checks each element
+            one by one until it finds the target or reaches the end.
+        </p>
+        <ul>
+            <li>Worst case: you check all <code>n</code> elements → <strong>O(n)</strong>.</li>
+            <li>Best case: the target is at index 0 → still Big-O <strong>O(n)</strong> (Big-O ignores constants).</li>
+        </ul>
+
+        <!-- If you want to link your interactive demo, you can add:
+        <p>
+            <a href="big-o/01_linear_search/javascript/linear_search.html" target="_blank">
+                Open interactive linear search demo →
+            </a>
+        </p>
+        -->
+
+        <div class="code-example" data-example="s0-ex1-linear">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 1</span>
+                    <span class="meta">Linear search returning the index or -1</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C - linear search
+int linear_search(const int* arr, int n, int target) {
+    for (int i = 0; i &lt; n; i++) {
+        if (arr[i] == target) {
+            return i;   // found at index i
+        }
+    }
+    return -1;          // not found
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++ - linear search
+#include &lt;vector&gt;
+using std::vector;
+
+int linearSearch(const vector&lt;int&gt;&amp; arr, int target) {
+    for (int i = 0; i &lt; (int)arr.size(); i++) {
+        if (arr[i] == target) {
+            return i;
+        }
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java - linear search
+int linearSearch(int[] arr, int target) {
+    for (int i = 0; i &lt; arr.length; i++) {
+        if (arr[i] == target) {
+            return i;
+        }
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript - linear search
+function linearSearch(arr, target) {
+    for (let i = 0; i &lt; arr.length; i++) {
+        if (arr[i] === target) {
+            return i;
+        }
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C# - linear search
+int LinearSearch(int[] arr, int target) {
+    for (int i = 0; i &lt; arr.Length; i++) {
+        if (arr[i] == target) {
+            return i;
+        }
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python - linear search
+from typing import List
+
+def linear_search(arr: List[int], target: int) -&gt; int:
+    for i, value in enumerate(arr):
+        if value == target:
+            return i
+    return -1</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n)</strong> worst case. &nbsp;|&nbsp;
+                Extra space: <strong>O(1)</strong>.
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- ======================= 0.3 Binary Search ======================= -->
+        <h2>
+            0.3 Example - Binary Search (O(log n))
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s0-binary">
+                Dig deeper
+            </button>
+            <button type="button" class="deep-dive-trigger inline secondary" data-deep-id="understand-s12-binary">
+                Understand the algorithm
+            </button>
+        </h2>
+        <p>
+            If the array is sorted, <strong>binary search</strong> repeatedly halves the search space:
+            compare the middle element, then keep only the left or right half.
+        </p>
+        <ul>
+            <li>Each step cuts the remaining range roughly in half.</li>
+            <li>Number of steps ≈ how many times you can halve <code>n</code> → <strong>O(log n)</strong>.</li>
+        </ul>
+
+        <div class="code-example" data-example="s0-ex2-binary">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 2</span>
+                    <span class="meta">Binary search on a sorted array</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C - binary search (iterative)
+int binary_search(const int* arr, int n, int target) {
+    int lo = 0, hi = n - 1;
+    while (lo &lt;= hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] == target) {
+            return mid;
+        } else if (arr[mid] &lt; target) {
+            lo = mid + 1;
+        } else {
+            hi = mid - 1;
+        }
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++ - binary search
+#include &lt;vector&gt;
+using std::vector;
+
+int binarySearch(const vector&lt;int&gt;&amp; arr, int target) {
+    int lo = 0, hi = (int)arr.size() - 1;
+    while (lo &lt;= hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] == target) {
+            return mid;
+        } else if (arr[mid] &lt; target) {
+            lo = mid + 1;
+        } else {
+            hi = mid - 1;
+        }
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java - binary search
+int binarySearch(int[] arr, int target) {
+    int lo = 0, hi = arr.length - 1;
+    while (lo &lt;= hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] == target) {
+            return mid;
+        } else if (arr[mid] &lt; target) {
+            lo = mid + 1;
+        } else {
+            hi = mid - 1;
+        }
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript - binary search
+function binarySearch(arr, target) {
+    let lo = 0, hi = arr.length - 1;
+    while (lo &lt;= hi) {
+        const mid = Math.floor(lo + (hi - lo) / 2);
+        if (arr[mid] === target) {
+            return mid;
+        } else if (arr[mid] &lt; target) {
+            lo = mid + 1;
+        } else {
+            hi = mid - 1;
+        }
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C# - binary search
+int BinarySearch(int[] arr, int target) {
+    int lo = 0, hi = arr.Length - 1;
+    while (lo &lt;= hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] == target) {
+            return mid;
+        } else if (arr[mid] &lt; target) {
+            lo = mid + 1;
+        } else {
+            hi = mid - 1;
+        }
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python - binary search
+from typing import List
+
+def binary_search(arr: List[int], target: int) -&gt; int:
+    lo, hi = 0, len(arr) - 1
+    while lo &lt;= hi:
+        mid = lo + (hi - lo) // 2
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] &lt; target:
+            lo = mid + 1
+        else:
+            hi = mid - 1
+    return -1</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(log n)</strong> (each step halves the range). &nbsp;|&nbsp;
+                Extra space: <strong>O(1)</strong>.
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- ======================= 0.4 Selection Sort ======================= -->
+        <h2>
+            0.4 Selection Sort (O(n²))
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s0-selection">
+                Dig deeper
+            </button>
+            <button type="button" class="deep-dive-trigger inline secondary" data-deep-id="understand-s12-selection">
+                Understand the algorithm
+            </button>
+        </h2>
+        <p>
+            <strong>Selection sort</strong> repeatedly selects the smallest remaining element and
+            swaps it into the next position.
+        </p>
+        <ul class="bullet-tight">
+            <li>Outer loop picks index <code>i</code> from 0 to <code>n-1</code>.</li>
+            <li>Inner loop scans the remaining elements to find the minimum.</li>
+            <li>Two nested loops over <code>n</code> → <strong>O(n²)</strong>.</li>
+        </ul>
+
+        <div class="code-example" data-example="s0-ex3-selection">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 3</span>
+                    <span class="meta">Selection sort in-place</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C - selection sort
+void selection_sort(int* arr, int n) {
+    for (int i = 0; i &lt; n; i++) {
+        int min_idx = i;
+        for (int j = i + 1; j &lt; n; j++) {
+            if (arr[j] &lt; arr[min_idx]) {
+                min_idx = j;
+            }
+        }
+        int tmp = arr[i];
+        arr[i] = arr[min_idx];
+        arr[min_idx] = tmp;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++ - selection sort
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+
+void selectionSort(std::vector&lt;int&gt;&amp; arr) {
+    int n = (int)arr.size();
+    for (int i = 0; i &lt; n; i++) {
+        int minIdx = i;
+        for (int j = i + 1; j &lt; n; j++) {
+            if (arr[j] &lt; arr[minIdx]) {
+                minIdx = j;
+            }
+        }
+        std::swap(arr[i], arr[minIdx]);
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java - selection sort
+void selectionSort(int[] arr) {
+    int n = arr.length;
+    for (int i = 0; i &lt; n; i++) {
+        int minIdx = i;
+        for (int j = i + 1; j &lt; n; j++) {
+            if (arr[j] &lt; arr[minIdx]) {
+                minIdx = j;
+            }
+        }
+        int tmp = arr[i];
+        arr[i] = arr[minIdx];
+        arr[minIdx] = tmp;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript - selection sort
+function selectionSort(arr) {
+    const n = arr.length;
+    for (let i = 0; i &lt; n; i++) {
+        let minIdx = i;
+        for (let j = i + 1; j &lt; n; j++) {
+            if (arr[j] &lt; arr[minIdx]) {
+                minIdx = j;
+            }
+        }
+        [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C# - selection sort
+void SelectionSort(int[] arr) {
+    int n = arr.Length;
+    for (int i = 0; i &lt; n; i++) {
+        int minIdx = i;
+        for (int j = i + 1; j &lt; n; j++) {
+            if (arr[j] &lt; arr[minIdx]) {
+                minIdx = j;
+            }
+        }
+        int tmp = arr[i];
+        arr[i] = arr[minIdx];
+        arr[minIdx] = tmp;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python - selection sort
+from typing import List
+
+def selection_sort(arr: List[int]) -&gt; None:
+    n = len(arr)
+    for i in range(n):
+        min_idx = i
+        for j in range(i + 1, n):
+            if arr[j] &lt; arr[min_idx]:
+                min_idx = j
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n²)</strong> (two nested loops). &nbsp;|&nbsp;
+                Extra space: <strong>O(1)</strong>.
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- ======================= 0.5 Bubble Sort ======================= -->
+        <h2>
+            0.5 Bubble Sort (O(n²))
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s0-bubble">
+                Dig deeper
+            </button>
+            <button type="button" class="deep-dive-trigger inline secondary" data-deep-id="understand-s12-bubble">
+                Understand the algorithm
+            </button>
+        </h2>
+        <p>
+            <strong>Bubble sort</strong> repeatedly “bubbles up” the largest element to the end
+            by swapping adjacent out-of-order pairs.
+        </p>
+
+        <div class="code-example" data-example="s0-ex4-bubble">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 4</span>
+                    <span class="meta">Bubble sort with early exit</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C - bubble sort
+#include &lt;stdbool.h&gt;
+
+void bubble_sort(int* arr, int n) {
+    bool swapped = true;
+    while (swapped) {
+        swapped = false;
+        for (int i = 1; i &lt; n; i++) {
+            if (arr[i - 1] &gt; arr[i]) {
+                int tmp = arr[i - 1];
+                arr[i - 1] = arr[i];
+                arr[i] = tmp;
+                swapped = true;
+            }
+        }
+        n--; // last element is now in place
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++ - bubble sort
+#include &lt;vector&gt;
+
+void bubbleSort(std::vector&lt;int&gt;&amp; arr) {
+    int n = (int)arr.size();
+    bool swapped = true;
+    while (swapped) {
+        swapped = false;
+        for (int i = 1; i &lt; n; i++) {
+            if (arr[i - 1] &gt; arr[i]) {
+                std::swap(arr[i - 1], arr[i]);
+                swapped = true;
+            }
+        }
+        n--;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java - bubble sort
+void bubbleSort(int[] arr) {
+    int n = arr.length;
+    boolean swapped = true;
+    while (swapped) {
+        swapped = false;
+        for (int i = 1; i &lt; n; i++) {
+            if (arr[i - 1] &gt; arr[i]) {
+                int tmp = arr[i - 1];
+                arr[i - 1] = arr[i];
+                arr[i] = tmp;
+                swapped = true;
+            }
+        }
+        n--;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript - bubble sort
+function bubbleSort(arr) {
+    let n = arr.length;
+    let swapped = true;
+    while (swapped) {
+        swapped = false;
+        for (let i = 1; i &lt; n; i++) {
+            if (arr[i - 1] &gt; arr[i]) {
+                [arr[i - 1], arr[i]] = [arr[i], arr[i - 1]];
+                swapped = true;
+            }
+        }
+        n--;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C# - bubble sort
+void BubbleSort(int[] arr) {
+    int n = arr.Length;
+    bool swapped = true;
+    while (swapped) {
+        swapped = false;
+        for (int i = 1; i &lt; n; i++) {
+            if (arr[i - 1] &gt; arr[i]) {
+                int tmp = arr[i - 1];
+                arr[i - 1] = arr[i];
+                arr[i] = tmp;
+                swapped = true;
+            }
+        }
+        n--;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python - bubble sort
+from typing import List
+
+def bubble_sort(arr: List[int]) -&gt; None:
+    n = len(arr)
+    swapped = True
+    while swapped:
+        swapped = False
+        for i in range(1, n):
+            if arr[i - 1] &gt; arr[i]:
+                arr[i - 1], arr[i] = arr[i], arr[i - 1]
+                swapped = True
+        n -= 1</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n²)</strong> worst case; can be <strong>O(n)</strong> best case if already sorted. &nbsp;|&nbsp;
+                Extra space: <strong>O(1)</strong>.
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- ======================= 0.6 Merge Sort ======================= -->
+        <h2>
+            0.6 Merge Sort (O(n log n))
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s0-merge">
+                Dig deeper
+            </button>
+            <button type="button" class="deep-dive-trigger inline secondary" data-deep-id="understand-s12-merge">
+                Understand the algorithm
+            </button>
+        </h2>
+        <p>
+            <strong>Merge sort</strong> uses the classic divide-and-conquer pattern:
+        </p>
+        <ol>
+            <li>Split the array into two halves.</li>
+            <li>Recursively sort each half.</li>
+            <li>Merge the two sorted halves.</li>
+        </ol>
+        <p>
+            Each level of recursion does <strong>O(n)</strong> merge work, and there are
+            <strong>O(log n)</strong> levels → overall <strong>O(n log n)</strong>.
+        </p>
+
+        <div class="code-example" data-example="s0-ex5-merge">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 5</span>
+                    <span class="meta">Merge sort on an array</span>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C - merge sort (simplified, uses temp array)
+#include &lt;stdlib.h&gt;
+
+static void merge(int* arr, int* tmp, int left, int mid, int right) {
+    int i = left, j = mid, k = left;
+    while (i &lt; mid &amp;&amp; j &lt; right) {
+        if (arr[i] &lt;= arr[j]) tmp[k++] = arr[i++];
+        else                  tmp[k++] = arr[j++];
+    }
+    while (i &lt; mid)  tmp[k++] = arr[i++];
+    while (j &lt; right) tmp[k++] = arr[j++];
+    for (int p = left; p &lt; right; p++) {
+        arr[p] = tmp[p];
+    }
+}
+
+static void merge_sort_rec(int* arr, int* tmp, int left, int right) {
+    if (right - left &lt;= 1) return;
+    int mid = left + (right - left) / 2;
+    merge_sort_rec(arr, tmp, left, mid);
+    merge_sort_rec(arr, tmp, mid, right);
+    merge(arr, tmp, left, mid, right);
+}
+
+void merge_sort(int* arr, int n) {
+    int* tmp = (int*)malloc(sizeof(int) * n);
+    merge_sort_rec(arr, tmp, 0, n);
+    free(tmp);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++ - merge sort
+#include &lt;vector&gt;
+using std::vector;
+
+static void merge(vector&lt;int&gt;&amp; arr, vector&lt;int&gt;&amp; tmp, int left, int mid, int right) {
+    int i = left, j = mid, k = left;
+    while (i &lt; mid &amp;&amp; j &lt; right) {
+        if (arr[i] &lt;= arr[j]) tmp[k++] = arr[i++];
+        else                  tmp[k++] = arr[j++];
+    }
+    while (i &lt; mid)  tmp[k++] = arr[i++];
+    while (j &lt; right) tmp[k++] = arr[j++];
+    for (int p = left; p &lt; right; p++) {
+        arr[p] = tmp[p];
+    }
+}
+
+static void mergeSortRec(vector&lt;int&gt;&amp; arr, vector&lt;int&gt;&amp; tmp, int left, int right) {
+    if (right - left &lt;= 1) return;
+    int mid = left + (right - left) / 2;
+    mergeSortRec(arr, tmp, left, mid);
+    mergeSortRec(arr, tmp, mid, right);
+    merge(arr, tmp, left, mid, right);
+}
+
+void mergeSort(vector&lt;int&gt;&amp; arr) {
+    vector&lt;int&gt; tmp(arr.size());
+    mergeSortRec(arr, tmp, 0, (int)arr.size());
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java - merge sort
+void mergeSort(int[] arr) {
+    int n = arr.length;
+    int[] tmp = new int[n];
+    mergeSortRec(arr, tmp, 0, n);
+}
+
+private void mergeSortRec(int[] arr, int[] tmp, int left, int right) {
+    if (right - left &lt;= 1) return;
+    int mid = left + (right - left) / 2;
+    mergeSortRec(arr, tmp, left, mid);
+    mergeSortRec(arr, tmp, mid, right);
+    merge(arr, tmp, left, mid, right);
+}
+
+private void merge(int[] arr, int[] tmp, int left, int mid, int right) {
+    int i = left, j = mid, k = left;
+    while (i &lt; mid &amp;&amp; j &lt; right) {
+        if (arr[i] &lt;= arr[j]) tmp[k++] = arr[i++];
+        else                  tmp[k++] = arr[j++];
+    }
+    while (i &lt; mid)  tmp[k++] = arr[i++];
+    while (j &lt; right) tmp[k++] = arr[j++];
+    for (int p = left; p &lt; right; p++) {
+        arr[p] = tmp[p];
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript - merge sort (returns new array)
+function mergeSort(arr) {
+    if (arr.length &lt;= 1) return arr.slice();
+    const mid = Math.floor(arr.length / 2);
+    const left = mergeSort(arr.slice(0, mid));
+    const right = mergeSort(arr.slice(mid));
+    return merge(left, right);
+}
+
+function merge(left, right) {
+    const result = [];
+    let i = 0, j = 0;
+    while (i &lt; left.length &amp;&amp; j &lt; right.length) {
+        if (left[i] &lt;= right[j]) {
+            result.push(left[i++]);
+        } else {
+            result.push(right[j++]);
+        }
+    }
+    return result.concat(left.slice(i)).concat(right.slice(j));
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C# - merge sort
+void MergeSort(int[] arr) {
+    int n = arr.Length;
+    int[] tmp = new int[n];
+    MergeSortRec(arr, tmp, 0, n);
+}
+
+void MergeSortRec(int[] arr, int[] tmp, int left, int right) {
+    if (right - left &lt;= 1) return;
+    int mid = left + (right - left) / 2;
+    MergeSortRec(arr, tmp, left, mid);
+    MergeSortRec(arr, tmp, mid, right);
+    Merge(arr, tmp, left, mid, right);
+}
+
+void Merge(int[] arr, int[] tmp, int left, int mid, int right) {
+    int i = left, j = mid, k = left;
+    while (i &lt; mid &amp;&amp; j &lt; right) {
+        if (arr[i] &lt;= arr[j]) tmp[k++] = arr[i++];
+        else                  tmp[k++] = arr[j++];
+    }
+    while (i &lt; mid)  tmp[k++] = arr[i++];
+    while (j &lt; right) tmp[k++] = arr[j++];
+    for (int p = left; p &lt; right; p++) {
+        arr[p] = tmp[p];
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python - merge sort (returns new list)
+from typing import List
+
+def merge_sort(arr: List[int]) -&gt; List[int]:
+    if len(arr) &lt;= 1:
+        return arr[:]
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+    return _merge(left, right)
+
+def _merge(left: List[int], right: List[int]) -&gt; List[int]:
+    result: List[int] = []
+    i = j = 0
+    while i &lt; len(left) and j &lt; len(right):
+        if left[i] &lt;= right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result</code></pre>
+            </div>
+
+            <div class="complexity-note">
+                Time: <strong>O(n log n)</strong>. &nbsp;|&nbsp;
+                Extra space: <strong>O(n)</strong> for temporary arrays.
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- ======================= 0.7 Choosing Algorithms ======================= -->
+        <h2>0.7 Picking the Right Algorithm</h2>
+        <ul>
+            <li>
+                <strong>Search in unsorted data</strong> → linear search (or sort once, then use binary search).
+            </li>
+            <li>
+                <strong>Search in sorted data</strong> → binary search (O(log n)).
+            </li>
+            <li>
+                <strong>Small n or teaching / whiteboard problems</strong> →
+                simple O(n²) sorts like selection / bubble are fine.
+            </li>
+            <li>
+                <strong>Real-world large inputs</strong> → prefer O(n log n) sorting (merge / quicksort).
+            </li>
+        </ul>
+
+        <div class="top-nav">
+            <a href="index.html">
+                ← Back to Index
+            </a>
+        </div>
+
+        <!-- ======================= Understand templates ======================= -->
+
+        <div class="deep-dive-template" id="understand-s12-big-o"
+            data-title="Understanding Big-O and why it matters" hidden>
+            <p>
+                Big-O describes how the <strong>cost of the process</strong> grows as the input size
+                <code>n</code> grows. One way to think about it:
+            </p>
+            <ol>
+                <li>
+                    <strong>Input</strong>: the raw data your program receives (size = <code>n</code>).
+                </li>
+                <li>
+                    <strong>Process</strong>: the algorithm (steps) that transform input → output.
+                    Big-O is about how expensive this part gets as <code>n</code> grows.
+                </li>
+                <li>
+                    <strong>Output</strong>: the result. Its size may be smaller, equal, or larger
+                    than the input, but Big-O usually focuses on the processing cost.
+                </li>
+            </ol>
+
+            <p>
+                When we say Big-O here, we usually mean <strong>asymptotic worst-case complexity</strong>:
+                how the running time grows as <code>n → ∞</code>, in the slowest scenario.
+            </p>
+
+            <h3>Typical Big-O classes</h3>
+            <ul>
+                <li>
+                    <strong>O(1)</strong> – constant time:
+                    array index access, setting a variable, a single arithmetic operation.
+                </li>
+                <li>
+                    <strong>O(n)</strong> – linear time:
+                    scanning a list once, e.g. a simple <code>for</code> loop or linear search.
+                </li>
+                <li>
+                    <strong>O(n²)</strong> – quadratic time:
+                    simple double loops over the same list, or naive comparison-based algorithms.
+                </li>
+                <li>
+                    <strong>O(log n)</strong> – logarithmic time:
+                    divide the search space in half each step (binary search, balanced trees).
+                </li>
+                <li>
+                    <strong>O(n log n)</strong> – loglinear time:
+                    &ldquo;good&rdquo; comparison-based sorts like mergesort and heapsort.
+                </li>
+                <li>
+                    <strong>O(2ⁿ)</strong>, <strong>O(n!)</strong> – exponential / factorial:
+                    brute forcing all subsets or permutations; usually only viable for small <code>n</code>.
+                </li>
+            </ul>
+
+            <h3>Ignoring constants and lower-order terms</h3>
+            <p>
+                Big-O drops constant multipliers and lower powers. An algorithm that does
+                <code>3 · n</code> or <code>12 · n</code> operations is still O(n). One that does
+                <code>0.5 · n²</code> work is still O(n²). We only care about the <em>shape</em>:
+                doubling <code>n</code> roughly:
+            </p>
+            <ul>
+                <li>Leaves O(1) unchanged.</li>
+                <li>Doubles O(n).</li>
+                <li>Quadruples O(n²).</li>
+                <li>Adds a small constant to O(log n).</li>
+            </ul>
+
+            <h3>When should you pay to sort?</h3>
+            <p>
+                A classic design question: You have an unsorted array of length <code>n</code>.
+                You can either:
+            </p>
+            <ul>
+                <li>
+                    <strong>Option A</strong>: just do an O(n) linear search each time.
+                </li>
+                <li>
+                    <strong>Option B</strong>: pay O(n log n) once to sort, then do O(log n) binary search
+                    repeatedly.
+                </li>
+            </ul>
+            <p>
+                If you only search <em>once</em>, sorting is overkill: you&apos;d pay far more than
+                the simple O(n) scan. If you search many times, the one-time sort cost becomes cheap
+                compared to the cumulative savings of O(log n) searches.
+            </p>
+
+            <h3>Growth-rate comparison table</h3>
+            <p>The table below shows how various complexities grow as <code>n</code> doubles:</p>
+            <table class="big-o-table">
+                <thead>
+                    <tr>
+                        <th>log₂ n</th>
+                        <th>n</th>
+                        <th>n · log₂ n</th>
+                        <th>n²</th>
+                        <th>2ⁿ</th>
+                        <th>n!</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>2</td><td>2</td><td>4</td><td>4</td><td>2</td></tr>
+                    <tr><td>2</td><td>4</td><td>8</td><td>16</td><td>16</td><td>24</td></tr>
+                    <tr><td>3</td><td>8</td><td>24</td><td>64</td><td>256</td><td>40,320</td></tr>
+                    <tr><td>4</td><td>16</td><td>64</td><td>256</td><td>65,536</td><td>≈ 2 × 10¹³</td></tr>
+                    <tr><td>5</td><td>32</td><td>160</td><td>1,024</td><td>4,294,967,296</td><td>≈ 2.6 × 10³⁵</td></tr>
+                </tbody>
+            </table>
+
+            <p>
+                The main takeaway: polynomial time (O(n), O(n log n), even O(n²) for small n) grows
+                reasonably, but exponential / factorial time explode incredibly fast.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s12-linear"
+            data-title="Step-by-step: linear search on an array" hidden>
+            <p>
+                Consider an unsorted array of eight values:
+            </p>
+            <pre class="inline-array">[ 7  2  5  4  1  6  0  3 ]</pre>
+            <p>
+                Suppose we want to find <strong>3</strong> using linear search:
+            </p>
+            <ol>
+                <li>Check index 0 → value 7 ≠ 3, continue.</li>
+                <li>Check index 1 → value 2 ≠ 3, continue.</li>
+                <li>Check index 2 → value 5 ≠ 3, continue.</li>
+                <li>Check index 3 → value 4 ≠ 3, continue.</li>
+                <li>Check index 4 → value 1 ≠ 3, continue.</li>
+                <li>Check index 5 → value 6 ≠ 3, continue.</li>
+                <li>Check index 6 → value 0 ≠ 3, continue.</li>
+                <li>Check index 7 → value 3 = target ⇒ return 7.</li>
+            </ol>
+            <p>
+                This worst case required <code>n = 8</code> comparisons.
+                In general, linear search may have to examine <em>every</em> element, so the cost is
+                proportional to <code>n</code> → <strong>O(n)</strong>.
+            </p>
+
+            <h3>Pseudocode</h3>
+            <pre><code>for i from 0 to n - 1:
+    if arr[i] == target:
+        return i      # found
+return -1             # not found</code></pre>
+
+            <h3>Key intuition</h3>
+            <ul>
+                <li>Linear search is simple and works on any collection, sorted or not.</li>
+                <li>Worst-case, you pay one comparison per element.</li>
+                <li>For very small arrays or a single search, this is often perfectly fine.</li>
+            </ul>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s12-binary"
+            data-title="Step-by-step: binary search on a sorted array" hidden>
+            <p>
+                Now take a sorted array:
+            </p>
+            <pre class="inline-array">[ 0  1  2  3  4  5  6  7 ]</pre>
+            <p>
+                We want to find <strong>3</strong> using binary search:
+            </p>
+            <ol>
+                <li>
+                    Check the middle (between 3 and 4). Let&apos;s pick index 4 → value 4.
+                    Since 4 &gt; 3, discard the <em>right</em> half: new range is [0..3].
+                </li>
+                <li>
+                    Middle of [0..3] is index 1 or 2; say we pick index 1 → value 1.
+                    Since 1 &lt; 3, discard the <em>left</em> half: new range is [2..3].
+                </li>
+                <li>
+                    Middle of [2..3] is index 2 → value 2. Still &lt; 3, so range becomes [3..3].
+                </li>
+                <li>
+                    Now only index 3 is left → value 3 = target ⇒ return 3.
+                </li>
+            </ol>
+
+            <p>
+                We did only a handful of comparisons; for <code>n = 8</code>, the worst-case number of
+                steps is about <code>log₂ 8 = 3</code>. In general, halving the search space each time
+                gives <strong>O(log n)</strong> complexity.
+            </p>
+
+            <h3>How slowly log n grows</h3>
+            <table class="big-o-table">
+                <thead>
+                    <tr><th>n</th><th>log₂ n</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>0</td></tr>
+                    <tr><td>8</td><td>3</td></tr>
+                    <tr><td>1,000</td><td>≈ 10</td></tr>
+                    <tr><td>1,000,000</td><td>≈ 20</td></tr>
+                </tbody>
+            </table>
+            <p>
+                Even when <code>n</code> jumps from a thousand to a million, log₂ n only increases
+                from ~10 to ~20. That&apos;s why binary search and tree-based structures are so powerful.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s12-selection"
+            data-title="Tracing selection sort and counting comparisons" hidden>
+            <p>
+                Selection sort repeatedly selects the smallest remaining element and swaps it into place.
+                On the array:
+            </p>
+            <pre class="inline-array">[ 7  2  5  4  1  6  0  3 ]</pre>
+
+            <p>The high-level steps:</p>
+            <ol>
+                <li>At i = 0, scan indices 0..7 to find the smallest value (0 at index 6), then swap it with index 0.</li>
+                <li>At i = 1, scan indices 1..7 to find the smallest among the remaining values (1), and swap to index 1.</li>
+                <li>Repeat for each i until the array is sorted.</li>
+            </ol>
+
+            <p>
+                If you count comparisons for <code>n = 8</code>, you get:
+            </p>
+            <pre><code>8 + 7 + 6 + 5 + 4 + 3 + 2 + 1 = 36 ≈ 0.5 · n²</code></pre>
+            <p>
+                In general, the inner loop does about <code>n - i - 1</code> comparisons for each outer
+                <code>i</code>, so total comparisons are:
+            </p>
+            <pre><code>1 + 2 + ... + (n - 1) = n(n - 1)/2 ∈ O(n²)</code></pre>
+
+            <h3>Why it’s still useful</h3>
+            <ul>
+                <li>It&apos;s simple and deterministic; great for teaching sorting basics.</li>
+                <li>It makes the <em>fewest swaps</em> among simple O(n²) sorts (useful in some constrained environments).</li>
+                <li>But for large inputs, O(n²) is far slower than O(n log n) algorithms like mergesort.</li>
+            </ul>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s12-bubble"
+            data-title="Bubble sort, and why it can be Ω(n) in the best case" hidden>
+            <p>
+                Bubble sort repeatedly scans the array and swaps adjacent out-of-order pairs,
+                &ldquo;bubbling&rdquo; larger elements toward the end.
+            </p>
+
+            <h3>Worst case</h3>
+            <p>
+                On a badly unsorted array like:
+            </p>
+            <pre class="inline-array">[ 7  2  5  4  1  6  0  3 ]</pre>
+            <p>
+                The first pass bubbles the largest element to the end. The second pass bubbles
+                the second-largest, and so on. You essentially repeat inner comparisons on almost
+                the whole array multiple times.
+            </p>
+            <p>
+                For <code>n</code> items, the worst-case number of comparisons is roughly:
+            </p>
+            <pre><code>(n - 1)² = n² - 2n + 1 ∈ O(n²)</code></pre>
+
+            <h3>Best case</h3>
+            <p>
+                If the array is already sorted, and you implement bubble sort with an
+                &ldquo;early exit&rdquo; flag (stop when a pass makes no swaps), then:
+            </p>
+            <ul>
+                <li>You still do one pass with <code>n - 1</code> comparisons.</li>
+                <li>You do <em>no swaps</em>, so you exit early.</li>
+            </ul>
+            <p>
+                That&apos;s <code>n - 1</code> comparisons → <strong>Ω(n)</strong> best case, which is
+                better than selection sort&apos;s fixed O(n²) work even on sorted data.
+            </p>
+
+            <h3>Takeaways</h3>
+            <ul>
+                <li>Bubble sort is usually slower than selection sort in the average/worst case.</li>
+                <li>With early exit, it can detect a pre-sorted array in linear time.</li>
+                <li>In practice, both are taught mainly for understanding, not used for large datasets.</li>
+            </ul>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s12-merge"
+            data-title="Merge sort: splitting, merging, and n log n comparisons" hidden>
+            <p>
+                Merge sort uses divide-and-conquer: recursively split the array in half, sort each half,
+                then merge the two sorted halves.
+            </p>
+            <p>On the array:</p>
+            <pre class="inline-array">[ 7  2  5  4  1  6  0  3 ]</pre>
+
+            <h3>High-level trace</h3>
+            <ol>
+                <li>Split into [7 2 5 4] and [1 6 0 3].</li>
+                <li>Recursively split [7 2 5 4] → [7 2] and [5 4], then [7] [2] and [5] [4].</li>
+                <li>Merge [7] &amp; [2] → [2 7], merge [5] &amp; [4] → [4 5], then merge those → [2 4 5 7].</li>
+                <li>Do the same on the right half [1 6 0 3] → [1 6] &amp; [0 3] → [1 6] and [0 3] → [0 1 3 6].</li>
+                <li>Finally, merge [2 4 5 7] &amp; [0 1 3 6] → [0 1 2 3 4 5 6 7].</li>
+            </ol>
+
+            <h3>Counting comparisons</h3>
+            <p>
+                The cost is dominated by <strong>merge</strong> steps. For <code>n = 8</code>, you can
+                count about 24 element comparisons, which is roughly <code>n · log₂ n = 8 · 3</code>.
+            </p>
+            <p>
+                In general, the recursion tree has O(log n) levels (each split halves the array),
+                and each level does O(n) merge work → total <strong>O(n log n)</strong>.
+            </p>
+
+            <h3>How it compares to O(n²) sorts</h3>
+            <p>
+                For <code>n = 1000</code>, a rough comparison:
+            </p>
+            <ul>
+                <li>Selection sort: ~500,000 comparisons.</li>
+                <li>Bubble sort: ~1,000,000 comparisons.</li>
+                <li>Merge sort: ~n log₂ n ≈ 1000 × 10 = 10,000 comparisons.</li>
+            </ul>
+            <p>
+                That&apos;s about 50–100× fewer comparisons — and the gap widens as <code>n</code> grows.
+                This is why O(n log n) sorting is the default choice in real systems.
+            </p>
+        </div>
+
+        <!-- ======================= Deep dive templates ======================= -->
+
+        <div class="deep-dive-template" id="deep-dive-s0-big-o"
+            data-title="Big-O as a growth-rate comparison tool" hidden>
+            <p>
+                Big-O compresses the messy details of your code into a high-level growth rate:
+                we throw away constants and lower-order terms and look only at the dominant one.
+            </p>
+            <ul>
+                <li>
+                    <strong>O(n)</strong> vs <strong>O(n²)</strong>: for small <code>n</code>, they may look similar,
+                    but as <code>n</code> grows, <code>n²</code> will eventually dominate.
+                </li>
+                <li>
+                    <strong>O(n log n)</strong> often hits the sweet spot: fast enough for large inputs,
+                    but still implementable with simple patterns like divide-and-conquer.
+                </li>
+                <li>
+                    <strong>Exponential / factorial</strong> algorithms are usually only viable for very small inputs
+                    (or with heavy pruning / memoization).
+                </li>
+            </ul>
+            <p>
+                When you design or compare algorithms, ask:
+                &ldquo;If I 10× the input size, does the running time roughly 10×, 100×, or 1000×?&rdquo;
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s0-linear"
+            data-title="Why linear search is O(n)" hidden>
+            <p>
+                In the worst case, linear search needs to inspect every element:
+                the target might be at the end or not present at all.
+            </p>
+            <ul>
+                <li>Each iteration does O(1) work (a comparison plus maybe a return).</li>
+                <li>The loop runs at most <code>n</code> times → total work ≈ <code>c · n</code> for some constant <code>c</code>.</li>
+                <li>Big-O discards the constant and keeps the shape: <strong>O(n)</strong>.</li>
+            </ul>
+            <p>
+                In interviews, explicitly saying &ldquo;this is O(n) because in the worst case
+                we visit every element once&rdquo; is usually enough.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s0-binary"
+            data-title="Binary search and logarithms" hidden>
+            <p>
+                Binary search is the canonical example of <strong>O(log n)</strong>.
+                Each step halves the search range, so how many steps do we need until only 1 element remains?
+            </p>
+            <p>
+                That number is about <code>log₂ n</code>, because:
+            </p>
+            <ul>
+                <li>
+                    After 1 step, you have ~<code>n/2</code> items left.
+                </li>
+                <li>
+                    After 2 steps, ~<code>n/4</code>.
+                </li>
+                <li>
+                    After <code>k</code> steps, ~<code>n / 2ᵏ</code>.
+                </li>
+            </ul>
+            <p>
+                You stop when <code>n / 2ᵏ ≈ 1</code>, i.e. <code>2ᵏ ≈ n</code>,
+                so <code>k ≈ log₂ n</code>. Big-O turns this into <strong>O(log n)</strong>.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s0-selection"
+            data-title="Counting operations in selection sort" hidden>
+            <p>
+                Selection sort&apos;s runtime comes from the nested loops:
+            </p>
+            <ul>
+                <li>For <code>i = 0</code>, the inner loop does about <code>n-1</code> comparisons.</li>
+                <li>For <code>i = 1</code>, it does about <code>n-2</code>, and so on, down to 1.</li>
+            </ul>
+            <p>
+                The total comparisons are roughly:
+            </p>
+            <p>
+                <code>(n - 1) + (n - 2) + ... + 1 = n(n - 1)/2</code>, which is <strong>O(n²)</strong>.
+            </p>
+            <p>
+                This is a good example to practice turning a double loop into a sum and then into Big-O.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s0-bubble"
+            data-title="Bubble sort vs. selection sort" hidden>
+            <p>
+                Both bubble sort and selection sort are <strong>O(n²)</strong>, but they behave differently:
+            </p>
+            <ul>
+                <li>
+                    Selection sort always does the same number of comparisons, even if the array is already sorted.
+                </li>
+                <li>
+                    Bubble sort can stop early if no swaps occur in a pass, so its <em>best-case</em> is O(n).
+                </li>
+                <li>
+                    In practice, neither is used on large data sets; they are mainly for teaching and tiny inputs.
+                </li>
+            </ul>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s0-merge"
+            data-title="Why merge sort is O(n log n)" hidden>
+            <p>
+                Merge sort splits the array in half at each step, giving a recursion tree of height O(log n),
+                and each level of the tree performs O(n) total work to merge.
+            </p>
+            <p>
+                If you sketch the recursion tree, you&apos;ll see:
+            </p>
+            <ul>
+                <li>Level 0: 1 subproblem of size n → O(n) work.</li>
+                <li>Level 1: 2 subproblems of size n/2 → O(n) work.</li>
+                <li>Level 2: 4 subproblems of size n/4 → O(n) work.</li>
+                <li>...</li>
+            </ul>
+            <p>
+                There are O(log n) levels, each with O(n) work, so total is O(n log n).
+                This &ldquo;log levels times n per level&rdquo; pattern shows up in many divide-and-conquer algorithms.
+            </p>
+        </div>
+
+        <!-- ======================= Deep dive modal shell ======================= -->
+
+        <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title">&nbsp;</h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
+    </main>
+</body>
+
+</html>

@@ -51,6 +51,27 @@
             focuses on patterns you can reuse across many graph problems.
         </p>
 
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <p>
+            In this section we will implement the core interview workhorses:
+        </p>
+        <ul class="bullet-tight">
+            <li>Graph representation with adjacency lists.</li>
+            <li>BFS for unweighted shortest paths.</li>
+            <li>DFS for exploration and connected components.</li>
+            <li>Topological sort on DAGs.</li>
+            <li>Dijkstra for weighted shortest paths (non-negative edges).</li>
+            <li>Union-Find for dynamic connectivity.</li>
+        </ul>
+
         <hr>
 
         <!-- ========================================================= -->
@@ -58,7 +79,12 @@
         <!-- ========================================================= -->
 
         <section class="lesson-section">
-            <h2>1. Graph Basics</h2>
+            <h2>
+                1. Graph Basics
+                <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s11-basics">
+                    Dig deeper
+                </button>
+            </h2>
             <p>
                 A <strong>graph</strong> is a set of <em>vertices</em> (nodes) plus a set of <em>edges</em> connecting them.
                 Edges can be:
@@ -73,29 +99,165 @@
             <ul>
                 <li>
                     <strong>Adjacency list</strong>:
-                    For each node keep a list of neighbors (and optionally weights).
+                    for each node, keep a list of neighbors (and optionally weights).
                     This is the default for sparse graphs.
                 </li>
                 <li>
                     <strong>Adjacency matrix</strong>:
-                    <code>n * n</code> matrix where <code>mat[u][v]</code> stores edge weight or presence.
+                    <code>n × n</code> matrix where <code>mat[u][v]</code> stores edge weight or presence.
                     Simpler conceptually but uses <code>O(n²)</code> memory.
                 </li>
             </ul>
-
-<pre><code class="language-plaintext">Adjacency list idea (0-based):
-
-graph[0] = neighbors of 0
-graph[1] = neighbors of 1
-...
-for each edge (u, v) in an undirected graph:
-    graph[u].push_back(v)
-    graph[v].push_back(u)</code></pre>
 
             <p>
                 Most interview problems use adjacency lists with <code>vector&lt;int&gt;</code>,
                 <code>ArrayList&lt;Integer&gt;</code>, or <code>List[int]</code>-style structures.
             </p>
+
+            <h3>Example 0 – Building an Adjacency List</h3>
+            <p>
+                Suppose we have <code>n</code> nodes labeled <code>0..n-1</code> and <code>m</code> undirected edges.
+                Below is a simple helper to build an adjacency list. You can reuse this across most graph problems.
+            </p>
+
+            <div class="code-example" data-example="s11-ex0-adj">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Example 0</span>
+                        <span class="meta">Building an adjacency list for an undirected graph</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <div class="code-panel" data-lang-panel="c">
+                    <pre><code class="language-c">// C (using simple dynamic arrays for illustration)
+#include &lt;stdlib.h&gt;
+
+typedef struct {
+    int* data;
+    int size;
+    int capacity;
+} VecInt;
+
+static void vec_init(VecInt* v, int cap) {
+    v-&gt;data = (int*)malloc(sizeof(int) * cap);
+    v-&gt;size = 0;
+    v-&gt;capacity = cap;
+}
+
+static void vec_push(VecInt* v, int x) {
+    if (v-&gt;size == v-&gt;capacity) {
+        v-&gt;capacity *= 2;
+        v-&gt;data = (int*)realloc(v-&gt;data, sizeof(int) * v-&gt;capacity);
+    }
+    v-&gt;data[v-&gt;size++] = x;
+}
+
+// Build adjacency list for undirected graph with n nodes and m edges
+// edges[i][0], edges[i][1] are endpoints (0-based)
+VecInt* build_graph(int n, int m, int edges[][2]) {
+    VecInt* graph = (VecInt*)malloc(sizeof(VecInt) * n);
+    for (int i = 0; i &lt; n; i++) {
+        vec_init(&graph[i], 4);
+    }
+    for (int i = 0; i &lt; m; i++) {
+        int u = edges[i][0];
+        int v = edges[i][1];
+        vec_push(&graph[u], v);
+        vec_push(&graph[v], u);
+    }
+    return graph;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="cpp">
+                    <pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+using std::vector;
+
+vector&lt;vector&lt;int&gt;&gt; buildGraph(int n, const vector&lt;std::pair&lt;int,int&gt;&gt;&amp; edges) {
+    vector&lt;vector&lt;int&gt;&gt; graph(n);
+    for (auto [u, v] : edges) {
+        graph[u].push_back(v);
+        graph[v].push_back(u);
+    }
+    return graph;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="java">
+                    <pre><code class="language-java">// Java
+import java.util.*;
+
+List&lt;List&lt;Integer&gt;&gt; buildGraph(int n, int[][] edges) {
+    List&lt;List&lt;Integer&gt;&gt; graph = new ArrayList&lt;&gt;(n);
+    for (int i = 0; i &lt; n; i++) {
+        graph.add(new ArrayList&lt;&gt;());
+    }
+    for (int[] e : edges) {
+        int u = e[0], v = e[1];
+        graph.get(u).add(v);
+        graph.get(v).add(u);
+    }
+    return graph;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="js">
+                    <pre><code class="language-javascript">// JavaScript
+function buildGraph(n, edges) {
+    const graph = Array.from({ length: n }, () =&gt; []);
+    for (const [u, v] of edges) {
+        graph[u].push(v);
+        graph[v].push(u);
+    }
+    return graph;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="cs">
+                    <pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+List&lt;List&lt;int&gt;&gt; BuildGraph(int n, int[][] edges) {
+    var graph = new List&lt;List&lt;int&gt;&gt;(n);
+    for (int i = 0; i &lt; n; i++) {
+        graph.Add(new List&lt;int&gt;());
+    }
+    foreach (var e in edges) {
+        int u = e[0], v = e[1];
+        graph[u].Add(v);
+        graph[v].Add(u);
+    }
+    return graph;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="py">
+                    <pre><code class="language-python"># Python
+from typing import List, Tuple
+
+def build_graph(n: int, edges: List[Tuple[int, int]]) -&gt; List[List[int]]:
+    graph = [[] for _ in range(n)]
+    for u, v in edges:
+        graph[u].append(v)
+        graph[v].append(u)
+    return graph</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Building an adjacency list from <code>m</code> edges takes
+                    Time: <strong>O(n + m)</strong> &nbsp;|&nbsp; Extra space: <strong>O(n + m)</strong>.
+                </div>
+            </div>
         </section>
 
         <hr>
@@ -105,7 +267,12 @@ for each edge (u, v) in an undirected graph:
         <!-- ========================================================= -->
 
         <section class="lesson-section">
-            <h2>2. Breadth-First Search (BFS)</h2>
+            <h2>
+                2. Breadth-First Search (BFS)
+                <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s11-bfs">
+                    Dig deeper
+                </button>
+            </h2>
             <p>
                 <strong>BFS</strong> explores the graph in “layers” from a starting node.
                 In an <strong>unweighted</strong> graph, BFS gives the shortest path
@@ -115,26 +282,196 @@ for each edge (u, v) in an undirected graph:
             <h3>Key pattern</h3>
             <ul>
                 <li>Use a <strong>queue</strong>.</li>
-                <li>Keep a <strong>visited</strong> array or distance array to avoid cycles.</li>
+                <li>Keep a <strong>visited</strong> or <strong>distance</strong> array to avoid cycles.</li>
                 <li>Push the start node with distance <code>0</code>.</li>
                 <li>Pop nodes, relax all neighbors, push unseen neighbors with distance +1.</li>
             </ul>
 
-<pre><code class="language-plaintext">BFS template (unweighted graph):
+            <div class="code-example" data-example="s11-ex1-bfs">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Example 1</span>
+                        <span class="meta">BFS shortest paths in an unweighted graph</span>
+                    </div>
+                </div>
 
-dist[start] = 0
-queue = [start]
-while queue not empty:
-    u = queue.pop_front()
-    for each neighbor v of u:
-        if dist[v] is INF / not visited:
-            dist[v] = dist[u] + 1
-            queue.push_back(v)</code></pre>
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
 
-            <p>
-                In <strong>Problem 1</strong> (shortest path in an unweighted graph),
-                you can store <code>dist[v]</code> and stop early once you pop <code>dst</code> from the queue.
-            </p>
+                <div class="code-panel" data-lang-panel="c">
+                    <pre><code class="language-c">// C
+#include &lt;limits.h&gt;
+#include &lt;stdlib.h&gt;
+
+void bfs_shortest(int n, VecInt* graph, int src, int* dist) {
+    const int INF = INT_MAX / 4;
+    for (int i = 0; i &lt; n; i++) {
+        dist[i] = INF;
+    }
+    int* q = (int*)malloc(sizeof(int) * n);
+    int head = 0, tail = 0;
+
+    dist[src] = 0;
+    q[tail++] = src;
+
+    while (head &lt; tail) {
+        int u = q[head++];
+        for (int i = 0; i &lt; graph[u].size; i++) {
+            int v = graph[u].data[i];
+            if (dist[v] == INF) {
+                dist[v] = dist[u] + 1;
+                q[tail++] = v;
+            }
+        }
+    }
+    free(q);
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="cpp">
+                    <pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;limits&gt;
+
+using std::vector;
+
+vector&lt;int&gt; bfsShortest(const vector&lt;vector&lt;int&gt;&gt;&amp; graph, int src) {
+    int n = (int)graph.size();
+    const int INF = std::numeric_limits&lt;int&gt;::max() / 4;
+    vector&lt;int&gt; dist(n, INF);
+    std::queue&lt;int&gt; q;
+
+    dist[src] = 0;
+    q.push(src);
+
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (int v : graph[u]) {
+            if (dist[v] == INF) {
+                dist[v] = dist[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="java">
+                    <pre><code class="language-java">// Java
+import java.util.*;
+
+int[] bfsShortest(List&lt;List&lt;Integer&gt;&gt; graph, int src) {
+    int n = graph.size();
+    final int INF = Integer.MAX_VALUE / 4;
+    int[] dist = new int[n];
+    Arrays.fill(dist, INF);
+
+    Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+    dist[src] = 0;
+    q.add(src);
+
+    while (!q.isEmpty()) {
+        int u = q.remove();
+        for (int v : graph.get(u)) {
+            if (dist[v] == INF) {
+                dist[v] = dist[u] + 1;
+                q.add(v);
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="js">
+                    <pre><code class="language-javascript">// JavaScript
+function bfsShortest(graph, src) {
+    const n = graph.length;
+    const INF = Number.MAX_SAFE_INTEGER;
+    const dist = new Array(n).fill(INF);
+    const q = [];
+
+    dist[src] = 0;
+    q.push(src);
+
+    let head = 0;
+    while (head &lt; q.length) {
+        const u = q[head++];
+        for (const v of graph[u]) {
+            if (dist[v] === INF) {
+                dist[v] = dist[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="cs">
+                    <pre><code class="language-csharp">// C#
+using System;
+using System.Collections.Generic;
+
+int[] BfsShortest(List&lt;List&lt;int&gt;&gt; graph, int src) {
+    int n = graph.Count;
+    int INF = int.MaxValue / 4;
+    var dist = new int[n];
+    Array.Fill(dist, INF);
+
+    var q = new Queue&lt;int&gt;();
+    dist[src] = 0;
+    q.Enqueue(src);
+
+    while (q.Count &gt; 0) {
+        int u = q.Dequeue();
+        foreach (int v in graph[u]) {
+            if (dist[v] == INF) {
+                dist[v] = dist[u] + 1;
+                q.Enqueue(v);
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="py">
+                    <pre><code class="language-python"># Python
+from collections import deque
+from typing import List
+
+def bfs_shortest(graph: List[List[int]], src: int) -&gt; List[int]:
+    n = len(graph)
+    INF = 10**15
+    dist = [INF] * n
+    q: deque[int] = deque()
+
+    dist[src] = 0
+    q.append(src)
+
+    while q:
+        u = q.popleft()
+        for v in graph[u]:
+            if dist[v] == INF:
+                dist[v] = dist[u] + 1
+                q.append(v)
+    return dist</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: <strong>O(n + m)</strong> for <code>n</code> nodes and <code>m</code> edges. &nbsp;|&nbsp;
+                    Extra space: <strong>O(n)</strong>.
+                </div>
+            </div>
         </section>
 
         <hr>
@@ -144,21 +481,20 @@ while queue not empty:
         <!-- ========================================================= -->
 
         <section class="lesson-section">
-            <h2>3. Depth-First Search (DFS) and Connected Components</h2>
+            <h2>
+                3. Depth-First Search (DFS) and Connected Components
+                <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s11-dfs">
+                    Dig deeper
+                </button>
+            </h2>
             <p>
                 <strong>DFS</strong> explores as far as possible along a path before backtracking.
                 It is typically implemented with recursion or an explicit stack.
             </p>
 
-            <h3>DFS template (recursive)</h3>
-<pre><code class="language-plaintext">visited[u] = true
-for each neighbor v of u:
-    if not visited[v]:
-        dfs(v)</code></pre>
-
-            <h3>Connected components (undirected)</h3>
             <p>
-                To count connected components, run DFS/BFS from every unvisited node:
+                To count <strong>connected components</strong> in an undirected graph, run DFS/BFS from every
+                unvisited node:
             </p>
             <ol>
                 <li>Initialize <code>components = 0</code>.</li>
@@ -171,15 +507,183 @@ for each neighbor v of u:
                 </li>
             </ol>
 
-<pre><code class="language-plaintext">components = 0
-for u in 0..n-1:
-    if not visited[u]:
-        components += 1
-        dfs(u)</code></pre>
+            <div class="code-example" data-example="s11-ex2-dfs-components">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Example 2</span>
+                        <span class="meta">DFS and counting connected components</span>
+                    </div>
+                </div>
 
-            <p>
-                <strong>Problem 2</strong> is a direct application of this pattern.
-            </p>
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <div class="code-panel" data-lang-panel="c">
+                    <pre><code class="language-c">// C
+void dfs_visit(int u, VecInt* graph, int* visited) {
+    visited[u] = 1;
+    for (int i = 0; i &lt; graph[u].size; i++) {
+        int v = graph[u].data[i];
+        if (!visited[v]) {
+            dfs_visit(v, graph, visited);
+        }
+    }
+}
+
+int count_components(int n, VecInt* graph) {
+    int* visited = (int*)calloc(n, sizeof(int));
+    int components = 0;
+    for (int u = 0; u &lt; n; u++) {
+        if (!visited[u]) {
+            components++;
+            dfs_visit(u, graph, visited);
+        }
+    }
+    free(visited);
+    return components;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="cpp">
+                    <pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+using std::vector;
+
+void dfsVisit(int u, const vector&lt;vector&lt;int&gt;&gt;&amp; graph, vector&lt;bool&gt;&amp; visited) {
+    visited[u] = true;
+    for (int v : graph[u]) {
+        if (!visited[v]) {
+            dfsVisit(v, graph, visited);
+        }
+    }
+}
+
+int countComponents(const vector&lt;vector&lt;int&gt;&gt;&amp; graph) {
+    int n = (int)graph.size();
+    vector&lt;bool&gt; visited(n, false);
+    int components = 0;
+    for (int u = 0; u &lt; n; u++) {
+        if (!visited[u]) {
+            components++;
+            dfsVisit(u, graph, visited);
+        }
+    }
+    return components;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="java">
+                    <pre><code class="language-java">// Java
+import java.util.*;
+
+void dfsVisit(int u, List&lt;List&lt;Integer&gt;&gt; graph, boolean[] visited) {
+    visited[u] = true;
+    for (int v : graph.get(u)) {
+        if (!visited[v]) {
+            dfsVisit(v, graph, visited);
+        }
+    }
+}
+
+int countComponents(List&lt;List&lt;Integer&gt;&gt; graph) {
+    int n = graph.size();
+    boolean[] visited = new boolean[n];
+    int components = 0;
+    for (int u = 0; u &lt; n; u++) {
+        if (!visited[u]) {
+            components++;
+            dfsVisit(u, graph, visited);
+        }
+    }
+    return components;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="js">
+                    <pre><code class="language-javascript">// JavaScript
+function dfsVisit(u, graph, visited) {
+    visited[u] = true;
+    for (const v of graph[u]) {
+        if (!visited[v]) {
+            dfsVisit(v, graph, visited);
+        }
+    }
+}
+
+function countComponents(graph) {
+    const n = graph.length;
+    const visited = new Array(n).fill(false);
+    let components = 0;
+
+    for (let u = 0; u &lt; n; u++) {
+        if (!visited[u]) {
+            components++;
+            dfsVisit(u, graph, visited);
+        }
+    }
+    return components;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="cs">
+                    <pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+void DfsVisit(int u, List&lt;List&lt;int&gt;&gt; graph, bool[] visited) {
+    visited[u] = true;
+    foreach (int v in graph[u]) {
+        if (!visited[v]) {
+            DfsVisit(v, graph, visited);
+        }
+    }
+}
+
+int CountComponents(List&lt;List&lt;int&gt;&gt; graph) {
+    int n = graph.Count;
+    var visited = new bool[n];
+    int components = 0;
+    for (int u = 0; u &lt; n; u++) {
+        if (!visited[u]) {
+            components++;
+            DfsVisit(u, graph, visited);
+        }
+    }
+    return components;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="py">
+                    <pre><code class="language-python"># Python
+from typing import List
+
+def _dfs_visit(u: int, graph: List[List[int]], visited: List[bool]) -&gt; None:
+    visited[u] = True
+    for v in graph[u]:
+        if not visited[v]:
+            _dfs_visit(v, graph, visited)
+
+def count_components(graph: List[List[int]]) -&gt; int:
+    n = len(graph)
+    visited = [False] * n
+    components = 0
+    for u in range(n):
+        if not visited[u]:
+            components += 1
+            _dfs_visit(u, graph, visited)
+    return components</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: <strong>O(n + m)</strong> for <code>n</code> nodes and <code>m</code> edges. &nbsp;|&nbsp;
+                    Extra space: <strong>O(n)</strong> (plus recursion stack).
+                </div>
+            </div>
         </section>
 
         <hr>
@@ -189,7 +693,12 @@ for u in 0..n-1:
         <!-- ========================================================= -->
 
         <section class="lesson-section">
-            <h2>4. Topological Sorting (DAGs Only)</h2>
+            <h2>
+                4. Topological Sorting (DAGs Only)
+                <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s11-toposort">
+                    Dig deeper
+                </button>
+            </h2>
             <p>
                 For a <strong>DAG</strong> (Directed Acyclic Graph), a
                 <strong>topological order</strong> is a sequence of all vertices such that
@@ -199,42 +708,247 @@ for u in 0..n-1:
             <h3>Two classic patterns</h3>
             <ol>
                 <li>
-                    <strong>Kahn's algorithm (BFS on indegrees)</strong>:
-                    <ul>
-                        <li>Compute indegree of every vertex.</li>
-                        <li>Push all nodes with indegree 0 into a queue.</li>
-                        <li>Repeatedly pop from the queue, append to ordering, and decrement indegree of neighbors.</li>
-                        <li>Whenever a neighbor's indegree hits 0, push it into the queue.</li>
-                    </ul>
+                    <strong>Kahn's algorithm (BFS on indegrees)</strong>.
                 </li>
                 <li>
-                    <strong>DFS finishing times</strong>:
-                    <ul>
-                        <li>Run DFS on the DAG.</li>
-                        <li>When a node finishes (all children processed), push it onto a stack or front of a list.</li>
-                        <li>The reverse finishing order is a valid topological sorting.</li>
-                    </ul>
+                    <strong>DFS finishing times</strong> (reverse post-order).
                 </li>
             </ol>
 
-<pre><code class="language-plaintext">Kahn's algorithm sketch:
-
-compute indegree[v] for all v
-queue = all v with indegree[v] == 0
-order = []
-
-while queue not empty:
-    u = queue.pop_front()
-    order.append(u)
-    for each neighbor v of u:
-        indegree[v] -= 1
-        if indegree[v] == 0:
-            queue.push_back(v)</code></pre>
-
             <p>
-                In <strong>Problem 3</strong>, the graph is guaranteed to be acyclic, so any
-                order produced by these methods is valid.
+                Below we implement <strong>Kahn's algorithm</strong>, which works well for detecting cycles too
+                (if you cannot output all nodes, there was a cycle).
             </p>
+
+            <div class="code-example" data-example="s11-ex3-toposort">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Example 3</span>
+                        <span class="meta">Topological sort using Kahn's algorithm</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <div class="code-panel" data-lang-panel="c">
+                    <pre><code class="language-c">// C (Kahn's algorithm)
+#include &lt;stdlib.h&gt;
+
+int topo_sort(int n, VecInt* graph, int* out_order) {
+    int* indeg = (int*)calloc(n, sizeof(int));
+    for (int u = 0; u &lt; n; u++) {
+        for (int i = 0; i &lt; graph[u].size; i++) {
+            int v = graph[u].data[i];
+            indeg[v]++;
+        }
+    }
+
+    int* q = (int*)malloc(sizeof(int) * n);
+    int head = 0, tail = 0;
+    for (int i = 0; i &lt; n; i++) {
+        if (indeg[i] == 0) {
+            q[tail++] = i;
+        }
+    }
+
+    int idx = 0;
+    while (head &lt; tail) {
+        int u = q[head++];
+        out_order[idx++] = u;
+        for (int i = 0; i &lt; graph[u].size; i++) {
+            int v = graph[u].data[i];
+            if (--indeg[v] == 0) {
+                q[tail++] = v;
+            }
+        }
+    }
+
+    free(indeg);
+    free(q);
+    return idx; // if idx &lt; n, there was a cycle
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="cpp">
+                    <pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+
+using std::vector;
+
+vector&lt;int&gt; topoSort(const vector&lt;vector&lt;int&gt;&gt;&amp; graph) {
+    int n = (int)graph.size();
+    vector&lt;int&gt; indeg(n, 0);
+    for (int u = 0; u &lt; n; u++) {
+        for (int v : graph[u]) {
+            indeg[v]++;
+        }
+    }
+
+    std::queue&lt;int&gt; q;
+    for (int i = 0; i &lt; n; i++) {
+        if (indeg[i] == 0) {
+            q.push(i);
+        }
+    }
+
+    vector&lt;int&gt; order;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        order.push_back(u);
+        for (int v : graph[u]) {
+            if (--indeg[v] == 0) {
+                q.push(v);
+            }
+        }
+    }
+    // if order.size() &lt; n, graph had a cycle
+    return order;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="java">
+                    <pre><code class="language-java">// Java
+import java.util.*;
+
+List&lt;Integer&gt; topoSort(List&lt;List&lt;Integer&gt;&gt; graph) {
+    int n = graph.size();
+    int[] indeg = new int[n];
+    for (int u = 0; u &lt; n; u++) {
+        for (int v : graph.get(u)) {
+            indeg[v]++;
+        }
+    }
+
+    Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+    for (int i = 0; i &lt; n; i++) {
+        if (indeg[i] == 0) {
+            q.add(i);
+        }
+    }
+
+    List&lt;Integer&gt; order = new ArrayList&lt;&gt;();
+    while (!q.isEmpty()) {
+        int u = q.remove();
+        order.add(u);
+        for (int v : graph.get(u)) {
+            if (--indeg[v] == 0) {
+                q.add(v);
+            }
+        }
+    }
+    // if order.size() &lt; n, there was a cycle
+    return order;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="js">
+                    <pre><code class="language-javascript">// JavaScript
+function topoSort(graph) {
+    const n = graph.length;
+    const indeg = new Array(n).fill(0);
+    for (let u = 0; u &lt; n; u++) {
+        for (const v of graph[u]) {
+            indeg[v]++;
+        }
+    }
+
+    const q = [];
+    for (let i = 0; i &lt; n; i++) {
+        if (indeg[i] === 0) q.push(i);
+    }
+
+    const order = [];
+    let head = 0;
+    while (head &lt; q.length) {
+        const u = q[head++];
+        order.push(u);
+        for (const v of graph[u]) {
+            indeg[v]--;
+            if (indeg[v] === 0) {
+                q.push(v);
+            }
+        }
+    }
+    // if order.length &lt; n, there was a cycle
+    return order;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="cs">
+                    <pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+List&lt;int&gt; TopoSort(List&lt;List&lt;int&gt;&gt; graph) {
+    int n = graph.Count;
+    var indeg = new int[n];
+    for (int u = 0; u &lt; n; u++) {
+        foreach (int v in graph[u]) {
+            indeg[v]++;
+        }
+    }
+
+    var q = new Queue&lt;int&gt;();
+    for (int i = 0; i &lt; n; i++) {
+        if (indeg[i] == 0) {
+            q.Enqueue(i);
+        }
+    }
+
+    var order = new List&lt;int&gt;();
+    while (q.Count &gt; 0) {
+        int u = q.Dequeue();
+        order.Add(u);
+        foreach (int v in graph[u]) {
+            if (--indeg[v] == 0) {
+                q.Enqueue(v);
+            }
+        }
+    }
+    // if order.Count &lt; n, there was a cycle
+    return order;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="py">
+                    <pre><code class="language-python"># Python
+from collections import deque
+from typing import List
+
+def topo_sort(graph: List[List[int]]) -&gt; List[int]:
+    n = len(graph)
+    indeg = [0] * n
+    for u in range(n):
+        for v in graph[u]:
+            indeg[v] += 1
+
+    q: deque[int] = deque(i for i in range(n) if indeg[i] == 0)
+    order: List[int] = []
+
+    while q:
+        u = q.popleft()
+        order.append(u)
+        for v in graph[u]:
+            indeg[v] -= 1
+            if indeg[v] == 0:
+                q.append(v)
+
+    # if len(order) &lt; n, there was a cycle
+    return order</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: <strong>O(n + m)</strong>. &nbsp;|&nbsp;
+                    Extra space: <strong>O(n + m)</strong>.
+                </div>
+            </div>
         </section>
 
         <hr>
@@ -244,7 +958,12 @@ while queue not empty:
         <!-- ========================================================= -->
 
         <section class="lesson-section">
-            <h2>5. Dijkstra's Algorithm (Non-negative Edge Weights)</h2>
+            <h2>
+                5. Dijkstra's Algorithm (Non-negative Edge Weights)
+                <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s11-dijkstra">
+                    Dig deeper
+                </button>
+            </h2>
             <p>
                 When edges have <strong>non-negative weights</strong>, the BFS idea generalizes to
                 <strong>Dijkstra's algorithm</strong>. Instead of a plain queue, we use a
@@ -259,24 +978,237 @@ while queue not empty:
                 <li>Relax edges: for each neighbor <code>v</code> of <code>u</code>, try to improve <code>dist[v]</code>.</li>
             </ul>
 
-<pre><code class="language-plaintext">Dijkstra sketch:
+            <div class="code-example" data-example="s11-ex4-dijkstra">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Example 4</span>
+                        <span class="meta">Dijkstra on a weighted graph</span>
+                    </div>
+                </div>
 
-dist[src] = 0
-push (0, src) into min-heap
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
 
-while heap not empty:
-    (d, u) = heap.pop_min()
-    if d != dist[u]:
-        continue  # outdated entry
-    for each edge u -&gt; v with weight w:
-        if dist[u] + w &lt; dist[v]:
-            dist[v] = dist[u] + w
-            heap.push(dist[v], v)</code></pre>
+                <div class="code-panel" data-lang-panel="c">
+                    <pre><code class="language-c">// C (simple O(n²) version without a heap)
+// graph: for each node u, we have arrays neigh[u], weight[u], with sizes size[u]
+void dijkstra_simple(int n, VecInt* neigh, VecInt* w, int src, long long* dist) {
+    const long long INF = (long long)4e18;
+    int* used = (int*)calloc(n, sizeof(int));
+    for (int i = 0; i &lt; n; i++) {
+        dist[i] = INF;
+    }
+    dist[src] = 0;
 
-            <p>
-                For <strong>Problem 4</strong>, unreachable nodes can be reported as <code>-1</code> by checking
-                whether <code>dist[v]</code> is still infinite after the algorithm finishes.
-            </p>
+    for (int it = 0; it &lt; n; it++) {
+        int u = -1;
+        long long best = INF;
+        for (int i = 0; i &lt; n; i++) {
+            if (!used[i] &amp;&amp; dist[i] &lt; best) {
+                best = dist[i];
+                u = i;
+            }
+        }
+        if (u == -1) break;
+        used[u] = 1;
+        for (int i = 0; i &lt; neigh[u].size; i++) {
+            int v = neigh[u].data[i];
+            int wt = w[u].data[i];
+            if (dist[u] + wt &lt; dist[v]) {
+                dist[v] = dist[u] + wt;
+            }
+        }
+    }
+    free(used);
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="cpp">
+                    <pre><code class="language-cpp">// C++ (using a min-heap)
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;limits&gt;
+
+using std::vector;
+
+struct Edge {
+    int to;
+    int w;
+};
+
+vector&lt;long long&gt; dijkstra(int n, const vector&lt;vector&lt;Edge&gt;&gt;&amp; graph, int src) {
+    const long long INF = std::numeric_limits&lt;long long&gt;::max() / 4;
+    vector&lt;long long&gt; dist(n, INF);
+    using P = std::pair&lt;long long,int&gt;;
+    std::priority_queue&lt;P, vector&lt;P&gt;, std::greater&lt;P&gt;&gt; pq;
+
+    dist[src] = 0;
+    pq.push({0, src});
+
+    while (!pq.empty()) {
+        auto [d, u] = pq.top(); pq.pop();
+        if (d != dist[u]) continue;
+        for (const auto&amp; e : graph[u]) {
+            int v = e.to;
+            long long nd = d + e.w;
+            if (nd &lt; dist[v]) {
+                dist[v] = nd;
+                pq.push({nd, v});
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="java">
+                    <pre><code class="language-java">// Java
+import java.util.*;
+
+static class Edge {
+    int to, w;
+    Edge(int t, int w) { this.to = t; this.w = w; }
+}
+
+long[] dijkstra(List&lt;List&lt;Edge&gt;&gt; graph, int src) {
+    int n = graph.size();
+    final long INF = Long.MAX_VALUE / 4;
+    long[] dist = new long[n];
+    Arrays.fill(dist, INF);
+
+    PriorityQueue&lt;long[]&gt; pq =
+        new PriorityQueue&lt;&gt;(Comparator.comparingLong(a -&gt; a[0]));
+    dist[src] = 0;
+    pq.offer(new long[]{0, src});
+
+    while (!pq.isEmpty()) {
+        long[] cur = pq.poll();
+        long d = cur[0];
+        int u = (int)cur[1];
+        if (d != dist[u]) continue;
+
+        for (Edge e : graph.get(u)) {
+            int v = e.to;
+            long nd = d + e.w;
+            if (nd &lt; dist[v]) {
+                dist[v] = nd;
+                pq.offer(new long[]{nd, v});
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="js">
+                    <pre><code class="language-javascript">// JavaScript (using a simple binary heap implementation is ideal;
+// here we sketch with a naive O(n²) version for clarity)
+
+function dijkstraSimple(graph, src) {
+    const n = graph.length;
+    const INF = Number.MAX_SAFE_INTEGER;
+    const dist = new Array(n).fill(INF);
+    const used = new Array(n).fill(false);
+
+    dist[src] = 0;
+
+    for (let iter = 0; iter &lt; n; iter++) {
+        let u = -1;
+        let best = INF;
+        for (let i = 0; i &lt; n; i++) {
+            if (!used[i] &amp;&amp; dist[i] &lt; best) {
+                best = dist[i];
+                u = i;
+            }
+        }
+        if (u === -1) break;
+        used[u] = true;
+        for (const [v, w] of graph[u]) {
+            const nd = dist[u] + w;
+            if (nd &lt; dist[v]) {
+                dist[v] = nd;
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="cs">
+                    <pre><code class="language-csharp">// C#
+using System;
+using System.Collections.Generic;
+
+class Edge {
+    public int To;
+    public int W;
+    public Edge(int to, int w) { To = to; W = w; }
+}
+
+long[] Dijkstra(List&lt;List&lt;Edge&gt;&gt; graph, int src) {
+    int n = graph.Count;
+    long INF = long.MaxValue / 4;
+    var dist = new long[n];
+    Array.Fill(dist, INF);
+
+    var pq = new PriorityQueue&lt;int, long&gt;();
+    dist[src] = 0;
+    pq.Enqueue(src, 0);
+
+    while (pq.Count &gt; 0) {
+        pq.TryDequeue(out int u, out long d);
+        if (d != dist[u]) continue;
+        foreach (var e in graph[u]) {
+            int v = e.To;
+            long nd = d + e.W;
+            if (nd &lt; dist[v]) {
+                dist[v] = nd;
+                pq.Enqueue(v, nd);
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="py">
+                    <pre><code class="language-python"># Python
+import heapq
+from typing import List, Tuple
+
+def dijkstra(graph: List[List[Tuple[int, int]]], src: int) -&gt; List[int]:
+    """
+    graph[u] = list of (v, w)
+    """
+    n = len(graph)
+    INF = 10**18
+    dist = [INF] * n
+    dist[src] = 0
+    heap: List[Tuple[int, int]] = [(0, src)]
+
+    while heap:
+        d, u = heapq.heappop(heap)
+        if d != dist[u]:
+            continue
+        for v, w in graph[u]:
+            nd = d + w
+            if nd &lt; dist[v]:
+                dist[v] = nd
+                heapq.heappush(heap, (nd, v))
+    return dist</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Using a binary heap, Time: <strong>O((n + m) log n)</strong>. &nbsp;|&nbsp;
+                    Extra space: <strong>O(n + m)</strong>.
+                </div>
+            </div>
         </section>
 
         <hr>
@@ -286,7 +1218,12 @@ while heap not empty:
         <!-- ========================================================= -->
 
         <section class="lesson-section">
-            <h2>6. Union-Find (Disjoint Set Union)</h2>
+            <h2>
+                6. Union-Find (Disjoint Set Union)
+                <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s11-dsu">
+                    Dig deeper
+                </button>
+            </h2>
             <p>
                 The <strong>Disjoint Set Union (DSU)</strong> or <strong>Union-Find</strong> structure maintains a
                 partition of elements into disjoint sets and supports two fast operations:
@@ -296,44 +1233,250 @@ while heap not empty:
                 <li><code>union(x, y)</code>: merge the sets containing <code>x</code> and <code>y</code>.</li>
             </ul>
 
-            <h3>Implementation tricks</h3>
-            <ul>
-                <li><strong>Parent array</strong>: <code>parent[x]</code> initially <code>x</code>.</li>
-                <li>
-                    <strong>Path compression</strong> in <code>find</code>:
-                    recursively set <code>parent[x]</code> to the root so future queries are faster.
-                </li>
-                <li>
-                    <strong>Union by rank / size</strong>:
-                    always attach the smaller tree under the larger one to keep trees shallow.
-                </li>
-            </ul>
-
-<pre><code class="language-plaintext">find(x):
-    if parent[x] != x:
-        parent[x] = find(parent[x])
-    return parent[x]
-
-union(a, b):
-    ra = find(a)
-    rb = find(b)
-    if ra == rb: return
-    # attach smaller rank under bigger rank
-    if rank[ra] &lt; rank[rb]:
-        parent[ra] = rb
-    else if rank[ra] &gt; rank[rb]:
-        parent[rb] = ra
-    else:
-        parent[rb] = ra
-        rank[ra] += 1</code></pre>
-
             <p>
-                In <strong>Problem 5</strong>, each <code>union</code> call merges components, and
-                <code>connected a b</code> checks whether <code>find(a) == find(b)</code>.
-                With path compression and union by rank, each operation is effectively
-                amortized <code>O(&alpha;(n))</code>, where <code>&alpha;</code> is the inverse Ackermann function
-                (practically constant).
+                We will implement Union-Find with <strong>path compression</strong> and
+                <strong>union by rank/size</strong>, which makes operations almost O(1) in practice.
             </p>
+
+            <div class="code-example" data-example="s11-ex5-dsu">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Example 5</span>
+                        <span class="meta">Union-Find with path compression and union by rank</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <div class="code-panel" data-lang-panel="c">
+                    <pre><code class="language-c">// C
+#include &lt;stdlib.h&gt;
+
+typedef struct {
+    int* parent;
+    int* rank;
+    int n;
+} DSU;
+
+DSU* dsu_create(int n) {
+    DSU* d = (DSU*)malloc(sizeof(DSU));
+    d-&gt;n = n;
+    d-&gt;parent = (int*)malloc(sizeof(int) * n);
+    d-&gt;rank = (int*)calloc(n, sizeof(int));
+    for (int i = 0; i &lt; n; i++) {
+        d-&gt;parent[i] = i;
+    }
+    return d;
+}
+
+int dsu_find(DSU* d, int x) {
+    if (d-&gt;parent[x] != x) {
+        d-&gt;parent[x] = dsu_find(d, d-&gt;parent[x]);
+    }
+    return d-&gt;parent[x];
+}
+
+void dsu_union(DSU* d, int a, int b) {
+    int ra = dsu_find(d, a);
+    int rb = dsu_find(d, b);
+    if (ra == rb) return;
+    if (d-&gt;rank[ra] &lt; d-&gt;rank[rb]) {
+        d-&gt;parent[ra] = rb;
+    } else if (d-&gt;rank[ra] &gt; d-&gt;rank[rb]) {
+        d-&gt;parent[rb] = ra;
+    } else {
+        d-&gt;parent[rb] = ra;
+        d-&gt;rank[ra]++;
+    }
+}
+
+void dsu_free(DSU* d) {
+    free(d-&gt;parent);
+    free(d-&gt;rank);
+    free(d);
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="cpp">
+                    <pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+using std::vector;
+
+struct DSU {
+    vector&lt;int&gt; parent;
+    vector&lt;int&gt; rnk;
+
+    explicit DSU(int n) : parent(n), rnk(n, 0) {
+        for (int i = 0; i &lt; n; i++) parent[i] = i;
+    }
+
+    int find(int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent[x]);
+        }
+        return parent[x];
+    }
+
+    void unite(int a, int b) {
+        int ra = find(a);
+        int rb = find(b);
+        if (ra == rb) return;
+        if (rnk[ra] &lt; rnk[rb]) {
+            parent[ra] = rb;
+        } else if (rnk[ra] &gt; rnk[rb]) {
+            parent[rb] = ra;
+        } else {
+            parent[rb] = ra;
+            rnk[ra]++;
+        }
+    }
+};</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="java">
+                    <pre><code class="language-java">// Java
+class DSU {
+    private int[] parent;
+    private int[] rank;
+
+    DSU(int n) {
+        parent = new int[n];
+        rank = new int[n];
+        for (int i = 0; i &lt; n; i++) {
+            parent[i] = i;
+        }
+    }
+
+    int find(int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent[x]);
+        }
+        return parent[x];
+    }
+
+    void unionSet(int a, int b) {
+        int ra = find(a);
+        int rb = find(b);
+        if (ra == rb) return;
+        if (rank[ra] &lt; rank[rb]) {
+            parent[ra] = rb;
+        } else if (rank[ra] &gt; rank[rb]) {
+            parent[rb] = ra;
+        } else {
+            parent[rb] = ra;
+            rank[ra]++;
+        }
+    }
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="js">
+                    <pre><code class="language-javascript">// JavaScript
+class DSU {
+    constructor(n) {
+        this.parent = Array.from({ length: n }, (_, i) =&gt; i);
+        this.rank = new Array(n).fill(0);
+    }
+
+    find(x) {
+        if (this.parent[x] !== x) {
+            this.parent[x] = this.find(this.parent[x]);
+        }
+        return this.parent[x];
+    }
+
+    union(a, b) {
+        let ra = this.find(a);
+        let rb = this.find(b);
+        if (ra === rb) return;
+        if (this.rank[ra] &lt; this.rank[rb]) {
+            this.parent[ra] = rb;
+        } else if (this.rank[ra] &gt; this.rank[rb]) {
+            this.parent[rb] = ra;
+        } else {
+            this.parent[rb] = ra;
+            this.rank[ra]++;
+        }
+    }
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="cs">
+                    <pre><code class="language-csharp">// C#
+class DSU {
+    private int[] parent;
+    private int[] rank;
+
+    public DSU(int n) {
+        parent = new int[n];
+        rank = new int[n];
+        for (int i = 0; i &lt; n; i++) {
+            parent[i] = i;
+        }
+    }
+
+    public int Find(int x) {
+        if (parent[x] != x) {
+            parent[x] = Find(parent[x]);
+        }
+        return parent[x];
+    }
+
+    public void Union(int a, int b) {
+        int ra = Find(a);
+        int rb = Find(b);
+        if (ra == rb) return;
+        if (rank[ra] &lt; rank[rb]) {
+            parent[ra] = rb;
+        } else if (rank[ra] &gt; rank[rb]) {
+            parent[rb] = ra;
+        } else {
+            parent[rb] = ra;
+            rank[ra]++;
+        }
+    }
+}</code></pre>
+                </div>
+
+                <div class="code-panel" data-lang-panel="py">
+                    <pre><code class="language-python"># Python
+class DSU:
+    def __init__(self, n: int) -&gt; None:
+        self.parent = list(range(n))
+        self.rank = [0] * n
+
+    def find(self, x: int) -&gt; int:
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+
+    def union(self, a: int, b: int) -&gt; None:
+        ra = self.find(a)
+        rb = self.find(b)
+        if ra == rb:
+            return
+        if self.rank[ra] &lt; self.rank[rb]:
+            self.parent[ra] = rb
+        elif self.rank[ra] &gt; self.rank[rb]:
+            self.parent[rb] = ra
+        else:
+            self.parent[rb] = ra
+            self.rank[ra] += 1</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    With path compression and union by rank:
+                    each operation is amortized <strong>O(α(n))</strong>, where <code>α</code> is the inverse Ackermann function
+                    (effectively constant).
+                </div>
+            </div>
         </section>
 
         <hr>
@@ -343,27 +1486,32 @@ union(a, b):
         <!-- ========================================================= -->
 
         <section class="lesson-section">
-            <h2>7. Choosing the Right Graph Pattern</h2>
+            <h2>
+                7. Choosing the Right Graph Pattern
+                <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s11-choosing">
+                    Dig deeper
+                </button>
+            </h2>
             <ul>
                 <li>
                     <strong>Unweighted shortest path / minimum number of steps</strong> →
-                    BFS on an unweighted graph (Problem 1).
+                    BFS on an unweighted graph.
                 </li>
                 <li>
                     <strong>Reachability / number of groups</strong> →
-                    DFS/BFS or Union-Find (Problem 2 &amp; 5).
+                    DFS/BFS or Union-Find.
                 </li>
                 <li>
                     <strong>Ordering with prerequisites, DAG</strong> →
-                    Topological sort (Problem 3).
+                    Topological sort.
                 </li>
                 <li>
                     <strong>Shortest path with non-negative weights</strong> →
-                    Dijkstra's algorithm (Problem 4).
+                    Dijkstra's algorithm.
                 </li>
                 <li>
                     <strong>Dynamic connectivity queries</strong> →
-                    Union-Find (Problem 5).
+                    Union-Find.
                 </li>
             </ul>
 
@@ -379,6 +1527,208 @@ union(a, b):
             &nbsp;&nbsp;
             <a href="section10-practice.html">Back to Practice Hub →</a>
         </div>
+
+        <!-- ======================= Deep dive templates ======================= -->
+
+        <div class="deep-dive-template" id="deep-dive-s11-basics"
+            data-title="When to use graphs and how to think about them" hidden>
+            <p>
+                Graphs show up whenever you have <strong>entities</strong> (nodes) with
+                <strong>relationships</strong> (edges) between them:
+                people with friendships, cities with roads, courses with prerequisites, etc.
+            </p>
+            <ul>
+                <li>
+                    If your input feels like “things with links”, it is probably a graph problem
+                    even if the statement never uses the word “graph”.
+                </li>
+                <li>
+                    In interviews, you almost always want an <strong>adjacency list</strong>:
+                    it is memory efficient and plays nicely with BFS/DFS/Dijkstra.
+                </li>
+                <li>
+                    Adjacency matrices are mainly useful when the graph is very dense or when you need
+                    <code>O(1)</code> edge lookups.
+                </li>
+            </ul>
+            <p>
+                A good first step for any graph-flavored problem is to write down what the nodes and edges are
+                and then explicitly build an adjacency list. Once you have that, the patterns in this section
+                become plug-and-play.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s11-bfs"
+            data-title="BFS as a shortest-path-in-edges machine" hidden>
+            <p>
+                BFS is best thought of as a machine that answers: “What is the minimum number of steps from
+                the start to each node?” — as long as all edges cost the same.
+            </p>
+            <ul>
+                <li>
+                    Each time a node is popped from the queue, you know you have found the
+                    <strong>shortest possible</strong> path to it in terms of edge count.
+                </li>
+                <li>
+                    If you only care about a single target, you can stop when you pop that target
+                    and read off its distance.
+                </li>
+                <li>
+                    Grid problems (with 4-direction or 8-direction moves) are just BFS on an implicit graph
+                    where each cell is a node and edges go to adjacent cells.
+                </li>
+            </ul>
+            <p>
+                The most common mistake is to forget the visited/dist array and accidentally revisit nodes,
+                which can turn BFS into an exponential-time mess. Mark as visited as soon as you push into
+                the queue, not when you pop.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s11-dfs"
+            data-title="When DFS is better than BFS" hidden>
+            <p>
+                DFS and BFS both explore the whole connected component, but DFS goes “deep” first while BFS
+                grows layers. DFS is often the right choice when:
+            </p>
+            <ul>
+                <li>
+                    You want to perform some computation per subtree (like in tree DP).
+                </li>
+                <li>
+                    You care about entry/exit times, back edges, or the shape of recursion.
+                </li>
+                <li>
+                    You are working on problems like:
+                    <em>connected components, articulation points, bridges, cycles, topological sort via DFS</em>, etc.
+                </li>
+            </ul>
+            <p>
+                In code interviews, DFS is usually easier to implement via recursion.
+                If recursion depth is a concern, you can simulate it with an explicit stack, but the core
+                logic stays the same.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s11-toposort"
+            data-title="Topological sort intuition and cycle detection" hidden>
+            <p>
+                A topological order is like a schedule that respects all prerequisites.
+                If course A must come before course B, then A must appear before B in the ordering.
+            </p>
+            <ul>
+                <li>
+                    Kahn's algorithm always picks a node with indegree 0 (no remaining prerequisites) and
+                    appends it to the order.
+                </li>
+                <li>
+                    Removing that node and its outgoing edges may cause new nodes to reach indegree 0,
+                    which become the next candidates.
+                </li>
+                <li>
+                    If at some point the queue of indegree-0 nodes is empty but we still have nodes left,
+                    the graph must have a <strong>cycle</strong>; no valid topological order exists.
+                </li>
+            </ul>
+            <p>
+                Any time you see “prerequisites”, “build order”, or “dependency resolution” with no cycles
+                allowed, you should be thinking about topological sort.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s11-dijkstra"
+            data-title="When Dijkstra works and when it doesn't" hidden>
+            <p>
+                Dijkstra is essentially “weighted BFS”: instead of expanding all nodes at distance 1, then 2, etc.,
+                it always expands the node with the smallest current distance.
+            </p>
+            <ul>
+                <li>
+                    It <strong>requires non-negative edge weights</strong>. A single negative edge can break
+                    its correctness, because a node you thought was finalized may later get a cheaper path.
+                </li>
+                <li>
+                    On small dense graphs, an <code>O(n²)</code> implementation is often enough.
+                    On large sparse graphs, you want a binary heap or even a Fibonacci heap.
+                </li>
+                <li>
+                    If you have negative edges but no negative cycles, you should think about
+                    <strong>Bellman–Ford</strong> or <strong>SPFA</strong> instead.
+                </li>
+            </ul>
+            <p>
+                In interview settings, “roads with travel times or costs” + “non-negative weights”
+                almost always means Dijkstra.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s11-dsu"
+            data-title="How Union-Find stays almost O(1)" hidden>
+            <p>
+                The magic of Union-Find comes from combining two simple tricks:
+            </p>
+            <ul>
+                <li>
+                    <strong>Path compression</strong>: every time you call <code>find(x)</code>, you make each node
+                    along the path from <code>x</code> to the root point directly to the root.
+                    Future finds become very short.
+                </li>
+                <li>
+                    <strong>Union by rank/size</strong>: always attach the smaller tree under the larger tree.
+                    This keeps the height tiny.
+                </li>
+            </ul>
+            <p>
+                The resulting amortized time bound <code>O(α(n))</code> is so close to constant that, for all
+                practical input sizes, it behaves like <code>O(1)</code>.
+                That is why Union-Find is the go-to data structure for connectivity queries.
+            </p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s11-choosing"
+            data-title="Pattern matching graph problems in interviews" hidden>
+            <p>
+                A big part of graph problem solving is recognizing which of a small set of patterns applies.
+                Here is a quick cheat sheet:
+            </p>
+            <ul>
+                <li>
+                    <strong>“Fewest steps”, “minimum edges”, “unweighted grid”</strong> → BFS.
+                </li>
+                <li>
+                    <strong>“How many groups?”, “is there a path?”, “is everything connected?”</strong> →
+                    DFS/BFS or Union-Find.
+                </li>
+                <li>
+                    <strong>“Order with prerequisites”, “build order”, “no cycles allowed”</strong> →
+                    topological sort.
+                </li>
+                <li>
+                    <strong>“Minimum cost / distance” with non-negative weights</strong> →
+                    Dijkstra.
+                </li>
+                <li>
+                    <strong>“Edges added/removed over time, query if x and y are connected”</strong> →
+                    Union-Find.
+                </li>
+            </ul>
+            <p>
+                When reading a new problem, try to say out loud which pattern you think it is.
+                Even if you are slightly off at first, this habit trains your brain to map natural-language
+                descriptions onto the right algorithm templates.
+            </p>
+        </div>
+
+        <!-- ======================= Deep dive modal shell ======================= -->
+
+        <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title">&nbsp;</h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
     </main>
 </body>
 
