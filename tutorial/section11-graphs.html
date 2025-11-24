@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Section 11 - Graph Algorithms</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css">
+
+    <!-- Highlight.js theme -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts -->
+    <script src="js/site.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="section10-practice.html">← Back to Practice Hub</a>
+            &nbsp;&nbsp;
+            <a href="problems-section11-graphs.html">← Back to Section 11 Problems</a>
+            &nbsp;&nbsp;
+            <a href="solutions-section11-graphs.html">View Section 11 Solutions →</a>
+        </div>
+
+        <div class="kicker">Section 11</div>
+        <h1>Graph Algorithms</h1>
+
+        <p class="tagline">
+            Breadth-first search, depth-first search, topological sorting, shortest paths, and union-find. This section
+            focuses on patterns you can reuse across many graph problems.
+        </p>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- 1. Graph basics                                           -->
+        <!-- ========================================================= -->
+
+        <section class="lesson-section">
+            <h2>1. Graph Basics</h2>
+            <p>
+                A <strong>graph</strong> is a set of <em>vertices</em> (nodes) plus a set of <em>edges</em> connecting them.
+                Edges can be:
+            </p>
+            <ul>
+                <li><strong>Directed</strong> (<code>u → v</code>): one-way links.</li>
+                <li><strong>Undirected</strong> (<code>u - v</code>): two-way links.</li>
+                <li><strong>Weighted</strong>: each edge has a cost/weight.</li>
+            </ul>
+
+            <h3>Common Representations</h3>
+            <ul>
+                <li>
+                    <strong>Adjacency list</strong>:
+                    For each node keep a list of neighbors (and optionally weights).
+                    This is the default for sparse graphs.
+                </li>
+                <li>
+                    <strong>Adjacency matrix</strong>:
+                    <code>n * n</code> matrix where <code>mat[u][v]</code> stores edge weight or presence.
+                    Simpler conceptually but uses <code>O(n²)</code> memory.
+                </li>
+            </ul>
+
+<pre><code class="language-plaintext">Adjacency list idea (0-based):
+
+graph[0] = neighbors of 0
+graph[1] = neighbors of 1
+...
+for each edge (u, v) in an undirected graph:
+    graph[u].push_back(v)
+    graph[v].push_back(u)</code></pre>
+
+            <p>
+                Most interview problems use adjacency lists with <code>vector&lt;int&gt;</code>,
+                <code>ArrayList&lt;Integer&gt;</code>, or <code>List[int]</code>-style structures.
+            </p>
+        </section>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- 2. Breadth-First Search (BFS)                             -->
+        <!-- ========================================================= -->
+
+        <section class="lesson-section">
+            <h2>2. Breadth-First Search (BFS)</h2>
+            <p>
+                <strong>BFS</strong> explores the graph in “layers” from a starting node.
+                In an <strong>unweighted</strong> graph, BFS gives the shortest path
+                (fewest edges) from the start to every reachable node.
+            </p>
+
+            <h3>Key pattern</h3>
+            <ul>
+                <li>Use a <strong>queue</strong>.</li>
+                <li>Keep a <strong>visited</strong> array or distance array to avoid cycles.</li>
+                <li>Push the start node with distance <code>0</code>.</li>
+                <li>Pop nodes, relax all neighbors, push unseen neighbors with distance +1.</li>
+            </ul>
+
+<pre><code class="language-plaintext">BFS template (unweighted graph):
+
+dist[start] = 0
+queue = [start]
+while queue not empty:
+    u = queue.pop_front()
+    for each neighbor v of u:
+        if dist[v] is INF / not visited:
+            dist[v] = dist[u] + 1
+            queue.push_back(v)</code></pre>
+
+            <p>
+                In <strong>Problem 1</strong> (shortest path in an unweighted graph),
+                you can store <code>dist[v]</code> and stop early once you pop <code>dst</code> from the queue.
+            </p>
+        </section>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- 3. Depth-First Search (DFS) & Connected Components        -->
+        <!-- ========================================================= -->
+
+        <section class="lesson-section">
+            <h2>3. Depth-First Search (DFS) and Connected Components</h2>
+            <p>
+                <strong>DFS</strong> explores as far as possible along a path before backtracking.
+                It is typically implemented with recursion or an explicit stack.
+            </p>
+
+            <h3>DFS template (recursive)</h3>
+<pre><code class="language-plaintext">visited[u] = true
+for each neighbor v of u:
+    if not visited[v]:
+        dfs(v)</code></pre>
+
+            <h3>Connected components (undirected)</h3>
+            <p>
+                To count connected components, run DFS/BFS from every unvisited node:
+            </p>
+            <ol>
+                <li>Initialize <code>components = 0</code>.</li>
+                <li>For each node <code>u</code>:
+                    <ul>
+                        <li>If <code>u</code> is not visited, start a DFS/BFS from <code>u</code>.</li>
+                        <li>Mark all nodes reachable from <code>u</code> as visited.</li>
+                        <li>Increment <code>components</code>.</li>
+                    </ul>
+                </li>
+            </ol>
+
+<pre><code class="language-plaintext">components = 0
+for u in 0..n-1:
+    if not visited[u]:
+        components += 1
+        dfs(u)</code></pre>
+
+            <p>
+                <strong>Problem 2</strong> is a direct application of this pattern.
+            </p>
+        </section>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- 4. Topological Sorting                                    -->
+        <!-- ========================================================= -->
+
+        <section class="lesson-section">
+            <h2>4. Topological Sorting (DAGs Only)</h2>
+            <p>
+                For a <strong>DAG</strong> (Directed Acyclic Graph), a
+                <strong>topological order</strong> is a sequence of all vertices such that
+                every directed edge <code>u → v</code> appears with <code>u</code> before <code>v</code>.
+            </p>
+
+            <h3>Two classic patterns</h3>
+            <ol>
+                <li>
+                    <strong>Kahn's algorithm (BFS on indegrees)</strong>:
+                    <ul>
+                        <li>Compute indegree of every vertex.</li>
+                        <li>Push all nodes with indegree 0 into a queue.</li>
+                        <li>Repeatedly pop from the queue, append to ordering, and decrement indegree of neighbors.</li>
+                        <li>Whenever a neighbor's indegree hits 0, push it into the queue.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>DFS finishing times</strong>:
+                    <ul>
+                        <li>Run DFS on the DAG.</li>
+                        <li>When a node finishes (all children processed), push it onto a stack or front of a list.</li>
+                        <li>The reverse finishing order is a valid topological sorting.</li>
+                    </ul>
+                </li>
+            </ol>
+
+<pre><code class="language-plaintext">Kahn's algorithm sketch:
+
+compute indegree[v] for all v
+queue = all v with indegree[v] == 0
+order = []
+
+while queue not empty:
+    u = queue.pop_front()
+    order.append(u)
+    for each neighbor v of u:
+        indegree[v] -= 1
+        if indegree[v] == 0:
+            queue.push_back(v)</code></pre>
+
+            <p>
+                In <strong>Problem 3</strong>, the graph is guaranteed to be acyclic, so any
+                order produced by these methods is valid.
+            </p>
+        </section>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- 5. Dijkstra's Algorithm (Non-negative Weights)            -->
+        <!-- ========================================================= -->
+
+        <section class="lesson-section">
+            <h2>5. Dijkstra's Algorithm (Non-negative Edge Weights)</h2>
+            <p>
+                When edges have <strong>non-negative weights</strong>, the BFS idea generalizes to
+                <strong>Dijkstra's algorithm</strong>. Instead of a plain queue, we use a
+                <strong>priority queue (min-heap)</strong> keyed by the current best distance.
+            </p>
+
+            <h3>Key ideas</h3>
+            <ul>
+                <li>Maintain <code>dist[v]</code>, initialized to <code>∞</code> except <code>dist[src] = 0</code>.</li>
+                <li>Use a min-heap of pairs <code>(dist, node)</code>.</li>
+                <li>Pop the node with the smallest distance; if the distance is outdated, skip it.</li>
+                <li>Relax edges: for each neighbor <code>v</code> of <code>u</code>, try to improve <code>dist[v]</code>.</li>
+            </ul>
+
+<pre><code class="language-plaintext">Dijkstra sketch:
+
+dist[src] = 0
+push (0, src) into min-heap
+
+while heap not empty:
+    (d, u) = heap.pop_min()
+    if d != dist[u]:
+        continue  # outdated entry
+    for each edge u -&gt; v with weight w:
+        if dist[u] + w &lt; dist[v]:
+            dist[v] = dist[u] + w
+            heap.push(dist[v], v)</code></pre>
+
+            <p>
+                For <strong>Problem 4</strong>, unreachable nodes can be reported as <code>-1</code> by checking
+                whether <code>dist[v]</code> is still infinite after the algorithm finishes.
+            </p>
+        </section>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- 6. Union-Find (Disjoint Set Union)                        -->
+        <!-- ========================================================= -->
+
+        <section class="lesson-section">
+            <h2>6. Union-Find (Disjoint Set Union)</h2>
+            <p>
+                The <strong>Disjoint Set Union (DSU)</strong> or <strong>Union-Find</strong> structure maintains a
+                partition of elements into disjoint sets and supports two fast operations:
+            </p>
+            <ul>
+                <li><code>find(x)</code>: return a representative (root) of the set containing <code>x</code>.</li>
+                <li><code>union(x, y)</code>: merge the sets containing <code>x</code> and <code>y</code>.</li>
+            </ul>
+
+            <h3>Implementation tricks</h3>
+            <ul>
+                <li><strong>Parent array</strong>: <code>parent[x]</code> initially <code>x</code>.</li>
+                <li>
+                    <strong>Path compression</strong> in <code>find</code>:
+                    recursively set <code>parent[x]</code> to the root so future queries are faster.
+                </li>
+                <li>
+                    <strong>Union by rank / size</strong>:
+                    always attach the smaller tree under the larger one to keep trees shallow.
+                </li>
+            </ul>
+
+<pre><code class="language-plaintext">find(x):
+    if parent[x] != x:
+        parent[x] = find(parent[x])
+    return parent[x]
+
+union(a, b):
+    ra = find(a)
+    rb = find(b)
+    if ra == rb: return
+    # attach smaller rank under bigger rank
+    if rank[ra] &lt; rank[rb]:
+        parent[ra] = rb
+    else if rank[ra] &gt; rank[rb]:
+        parent[rb] = ra
+    else:
+        parent[rb] = ra
+        rank[ra] += 1</code></pre>
+
+            <p>
+                In <strong>Problem 5</strong>, each <code>union</code> call merges components, and
+                <code>connected a b</code> checks whether <code>find(a) == find(b)</code>.
+                With path compression and union by rank, each operation is effectively
+                amortized <code>O(&alpha;(n))</code>, where <code>&alpha;</code> is the inverse Ackermann function
+                (practically constant).
+            </p>
+        </section>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- 7. Choosing the Right Graph Pattern                       -->
+        <!-- ========================================================= -->
+
+        <section class="lesson-section">
+            <h2>7. Choosing the Right Graph Pattern</h2>
+            <ul>
+                <li>
+                    <strong>Unweighted shortest path / minimum number of steps</strong> →
+                    BFS on an unweighted graph (Problem 1).
+                </li>
+                <li>
+                    <strong>Reachability / number of groups</strong> →
+                    DFS/BFS or Union-Find (Problem 2 &amp; 5).
+                </li>
+                <li>
+                    <strong>Ordering with prerequisites, DAG</strong> →
+                    Topological sort (Problem 3).
+                </li>
+                <li>
+                    <strong>Shortest path with non-negative weights</strong> →
+                    Dijkstra's algorithm (Problem 4).
+                </li>
+                <li>
+                    <strong>Dynamic connectivity queries</strong> →
+                    Union-Find (Problem 5).
+                </li>
+            </ul>
+
+            <p>
+                In interviews, many “mystery” problems are just disguised versions of these patterns.
+                Your goal is to recognize the pattern (BFS layer expansion, DFS component search,
+                DAG ordering, Dijkstra relaxation, or DSU merges) and then drop in the appropriate template.
+            </p>
+        </section>
+
+        <div class="next-section">
+            <a href="problems-section11-graphs.html">← Back to Section 11 Problem Set</a>
+            &nbsp;&nbsp;
+            <a href="section10-practice.html">Back to Practice Hub →</a>
+        </div>
+    </main>
+</body>
+
+</html>

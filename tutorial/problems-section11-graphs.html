@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Problems - Section 11 Graph Algorithms</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css">
+
+    <!-- Highlight.js theme (kept consistent even though this page has no code tabs yet) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts -->
+    <script src="js/site.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="section10-practice.html">← Back to Practice Hub</a>
+            &nbsp;&nbsp;
+            <a href="section11-graphs.html">View Section 11 Lesson →</a>
+            &nbsp;&nbsp;
+            <a href="solutions-section11-graphs.html">View Section 11 Solutions →</a>
+        </div>
+
+        <div class="kicker">Section 11 - Problems</div>
+        <h1>Graph Algorithms - Problem Set</h1>
+
+        <p class="tagline">
+            Core graph patterns: BFS &amp; DFS, connected components, topological sorting, shortest paths, and union-find.
+            Each problem is designed to exercise a specific pattern you’ll see repeatedly in interviews and real-world code.
+        </p>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- Problem 1 - Shortest Path in an Unweighted Graph          -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 1 - Shortest Path in an Unweighted Graph</h2>
+            <p>
+                You are given an undirected, unweighted graph with <code>n</code> vertices labeled
+                <code>0..n-1</code> and a list of edges. You are also given two vertices
+                <code>src</code> and <code>dst</code>.
+                Using <strong>Breadth-First Search (BFS)</strong>, compute the length of the
+                shortest path from <code>src</code> to <code>dst</code>.
+                If there is no path, return <code>-1</code>.
+            </p>
+
+            <h3>Input Format</h3>
+            <ul>
+                <li>An integer <code>n</code>, the number of vertices.</li>
+                <li>An integer <code>m</code>, the number of edges.</li>
+                <li><code>m</code> lines, each with two integers <code>u v</code> describing an undirected edge.</li>
+                <li>One line with two integers <code>src dst</code>.</li>
+            </ul>
+
+            <h3>Output Format</h3>
+            <p>
+                A single integer: the minimum number of edges on any path from <code>src</code> to <code>dst</code>,
+                or <code>-1</code> if no such path exists.
+            </p>
+
+            <h3>Constraints</h3>
+            <ul>
+                <li><code>1 ≤ n ≤ 2 * 10<sup>5</sup></code></li>
+                <li><code>0 ≤ m ≤ 2 * 10<sup>5</sup></code></li>
+                <li><code>0 ≤ u, v, src, dst &lt; n</code></li>
+                <li>The graph may be disconnected.</li>
+            </ul>
+
+            <h3>Example</h3>
+<pre><code>Input
+5 4
+0 1
+1 2
+1 3
+3 4
+0 4
+
+Output
+3
+
+Explanation
+One shortest path is 0 → 1 → 3 → 4 (3 edges).</code></pre>
+        </section>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- Problem 2 - Connected Components in an Undirected Graph   -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 2 - Connected Components in an Undirected Graph</h2>
+            <p>
+                You are given an undirected graph with <code>n</code> vertices labeled
+                <code>0..n-1</code> and a list of edges.
+                Using <strong>DFS or BFS</strong>, compute the number of connected components in the graph.
+            </p>
+
+            <h3>Input Format</h3>
+            <ul>
+                <li>An integer <code>n</code>, the number of vertices.</li>
+                <li>An integer <code>m</code>, the number of edges.</li>
+                <li><code>m</code> lines, each with two integers <code>u v</code> describing an undirected edge.</li>
+            </ul>
+
+            <h3>Output Format</h3>
+            <p>
+                A single integer: the number of connected components in the graph.
+            </p>
+
+            <h3>Constraints</h3>
+            <ul>
+                <li><code>1 ≤ n ≤ 2 * 10<sup>5</sup></code></li>
+                <li><code>0 ≤ m ≤ 2 * 10<sup>5</sup></code></li>
+                <li><code>0 ≤ u, v &lt; n</code></li>
+            </ul>
+
+            <h3>Example</h3>
+<pre><code>Input
+6 3
+0 1
+2 3
+4 5
+
+Output
+3
+
+Explanation
+The components are {0,1}, {2,3}, and {4,5}.</code></pre>
+        </section>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- Problem 3 - Topological Sort of a DAG                     -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 3 - Topological Ordering of a DAG</h2>
+            <p>
+                You are given a directed graph with <code>n</code> vertices labeled
+                <code>0..n-1</code> and <code>m</code> directed edges.
+                The graph is guaranteed to be a <strong>DAG (Directed Acyclic Graph)</strong>.
+                Your task is to output a valid <strong>topological ordering</strong> of all vertices.
+            </p>
+
+            <h3>Input Format</h3>
+            <ul>
+                <li>An integer <code>n</code>, the number of vertices.</li>
+                <li>An integer <code>m</code>, the number of edges.</li>
+                <li><code>m</code> lines, each with two integers <code>u v</code> describing a directed edge <code>u → v</code>.</li>
+            </ul>
+
+            <h3>Output Format</h3>
+            <p>
+                A permutation of <code>0..n-1</code> in a single line, representing a valid topological order
+                (if multiple orders are valid, output any one of them).
+            </p>
+
+            <h3>Constraints</h3>
+            <ul>
+                <li><code>1 ≤ n ≤ 2 * 10<sup>5</sup></code></li>
+                <li><code>0 ≤ m ≤ 2 * 10<sup>5</sup></code></li>
+                <li><code>0 ≤ u, v &lt; n</code></li>
+                <li>The graph is acyclic.</li>
+            </ul>
+
+            <h3>Example</h3>
+<pre><code>Input
+4 3
+0 1
+0 2
+1 3
+
+Output
+0 1 2 3
+
+Explanation
+Valid topological orders include [0,1,2,3], [0,2,1,3]; 0 must come before 1 and 2, and 1 before 3.</code></pre>
+        </section>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- Problem 4 - Single-Source Shortest Path (Non-negative)    -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 4 - Single-Source Shortest Path with Non-Negative Weights</h2>
+            <p>
+                You are given a directed weighted graph with <code>n</code> vertices labeled
+                <code>0..n-1</code> and <code>m</code> edges.
+                Each edge <code>u → v</code> has a non-negative weight <code>w</code>.
+                Given a source vertex <code>src</code>, compute the shortest distance
+                from <code>src</code> to every vertex using <strong>Dijkstra's algorithm</strong>.
+            </p>
+
+            <h3>Input Format</h3>
+            <ul>
+                <li>An integer <code>n</code>, the number of vertices.</li>
+                <li>An integer <code>m</code>, the number of edges.</li>
+                <li><code>m</code> lines, each with three integers <code>u v w</code> describing a directed edge.</li>
+                <li>One integer <code>src</code>, the source vertex.</li>
+            </ul>
+
+            <h3>Output Format</h3>
+            <p>
+                A single line with <code>n</code> space-separated integers, where the
+                <code>i</code>-th integer is the shortest distance from <code>src</code> to <code>i</code>,
+                or <code>-1</code> if <code>i</code> is unreachable.
+            </p>
+
+            <h3>Constraints</h3>
+            <ul>
+                <li><code>1 ≤ n ≤ 2 * 10<sup>5</sup></code></li>
+                <li><code>0 ≤ m ≤ 2 * 10<sup>5</sup></code></li>
+                <li><code>0 ≤ u, v, src &lt; n</code></li>
+                <li><code>0 ≤ w ≤ 10<sup>9</sup></code></li>
+            </ul>
+
+            <h3>Example</h3>
+<pre><code>Input
+5 6
+0 1 2
+0 2 5
+1 2 1
+1 3 2
+2 3 1
+3 4 3
+0
+
+Output
+0 2 3 4 7
+
+Explanation
+Example shortest paths:
+0→1 (2), 0→1→2 (3), 0→1→3 (4), 0→1→3→4 (7).</code></pre>
+        </section>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- Problem 5 - Dynamic Connectivity with Union-Find          -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 5 - Dynamic Connectivity with Union-Find</h2>
+            <p>
+                You are given <code>n</code> elements labeled <code>0..n-1</code>. Initially, each element is in its own set.
+                Then you receive <code>q</code> operations of two types:
+            </p>
+            <ul>
+                <li><code>union a b</code>: merge the sets containing <code>a</code> and <code>b</code>.</li>
+                <li><code>connected a b</code>: query whether <code>a</code> and <code>b</code> are in the same set.</li>
+            </ul>
+            <p>
+                Implement this using a <strong>Disjoint Set Union (Union-Find)</strong> data structure with
+                path compression and union-by-rank/size.
+            </p>
+
+            <h3>Input Format</h3>
+            <ul>
+                <li>An integer <code>n</code>, the number of elements.</li>
+                <li>An integer <code>q</code>, the number of operations.</li>
+                <li><code>q</code> lines, each in one of the forms:
+                    <ul>
+                        <li><code>union a b</code></li>
+                        <li><code>connected a b</code></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>Output Format</h3>
+            <p>
+                For every <code>connected</code> query, print <code>"YES"</code> if the two elements are in the same set,
+                otherwise print <code>"NO"</code>, each on its own line.
+            </p>
+
+            <h3>Constraints</h3>
+            <ul>
+                <li><code>1 ≤ n, q ≤ 2 * 10<sup>5</sup></code></li>
+                <li><code>0 ≤ a, b &lt; n</code></li>
+            </ul>
+
+            <h3>Example</h3>
+<pre><code>Input
+5 6
+union 0 1
+union 1 2
+connected 0 2
+connected 0 3
+union 3 4
+connected 2 4
+
+Output
+YES
+NO
+NO
+
+Explanation
+After unions, we have sets {0,1,2} and {3,4}.
+Queries:
+- 0 and 2 → YES
+- 0 and 3 → NO
+- 2 and 4 → NO</code></pre>
+        </section>
+
+        <div class="next-section">
+            <a href="section10-practice.html">← Back to Practice Hub</a>
+            &nbsp;&nbsp;
+            <a href="solutions-section11-graphs.html">View Section 11 Solutions →</a>
+        </div>
+    </main>
+</body>
+
+</html>

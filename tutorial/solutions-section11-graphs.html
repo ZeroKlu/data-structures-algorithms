@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Solutions - Section 11 Graph Algorithms</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css">
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tabs, highlight init, prefs, cookies, etc.) -->
+    <script src="js/site.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="section10-practice.html">← Back to Practice Hub</a>
+            &nbsp;&nbsp;
+            <a href="problems-section11-graphs.html">← Back to Section 11 Problems</a>
+            &nbsp;&nbsp;
+            <a href="section11-graphs.html">View Section 11 Lesson →</a>
+        </div>
+
+        <div class="kicker">Section 11 - Solutions</div>
+        <h1>Graph Algorithms - Solutions</h1>
+
+        <p class="tagline">
+            Fundamental graph patterns: BFS and shortest paths on unweighted graphs, DFS and connected
+            components, topological sort, Dijkstra on weighted graphs, and union-find (disjoint set).
+            Each core solution is provided in C, C++, Java, JavaScript, C#, and Python.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- Problem 1 - BFS Shortest Paths in Unweighted Graph        -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 1 - Shortest Path Lengths in an Unweighted Graph (BFS)</h2>
+            <p>
+                We are given an undirected, unweighted graph and a source node <code>s</code>. Using BFS from
+                <code>s</code>, we compute the minimum number of edges to reach each node. Unreachable nodes
+                get distance <code>-1</code>.
+            </p>
+
+            <div class="code-example" data-example="s11p1">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 1</span>
+                        <span class="meta">Level-order BFS for shortest paths</span>
+                    </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s11p1">
+                        Understand the Algorithm
+                    </button>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C (conceptual; assumes adjacency list + queue helpers) -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C (conceptual sketch)
+//
+// Assume:
+//   n = number of vertices labeled [0..n-1]
+//   adjacency list: vector of neighbor arrays, or similar
+//   queue of ints with enqueue/dequeue operations.
+//
+// The BFS idea mirrors the other languages:
+//
+// void bfs_shortest(int n, /* adjacency */, int s, int *dist) {
+//     for (int i = 0; i &lt; n; i++) dist[i] = -1;
+//     dist[s] = 0;
+//     init_queue(&amp;q);
+//     enqueue(&amp;q, s);
+//     while (!empty(&amp;q)) {
+//         int u = dequeue(&amp;q);
+//         for (each neighbor v of u) {
+//             if (dist[v] == -1) {
+//                 dist[v] = dist[u] + 1;
+//                 enqueue(&amp;q, v);
+//             }
+//         }
+//     }
+// }</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+
+vector&lt;int&gt; bfsShortestPaths(int n, const vector&lt;vector&lt;int&gt; &gt; &amp;adj, int s) {
+    vector&lt;int&gt; dist(n, -1);
+    queue&lt;int&gt; q;
+    dist[s] = 0;
+    q.push(s);
+
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+        for (int v : adj[u]) {
+            if (dist[v] == -1) {
+                dist[v] = dist[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.*;
+
+int[] bfsShortestPaths(int n, List&lt;List&lt;Integer&gt;&gt; adj, int s) {
+    int[] dist = new int[n];
+    Arrays.fill(dist, -1);
+    Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+    dist[s] = 0;
+    q.offer(s);
+
+    while (!q.isEmpty()) {
+        int u = q.poll();
+        for (int v : adj.get(u)) {
+            if (dist[v] == -1) {
+                dist[v] = dist[u] + 1;
+                q.offer(v);
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+// adj: adjacency list as array of arrays, nodes 0..n-1
+function bfsShortestPaths(n, adj, s) {
+    const dist = new Array(n).fill(-1);
+    const q = [];
+    let head = 0;
+
+    dist[s] = 0;
+    q.push(s);
+
+    while (head &lt; q.length) {
+        const u = q[head++];
+        for (const v of adj[u]) {
+            if (dist[v] === -1) {
+                dist[v] = dist[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System;
+using System.Collections.Generic;
+
+int[] BfsShortestPaths(int n, List&lt;List&lt;int&gt;&gt; adj, int s) {
+    var dist = new int[n];
+    Array.Fill(dist, -1);
+    var q = new Queue&lt;int&gt;();
+    dist[s] = 0;
+    q.Enqueue(s);
+
+    while (q.Count &gt; 0) {
+        int u = q.Dequeue();
+        foreach (var v in adj[u]) {
+            if (dist[v] == -1) {
+                dist[v] = dist[u] + 1;
+                q.Enqueue(v);
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from collections import deque
+from typing import List
+
+def bfs_shortest_paths(n: int, adj: List[List[int]], s: int) -&gt; List[int]:
+    dist = [-1] * n
+    dist[s] = 0
+    q: deque[int] = deque([s])
+    while q:
+        u = q.popleft()
+        for v in adj[u]:
+            if dist[v] == -1:
+                dist[v] = dist[u] + 1
+                q.append(v)
+    return dist</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: each edge is explored at most twice (undirected) → <strong>O(n + m)</strong>.  
+                    Extra space: queue and distance array → <strong>O(n)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- Problem 2 - DFS & Connected Components                    -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 2 - Connected Components in an Undirected Graph (DFS)</h2>
+            <p>
+                Given an undirected graph, count how many connected components it has and assign a component ID
+                to each node using DFS.
+            </p>
+
+            <div class="code-example" data-example="s11p2">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 2</span>
+                        <span class="meta">Recursive DFS with component labels</span>
+                    </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s11p2">
+                        Understand the Algorithm
+                    </button>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C (conceptual) -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C (conceptual sketch)
+//
+// Similar to BFS sketch above, but using DFS:
+//
+// void dfs(int u, int comp_id, int *comp, /* adjacency */) {
+//     comp[u] = comp_id;
+//     for (each neighbor v of u) {
+//         if (comp[v] == -1) {
+//             dfs(v, comp_id, comp, /* adjacency */);
+//         }
+//     }
+// }
+//
+// int connected_components(int n, /* adjacency */, int *comp) {
+//     for (int i = 0; i &lt; n; i++) comp[i] = -1;
+//     int cid = 0;
+//     for (int u = 0; u &lt; n; u++) {
+//         if (comp[u] == -1) {
+//             dfs(u, cid, comp, /* adjacency */);
+//             cid++;
+//         }
+//     }
+//     return cid;
+// }</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+using namespace std;
+
+void dfs_comp(int u, int cid, const vector&lt;vector&lt;int&gt; &gt; &amp;adj, vector&lt;int&gt; &amp;comp) {
+    comp[u] = cid;
+    for (int v : adj[u]) {
+        if (comp[v] == -1) {
+            dfs_comp(v, cid, adj, comp);
+        }
+    }
+}
+
+int connectedComponents(int n, const vector&lt;vector&lt;int&gt; &gt; &amp;adj, vector&lt;int&gt; &amp;comp) {
+    comp.assign(n, -1);
+    int cid = 0;
+    for (int u = 0; u &lt; n; u++) {
+        if (comp[u] == -1) {
+            dfs_comp(u, cid, adj, comp);
+            cid++;
+        }
+    }
+    return cid;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.*;
+
+void dfsComp(int u, int cid, List&lt;List&lt;Integer&gt;&gt; adj, int[] comp) {
+    comp[u] = cid;
+    for (int v : adj.get(u)) {
+        if (comp[v] == -1) {
+            dfsComp(v, cid, adj, comp);
+        }
+    }
+}
+
+int connectedComponents(int n, List&lt;List&lt;Integer&gt;&gt; adj, int[] comp) {
+    Arrays.fill(comp, -1);
+    int cid = 0;
+    for (int u = 0; u &lt; n; u++) {
+        if (comp[u] == -1) {
+            dfsComp(u, cid, adj, comp);
+            cid++;
+        }
+    }
+    return cid;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function dfsComp(u, cid, adj, comp) {
+    comp[u] = cid;
+    for (const v of adj[u]) {
+        if (comp[v] === -1) {
+            dfsComp(v, cid, adj, comp);
+        }
+    }
+}
+
+function connectedComponents(n, adj) {
+    const comp = new Array(n).fill(-1);
+    let cid = 0;
+    for (let u = 0; u &lt; n; u++) {
+        if (comp[u] === -1) {
+            dfsComp(u, cid, adj, comp);
+            cid++;
+        }
+    }
+    return { count: cid, comp };
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System;
+using System.Collections.Generic;
+
+void DfsComp(int u, int cid, List&lt;List&lt;int&gt;&gt; adj, int[] comp) {
+    comp[u] = cid;
+    foreach (var v in adj[u]) {
+        if (comp[v] == -1) {
+            DfsComp(v, cid, adj, comp);
+        }
+    }
+}
+
+int ConnectedComponents(int n, List&lt;List&lt;int&gt;&gt; adj, int[] comp) {
+    Array.Fill(comp, -1);
+    int cid = 0;
+    for (int u = 0; u &lt; n; u++) {
+        if (comp[u] == -1) {
+            DfsComp(u, cid, adj, comp);
+            cid++;
+        }
+    }
+    return cid;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import List, Tuple
+
+def _dfs_comp(u: int, cid: int, adj: List[List[int]], comp: List[int]) -&gt; None:
+    comp[u] = cid
+    for v in adj[u]:
+        if comp[v] == -1:
+            _dfs_comp(v, cid, adj, comp)
+
+def connected_components(n: int, adj: List[List[int]]) -&gt; Tuple[int, List[int]]:
+    comp = [-1] * n
+    cid = 0
+    for u in range(n):
+        if comp[u] == -1:
+            _dfs_comp(u, cid, adj, comp)
+            cid += 1
+    return cid, comp</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: each edge explored twice (undirected) → <strong>O(n + m)</strong>.  
+                    Extra space: recursion/stack and component array → <strong>O(n)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- Problem 3 - Topological Sort (Kahn's Algorithm)           -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 3 - Topological Sort of a DAG (Kahn's Algorithm)</h2>
+            <p>
+                Given a directed acyclic graph (DAG), produce a topological ordering of its nodes or detect a cycle.
+                We use indegrees plus a queue of zero-indegree nodes.
+            </p>
+
+            <div class="code-example" data-example="s11p3">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 3</span>
+                        <span class="meta">BFS-style topo sort using indegrees</span>
+                    </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s11p3">
+                        Understand the Algorithm
+                    </button>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C (conceptual) -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C (conceptual sketch)
+//
+// 1. Compute indegree[u] for each node.
+// 2. Push all nodes with indegree 0 into a queue.
+// 3. Repeatedly pop from queue, append to order, and decrement
+//    indegree of its neighbors, pushing new zeros.
+//
+// If we processed fewer than n nodes, there was a cycle.</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+
+vector&lt;int&gt; topoSortKahn(int n, const vector&lt;vector&lt;int&gt; &gt; &amp;adj) {
+    vector&lt;int&gt; indeg(n, 0);
+    for (int u = 0; u &lt; n; u++) {
+        for (int v : adj[u]) {
+            indeg[v]++;
+        }
+    }
+    queue&lt;int&gt; q;
+    for (int u = 0; u &lt; n; u++) {
+        if (indeg[u] == 0) q.push(u);
+    }
+    vector&lt;int&gt; order;
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+        order.push_back(u);
+        for (int v : adj[u]) {
+            if (--indeg[v] == 0) {
+                q.push(v);
+            }
+        }
+    }
+    if ((int)order.size() != n) {
+        return {}; // cycle exists
+    }
+    return order;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.*;
+
+List&lt;Integer&gt; topoSortKahn(int n, List&lt;List&lt;Integer&gt;&gt; adj) {
+    int[] indeg = new int[n];
+    for (int u = 0; u &lt; n; u++) {
+        for (int v : adj.get(u)) {
+            indeg[v]++;
+        }
+    }
+    Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+    for (int u = 0; u &lt; n; u++) {
+        if (indeg[u] == 0) q.offer(u);
+    }
+    List&lt;Integer&gt; order = new ArrayList&lt;&gt;();
+    while (!q.isEmpty()) {
+        int u = q.poll();
+        order.add(u);
+        for (int v : adj.get(u)) {
+            if (--indeg[v] == 0) {
+                q.offer(v);
+            }
+        }
+    }
+    if (order.size() != n) {
+        return Collections.emptyList(); // cycle detected
+    }
+    return order;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function topoSortKahn(n, adj) {
+    const indeg = new Array(n).fill(0);
+    for (let u = 0; u &lt; n; u++) {
+        for (const v of adj[u]) indeg[v]++;
+    }
+    const q = [];
+    let head = 0;
+    for (let u = 0; u &lt; n; u++) {
+        if (indeg[u] === 0) q.push(u);
+    }
+    const order = [];
+    while (head &lt; q.length) {
+        const u = q[head++];
+        order.push(u);
+        for (const v of adj[u]) {
+            indeg[v]--;
+            if (indeg[v] === 0) q.push(v);
+        }
+    }
+    if (order.length !== n) return []; // cycle
+    return order;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System;
+using System.Collections.Generic;
+
+IList&lt;int&gt; TopoSortKahn(int n, List&lt;List&lt;int&gt;&gt; adj) {
+    var indeg = new int[n];
+    for (int u = 0; u &lt; n; u++) {
+        foreach (var v in adj[u]) indeg[v]++;
+    }
+    var q = new Queue&lt;int&gt;();
+    for (int u = 0; u &lt; n; u++) {
+        if (indeg[u] == 0) q.Enqueue(u);
+    }
+    var order = new List&lt;int&gt;();
+    while (q.Count &gt; 0) {
+        int u = q.Dequeue();
+        order.Add(u);
+        foreach (var v in adj[u]) {
+            indeg[v]--;
+            if (indeg[v] == 0) q.Enqueue(v);
+        }
+    }
+    if (order.Count != n) return Array.Empty&lt;int&gt;();
+    return order;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from collections import deque
+from typing import List
+
+def topo_sort_kahn(n: int, adj: List[List[int]]) -&gt; List[int]:
+    indeg = [0] * n
+    for u in range(n):
+        for v in adj[u]:
+            indeg[v] += 1
+    q: deque[int] = deque(u for u in range(n) if indeg[u] == 0)
+    order: List[int] = []
+    while q:
+        u = q.popleft()
+        order.append(u)
+        for v in adj[u]:
+            indeg[v] -= 1
+            if indeg[v] == 0:
+                q.append(v)
+    if len(order) != n:
+        return []  # cycle
+    return order</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: count edges once and traverse each once → <strong>O(n + m)</strong>.  
+                    Extra space: indegree array, queue, output → <strong>O(n)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- Problem 4 - Dijkstra's Algorithm                          -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 4 - Dijkstra's Algorithm (Non-Negative Weights)</h2>
+            <p>
+                Given a weighted directed graph with non-negative edge weights and a source node <code>s</code>,
+                compute the minimum distance to all nodes using Dijkstra's algorithm with a priority queue.
+            </p>
+
+            <div class="code-example" data-example="s11p4">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 4</span>
+                        <span class="meta">Priority-queue Dijkstra on adjacency lists</span>
+                    </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s11p4">
+                        Understand the Algorithm
+                    </button>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C (conceptual) -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C (conceptual sketch)
+//
+// Represent adjacency as: for each u, a list of (v, w) pairs.
+// Use a min-priority-queue keyed by distance.
+//
+// 1. Initialize dist[u] = INF; dist[s] = 0.
+// 2. Push (0, s) into the heap.
+// 3. Pop (d, u); if d &gt; dist[u], skip.
+// 4. For each edge (u -&gt; v, w), relax:
+//      if dist[u] + w &lt; dist[v], update dist[v] and push (dist[v], v).
+//
+// Full C code depends on your heap implementation.</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;limits&gt;
+using namespace std;
+
+struct Edge {
+    int to;
+    int w;
+};
+
+vector&lt;int&gt; dijkstra(int n, const vector&lt;vector&lt;Edge&gt; &gt; &amp;adj, int s) {
+    const int INF = numeric_limits&lt;int&gt;::max() / 2;
+    vector&lt;int&gt; dist(n, INF);
+    dist[s] = 0;
+
+    using P = pair&lt;int, int&gt;; // (dist, node)
+    priority_queue&lt;P, vector&lt;P&gt;, greater&lt;P&gt; &gt; pq;
+    pq.push({0, s});
+
+    while (!pq.empty()) {
+        auto [d, u] = pq.top();
+        pq.pop();
+        if (d &gt; dist[u]) continue;
+        for (const auto &amp;e : adj[u]) {
+            int v = e.to;
+            int nd = d + e.w;
+            if (nd &lt; dist[v]) {
+                dist[v] = nd;
+                pq.push({nd, v});
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.*;
+
+class Edge {
+    int to;
+    int w;
+    Edge(int t, int w) { this.to = t; this.w = w; }
+}
+
+int[] dijkstra(int n, List&lt;List&lt;Edge&gt;&gt; adj, int s) {
+    int INF = Integer.MAX_VALUE / 2;
+    int[] dist = new int[n];
+    Arrays.fill(dist, INF);
+    dist[s] = 0;
+
+    PriorityQueue&lt;int[]&gt; pq = new PriorityQueue&lt;&gt;(Comparator.comparingInt(a -&gt; a[0]));
+    pq.offer(new int[]{0, s});
+
+    while (!pq.isEmpty()) {
+        int[] cur = pq.poll();
+        int d = cur[0], u = cur[1];
+        if (d &gt; dist[u]) continue;
+        for (Edge e : adj.get(u)) {
+            int v = e.to;
+            int nd = d + e.w;
+            if (nd &lt; dist[v]) {
+                dist[v] = nd;
+                pq.offer(new int[]{nd, v});
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+// Simple binary-heap-like priority queue can be imported or implemented.
+// Here we assume a minimal interface:
+//   pq.push({ dist, node });
+//   const item = pq.pop(); // smallest dist
+// For brevity, use a naive O(n) "priority queue" for teaching purposes.
+
+function dijkstra(n, adj, s) {
+    const INF = 1e15;
+    const dist = new Array(n).fill(INF);
+    dist[s] = 0;
+
+    const used = new Array(n).fill(false);
+    for (let it = 0; it &lt; n; it++) {
+        let u = -1;
+        let best = INF;
+        for (let i = 0; i &lt; n; i++) {
+            if (!used[i] &amp;&amp; dist[i] &lt; best) {
+                best = dist[i];
+                u = i;
+            }
+        }
+        if (u === -1) break;
+        used[u] = true;
+        for (const [v, w] of adj[u]) {
+            const nd = dist[u] + w;
+            if (nd &lt; dist[v]) dist[v] = nd;
+        }
+    }
+    return dist;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System;
+using System.Collections.Generic;
+
+class Edge {
+    public int To;
+    public int W;
+    public Edge(int to, int w) { To = to; W = w; }
+}
+
+int[] Dijkstra(int n, List&lt;List&lt;Edge&gt;&gt; adj, int s) {
+    int INF = int.MaxValue / 2;
+    var dist = new int[n];
+    Array.Fill(dist, INF);
+    dist[s] = 0;
+
+    var pq = new PriorityQueue&lt;int, int&gt;(); // (node, priority = dist)
+    pq.Enqueue(s, 0);
+
+    while (pq.Count &gt; 0) {
+        pq.TryDequeue(out int u, out int d);
+        if (d &gt; dist[u]) continue;
+        foreach (var e in adj[u]) {
+            int v = e.To;
+            int nd = d + e.W;
+            if (nd &lt; dist[v]) {
+                dist[v] = nd;
+                pq.Enqueue(v, nd);
+            }
+        }
+    }
+    return dist;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+import heapq
+from typing import List, Tuple
+
+def dijkstra(n: int, adj: List[List[Tuple[int, int]]], s: int) -&gt; List[int]:
+    """
+    adj[u] is a list of (v, w) edges.
+    """
+    INF = 10**15
+    dist = [INF] * n
+    dist[s] = 0
+    pq: List[Tuple[int, int]] = [(0, s)]
+    while pq:
+        d, u = heapq.heappop(pq)
+        if d &gt; dist[u]:
+            continue
+        for v, w in adj[u]:
+            nd = d + w
+            if nd &lt; dist[v]:
+                dist[v] = nd
+                heapq.heappush(pq, (nd, v))
+    return dist</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Using a binary heap: time <strong>O((n + m) log n)</strong>.  
+                    Extra space: graph + distance + heap → <strong>O(n + m)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- Problem 5 - Union-Find (Disjoint Set Union)               -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Problem 5 - Number of Connected Components via Union-Find</h2>
+            <p>
+                For an undirected graph with <code>n</code> nodes and edge list <code>edges</code>, use a disjoint
+                set union (union-find) structure with path compression and union by rank/size to count how many
+                connected components there are.
+            </p>
+
+            <div class="code-example" data-example="s11p5">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Problem 5</span>
+                        <span class="meta">Union-find with path compression</span>
+                    </div>
+                    <button type="button" class="deep-dive-trigger"
+                        data-deep-id="understand-s11p5">
+                        Understand the Algorithm
+                    </button>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdlib.h&gt;
+
+typedef struct {
+    int *parent;
+    int *rank;
+    int count;
+} DSU;
+
+static DSU *dsu_create(int n) {
+    DSU *d = (DSU *)malloc(sizeof(DSU));
+    d-&gt;parent = (int *)malloc(n * sizeof(int));
+    d-&gt;rank   = (int *)calloc(n, sizeof(int));
+    d-&gt;count  = n;
+    for (int i = 0; i &lt; n; i++) {
+        d-&gt;parent[i] = i;
+    }
+    return d;
+}
+
+static int dsu_find(DSU *d, int x) {
+    if (d-&gt;parent[x] != x) {
+        d-&gt;parent[x] = dsu_find(d, d-&gt;parent[x]);
+    }
+    return d-&gt;parent[x];
+}
+
+static void dsu_union(DSU *d, int a, int b) {
+    int ra = dsu_find(d, a);
+    int rb = dsu_find(d, b);
+    if (ra == rb) return;
+    if (d-&gt;rank[ra] &lt; d-&gt;rank[rb]) {
+        d-&gt;parent[ra] = rb;
+    } else if (d-&gt;rank[ra] &gt; d-&gt;rank[rb]) {
+        d-&gt;parent[rb] = ra;
+    } else {
+        d-&gt;parent[rb] = ra;
+        d-&gt;rank[ra]++;
+    }
+    d-&gt;count--;
+}
+
+static void dsu_free(DSU *d) {
+    free(d-&gt;parent);
+    free(d-&gt;rank);
+    free(d);
+}
+
+// edges: array of pairs (u, v) in edges[][2], edgesSize rows
+int countComponents(int n, int **edges, int edgesSize) {
+    DSU *d = dsu_create(n);
+    for (int i = 0; i &lt; edgesSize; i++) {
+        int u = edges[i][0];
+        int v = edges[i][1];
+        dsu_union(d, u, v);
+    }
+    int ans = d-&gt;count;
+    dsu_free(d);
+    return ans;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+using namespace std;
+
+struct DSU {
+    vector&lt;int&gt; parent;
+    vector&lt;int&gt; rnk;
+    int count;
+    DSU(int n) : parent(n), rnk(n, 0), count(n) {
+        for (int i = 0; i &lt; n; i++) parent[i] = i;
+    }
+    int find(int x) {
+        if (parent[x] != x) parent[x] = find(parent[x]);
+        return parent[x];
+    }
+    void unite(int a, int b) {
+        int ra = find(a), rb = find(b);
+        if (ra == rb) return;
+        if (rnk[ra] &lt; rnk[rb]) {
+            parent[ra] = rb;
+        } else if (rnk[ra] &gt; rnk[rb]) {
+            parent[rb] = ra;
+        } else {
+            parent[rb] = ra;
+            rnk[ra]++;
+        }
+        count--;
+    }
+};
+
+int countComponents(int n, const vector&lt;pair&lt;int,int&gt; &gt; &amp;edges) {
+    DSU d(n);
+    for (auto &amp;e : edges) {
+        d.unite(e.first, e.second);
+    }
+    return d.count;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+class DSU {
+    int[] parent;
+    int[] rank;
+    int count;
+
+    DSU(int n) {
+        parent = new int[n];
+        rank = new int[n];
+        count = n;
+        for (int i = 0; i &lt; n; i++) parent[i] = i;
+    }
+
+    int find(int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent[x]);
+        }
+        return parent[x];
+    }
+
+    void unite(int a, int b) {
+        int ra = find(a), rb = find(b);
+        if (ra == rb) return;
+        if (rank[ra] &lt; rank[rb]) {
+            parent[ra] = rb;
+        } else if (rank[ra] &gt; rank[rb]) {
+            parent[rb] = ra;
+        } else {
+            parent[rb] = ra;
+            rank[ra]++;
+        }
+        count--;
+    }
+}
+
+int countComponents(int n, int[][] edges) {
+    DSU d = new DSU(n);
+    for (int[] e : edges) {
+        d.unite(e[0], e[1]);
+    }
+    return d.count;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+class DSU {
+    constructor(n) {
+        this.parent = Array.from({ length: n }, (_, i) =&gt; i);
+        this.rank = new Array(n).fill(0);
+        this.count = n;
+    }
+    find(x) {
+        if (this.parent[x] !== x) {
+            this.parent[x] = this.find(this.parent[x]);
+        }
+        return this.parent[x];
+    }
+    unite(a, b) {
+        let ra = this.find(a), rb = this.find(b);
+        if (ra === rb) return;
+        if (this.rank[ra] &lt; this.rank[rb]) {
+            this.parent[ra] = rb;
+        } else if (this.rank[ra] &gt; this.rank[rb]) {
+            this.parent[rb] = ra;
+        } else {
+            this.parent[rb] = ra;
+            this.rank[ra]++;
+        }
+        this.count--;
+    }
+}
+
+// edges: array of [u, v]
+function countComponents(n, edges) {
+    const d = new DSU(n);
+    for (const [u, v] of edges) {
+        d.unite(u, v);
+    }
+    return d.count;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+class DSU {
+    public int[] Parent;
+    public int[] Rank;
+    public int Count;
+
+    public DSU(int n) {
+        Parent = new int[n];
+        Rank = new int[n];
+        Count = n;
+        for (int i = 0; i &lt; n; i++) Parent[i] = i;
+    }
+
+    public int Find(int x) {
+        if (Parent[x] != x) {
+            Parent[x] = Find(Parent[x]);
+        }
+        return Parent[x];
+    }
+
+    public void Unite(int a, int b) {
+        int ra = Find(a);
+        int rb = Find(b);
+        if (ra == rb) return;
+        if (Rank[ra] &lt; Rank[rb]) {
+            Parent[ra] = rb;
+        } else if (Rank[ra] &gt; Rank[rb]) {
+            Parent[rb] = ra;
+        } else {
+            Parent[rb] = ra;
+            Rank[ra]++;
+        }
+        Count--;
+    }
+}
+
+int CountComponents(int n, int[][] edges) {
+    var d = new DSU(n);
+    foreach (var e in edges) {
+        d.Unite(e[0], e[1]);
+    }
+    return d.Count;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import List
+
+class DSU:
+    def __init__(self, n: int) -&gt; None:
+        self.parent = list(range(n))
+        self.rank = [0] * n
+        self.count = n
+
+    def find(self, x: int) -&gt; int:
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+
+    def unite(self, a: int, b: int) -&gt; None:
+        ra = self.find(a)
+        rb = self.find(b)
+        if ra == rb:
+            return
+        if self.rank[ra] &lt; self.rank[rb]:
+            self.parent[ra] = rb
+        elif self.rank[ra] &gt; self.rank[rb]:
+            self.parent[rb] = ra
+        else:
+            self.parent[rb] = ra
+            self.rank[ra] += 1
+        self.count -= 1
+
+def count_components(n: int, edges: List[List[int]]) -&gt; int:
+    d = DSU(n)
+    for u, v in edges:
+        d.unite(u, v)
+    return d.count</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    With path compression + union by rank: amortized per operation ~ <strong>O(&alpha;(n))</strong>,
+                    where &alpha; is inverse Ackermann (very slow-growing).  
+                    Total for m edges: ~ <strong>O((n + m) &alpha;(n))</strong> ≈ linear.
+                </div>
+            </div>
+        </section>
+
+        <div class="next-section">
+            <a href="problems-section11-graphs.html">← Back to Section 11 Problem Set</a>
+            &nbsp;&nbsp;
+            <a href="section10-practice.html">Back to Practice Hub →</a>
+        </div>
+
+        <!-- ======================= Understand-the-algorithm templates ======================= -->
+
+        <div class="deep-dive-template" id="understand-s11p1"
+            data-title="Step-by-step: BFS shortest paths on an unweighted graph" hidden>
+            <p>
+                BFS is the natural tool for shortest paths when every edge has the same cost (think cost 1 per edge).
+                The queue ensures you always expand nodes in increasing distance from the source.
+            </p>
+            <ol>
+                <li>
+                    <strong>Model the graph:</strong>
+                    <p>
+                        Use an adjacency list: for each node <code>u</code>, store its neighbors
+                        <code>adj[u]</code>. Nodes are labeled <code>0..n-1</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Distance array:</strong>
+                    <p>
+                        Maintain <code>dist[u]</code> as “how many edges it takes to reach u from s”.
+                        Initialize all distances to <code>-1</code> (unvisited), except <code>dist[s] = 0</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Start BFS from s:</strong>
+                    <p>
+                        Push <code>s</code> into a queue. While the queue is not empty:
+                    </p>
+                    <ul>
+                        <li>Pop <code>u</code>.</li>
+                        <li>For each neighbor <code>v</code> of <code>u</code>:
+                            if <code>dist[v] == -1</code>, set <code>dist[v] = dist[u] + 1</code> and push <code>v</code>.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Why distances are shortest:</strong>
+                    <p>
+                        BFS explores the graph in <em>waves</em>: distance 0, then 1, then 2, etc.
+                        When we first visit <code>v</code>, the path we used has the minimum possible number of edges,
+                        because any shorter path would have been discovered in an earlier wave.
+                    </p>
+                </li>
+                <li>
+                    <strong>Unreachable nodes:</strong>
+                    <p>
+                        Any node that remains with distance <code>-1</code> after BFS is not reachable from <code>s</code>.
+                        The algorithm cleanly distinguishes reachable vs unreachable vertices.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s11p2"
+            data-title="Step-by-step: Connected components via DFS" hidden>
+            <p>
+                A connected component is a maximal set of nodes where each node can reach every other through some path.
+                DFS explores one component at a time.
+            </p>
+            <ol>
+                <li>
+                    <strong>Component labels:</strong>
+                    <p>
+                        We keep an array <code>comp[u]</code> that stores the component ID of node <code>u</code>.
+                        Initially everything is <code>-1</code> (unvisited).
+                    </p>
+                </li>
+                <li>
+                    <strong>Outer loop over all nodes:</strong>
+                    <p>
+                        For <code>u = 0..n-1</code>:
+                        if <code>comp[u] == -1</code>, we've found a new component.
+                        Start a DFS from <code>u</code> with a fresh component ID.
+                    </p>
+                </li>
+                <li>
+                    <strong>DFS from a seed:</strong>
+                    <p>
+                        In <code>dfs(u, cid)</code>:
+                    </p>
+                    <ul>
+                        <li>Set <code>comp[u] = cid</code>.</li>
+                        <li>For each neighbor <code>v</code> of <code>u</code>:
+                            if <code>comp[v] == -1</code>, recursively DFS on <code>v</code>.
+                        </li>
+                    </ul>
+                    <p>
+                        This floods the entire connected region reachable from <code>u</code>.
+                    </p>
+                </li>
+                <li>
+                    <strong>Counting components:</strong>
+                    <p>
+                        Each time we start a new DFS from an unvisited node, we increment a component counter.
+                        At the end, that counter is the total number of connected components.
+                    </p>
+                </li>
+                <li>
+                    <strong>Why this works:</strong>
+                    <p>
+                        DFS always follows edges to all reachable neighbors before returning.
+                        So starting from an unvisited node, one DFS explores exactly one connected component,
+                        and the outer loop ensures we discover every component.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s11p3"
+            data-title="Step-by-step: Topological sort with Kahn's algorithm" hidden>
+            <p>
+                Topological sorting orders the nodes of a DAG so every directed edge goes from earlier to later.
+                Kahn's algorithm uses indegrees and a queue to greedily remove nodes with no incoming edges.
+            </p>
+            <ol>
+                <li>
+                    <strong>Indegree definition:</strong>
+                    <p>
+                        For each node <code>u</code>, <code>indeg[u]</code> is the number of incoming edges.
+                        In a DAG, there is always at least one node with indegree 0 (unless the graph is empty).
+                    </p>
+                </li>
+                <li>
+                    <strong>Initialization:</strong>
+                    <ul>
+                        <li>Compute all indegrees by scanning adjacency lists.</li>
+                        <li>Push every node with <code>indeg[u] == 0</code> into a queue.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Main loop:</strong>
+                    <ul>
+                        <li>Pop a node <code>u</code> from the queue; append <code>u</code> to the ordering.</li>
+                        <li>For each outgoing edge <code>u → v</code>, decrement <code>indeg[v]</code>.</li>
+                        <li>If <code>indeg[v]</code> becomes 0, push <code>v</code> into the queue.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Detecting cycles:</strong>
+                    <p>
+                        If the graph has a cycle, some nodes are never reduced to indegree 0.
+                        Then the algorithm processes fewer than <code>n</code> nodes—this is how we detect a cycle.
+                    </p>
+                </li>
+                <li>
+                    <strong>Why the order is valid:</strong>
+                    <p>
+                        When we output <code>u</code>, all of its predecessors have already been removed
+                        (otherwise <code>indeg[u]</code> wouldn't be 0). So every edge is oriented forward in the
+                        final list, giving a valid topological ordering.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s11p4"
+            data-title="Step-by-step: Dijkstra's algorithm with a priority queue" hidden>
+            <p>
+                Dijkstra's algorithm generalizes BFS to weighted graphs with non-negative weights:
+                instead of exploring by “levels”, we explore by increasing distance using a min-priority queue.
+            </p>
+            <ol>
+                <li>
+                    <strong>Distance invariant:</strong>
+                    <p>
+                        <code>dist[u]</code> stores the best distance to <code>u</code> found so far.
+                        We maintain a min-heap of pairs <code>(d, u)</code>, where <code>d</code> is a candidate distance.
+                    </p>
+                </li>
+                <li>
+                    <strong>Initialization:</strong>
+                    <ul>
+                        <li>Set all <code>dist[u] = INF</code>, except <code>dist[s] = 0</code>.</li>
+                        <li>Push <code>(0, s)</code> into the heap.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Main loop:</strong>
+                    <p>
+                        While the heap is not empty:
+                    </p>
+                    <ul>
+                        <li>Pop the pair <code>(d, u)</code> with smallest <code>d</code>.</li>
+                        <li>If <code>d &gt; dist[u]</code>, skip (this is an outdated entry).</li>
+                        <li>Otherwise, <code>d == dist[u]</code> is final; relax all edges <code>u → v</code>:</li>
+                        <li>If <code>dist[u] + w &lt; dist[v]</code>, update <code>dist[v]</code> and push
+                            <code>(dist[v], v)</code> into the heap.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Why non-negative weights matter:</strong>
+                    <p>
+                        Once we pop <code>u</code> with the smallest distance, no alternate path through unprocessed
+                        nodes can be cheaper, because all edges have non-negative weight. This ensures <code>dist[u]</code>
+                        is finalized and never improved later.
+                    </p>
+                </li>
+                <li>
+                    <strong>Complexity intuition:</strong>
+                    <p>
+                        Each node can be popped multiple times, but we only relax edges when we see the best distance.
+                        With a binary heap, pushes and pops are <code>O(log n)</code>, giving total
+                        <code>O((n + m) log n)</code>.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s11p5"
+            data-title="Step-by-step: Union-find for connected components" hidden>
+            <p>
+                Union-find (disjoint set union, DSU) keeps track of which elements belong to the same set,
+                supporting near-constant-time union and find operations. It's ideal for merging edges
+                in an undirected graph.
+            </p>
+            <ol>
+                <li>
+                    <strong>Data structure design:</strong>
+                    <ul>
+                        <li><code>parent[x]</code> gives the parent of x; roots have <code>parent[x] == x</code>.</li>
+                        <li><code>rank[x]</code> (or size) is a rough measure of subtree height used to keep trees shallow.</li>
+                        <li><code>count</code> tracks how many disjoint sets currently exist.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Find with path compression:</strong>
+                    <p>
+                        <code>find(x)</code> walks parent pointers until it reaches a root.
+                        On the way back, it rewires every node directly to the root:
+                        this “flattens” the tree and makes future finds faster.
+                    </p>
+                </li>
+                <li>
+                    <strong>Union by rank:</strong>
+                    <p>
+                        To union <code>a</code> and <code>b</code>:
+                    </p>
+                    <ul>
+                        <li>Compute roots <code>ra = find(a)</code>, <code>rb = find(b)</code>.</li>
+                        <li>If <code>ra == rb</code>, they're already in the same set.</li>
+                        <li>Otherwise, attach the shallower tree under the deeper one by rank/size;
+                            if ranks are equal, pick one root and increment its rank.</li>
+                    </ul>
+                    <p>
+                        Each successful union reduces <code>count</code> by 1.
+                    </p>
+                </li>
+                <li>
+                    <strong>Graph application:</strong>
+                    <p>
+                        Start with <code>n</code> isolated nodes (<code>count = n</code>).
+                        For every undirected edge <code>(u, v)</code>, do <code>union(u, v)</code>.
+                        At the end, <code>count</code> is exactly the number of connected components.
+                    </p>
+                </li>
+                <li>
+                    <strong>Amortized complexity:</strong>
+                    <p>
+                        With both path compression and union by rank, each operation runs in almost constant time,
+                        roughly <code>O(&alpha;(n))</code>, where &alpha; is the inverse Ackermann function (less than 5 for any
+                        input size you'll ever see).
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <!-- ======================= Modal shell reused by all buttons ======================= -->
+
+        <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title">&nbsp;</h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
+    </main>
+</body>
+
+</html>
