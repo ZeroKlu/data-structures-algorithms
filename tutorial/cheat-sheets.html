@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cheat Sheets - Algorithms &amp; Data Structures</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css">
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tabs, highlight init, cookies, etc.) -->
+    <script src="js/site.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="index.html">← Back to Course Overview</a>
+            &nbsp;&nbsp;
+            <a href="section10-practice.html">Back to Practice Hub →</a>
+        </div>
+
+        <div class="kicker">Cheat Sheets</div>
+        <h1>Algorithm Cheat Sheets &amp; Templates</h1>
+
+        <p class="tagline">
+            Quick-reference tables and multi-language templates for core patterns: complexity of common structures,
+            BFS/DFS, binary search, and LIS in <strong>O(n log n)</strong>. All templates match the tabbed code style
+            used throughout the course.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- Section 1 - Time & Space Complexity Table                 -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Cheat Sheet 1 - Time &amp; Space Complexities</h2>
+            <p>
+                Common operations on basic data structures. These are <em>typical</em> complexities under reasonable
+                assumptions (e.g., hash tables with good hashing and low load factor).
+            </p>
+
+            <div class="complexity-table-wrapper">
+                <table class="complexity-table">
+                    <thead>
+                        <tr>
+                            <th>Structure / Operation</th>
+                            <th>Average Time</th>
+                            <th>Worst Time</th>
+                            <th>Space</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Array – index access</td>
+                            <td>O(1)</td>
+                            <td>O(1)</td>
+                            <td>O(n)</td>
+                        </tr>
+                        <tr>
+                            <td>Array – search (unsorted)</td>
+                            <td>O(n)</td>
+                            <td>O(n)</td>
+                            <td>O(1)</td>
+                        </tr>
+                        <tr>
+                            <td>Array – search (sorted, binary search)</td>
+                            <td>O(log n)</td>
+                            <td>O(log n)</td>
+                            <td>O(1)</td>
+                        </tr>
+                        <tr>
+                            <td>Dynamic array – append</td>
+                            <td>O(1) amortized</td>
+                            <td>O(n) when resize</td>
+                            <td>O(n)</td>
+                        </tr>
+                        <tr>
+                            <td>Singly linked list – prepend</td>
+                            <td>O(1)</td>
+                            <td>O(1)</td>
+                            <td>O(n)</td>
+                        </tr>
+                        <tr>
+                            <td>Singly linked list – search</td>
+                            <td>O(n)</td>
+                            <td>O(n)</td>
+                            <td>O(1)</td>
+                        </tr>
+                        <tr>
+                            <td>Hash table – insert / lookup / delete</td>
+                            <td>O(1) expected</td>
+                            <td>O(n)</td>
+                            <td>O(n)</td>
+                        </tr>
+                        <tr>
+                            <td>Balanced BST (e.g., AVL, Red-Black)</td>
+                            <td>O(log n)</td>
+                            <td>O(log n)</td>
+                            <td>O(n)</td>
+                        </tr>
+                        <tr>
+                            <td>Heap (priority queue) – insert</td>
+                            <td>O(log n)</td>
+                            <td>O(log n)</td>
+                            <td>O(n)</td>
+                        </tr>
+                        <tr>
+                            <td>Heap – get / remove min or max</td>
+                            <td>O(1) / O(log n)</td>
+                            <td>O(1) / O(log n)</td>
+                            <td>O(n)</td>
+                        </tr>
+                        <tr>
+                            <td>Graph (adjacency list) – BFS/DFS</td>
+                            <td>O(V + E)</td>
+                            <td>O(V + E)</td>
+                            <td>O(V + E)</td>
+                        </tr>
+                        <tr>
+                            <td>Graph (adjacency matrix) – BFS/DFS</td>
+                            <td>O(V²)</td>
+                            <td>O(V²)</td>
+                            <td>O(V²)</td>
+                        </tr>
+                        <tr>
+                            <td>Sorting – comparison based (e.g., quicksort, mergesort)</td>
+                            <td>O(n log n)</td>
+                            <td>O(n²) quicksort, O(n log n) mergesort</td>
+                            <td>O(log n) – O(n)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- Section 2 - BFS Template                                  -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Cheat Sheet 2 - BFS (Breadth-First Search) Template</h2>
+            <p>
+                Breadth-first search explores a graph level by level from a starting node. Use it for shortest path in
+                unweighted graphs, level-order traversal, and finding connected components.
+            </p>
+
+            <div class="code-example" data-example="cheat-bfs">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Template</span>
+                        <span class="meta">BFS on adjacency list graph (0..n-1)</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C (conceptual; adjacency list representation omitted) -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C (conceptual sketch)
+//
+// Assume:
+//   n = number of vertices 0..n-1
+//   adj[i] = array of neighbors of i, with sizes adjSize[i]
+//   Use an int queue implemented with a circular buffer array.
+
+#include &lt;stdbool.h&gt;
+
+void bfs(int n, int **adj, int *adjSize, int start) {
+    bool *visited = (bool *)calloc(n, sizeof(bool));
+    int *queue = (int *)malloc(n * sizeof(int));
+    int head = 0, tail = 0;
+
+    visited[start] = true;
+    queue[tail++] = start;
+
+    while (head &lt; tail) {
+        int u = queue[head++];
+
+        // Process vertex u here (e.g., print or record)
+        // printf("%d\n", u);
+
+        for (int i = 0; i &lt; adjSize[u]; i++) {
+            int v = adj[u][i];
+            if (!visited[v]) {
+                visited[v] = true;
+                queue[tail++] = v;
+            }
+        }
+    }
+
+    free(queue);
+    free(visited);
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+
+// adj: adjacency list, vertices are 0..n-1
+void bfs(const vector&lt;vector&lt;int&gt; &gt;&amp; adj, int start) {
+    int n = (int)adj.size();
+    vector&lt;bool&gt; visited(n, false);
+    queue&lt;int&gt; q;
+
+    visited[start] = true;
+    q.push(start);
+
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+
+        // Process vertex u here
+        // e.g., cout &lt;&lt; u &lt;&lt; "\n";
+
+        for (int v : adj[u]) {
+            if (!visited[v]) {
+                visited[v] = true;
+                q.push(v);
+            }
+        }
+    }
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.*;
+
+void bfs(List&lt;List&lt;Integer&gt;&gt; adj, int start) {
+    int n = adj.size();
+    boolean[] visited = new boolean[n];
+    Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+
+    visited[start] = true;
+    q.offer(start);
+
+    while (!q.isEmpty()) {
+        int u = q.poll();
+
+        // Process vertex u here
+        // System.out.println(u);
+
+        for (int v : adj.get(u)) {
+            if (!visited[v]) {
+                visited[v] = true;
+                q.offer(v);
+            }
+        }
+    }
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+// adj: array of neighbor arrays, vertices 0..n-1
+function bfs(adj, start) {
+    const n = adj.length;
+    const visited = new Array(n).fill(false);
+    const queue = [];
+
+    visited[start] = true;
+    queue.push(start);
+
+    let head = 0;
+    while (head &lt; queue.length) {
+        const u = queue[head++];
+
+        // Process vertex u here
+        // console.log(u);
+
+        for (const v of adj[u]) {
+            if (!visited[v]) {
+                visited[v] = true;
+                queue.push(v);
+            }
+        }
+    }
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System;
+using System.Collections.Generic;
+
+void Bfs(List&lt;List&lt;int&gt;&gt; adj, int start) {
+    int n = adj.Count;
+    var visited = new bool[n];
+    var q = new Queue&lt;int&gt;();
+
+    visited[start] = true;
+    q.Enqueue(start);
+
+    while (q.Count &gt; 0) {
+        int u = q.Dequeue();
+
+        // Process vertex u here
+        // Console.WriteLine(u);
+
+        foreach (var v in adj[u]) {
+            if (!visited[v]) {
+                visited[v] = true;
+                q.Enqueue(v);
+            }
+        }
+    }
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from collections import deque
+from typing import List
+
+def bfs(adj: List[List[int]], start: int) -&gt; None:
+    n = len(adj)
+    visited = [False] * n
+    q: deque[int] = deque()
+
+    visited[start] = True
+    q.append(start)
+
+    while q:
+        u = q.popleft()
+        # Process vertex u here
+        # print(u)
+
+        for v in adj[u]:
+            if not visited[v]:
+                visited[v] = True
+                q.append(v)</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Let <code>V</code> be number of vertices and <code>E</code> number of edges.  
+                    Time: <strong>O(V + E)</strong>. Space: <strong>O(V)</strong> for visited + queue.
+                </div>
+            </div>
+        </section>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- Section 3 - DFS Template                                  -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Cheat Sheet 3 - DFS (Depth-First Search) Template</h2>
+            <p>
+                Depth-first search explores as far as possible along each branch before backtracking. Use it for
+                connected components, cycle detection, topological sort (on DAGs), and many recursive DP-on-graphs
+                problems.
+            </p>
+
+            <div class="code-example" data-example="cheat-dfs">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Template</span>
+                        <span class="meta">Recursive DFS on adjacency list graph</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C (conceptual) -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C (conceptual sketch)
+//
+// adj[u] = neighbors, adjSize[u] = count
+// visited[] shared across recursive calls
+
+#include &lt;stdbool.h&gt;
+
+void dfs_visit(int u, int **adj, int *adjSize, bool *visited) {
+    visited[u] = true;
+    // Process vertex u here
+
+    for (int i = 0; i &lt; adjSize[u]; i++) {
+        int v = adj[u][i];
+        if (!visited[v]) {
+            dfs_visit(v, adj, adjSize, visited);
+        }
+    }
+}
+
+void dfs(int n, int **adj, int *adjSize, int start) {
+    bool *visited = (bool *)calloc(n, sizeof(bool));
+    dfs_visit(start, adj, adjSize, visited);
+    free(visited);
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+using namespace std;
+
+void dfs_visit(int u, const vector&lt;vector&lt;int&gt; &gt;&amp; adj, vector&lt;bool&gt;&amp; visited) {
+    visited[u] = true;
+    // Process vertex u here
+
+    for (int v : adj[u]) {
+        if (!visited[v]) {
+            dfs_visit(v, adj, visited);
+        }
+    }
+}
+
+void dfs(const vector&lt;vector&lt;int&gt; &gt;&amp; adj, int start) {
+    int n = (int)adj.size();
+    vector&lt;bool&gt; visited(n, false);
+    dfs_visit(start, adj, visited);
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+import java.util.List;
+
+void dfsVisit(int u, List&lt;List&lt;Integer&gt;&gt; adj, boolean[] visited) {
+    visited[u] = true;
+    // Process vertex u here
+
+    for (int v : adj.get(u)) {
+        if (!visited[v]) {
+            dfsVisit(v, adj, visited);
+        }
+    }
+}
+
+void dfs(List&lt;List&lt;Integer&gt;&gt; adj, int start) {
+    int n = adj.size();
+    boolean[] visited = new boolean[n];
+    dfsVisit(start, adj, visited);
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function dfsVisit(u, adj, visited) {
+    visited[u] = true;
+    // Process vertex u here
+
+    for (const v of adj[u]) {
+        if (!visited[v]) {
+            dfsVisit(v, adj, visited);
+        }
+    }
+}
+
+function dfs(adj, start) {
+    const n = adj.length;
+    const visited = new Array(n).fill(false);
+    dfsVisit(start, adj, visited);
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System.Collections.Generic;
+
+void DfsVisit(int u, List&lt;List&lt;int&gt;&gt; adj, bool[] visited) {
+    visited[u] = true;
+    // Process vertex u here
+
+    foreach (var v in adj[u]) {
+        if (!visited[v]) {
+            DfsVisit(v, adj, visited);
+        }
+    }
+}
+
+void Dfs(List&lt;List&lt;int&gt;&gt; adj, int start) {
+    int n = adj.Count;
+    bool[] visited = new bool[n];
+    DfsVisit(start, adj, visited);
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import List
+
+def dfs_visit(u: int, adj: List[List[int]], visited: List[bool]) -&gt; None:
+    visited[u] = True
+    # Process vertex u here
+
+    for v in adj[u]:
+        if not visited[v]:
+            dfs_visit(v, adj, visited)
+
+def dfs(adj: List[List[int]], start: int) -&gt; None:
+    n = len(adj)
+    visited = [False] * n
+    dfs_visit(start, adj, visited)</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: <strong>O(V + E)</strong> for a graph with V vertices, E edges.  
+                    Space: <strong>O(V)</strong> for visited plus recursion stack in the worst case.
+                </div>
+            </div>
+        </section>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- Section 4 - Binary Search on Sorted Array                 -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Cheat Sheet 4 - Binary Search on Sorted Array</h2>
+            <p>
+                Standard binary search on a sorted array, returning the index of <code>target</code> or <code>-1</code>
+                if not found.
+            </p>
+
+            <div class="code-example" data-example="cheat-binary-array">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Template</span>
+                        <span class="meta">Binary search for exact match</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+int binarySearch(int *arr, int n, int target) {
+    int lo = 0, hi = n - 1;
+    while (lo &lt;= hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] == target) {
+            return mid;
+        } else if (arr[mid] &lt; target) {
+            lo = mid + 1;
+        } else {
+            hi = mid - 1;
+        }
+    }
+    return -1;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+using namespace std;
+
+int binarySearch(const vector&lt;int&gt; &amp;arr, int target) {
+    int lo = 0, hi = (int)arr.size() - 1;
+    while (lo &lt;= hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] == target) return mid;
+        if (arr[mid] &lt; target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+int binarySearch(int[] arr, int target) {
+    int lo = 0, hi = arr.length - 1;
+    while (lo &lt;= hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] == target) return mid;
+        if (arr[mid] &lt; target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function binarySearch(arr, target) {
+    let lo = 0, hi = arr.length - 1;
+    while (lo &lt;= hi) {
+        const mid = lo + ((hi - lo) &gt;&gt; 1);
+        if (arr[mid] === target) return mid;
+        if (arr[mid] &lt; target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+int BinarySearch(int[] arr, int target) {
+    int lo = 0, hi = arr.Length - 1;
+    while (lo &lt;= hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] == target) return mid;
+        if (arr[mid] &lt; target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import List
+
+def binary_search(arr: List[int], target: int) -&gt; int:
+    lo, hi = 0, len(arr) - 1
+    while lo &lt;= hi:
+        mid = lo + (hi - lo) // 2
+        if arr[mid] == target:
+            return mid
+        if arr[mid] &lt; target:
+            lo = mid + 1
+        else:
+            hi = mid - 1
+    return -1</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: <strong>O(log n)</strong>. Space: <strong>O(1)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- Section 5 - Binary Search on Answer (Parametric Search)   -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Cheat Sheet 5 - Binary Search on Answer Space</h2>
+            <p>
+                Instead of searching an array directly, you binary-search over the <strong>range of possible
+                answers</strong> and use a monotonic predicate <code>can(mid)</code> to decide which side to keep.
+                Used in problems like “minimum capacity to ship packages within D days”, “minimum largest sum”, etc.
+            </p>
+
+            <div class="code-example" data-example="cheat-binary-answer">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Template</span>
+                        <span class="meta">Binary search on numeric answer with predicate can(x)</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C (conceptual; user fills in can(mid)) -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C (conceptual)
+// Assume we want the smallest x in [lo, hi] such that can(x) is true.
+//
+// bool can(int x) {
+//     // problem-specific check
+// }
+
+int binarySearchAnswer(int lo, int hi) {
+    while (lo &lt; hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (can(mid)) {
+            hi = mid;       // mid might be the answer
+        } else {
+            lo = mid + 1;   // need a larger value
+        }
+    }
+    return lo; // or hi
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+// bool can(int x); // user-defined predicate
+
+int binarySearchAnswer(int lo, int hi) {
+    while (lo &lt; hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (can(mid)) {
+            hi = mid;
+        } else {
+            lo = mid + 1;
+        }
+    }
+    return lo;
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+// boolean can(int x); // user-defined predicate
+
+int binarySearchAnswer(int lo, int hi) {
+    while (lo &lt; hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (can(mid)) {
+            hi = mid;
+        } else {
+            lo = mid + 1;
+        }
+    }
+    return lo;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+// function can(x) { /* problem-specific check */ }
+
+function binarySearchAnswer(lo, hi) {
+    while (lo &lt; hi) {
+        const mid = lo + ((hi - lo) &gt;&gt; 1);
+        if (can(mid)) {
+            hi = mid;
+        } else {
+            lo = mid + 1;
+        }
+    }
+    return lo;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+// Func&lt;int, bool&gt; can; // predicate injected or defined elsewhere
+
+int BinarySearchAnswer(int lo, int hi, Func&lt;int, bool&gt; can) {
+    while (lo &lt; hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (can(mid)) {
+            hi = mid;
+        } else {
+            lo = mid + 1;
+        }
+    }
+    return lo;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from typing import Callable
+
+def binary_search_answer(lo: int, hi: int, can: Callable[[int], bool]) -&gt; int:
+    """
+    Find the smallest x in [lo, hi] such that can(x) is True.
+    Assumes can is monotonic: if can(x) is True, then can(y) is True for all y &gt;= x.
+    """
+    while lo &lt; hi:
+        mid = lo + (hi - lo) // 2
+        if can(mid):
+            hi = mid
+        else:
+            lo = mid + 1
+    return lo</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Time: <strong>O(log R)</strong> where <code>R = hi - lo + 1</code> is the answer range, 
+                    times the cost of <code>can(x)</code>.  
+                    Space: <strong>O(1)</strong>.
+                </div>
+            </div>
+        </section>
+
+        <hr>
+
+        <!-- ========================================================= -->
+        <!-- Section 6 - LIS O(n log n) Template                       -->
+        <!-- ========================================================= -->
+
+        <section class="problem">
+            <h2>Cheat Sheet 6 - Longest Increasing Subsequence (O(n log n))</h2>
+            <p>
+                Same pattern as Section 9, Problem 1. Maintain a <code>tails</code> array where
+                <code>tails[len]</code> is the smallest possible tail of an increasing subsequence of length
+                <code>len + 1</code>. For each <code>x</code>, find the first <code>tails[pos] &gt;= x</code> and
+                replace it with <code>x</code>, or append if none.
+            </p>
+
+            <div class="code-example" data-example="cheat-lis">
+                <div class="code-example-header">
+                    <div class="code-example-title">
+                        <span class="label">Template</span>
+                        <span class="meta">LIS length via tails + binary search</span>
+                    </div>
+                </div>
+
+                <div class="tab-bar">
+                    <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                    <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                    <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                    <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                    <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                    <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+                </div>
+
+                <!-- C -->
+                <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C
+#include &lt;stdlib.h&gt;
+
+static int lower_bound_int(int *arr, int len, int x) {
+    int lo = 0, hi = len;
+    while (lo &lt; hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] &lt; x) {
+            lo = mid + 1;
+        } else {
+            hi = mid;
+        }
+    }
+    return lo;
+}
+
+int lengthOfLIS(int *nums, int numsSize) {
+    if (numsSize == 0) return 0;
+    int *tails = (int *)malloc(numsSize * sizeof(int));
+    int len = 0;
+    for (int i = 0; i &lt; numsSize; i++) {
+        int x = nums[i];
+        int pos = lower_bound_int(tails, len, x);
+        if (pos == len) {
+            tails[len++] = x;
+        } else {
+            tails[pos] = x;
+        }
+    }
+    free(tails);
+    return len;
+}</code></pre>
+                </div>
+
+                <!-- C++ -->
+                <div class="code-panel hidden" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+int lengthOfLIS(const vector&lt;int&gt; &amp;nums) {
+    vector&lt;int&gt; tails;
+    for (int x : nums) {
+        auto it = lower_bound(tails.begin(), tails.end(), x);
+        if (it == tails.end()) tails.push_back(x);
+        else *it = x;
+    }
+    return (int)tails.size();
+}</code></pre>
+                </div>
+
+                <!-- Java -->
+                <div class="code-panel hidden" data-lang-panel="java">
+<pre><code class="language-java">// Java
+int lengthOfLIS(int[] nums) {
+    int[] tails = new int[nums.length];
+    int len = 0;
+    for (int x : nums) {
+        int lo = 0, hi = len;
+        while (lo &lt; hi) {
+            int mid = (lo + hi) / 2;
+            if (tails[mid] &lt; x) {
+                lo = mid + 1;
+            } else {
+                hi = mid;
+            }
+        }
+        tails[lo] = x;
+        if (lo == len) len++;
+    }
+    return len;
+}</code></pre>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="code-panel hidden" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript
+function lengthOfLIS(nums) {
+    const tails = [];
+    for (const x of nums) {
+        let lo = 0, hi = tails.length;
+        while (lo &lt; hi) {
+            const mid = (lo + hi) &gt;&gt; 1;
+            if (tails[mid] &lt; x) {
+                lo = mid + 1;
+            } else {
+                hi = mid;
+            }
+        }
+        tails[lo] = x;
+    }
+    return tails.length;
+}</code></pre>
+                </div>
+
+                <!-- C# -->
+                <div class="code-panel hidden" data-lang-panel="cs">
+<pre><code class="language-csharp">// C#
+using System;
+using System.Collections.Generic;
+
+int LengthOfLIS(int[] nums) {
+    var tails = new List&lt;int&gt;();
+    foreach (int x in nums) {
+        int lo = 0, hi = tails.Count;
+        while (lo &lt; hi) {
+            int mid = (lo + hi) / 2;
+            if (tails[mid] &lt; x) {
+                lo = mid + 1;
+            } else {
+                hi = mid;
+            }
+        }
+        if (lo == tails.Count) tails.Add(x);
+        else tails[lo] = x;
+    }
+    return tails.Count;
+}</code></pre>
+                </div>
+
+                <!-- Python -->
+                <div class="code-panel hidden" data-lang-panel="py">
+<pre><code class="language-python"># Python
+from bisect import bisect_left
+from typing import List
+
+def length_of_lis(nums: List[int]) -&gt; int:
+    tails: List[int] = []
+    for x in nums:
+        i = bisect_left(tails, x)
+        if i == len(tails):
+            tails.append(x)
+        else:
+            tails[i] = x
+    return len(tails)</code></pre>
+                </div>
+
+                <div class="complexity-note">
+                    Let n be the length of the input array.  
+                    Time: <strong>O(n log n)</strong>. Space: <strong>O(n)</strong> for the tails array.
+                </div>
+            </div>
+        </section>
+
+        <div class="next-section">
+            <a href="section10-practice.html">← Back to Practice Hub</a>
+        </div>
+    </main>
+</body>
+
+</html>
