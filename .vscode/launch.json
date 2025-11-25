@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "section5",
+            "request": "launch",
+            "mainClass": "code_samples.section5.lesson.section5",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
             "name": "section4",
             "request": "launch",
             "mainClass": "code_samples.section4.problems.section4",
