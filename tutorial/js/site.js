@@ -218,4 +218,72 @@ $(document).ready(function () {
     }
   });
 
+    // ---------------- Copy button for code blocks ----------------
+
+  $(document).on("click", ".copy-button", function (e) {
+    e.preventDefault();
+
+    var $btn = $(this);
+    var $example = $btn.closest(".code-example");
+
+    if ($example.length === 0) return;
+
+    // Determine current language from the global active tab
+    var $activeTab = $(".tab-button.active").first();
+    var lang = $activeTab.length ? $activeTab.data("lang") : "c";
+
+    // Find the matching panel *within this example*
+    var $panel = $example.find('.code-panel[data-lang-panel="' + lang + '"] code');
+    if ($panel.length === 0) {
+      // Fallback: just grab the first code block in this example
+      $panel = $example.find("code").first();
+      if ($panel.length === 0) return;
+    }
+
+    var codeText = $panel.text(); // .text() gives you decoded text (no HTML entities)
+
+    function showCopiedState() {
+      var originalText = $btn.text();
+      $btn.addClass("copied").text("Copied!");
+      setTimeout(function () {
+        $btn.removeClass("copied").text(originalText);
+      }, 1200);
+    }
+
+    // Prefer Clipboard API if available
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(codeText)
+        .then(showCopiedState)
+        .catch(function () {
+          // Fallback to execCommand
+          var $temp = $("<textarea>")
+            .css({ position: "fixed", left: "-9999px", top: "0" })
+            .val(codeText)
+            .appendTo("body");
+          $temp[0].select();
+          try {
+            document.execCommand("copy");
+          } catch (err) {
+            console.error("Copy failed:", err);
+          }
+          $temp.remove();
+          showCopiedState();
+        });
+    } else {
+      // Legacy fallback immediately
+      var $temp = $("<textarea>")
+        .css({ position: "fixed", left: "-9999px", top: "0" })
+        .val(codeText)
+        .appendTo("body");
+      $temp[0].select();
+      try {
+        document.execCommand("copy");
+      } catch (err) {
+        console.error("Copy failed:", err);
+      }
+      $temp.remove();
+      showCopiedState();
+    }
+  });
+
 });

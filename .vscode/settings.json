@@ -17,6 +17,7 @@
         "dataclasses",
         "defaultdict",
         "Deque",
+        "deques",
         "endl",
         "exponentials",
         "getline",
