@@ -1,4 +1,4 @@
-"""Section 4: Trees and Graphs."""
+"""Section 4: Stack and Queue"""
 
 from collections import deque
 

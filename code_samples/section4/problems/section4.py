@@ -1,4 +1,4 @@
-"""Section 4 - Trees and Graphs."""
+"""Section 4 - Stacks and Queues"""
 
 from collections import deque
 from typing import Optional
