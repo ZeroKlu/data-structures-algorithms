@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "section4",
+            "request": "launch",
+            "mainClass": "code_samples.section4.problems.section4",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
+            "name": "section4",
+            "request": "launch",
+            "mainClass": "code_samples.section4.lesson.section4",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
             "name": "section3",
             "request": "launch",
             "mainClass": "code_samples.section3.problems.section3",
