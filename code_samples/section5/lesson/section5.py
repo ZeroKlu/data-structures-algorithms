@@ -63,6 +63,7 @@ def shortest_distances(start: int, graph: list[list[int]]) -> list[int]:
     return dist
 
 def main() -> None:
+    """Main function."""
     print("==== TEST TREE (preorder + level_order) ====")
 
     # Build this tree:
