@@ -3,6 +3,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "problem5_6",
+            "request": "launch",
+            "mainClass": "code_samples.section5.problems.problem5_6.problem5_6",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
             "name": "problem5_5",
             "request": "launch",
             "mainClass": "code_samples.section5.problems.problem5_5.problem5_5",
