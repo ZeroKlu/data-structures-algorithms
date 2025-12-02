@@ -6,6 +6,48 @@
     "configurations": [
         {
             "type": "java",
+            "name": "problem5_3",
+            "request": "launch",
+            "mainClass": "code_samples.section5.problems.problem5_3.problem5_3",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
+            "name": "problem5_2",
+            "request": "launch",
+            "mainClass": "code_samples.section5.problems.problem5_2.problem5_2",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
+            "name": "problem5_1",
+            "request": "launch",
+            "mainClass": "code_samples.section5.problems.problem5_1.problem5_1",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
+            "name": "problem5_1",
+            "request": "launch",
+            "mainClass": "problem5_1",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
+            "name": "problem5_2",
+            "request": "launch",
+            "mainClass": "code_samples.section5.problems.problem5_2",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
+            "name": "section5",
+            "request": "launch",
+            "mainClass": "code_samples.section5.problems.section5",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
             "name": "section5",
             "request": "launch",
             "mainClass": "code_samples.section5.lesson.section5",
