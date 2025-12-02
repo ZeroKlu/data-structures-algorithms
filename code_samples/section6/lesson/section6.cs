@@ -157,4 +157,3 @@ class MinHeapWithExtract {
         return minVal;
     }
 }
-
