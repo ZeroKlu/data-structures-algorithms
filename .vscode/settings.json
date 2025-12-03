@@ -55,6 +55,7 @@
         "qsort",
         "reroot",
         "rerooting",
+        "splitmix64",
         "sstream",
         "stackoverflow",
         "stdbool",
