@@ -5,6 +5,7 @@
         "aabbcc",
         "abcabcabc",
         "abcabcbb",
+        "adjac",
         "AGGTAB",
         "arraycopy",
         "atoi",
@@ -57,6 +58,7 @@
         "preorder",
         "pwwkew",
         "qsort",
+        "repr",
         "reroot",
         "rerooting",
         "splitmix64",
@@ -141,6 +143,9 @@
         "xmemory": "cpp",
         "xtr1common": "cpp",
         "xutility": "cpp",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "functional": "cpp",
+        "sstream": "cpp",
+        "unordered_map": "cpp"
     }
 }
