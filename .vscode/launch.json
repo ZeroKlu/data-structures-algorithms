@@ -3,6 +3,48 @@
     "configurations": [
         {
             "type": "java",
+            "name": "exponential_search",
+            "request": "launch",
+            "mainClass": "code_samples.section12.lesson_6_exponential_search.exponential_search",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
+            "name": "interpolation_search",
+            "request": "launch",
+            "mainClass": "code_samples.section12.lesson_5_interpolation_search.interpolation_search",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
+            "name": "jump_search",
+            "request": "launch",
+            "mainClass": "code_samples.section12.lesson_4_jump_search.jump_search",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
+            "name": "jump_search",
+            "request": "launch",
+            "mainClass": "code_samples.section12.lesson_3_jump_search.jump_search",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
+            "name": "binary_search",
+            "request": "launch",
+            "mainClass": "code_samples.section12.lesson_3_binary_search.binary_search",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
+            "name": "linear_search",
+            "request": "launch",
+            "mainClass": "code_samples.section12.lesson_2_linear_search.linear_search",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
             "name": "problem11_4",
             "request": "launch",
             "mainClass": "code_samples.section11.problems.problem11_4.problem11_4",

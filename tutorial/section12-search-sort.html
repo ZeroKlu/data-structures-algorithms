@@ -57,9 +57,9 @@
 
         <hr>
 
-        <!-- ========================= 0.1 Big-O ========================= -->
+        <!-- ========================= 1 Big-O ========================= -->
         <h2>
-            0.1 What Big-O Complexity Means
+            1. What Big-O Complexity Means
             <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s0-big-o">
                 Dig deeper
             </button>
@@ -89,9 +89,9 @@
 
         <hr>
 
-        <!-- ======================= 0.2 Linear Search ======================= -->
+        <!-- ======================= 2 Linear Search ======================= -->
         <h2>
-            0.2 Example - Linear Search (O(n))
+            2. Example - Linear Search (O(n))
             <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s0-linear">
                 Dig deeper
             </button>
@@ -218,9 +218,9 @@ def linear_search(arr: List[int], target: int) -&gt; int:
 
         <hr>
 
-        <!-- ======================= 0.3 Binary Search ======================= -->
+        <!-- ======================= 3 Binary Search ======================= -->
         <h2>
-            0.3 Example - Binary Search (O(log n))
+            3. Example - Binary Search (O(log n))
             <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s0-binary">
                 Dig deeper
             </button>
@@ -375,9 +375,9 @@ def binary_search(arr: List[int], target: int) -&gt; int:
 
         <hr>
 
-        <!-- ======================= 0.4 Selection Sort ======================= -->
+        <!-- ======================= 7 Selection Sort ======================= -->
         <h2>
-            0.4 Selection Sort (O(n²))
+            7. Selection Sort (O(n²))
             <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s0-selection">
                 Dig deeper
             </button>
@@ -398,7 +398,7 @@ def binary_search(arr: List[int], target: int) -&gt; int:
         <div class="code-example" data-example="s0-ex3-selection">
             <div class="code-example-header">
                 <div class="code-example-title">
-                    <span class="label">Example 3</span>
+                    <span class="label">Example 6</span>
                     <span class="meta">Selection sort in-place</span>
                 </div>
                 <button type="button" class="copy-button" aria-label="Copy code">
@@ -525,9 +525,9 @@ def selection_sort(arr: List[int]) -&gt; None:
 
         <hr>
 
-        <!-- ======================= 0.5 Bubble Sort ======================= -->
+        <!-- ======================= 8. Bubble Sort ======================= -->
         <h2>
-            0.5 Bubble Sort (O(n²))
+            8. Bubble Sort (O(n²))
             <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s0-bubble">
                 Dig deeper
             </button>
@@ -543,7 +543,7 @@ def selection_sort(arr: List[int]) -&gt; None:
         <div class="code-example" data-example="s0-ex4-bubble">
             <div class="code-example-header">
                 <div class="code-example-title">
-                    <span class="label">Example 4</span>
+                    <span class="label">Example 7</span>
                     <span class="meta">Bubble sort with early exit</span>
                 </div>
                 <button type="button" class="copy-button" aria-label="Copy code">
@@ -683,9 +683,9 @@ def bubble_sort(arr: List[int]) -&gt; None:
 
         <hr>
 
-        <!-- ======================= 0.6 Merge Sort ======================= -->
+        <!-- ======================= 9. Merge Sort ======================= -->
         <h2>
-            0.6 Merge Sort (O(n log n))
+            9. Merge Sort (O(n log n))
             <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s0-merge">
                 Dig deeper
             </button>
@@ -709,7 +709,7 @@ def bubble_sort(arr: List[int]) -&gt; None:
         <div class="code-example" data-example="s0-ex5-merge">
             <div class="code-example-header">
                 <div class="code-example-title">
-                    <span class="label">Example 5</span>
+                    <span class="label">Example 8</span>
                     <span class="meta">Merge sort on an array</span>
                 </div>
                 <button type="button" class="copy-button" aria-label="Copy code">
@@ -909,8 +909,8 @@ def _merge(left: List[int], right: List[int]) -&gt; List[int]:
 
         <hr>
 
-        <!-- ======================= 0.7 Choosing Algorithms ======================= -->
-        <h2>0.7 Picking the Right Algorithm</h2>
+        <!-- ======================= 7. Choosing Algorithms ======================= -->
+        <h2>7. Picking the Right Algorithm</h2>
         <ul>
             <li>
                 <strong>Search in unsorted data</strong> → linear search (or sort once, then use binary search).
@@ -963,27 +963,27 @@ def _merge(left: List[int], right: List[int]) -&gt; List[int]:
             <h3>Typical Big-O classes</h3>
             <ul>
                 <li>
-                    <strong>O(1)</strong> – constant time:
+                    <strong>O(1)</strong> - constant time:
                     array index access, setting a variable, a single arithmetic operation.
                 </li>
                 <li>
-                    <strong>O(n)</strong> – linear time:
+                    <strong>O(n)</strong> - linear time:
                     scanning a list once, e.g. a simple <code>for</code> loop or linear search.
                 </li>
                 <li>
-                    <strong>O(n²)</strong> – quadratic time:
+                    <strong>O(n²)</strong> - quadratic time:
                     simple double loops over the same list, or naive comparison-based algorithms.
                 </li>
                 <li>
-                    <strong>O(log n)</strong> – logarithmic time:
+                    <strong>O(log n)</strong> - logarithmic time:
                     divide the search space in half each step (binary search, balanced trees).
                 </li>
                 <li>
-                    <strong>O(n log n)</strong> – loglinear time:
+                    <strong>O(n log n)</strong> - loglinear time:
                     &ldquo;good&rdquo; comparison-based sorts like mergesort and heapsort.
                 </li>
                 <li>
-                    <strong>O(2ⁿ)</strong>, <strong>O(n!)</strong> – exponential / factorial:
+                    <strong>O(2ⁿ)</strong>, <strong>O(n!)</strong> - exponential / factorial:
                     brute forcing all subsets or permutations; usually only viable for small <code>n</code>.
                 </li>
             </ul>
@@ -1254,7 +1254,7 @@ return -1             # not found</code></pre>
                 <li>Merge sort: ~n log₂ n ≈ 1000 × 10 = 10,000 comparisons.</li>
             </ul>
             <p>
-                That&apos;s about 50–100× fewer comparisons — and the gap widens as <code>n</code> grows.
+                That&apos;s about 50-100× fewer comparisons — and the gap widens as <code>n</code> grows.
                 This is why O(n log n) sorting is the default choice in real systems.
             </p>
         </div>
