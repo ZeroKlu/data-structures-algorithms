@@ -3,6 +3,34 @@
     "configurations": [
         {
             "type": "java",
+            "name": "problem11_4",
+            "request": "launch",
+            "mainClass": "code_samples.section11.problems.problem11_4.problem11_4",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
+            "name": "section11$Main",
+            "request": "launch",
+            "mainClass": "code_samples.section11.lesson.section11$Main",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
+            "name": "problem11_3",
+            "request": "launch",
+            "mainClass": "code_samples.section11.problems.problem11_3.problem11_3",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
+            "name": "problem11_2",
+            "request": "launch",
+            "mainClass": "code_samples.section11.problems.problem11_2.problem11_2",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
             "name": "problem11_1",
             "request": "launch",
             "mainClass": "code_samples.section11.problems.problem11_1.problem11_1",
