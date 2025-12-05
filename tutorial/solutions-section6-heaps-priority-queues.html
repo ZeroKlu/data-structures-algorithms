@@ -67,7 +67,7 @@
         <!-- ========================================================= -->
 
         <section class="problem">
-            <h2>Problem 1 — Implement a Min-Heap (Array-Based)</h2>
+            <h2>Problem 1 - Implement a Min-Heap (Array-Based)</h2>
             <p>
                 A min-heap is a complete binary tree stored in an array, where for every node
                 <code>i</code>, <code>data[i]</code> is less than or equal to its children.
@@ -499,7 +499,7 @@ class MinHeap:
         <!-- ========================================================= -->
 
         <section class="problem">
-            <h2>Problem 2 — Build a Heap in O(n)</h2>
+            <h2>Problem 2 - Build a Heap in O(n)</h2>
             <p>
                 To build a heap from an arbitrary array, we start from the last non-leaf index
                 <code>i = floor(n/2) - 1</code> and run <code>heapify</code> on each index down to 0.
@@ -707,7 +707,7 @@ def build_heap(arr: List[int]) -&gt; None:
         <!-- ========================================================= -->
 
         <section class="problem">
-            <h2>Problem 3 — Find the K Smallest Elements</h2>
+            <h2>Problem 3 - Find the K Smallest Elements</h2>
             <p>
                 The key pattern: maintain a <strong>max-heap of size k</strong>.  
                 Push each number; if heap grows beyond k, remove the current maximum.
@@ -937,7 +937,7 @@ def k_smallest(nums: List[int], k: int) -&gt; List[int]:
         <!-- ========================================================= -->
 
         <section class="problem">
-            <h2>Problem 4 — Merge K Sorted Lists</h2>
+            <h2>Problem 4 - Merge K Sorted Lists</h2>
             <p>
                 Maintain a min-heap keyed by node value, initially containing the head of each non-empty list.
                 Repeatedly extract the smallest node and push its successor (if any).
@@ -969,7 +969,7 @@ def k_smallest(nums: List[int], k: int) -&gt; List[int]:
 
                 <!-- C (sketch using array-based min-heap of pointers) -->
                 <div class="code-panel" data-lang-panel="c">
-<pre><code class="language-c">// C (sketch) — assume ListNode { int val; struct ListNode *next; }
+<pre><code class="language-c">// C (sketch) - assume ListNode { int val; struct ListNode *next; }
 // and a MinHeap of ListNode* keyed by node-&gt;val.
 
 typedef struct ListNode {
@@ -1228,7 +1228,7 @@ def merge_k_lists(lists: List[Optional[ListNode]]) -&gt; Optional[ListNode]:
         <!-- ========================================================= -->
 
         <section class="problem">
-            <h2>Problem 5 — Kth Largest Element in a Stream</h2>
+            <h2>Problem 5 - Kth Largest Element in a Stream</h2>
             <p>
                 Maintain a <strong>min-heap of size k</strong>.  
                 The root of the heap is always the kth largest element seen so far.
@@ -1519,7 +1519,7 @@ class KthLargest:
                 </li>
 
                 <li>
-                    <strong>Insert(x) — bubble up:</strong>
+                    <strong>Insert(x) - bubble up:</strong>
                     <ol>
                         <li>Place <code>x</code> at the end of the array (<code>data[size]</code>).</li>
                         <li>
@@ -1537,7 +1537,7 @@ class KthLargest:
                 </li>
 
                 <li>
-                    <strong>Pop() — remove the minimum:</strong>
+                    <strong>Pop() - remove the minimum:</strong>
                     <ol>
                         <li>The minimum is at <code>data[0]</code>; save it as the result.</li>
                         <li>Move the last element in the array to <code>data[0]</code>.</li>
@@ -1563,7 +1563,7 @@ class KthLargest:
                 </li>
 
                 <li>
-                    <strong>Peek() — get the minimum without removing it:</strong>
+                    <strong>Peek() - get the minimum without removing it:</strong>
                     <p>
                         The minimum is always at the root (<code>data[0]</code>), so
                         <code>peek()</code> is just an <code>O(1)</code> read. You only need to decide
@@ -1885,7 +1885,7 @@ class KthLargest:
                     <strong>Invariant of the heap:</strong>
                     <ul>
                         <li>The heap always stores the <strong>k largest</strong> values seen so far (or fewer while warming up).</li>
-                        <li>The smallest of these k values — the heap root — is the <strong>kth largest overall</strong>.</li>
+                        <li>The smallest of these k values - the heap root - is the <strong>kth largest overall</strong>.</li>
                     </ul>
                 </li>
 

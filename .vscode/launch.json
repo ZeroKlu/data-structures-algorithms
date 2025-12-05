@@ -3,6 +3,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "bubble_sort",
+            "request": "launch",
+            "mainClass": "code_samples.section12.example_7_bubble_sort.bubble_sort",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
+            "name": "selection_sort",
+            "request": "launch",
+            "mainClass": "code_samples.section12.example_6_selection_sort.selection_sort",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
+            "name": "linear_search",
+            "request": "launch",
+            "mainClass": "code_samples.section12.example_1_linear_search.linear_search",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
             "name": "exponential_search",
             "request": "launch",
             "mainClass": "code_samples.section12.lesson_6_exponential_search.exponential_search",

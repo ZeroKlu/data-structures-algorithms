@@ -40,7 +40,7 @@ def two_sum(nums: list[int], target: int) -> tuple[int, int]:
 
 print("=== Test: demo_hash ===")
 demo_hash()
-print("(demo_hash ran — no visible output)\n")
+print("(demo_hash ran - no visible output)\n")
 
 # ------------------------------------------------------------
 

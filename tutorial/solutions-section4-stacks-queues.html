@@ -734,7 +734,7 @@ def next_greater_elements(nums: List[int]) -&gt; List[int]:
                 </div>
 
                 <div class="complexity-note">
-                    Time: <strong>O(n)</strong> — each value is pushed and popped at most once. &nbsp;|&nbsp;
+                    Time: <strong>O(n)</strong> - each value is pushed and popped at most once. &nbsp;|&nbsp;
                     Extra space: stack up to <code>n</code> plus result → <strong>O(n)</strong>.
                 </div>
             </div>
@@ -912,7 +912,7 @@ def daily_temperatures(temps: List[int]) -&gt; List[int]:
                 </div>
 
                 <div class="complexity-note">
-                    Time: <strong>O(n)</strong> — each index is pushed and popped at most once. &nbsp;|&nbsp;
+                    Time: <strong>O(n)</strong> - each index is pushed and popped at most once. &nbsp;|&nbsp;
                     Extra space: stack up to <code>n</code> plus result → <strong>O(n)</strong>.
                 </div>
             </div>
@@ -1409,7 +1409,7 @@ def max_sliding_window(nums: List[int], k: int) -&gt; List[int]:
                 </div>
 
                 <div class="complexity-note">
-                    Time: <strong>O(n)</strong> — each index is pushed and popped at most once from the deque.
+                    Time: <strong>O(n)</strong> - each index is pushed and popped at most once from the deque.
                     &nbsp;|&nbsp; Extra space: deque plus result → <strong>O(n)</strong>.
                 </div>
             </div>
@@ -1586,7 +1586,7 @@ def max_sliding_window(nums: List[int], k: int) -&gt; List[int]:
                         <li>Let <code>x = nums[i]</code>.</li>
                         <li>
                             While the stack is not empty and <code>stack.top() &lt;= x</code>,
-                            pop — those values cannot be &quot;next greater&quot; for <code>x</code> or for any earlier
+                            pop - those values cannot be &quot;next greater&quot; for <code>x</code> or for any earlier
                             elements, because <code>x</code> is closer and at least as large.
                         </li>
                         <li>
@@ -1781,7 +1781,7 @@ def max_sliding_window(nums: List[int], k: int) -&gt; List[int]:
                     </ul>
                 </li>
                 <li>
-                    <strong>Step 1 — Remove indices that fall out of the window:</strong>
+                    <strong>Step 1 - Remove indices that fall out of the window:</strong>
                     <p>
                         For a new index <code>i</code>, the window left boundary is <code>i - k + 1</code>.
                         Any index <code>j &lt; i - k + 1</code> is no longer in the window.
@@ -1794,7 +1794,7 @@ def max_sliding_window(nums: List[int], k: int) -&gt; List[int]:
                     </ul>
                 </li>
                 <li>
-                    <strong>Step 2 — Maintain decreasing values at the back:</strong>
+                    <strong>Step 2 - Maintain decreasing values at the back:</strong>
                     <p>
                         The new element <code>nums[i]</code> should join the deque as a candidate.
                         But any existing candidate with a value less than or equal to <code>nums[i]</code> can never become
@@ -1810,7 +1810,7 @@ def max_sliding_window(nums: List[int], k: int) -&gt; List[int]:
                     </p>
                 </li>
                 <li>
-                    <strong>Step 3 — Add the new index and record the max:</strong>
+                    <strong>Step 3 - Add the new index and record the max:</strong>
                     <ul>
                         <li>Append <code>i</code> to the back of the deque.</li>
                         <li>

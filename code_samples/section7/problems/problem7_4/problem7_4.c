@@ -66,7 +66,7 @@ static void map_put(IntMap *m, int key, int value) {
             return;
         }
     }
-    fprintf(stderr, "Hash table full — no resize implemented.\n");
+    fprintf(stderr, "Hash table full - no resize implemented.\n");
     exit(EXIT_FAILURE);
 }
 

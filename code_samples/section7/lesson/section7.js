@@ -57,7 +57,7 @@ function printArray(label, arr) {
 
 console.log("=== Test: demoHash ===");
 demoHash();
-console.log("(demoHash ran — no visible output)\n");
+console.log("(demoHash ran - no visible output)\n");
 
 // ------------------------------------------------------------
 
