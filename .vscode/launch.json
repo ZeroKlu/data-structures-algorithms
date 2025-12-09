@@ -3,6 +3,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "heap_sort",
+            "request": "launch",
+            "mainClass": "code_samples.section12.example_11_heap_sort.heap_sort",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
+            "name": "quick_sort",
+            "request": "launch",
+            "mainClass": "code_samples.section12.example_10_quick_sort.quick_sort",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
             "name": "insertion_sort",
             "request": "launch",
             "mainClass": "code_samples.section12.example_9_insertion_sort.insertion_sort",
