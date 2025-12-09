@@ -3,6 +3,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "merge_sort",
+            "request": "launch",
+            "mainClass": "code_samples.section12.example_8_merge_sort.merge_sort",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
             "name": "bubble_sort",
             "request": "launch",
             "mainClass": "code_samples.section12.example_7_bubble_sort.bubble_sort",
