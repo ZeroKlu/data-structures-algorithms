@@ -106,7 +106,7 @@ int[] LoadFile(string fileName) {
 int[] ReadIntFile(string fullPath) {
     try {
         string text = File.ReadAllText(fullPath);
-        char[] sep = new[] { ' ', '\n', '\r', '\t' };
+        char[] sep = [' ', '\n', '\r', '\t'];
         var nums = text
             .Split(sep, StringSplitOptions.RemoveEmptyEntries)
             .Select(int.Parse)

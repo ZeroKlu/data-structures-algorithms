@@ -3,6 +3,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "insertion_sort",
+            "request": "launch",
+            "mainClass": "code_samples.section12.example_9_insertion_sort.insertion_sort",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
             "name": "merge_sort",
             "request": "launch",
             "mainClass": "code_samples.section12.example_8_merge_sort.merge_sort",
