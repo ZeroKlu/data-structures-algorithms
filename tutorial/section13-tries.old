@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Section 13 - Tries (Prefix Trees)</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css">
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tab logic, highlight init, prefs, etc.) -->
+    <script src="js/site.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+<main>
+    <div class="top-nav">
+        <a href="index.html">← Back to Index</a>
+    </div>
+
+    <div class="kicker">Section 13</div>
+    <h1>Tries (Prefix Trees)</h1>
+    <p class="tagline">
+        Learn how <strong>tries</strong> (prefix trees) store and search strings character-by-character,
+        enabling fast prefix queries, dictionaries, and autocomplete-style problems.
+    </p>
+
+    <div class="theme-picker">
+        <label for="theme-select">Syntax theme:</label>
+        <select id="theme-select">
+            <option value="atom-one-dark">Dark</option>
+            <option value="far">Blue</option>
+            <option value="atom-one-light">Light</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- ======================= 13.1 What is a Trie? ======================= -->
+    <h2>
+        13.1 What is a Trie?
+        <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s13-what-is-trie">
+            Dig deeper
+        </button>
+        <button type="button" class="deep-dive-trigger secondary" data-deep-id="understand-s13-what-is-trie">
+            Understand the structure
+        </button>
+    </h2>
+    <p>
+        A <strong>trie</strong> (pronounced &ldquo;try&rdquo;) is a tree-based data structure that stores
+        strings by their <em>prefixes</em>. Each edge represents a character, and each path from the root
+        down represents a prefix of one or more stored words.
+    </p>
+    <ul class="bullet-tight">
+        <li>Each node has up to <code>alphabet_size</code> children (e.g., 26 for lowercase English letters).</li>
+        <li>We mark nodes where a complete word ends (e.g., with a boolean flag or <code>word_count</code>).</li>
+        <li>
+            To insert or search you walk the tree <strong>one character at a time</strong> from the root.
+        </li>
+    </ul>
+
+    <div class="callout">
+        <strong>Mental model:</strong> instead of storing whole strings in a flat structure,
+        a trie <em>shares prefixes</em>. Words like <code>car</code>, <code>card</code>, and <code>care</code>
+        share the path <code>c → a → r</code>.
+    </div>
+
+    <hr>
+
+    <!-- ======================= 13.2 Core Operations ======================= -->
+    <h2>
+        13.2 Core Operations on a Trie
+        <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s13-core-ops">
+            Dig deeper
+        </button>
+    </h2>
+    <p>
+        Most interview problems that involve tries rely on a few standard operations:
+    </p>
+    <ul>
+        <li><strong>Insert</strong> a word: walk characters, create nodes as needed, mark the final node as a word.</li>
+        <li><strong>Search</strong> for a word: walk characters; if any link is missing, the word isn&apos;t present.</li>
+        <li>
+            <strong>Prefix check</strong> (e.g., <code>startsWith</code>):
+            walk characters; if you reach the end of the prefix, it exists as a prefix.
+        </li>
+        <li>
+            Optionally: <strong>delete</strong> a word: unmark the final node and clean up nodes that are no longer used.
+        </li>
+    </ul>
+
+    <hr>
+
+    <!-- ======================= Example 1 - Basic Trie ======================= -->
+    <h2>
+        13.3 Example – Basic Trie with Insert and Search
+        <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s13-ex1">
+            Dig deeper
+        </button>
+        <button type="button" class="deep-dive-trigger inline secondary" data-deep-id="understand-s13-ex1">
+            Understand the algorithm
+        </button>
+    </h2>
+    <p>
+        We implement a trie supporting three operations:
+        <code>insert(word)</code>, <code>search(word)</code>, and <code>startsWith(prefix)</code>.
+        For simplicity, we assume <strong>lowercase English letters</strong> <code>'a'..'z'</code>.
+    </p>
+    <p>
+        The key idea:
+    </p>
+    <ul class="bullet-tight">
+        <li>
+            Map each character <code>c</code> to an index <code>idx = c - 'a'</code>
+            (or use a hash map / dictionary in higher-level languages).
+        </li>
+        <li>
+            Follow child pointers for each character of the word. If a pointer is missing on insert,
+            create a new node.
+        </li>
+        <li>
+            For search, if a pointer is missing, the word is not present.
+        </li>
+    </ul>
+
+    <div class="code-example" data-example="s13-ex1">
+        <div class="code-example-header">
+            <div class="code-example-title">
+                <span class="label">Example 1</span>
+                <span class="meta">Trie insert, search, and prefix check</span>
+            </div>
+            <button type="button" class="copy-button" aria-label="Copy code">
+                Copy
+            </button>
+        </div>
+
+        <div class="tab-bar">
+            <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+            <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+            <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+            <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+            <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+            <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+        </div>
+
+        <!-- C -->
+        <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C - Trie implementation (lowercase 'a'..'z')
+#include &lt;stdlib.h&gt;
+#include &lt;stdbool.h&gt;
+
+#define ALPHABET_SIZE 26
+
+typedef struct TrieNode {
+    struct TrieNode* children[ALPHABET_SIZE];
+    bool is_end_of_word;
+} TrieNode;
+
+TrieNode* trie_node_create(void) {
+    TrieNode* node = (TrieNode*)malloc(sizeof(TrieNode));
+    if (!node) return NULL;
+    for (int i = 0; i &lt; ALPHABET_SIZE; i++) {
+        node-&gt;children[i] = NULL;
+    }
+    node-&gt;is_end_of_word = false;
+    return node;
+}
+
+void trie_insert(TrieNode* root, const char* word) {
+    TrieNode* cur = root;
+    for (const char* p = word; *p; ++p) {
+        char c = *p;
+        if (c &lt; 'a' || c &gt; 'z') continue; // skip non-lowercase
+        int idx = c - 'a';
+        if (!cur-&gt;children[idx]) {
+            cur-&gt;children[idx] = trie_node_create();
+        }
+        cur = cur-&gt;children[idx];
+    }
+    cur-&gt;is_end_of_word = true;
+}
+
+bool trie_search(TrieNode* root, const char* word) {
+    TrieNode* cur = root;
+    for (const char* p = word; *p; ++p) {
+        char c = *p;
+        if (c &lt; 'a' || c &gt; 'z') return false;
+        int idx = c - 'a';
+        if (!cur-&gt;children[idx]) {
+            return false;
+        }
+        cur = cur-&gt;children[idx];
+    }
+    return cur-&gt;is_end_of_word;
+}
+
+bool trie_starts_with(TrieNode* root, const char* prefix) {
+    TrieNode* cur = root;
+    for (const char* p = prefix; *p; ++p) {
+        char c = *p;
+        if (c &lt; 'a' || c &gt; 'z') return false;
+        int idx = c - 'a';
+        if (!cur-&gt;children[idx]) {
+            return false;
+        }
+        cur = cur-&gt;children[idx];
+    }
+    return true;
+}
+
+// Example usage:
+// TrieNode* root = trie_node_create();
+// trie_insert(root, "apple");
+// trie_insert(root, "app");
+// trie_search(root, "app");        // true
+// trie_starts_with(root, "ap");    // true
+// trie_search(root, "apt");        // false</code></pre>
+        </div>
+
+        <!-- C++ -->
+        <div class="code-panel" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++ - Trie implementation
+#include &lt;array&gt;
+#include &lt;memory&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+
+struct TrieNode {
+    std::array&lt;std::unique_ptr&lt;TrieNode&gt;, 26&gt; children{};
+    bool isEnd = false;
+};
+
+class Trie {
+public:
+    Trie() : root(std::make_unique&lt;TrieNode&gt;()) {}
+
+    void insert(const std::string&amp; word) {
+        TrieNode* cur = root.get();
+        for (char ch : word) {
+            if (ch &lt; 'a' || ch &gt; 'z') continue;
+            int idx = ch - 'a';
+            if (!cur-&gt;children[idx]) {
+                cur-&gt;children[idx] = std::make_unique&lt;TrieNode&gt;();
+            }
+            cur = cur-&gt;children[idx].get();
+        }
+        cur-&gt;isEnd = true;
+    }
+
+    bool search(const std::string&amp; word) const {
+        const TrieNode* cur = root.get();
+        for (char ch : word) {
+            if (ch &lt; 'a' || ch &gt; 'z') return false;
+            int idx = ch - 'a';
+            if (!cur-&gt;children[idx]) return false;
+            cur = cur-&gt;children[idx].get();
+        }
+        return cur-&gt;isEnd;
+    }
+
+    bool startsWith(const std::string&amp; prefix) const {
+        const TrieNode* cur = root.get();
+        for (char ch : prefix) {
+            if (ch &lt; 'a' || ch &gt; 'z') return false;
+            int idx = ch - 'a';
+            if (!cur-&gt;children[idx]) return false;
+            cur = cur-&gt;children[idx].get();
+        }
+        return true;
+    }
+
+private:
+    std::unique_ptr&lt;TrieNode&gt; root;
+};
+
+// Example usage:
+// Trie trie;
+// trie.insert("apple");
+// trie.insert("app");
+// bool a = trie.search("app");      // true
+// bool b = trie.startsWith("ap");   // true
+// bool c = trie.search("apt");      // false</code></pre>
+        </div>
+
+        <!-- Java -->
+        <div class="code-panel" data-lang-panel="java">
+<pre><code class="language-java">// Java - Trie implementation
+class TrieNode {
+    TrieNode[] children = new TrieNode[26];
+    boolean isEndOfWord = false;
+}
+
+class Trie {
+    private final TrieNode root = new TrieNode();
+
+    public void insert(String word) {
+        TrieNode cur = root;
+        for (char ch : word.toLowerCase().toCharArray()) {
+            if (ch &lt; 'a' || ch &gt; 'z') continue;
+            int idx = ch - 'a';
+            if (cur.children[idx] == null) {
+                cur.children[idx] = new TrieNode();
+            }
+            cur = cur.children[idx];
+        }
+        cur.isEndOfWord = true;
+    }
+
+    public boolean search(String word) {
+        TrieNode cur = root;
+        for (char ch : word.toLowerCase().toCharArray()) {
+            if (ch &lt; 'a' || ch &gt; 'z') return false;
+            int idx = ch - 'a';
+            if (cur.children[idx] == null) {
+                return false;
+            }
+            cur = cur.children[idx];
+        }
+        return cur.isEndOfWord;
+    }
+
+    public boolean startsWith(String prefix) {
+        TrieNode cur = root;
+        for (char ch : prefix.toLowerCase().toCharArray()) {
+            if (ch &lt; 'a' || ch &gt; 'z') return false;
+            int idx = ch - 'a';
+            if (cur.children[idx] == null) {
+                return false;
+            }
+            cur = cur.children[idx];
+        }
+        return true;
+    }
+}
+
+// Example usage:
+// Trie trie = new Trie();
+// trie.insert("apple");
+// trie.insert("app");
+// trie.search("app");        // true
+// trie.startsWith("ap");     // true
+// trie.search("apt");        // false</code></pre>
+        </div>
+
+        <!-- JavaScript -->
+        <div class="code-panel" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript - Trie implementation (using plain objects)
+class TrieNode {
+    constructor() {
+        this.children = {};      // key: character, value: TrieNode
+        this.isEndOfWord = false;
+    }
+}
+
+class Trie {
+    constructor() {
+        this.root = new TrieNode();
+    }
+
+    insert(word) {
+        let cur = this.root;
+        for (const ch of word.toLowerCase()) {
+            if (ch &lt; 'a' || ch &gt; 'z') continue;
+            if (!cur.children[ch]) {
+                cur.children[ch] = new TrieNode();
+            }
+            cur = cur.children[ch];
+        }
+        cur.isEndOfWord = true;
+    }
+
+    search(word) {
+        let cur = this.root;
+        for (const ch of word.toLowerCase()) {
+            if (ch &lt; 'a' || ch &gt; 'z') return false;
+            if (!cur.children[ch]) return false;
+            cur = cur.children[ch];
+        }
+        return cur.isEndOfWord;
+    }
+
+    startsWith(prefix) {
+        let cur = this.root;
+        for (const ch of prefix.toLowerCase()) {
+            if (ch &lt; 'a' || ch &gt; 'z') return false;
+            if (!cur.children[ch]) return false;
+            cur = cur.children[ch];
+        }
+        return true;
+    }
+}
+
+// Example usage:
+// const trie = new Trie();
+// trie.insert("apple");
+// trie.insert("app");
+// trie.search("app");       // true
+// trie.startsWith("ap");    // true
+// trie.search("apt");       // false</code></pre>
+        </div>
+
+        <!-- C# -->
+        <div class="code-panel" data-lang-panel="cs">
+<pre><code class="language-csharp">// C# - Trie implementation
+public class TrieNode {
+    public TrieNode[] Children = new TrieNode[26];
+    public bool IsEndOfWord = false;
+}
+
+public class Trie {
+    private readonly TrieNode _root = new TrieNode();
+
+    public void Insert(string word) {
+        var cur = _root;
+        foreach (char chRaw in word.ToLower()) {
+            char ch = chRaw;
+            if (ch &lt; 'a' || ch &gt; 'z') continue;
+            int idx = ch - 'a';
+            if (cur.Children[idx] == null) {
+                cur.Children[idx] = new TrieNode();
+            }
+            cur = cur.Children[idx];
+        }
+        cur.IsEndOfWord = true;
+    }
+
+    public bool Search(string word) {
+        var cur = _root;
+        foreach (char chRaw in word.ToLower()) {
+            char ch = chRaw;
+            if (ch &lt; 'a' || ch &gt; 'z') return false;
+            int idx = ch - 'a';
+            if (cur.Children[idx] == null) {
+                return false;
+            }
+            cur = cur.Children[idx];
+        }
+        return cur.IsEndOfWord;
+    }
+
+    public bool StartsWith(string prefix) {
+        var cur = _root;
+        foreach (char chRaw in prefix.ToLower()) {
+            char ch = chRaw;
+            if (ch &lt; 'a' || ch &gt; 'z') return false;
+            int idx = ch - 'a';
+            if (cur.Children[idx] == null) {
+                return false;
+            }
+            cur = cur.Children[idx];
+        }
+        return true;
+    }
+}
+
+// Example usage:
+// var trie = new Trie();
+// trie.Insert("apple");
+// trie.Insert("app");
+// trie.Search("app");        // true
+// trie.StartsWith("ap");     // true
+// trie.Search("apt");        // false</code></pre>
+        </div>
+
+        <!-- Python -->
+        <div class="code-panel" data-lang-panel="py">
+<pre><code class="language-python"># Python - Trie implementation
+from __future__ import annotations
+from dataclasses import dataclass, field
+from typing import Dict
+
+@dataclass
+class TrieNode:
+    children: Dict[str, "TrieNode"] = field(default_factory=dict)
+    is_end_of_word: bool = False
+
+class Trie:
+    def __init__(self) -&gt; None:
+        self.root = TrieNode()
+
+    def insert(self, word: str) -&gt; None:
+        cur = self.root
+        for ch in word.lower():
+            if ch &lt; "a" or ch &gt; "z":
+                continue
+            if ch not in cur.children:
+                cur.children[ch] = TrieNode()
+            cur = cur.children[ch]
+        cur.is_end_of_word = True
+
+    def search(self, word: str) -&gt; bool:
+        cur = self.root
+        for ch in word.lower():
+            if ch &lt; "a" or ch &gt; "z":
+                return False
+            if ch not in cur.children:
+                return False
+            cur = cur.children[ch]
+        return cur.is_end_of_word
+
+    def starts_with(self, prefix: str) -&gt; bool:
+        cur = self.root
+        for ch in prefix.lower():
+            if ch &lt; "a" or ch &gt; "z":
+                return False
+            if ch not in cur.children:
+                return False
+            cur = cur.children[ch]
+        return True
+
+# Example usage:
+# trie = Trie()
+# for w in ["apple", "app", "apt"]:
+#     trie.insert(w)
+# print(trie.search("app"))       # True
+# print(trie.starts_with("ap"))   # True
+# print(trie.search("apply"))     # False</code></pre>
+        </div>
+
+        <div class="complexity-note">
+            Time per operation (<code>insert</code>, <code>search</code>, <code>startsWith</code>):
+            <strong>O(L)</strong>, where <code>L</code> is the length of the word/prefix. &nbsp;|&nbsp;
+            Extra space: proportional to total characters stored across all words.
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- ======================= Example 2 - Prefix-based usage ======================= -->
+    <h2>
+        13.4 Example – Using a Trie for Prefix Counting
+        <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s13-ex2">
+            Dig deeper
+        </button>
+        <button type="button" class="deep-dive-trigger inline secondary" data-deep-id="understand-s13-ex2">
+            Understand the algorithm
+        </button>
+    </h2>
+    <p>
+        Many problems use tries to answer questions like:
+        &ldquo;How many words start with this prefix?&rdquo; or
+        &ldquo;Does any word share this prefix?&rdquo;
+    </p>
+    <p>
+        A common trick is to store a <strong>prefix count</strong> at each node:
+        every time you insert a word, you increment counts along the path.
+        Then:
+    </p>
+    <ul>
+        <li><code>countPrefix(prefix)</code> walks the prefix path and returns the stored count at the last node.</li>
+        <li>If the path breaks (missing child), the count is zero.</li>
+    </ul>
+
+    <div class="code-example" data-example="s13-ex2">
+        <div class="code-example-header">
+            <div class="code-example-title">
+                <span class="label">Example 2</span>
+                <span class="meta">Counting how many words share a prefix</span>
+            </div>
+            <button type="button" class="copy-button" aria-label="Copy code">
+                Copy
+            </button>
+        </div>
+
+        <div class="tab-bar">
+            <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+            <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+            <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+            <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+            <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+            <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+        </div>
+
+        <!-- C -->
+        <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">// C - Trie with prefix counts
+#include &lt;stdlib.h&gt;
+#include &lt;stdbool.h&gt;
+
+#define ALPHABET_SIZE 26
+
+typedef struct TrieCountNode {
+    struct TrieCountNode* children[ALPHABET_SIZE];
+    bool is_end_of_word;
+    int prefix_count;  // number of words that pass through this node
+} TrieCountNode;
+
+TrieCountNode* trie_count_node_create(void) {
+    TrieCountNode* node = (TrieCountNode*)malloc(sizeof(TrieCountNode));
+    if (!node) return NULL;
+    for (int i = 0; i &lt; ALPHABET_SIZE; i++) {
+        node-&gt;children[i] = NULL;
+    }
+    node-&gt;is_end_of_word = false;
+    node-&gt;prefix_count = 0;
+    return node;
+}
+
+void trie_count_insert(TrieCountNode* root, const char* word) {
+    TrieCountNode* cur = root;
+    for (const char* p = word; *p; ++p) {
+        char c = *p;
+        if (c &lt; 'a' || c &gt; 'z') continue;
+        int idx = c - 'a';
+        if (!cur-&gt;children[idx]) {
+            cur-&gt;children[idx] = trie_count_node_create();
+        }
+        cur = cur-&gt;children[idx];
+        cur-&gt;prefix_count += 1;
+    }
+    cur-&gt;is_end_of_word = true;
+}
+
+int trie_count_prefix(TrieCountNode* root, const char* prefix) {
+    TrieCountNode* cur = root;
+    for (const char* p = prefix; *p; ++p) {
+        char c = *p;
+        if (c &lt; 'a' || c &gt; 'z') return 0;
+        int idx = c - 'a';
+        if (!cur-&gt;children[idx]) return 0;
+        cur = cur-&gt;children[idx];
+    }
+    return cur-&gt;prefix_count;
+}
+
+// Example usage:
+// TrieCountNode* root = trie_count_node_create();
+// trie_count_insert(root, "apple");
+// trie_count_insert(root, "app");
+// trie_count_insert(root, "apt");
+// trie_count_prefix(root, "ap");   // 3
+// trie_count_prefix(root, "app");  // 2
+// trie_count_prefix(root, "b");    // 0</code></pre>
+        </div>
+
+        <!-- C++ -->
+        <div class="code-panel" data-lang-panel="cpp">
+<pre><code class="language-cpp">// C++ - Trie with prefix counts
+#include &lt;array&gt;
+#include &lt;memory&gt;
+#include &lt;string&gt;
+
+struct TrieCountNode {
+    std::array&lt;std::unique_ptr&lt;TrieCountNode&gt;, 26&gt; children{};
+    bool isEnd = false;
+    int prefixCount = 0;
+};
+
+class PrefixTrie {
+public:
+    PrefixTrie() : root(std::make_unique&lt;TrieCountNode&gt;()) {}
+
+    void insert(const std::string&amp; word) {
+        TrieCountNode* cur = root.get();
+        for (char ch : word) {
+            if (ch &lt; 'a' || ch &gt; 'z') continue;
+            int idx = ch - 'a';
+            if (!cur-&gt;children[idx]) {
+                cur-&gt;children[idx] = std::make_unique&lt;TrieCountNode&gt;();
+            }
+            cur = cur-&gt;children[idx].get();
+            cur-&gt;prefixCount++;
+        }
+        cur-&gt;isEnd = true;
+    }
+
+    int countPrefix(const std::string&amp; prefix) const {
+        const TrieCountNode* cur = root.get();
+        for (char ch : prefix) {
+            if (ch &lt; 'a' || ch &gt; 'z') return 0;
+            int idx = ch - 'a';
+            if (!cur-&gt;children[idx]) return 0;
+            cur = cur-&gt;children[idx].get();
+        }
+        return cur-&gt;prefixCount;
+    }
+
+private:
+    std::unique_ptr&lt;TrieCountNode&gt; root;
+};
+
+// Example usage:
+// PrefixTrie trie;
+// for (auto&amp; w : std::vector&lt;std::string&gt;{"apple", "app", "apt"}) {
+//     trie.insert(w);
+// }
+// trie.countPrefix("ap");   // 3
+// trie.countPrefix("app");  // 2
+// trie.countPrefix("b");    // 0</code></pre>
+        </div>
+
+        <!-- Java -->
+        <div class="code-panel" data-lang-panel="java">
+<pre><code class="language-java">// Java - Trie with prefix counts
+class TrieCountNode {
+    TrieCountNode[] children = new TrieCountNode[26];
+    boolean isEndOfWord = false;
+    int prefixCount = 0;
+}
+
+class PrefixTrie {
+    private final TrieCountNode root = new TrieCountNode();
+
+    public void insert(String word) {
+        TrieCountNode cur = root;
+        for (char ch : word.toLowerCase().toCharArray()) {
+            if (ch &lt; 'a' || ch &gt; 'z') continue;
+            int idx = ch - 'a';
+            if (cur.children[idx] == null) {
+                cur.children[idx] = new TrieCountNode();
+            }
+            cur = cur.children[idx];
+            cur.prefixCount++;
+        }
+        cur.isEndOfWord = true;
+    }
+
+    public int countPrefix(String prefix) {
+        TrieCountNode cur = root;
+        for (char ch : prefix.toLowerCase().toCharArray()) {
+            if (ch &lt; 'a' || ch &gt; 'z') return 0;
+            int idx = ch - 'a';
+            if (cur.children[idx] == null) {
+                return 0;
+            }
+            cur = cur.children[idx];
+        }
+        return cur.prefixCount;
+    }
+}
+
+// Example usage:
+// PrefixTrie trie = new PrefixTrie();
+// for (String w : new String[]{"apple", "app", "apt"}) {
+//     trie.insert(w);
+// }
+// trie.countPrefix("ap");   // 3
+// trie.countPrefix("app");  // 2
+// trie.countPrefix("b");    // 0</code></pre>
+        </div>
+
+        <!-- JavaScript -->
+        <div class="code-panel" data-lang-panel="js">
+<pre><code class="language-javascript">// JavaScript - Trie with prefix counts
+class CountNode {
+    constructor() {
+        this.children = {};
+        this.isEndOfWord = false;
+        this.prefixCount = 0;
+    }
+}
+
+class PrefixTrie {
+    constructor() {
+        this.root = new CountNode();
+    }
+
+    insert(word) {
+        let cur = this.root;
+        for (const ch of word.toLowerCase()) {
+            if (ch &lt; 'a' || ch &gt; 'z') continue;
+            if (!cur.children[ch]) {
+                cur.children[ch] = new CountNode();
+            }
+            cur = cur.children[ch];
+            cur.prefixCount++;
+        }
+        cur.isEndOfWord = true;
+    }
+
+    countPrefix(prefix) {
+        let cur = this.root;
+        for (const ch of prefix.toLowerCase()) {
+            if (ch &lt; 'a' || ch &gt; 'z') return 0;
+            if (!cur.children[ch]) return 0;
+            cur = cur.children[ch];
+        }
+        return cur.prefixCount;
+    }
+}
+
+// Example usage:
+// const trie = new PrefixTrie();
+// for (const w of ["apple", "app", "apt"]) {
+//   trie.insert(w);
+// }
+// trie.countPrefix("ap");   // 3
+// trie.countPrefix("app");  // 2
+// trie.countPrefix("b");    // 0</code></pre>
+        </div>
+
+        <!-- C# -->
+        <div class="code-panel" data-lang-panel="cs">
+<pre><code class="language-csharp">// C# - Trie with prefix counts
+public class TrieCountNode {
+    public TrieCountNode[] Children = new TrieCountNode[26];
+    public bool IsEndOfWord = false;
+    public int PrefixCount = 0;
+}
+
+public class PrefixTrie {
+    private readonly TrieCountNode _root = new TrieCountNode();
+
+    public void Insert(string word) {
+        var cur = _root;
+        foreach (char chRaw in word.ToLower()) {
+            char ch = chRaw;
+            if (ch &lt; 'a' || ch &gt; 'z') continue;
+            int idx = ch - 'a';
+            if (cur.Children[idx] == null) {
+                cur.Children[idx] = new TrieCountNode();
+            }
+            cur = cur.Children[idx];
+            cur.PrefixCount++;
+        }
+        cur.IsEndOfWord = true;
+    }
+
+    public int CountPrefix(string prefix) {
+        var cur = _root;
+        foreach (char chRaw in prefix.ToLower()) {
+            char ch = chRaw;
+            if (ch &lt; 'a' || ch &gt; 'z') return 0;
+            int idx = ch - 'a';
+            if (cur.Children[idx] == null) {
+                return 0;
+            }
+            cur = cur.Children[idx];
+        }
+        return cur.PrefixCount;
+    }
+}
+
+// Example usage:
+// var trie = new PrefixTrie();
+// foreach (var w in new[] { "apple", "app", "apt" }) {
+//     trie.Insert(w);
+// }
+// trie.CountPrefix("ap");   // 3
+// trie.CountPrefix("app");  // 2
+// trie.CountPrefix("b");    // 0</code></pre>
+        </div>
+
+        <!-- Python -->
+        <div class="code-panel" data-lang-panel="py">
+<pre><code class="language-python"># Python - Trie with prefix counts
+from dataclasses import dataclass, field
+from typing import Dict
+
+@dataclass
+class CountNode:
+    children: Dict[str, "CountNode"] = field(default_factory=dict)
+    is_end_of_word: bool = False
+    prefix_count: int = 0
+
+class PrefixTrie:
+    def __init__(self) -&gt; None:
+        self.root = CountNode()
+
+    def insert(self, word: str) -&gt; None:
+        cur = self.root
+        for ch in word.lower():
+            if ch &lt; "a" or ch &gt; "z":
+                continue
+            if ch not in cur.children:
+                cur.children[ch] = CountNode()
+            cur = cur.children[ch]
+            cur.prefix_count += 1
+        cur.is_end_of_word = True
+
+    def count_prefix(self, prefix: str) -&gt; int:
+        cur = self.root
+        for ch in prefix.lower():
+            if ch &lt; "a" or ch &gt; "z":
+                return 0
+            if ch not in cur.children:
+                return 0
+            cur = cur.children[ch]
+        return cur.prefix_count
+
+# Example usage:
+# trie = PrefixTrie()
+# for w in ["apple", "app", "apt"]:
+#     trie.insert(w)
+# print(trie.count_prefix("ap"))    # 3
+# print(trie.count_prefix("app"))   # 2
+# print(trie.count_prefix("b"))     # 0</code></pre>
+        </div>
+
+        <div class="complexity-note">
+            Time: <strong>O(L)</strong> per operation, where <code>L</code> is length of the word/prefix. &nbsp;|&nbsp;
+            Extra space: counts add only O(1) per node on top of the base trie.
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- ======================= 13.5 When to Reach for a Trie ======================= -->
+    <h2>13.5 When to Use a Trie vs Other Structures</h2>
+    <ul>
+        <li>
+            You need fast <strong>prefix queries</strong> (e.g., autocomplete, word games):
+            <strong>trie</strong> is usually the right tool.
+        </li>
+        <li>
+            You only ever check <code>word in set</code> with no prefixes:
+            often a <strong>hash set</strong> is simpler and fast enough.
+        </li>
+        <li>
+            You need ordered results or range queries on strings:
+            a <strong>sorted array</strong> plus binary search or a <strong>balanced BST</strong> also works.
+        </li>
+        <li>
+            Memory is tight and your alphabet is large:
+            tries can be memory-heavy; compressed tries or alternatives might be needed.
+        </li>
+    </ul>
+
+    <div class="top-nav">
+        <a href="index.html">
+            ← Back to Index
+        </a>
+    </div>
+
+    <!-- ======================= Deep dive templates ======================= -->
+
+    <div class="deep-dive-template" id="deep-dive-s13-what-is-trie"
+         data-title="Why tries are called prefix trees" hidden>
+        <p>
+            A trie is sometimes called a <strong>prefix tree</strong> because each node represents a prefix
+            of one or more stored strings. The root corresponds to the empty prefix, its children represent
+            all prefixes of length 1, and so on.
+        </p>
+        <ul>
+            <li>
+                If you follow edges labeled <code>c1, c2, ..., ck</code> from the root, you&apos;re looking at
+                the prefix <code>c1c2...ck</code>.
+            </li>
+            <li>
+                Any node that is marked as &ldquo;end of word&rdquo; corresponds to a full word stored in the trie.
+            </li>
+            <li>
+                Many different words can share the same initial path (e.g., <code>car</code>, <code>card</code>,
+                <code>care</code>).
+            </li>
+        </ul>
+        <p>
+            This sharing of prefixes is what gives tries an advantage when you have many words with common
+            beginnings and need to query them by prefix.
+        </p>
+    </div>
+
+    <div class="deep-dive-template" id="understand-s13-what-is-trie"
+         data-title="Understanding tries via an example word set" hidden>
+        <p>
+            Imagine inserting the words <code>car</code>, <code>card</code>, <code>care</code>, and <code>dog</code>.
+            The trie&apos;s top levels look like this:
+        </p>
+        <ul>
+            <li>The root has two children: <code>'c'</code> and <code>'d'</code>.</li>
+            <li>Under <code>'c'</code> you have <code>'a'</code>, then <code>'r'</code>.</li>
+            <li>From the <code>'r'</code> node, you branch to <code>'d'</code> and <code>'e'</code> for
+                <code>card</code> and <code>care</code>.
+            </li>
+            <li>
+                Under <code>'d'</code> you follow <code>'o'</code> → <code>'g'</code> for <code>dog</code>.
+            </li>
+        </ul>
+        <p>
+            Notice how the shared prefix <code>car</code> appears only once in memory, but supports multiple
+            different words that extend it. This is the core idea of tries.
+        </p>
+    </div>
+
+    <div class="deep-dive-template" id="deep-dive-s13-core-ops"
+         data-title="Complexity intuition for trie operations" hidden>
+        <p>
+            Every core trie operation walks at most one node per character. That&apos;s why time is measured
+            in terms of <code>L</code>, the word length, instead of the number of words <code>N</code>:
+        </p>
+        <ul>
+            <li>
+                <strong>Insert:</strong> you go down the tree creating missing nodes; the cost is proportional
+                to the characters you traverse.
+            </li>
+            <li>
+                <strong>Search:</strong> you look up each edge; if one is missing, you stop early.
+            </li>
+            <li>
+                <strong>Prefix check:</strong> the same as search, but you don&apos;t require the final node
+                to be marked as a full word.
+            </li>
+        </ul>
+        <p>
+            In contrast, searching an unsorted list is <strong>O(N)</strong> and even a hash table still expects
+            you to scan the entire key; tries give you a direct path for each character.
+        </p>
+    </div>
+
+    <div class="deep-dive-template" id="deep-dive-s13-ex1"
+         data-title="Design choices in a trie implementation" hidden>
+        <p>
+            There are a few common design choices when building a trie:
+        </p>
+        <ul>
+            <li>
+                <strong>Child storage:</strong>
+                fixed-size array (fast but uses more memory) vs map/dictionary (less memory, slightly slower).
+            </li>
+            <li>
+                <strong>End-of-word marking:</strong>
+                you can use a boolean flag <code>isEnd</code> or an integer <code>word_count</code> if you want
+                to support duplicates or track counts.
+            </li>
+            <li>
+                <strong>Alphabet assumptions:</strong>
+                this example uses <code>'a'..'z'</code>. In production you might need Unicode or larger alphabets.
+            </li>
+        </ul>
+        <p>
+            In interviews, the simple &ldquo;array of size 26&rdquo; approach is usually fine and keeps the
+            implementation short while still demonstrating the core idea.
+        </p>
+    </div>
+
+    <div class="deep-dive-template" id="understand-s13-ex1"
+         data-title="Step-by-step: inserting and searching in a trie" hidden>
+        <p>
+            Think about inserting the word <code>cat</code> into an empty trie:
+        </p>
+        <ol>
+            <li>Start at the root node.</li>
+            <li>
+                Look at <code>'c'</code>. The root has no child for <code>'c'</code> yet,
+                so create a new node and follow that edge.
+            </li>
+            <li>
+                Now at the <code>'c'</code> node, look at <code>'a'</code>. Create the child and move there.
+            </li>
+            <li>
+                At the <code>'a'</code> node, process <code>'t'</code>, create the child, and move there.
+            </li>
+            <li>
+                Mark the current node as an end-of-word node. That node represents the word <code>&quot;cat&quot;</code>.
+            </li>
+        </ol>
+        <p>
+            Searching for <code>&quot;cat&quot;</code> walks the same path: root → <code>'c'</code> → <code>'a'</code> → <code>'t'</code>.
+            If any required child is missing, the search fails immediately. If you reach the final node and it&apos;s
+            marked as a word, the search succeeds.
+        </p>
+        <p>
+            This is why the time is <strong>O(L)</strong>: we only ever do a constant amount of work per character.
+        </p>
+    </div>
+
+    <div class="deep-dive-template" id="deep-dive-s13-ex2"
+         data-title="Why prefix counts are useful" hidden>
+        <p>
+            Prefix counts let you answer &ldquo;how many words start with this prefix?&rdquo; in O(L) time:
+        </p>
+        <ul>
+            <li>
+                When you insert a word, each node along its path sees its <code>prefix_count</code> incremented.
+            </li>
+            <li>
+                Nodes deeper in the tree represent longer prefixes and see fewer words.
+            </li>
+            <li>
+                Querying a prefix only needs to follow its characters; the stored count tells you the answer directly.
+            </li>
+        </ul>
+        <p>
+            This pattern shows up in problems like &ldquo;contact list search&rdquo;, &ldquo;word frequency by prefix&rdquo;,
+            and some scoring functions in autocomplete systems.
+        </p>
+    </div>
+
+    <div class="deep-dive-template" id="understand-s13-ex2"
+         data-title="Step-by-step: counting words with a prefix" hidden>
+        <p>
+            Suppose you insert <code>apple</code>, <code>app</code>, and <code>apt</code> into a prefix-count trie.
+            Each time you insert a word, you walk its path and increment <code>prefix_count</code> on every node visited.
+        </p>
+        <ol>
+            <li>
+                Insert <code>apple</code>:
+                nodes for <code>a</code>, <code>ap</code>, <code>app</code>, <code>appl</code>, <code>apple</code>
+                all get their counts incremented.
+            </li>
+            <li>
+                Insert <code>app</code>:
+                nodes for <code>a</code>, <code>ap</code>, <code>app</code> have their counts incremented again.
+            </li>
+            <li>
+                Insert <code>apt</code>:
+                nodes for <code>a</code>, <code>ap</code>, <code>apt</code> have their counts incremented.
+            </li>
+        </ol>
+        <p>
+            Now:
+        </p>
+        <ul>
+            <li>
+                The node for prefix <code>&quot;ap&quot;</code> has count 3 (three words start with <code>ap</code>).
+            </li>
+            <li>
+                The node for prefix <code>&quot;app&quot;</code> has count 2 (<code>apple</code> and <code>app</code>).
+            </li>
+            <li>
+                A prefix like <code>&quot;aq&quot;</code> never appears in the trie, so its count is zero.
+            </li>
+        </ul>
+        <p>
+            That&apos;s the entire algorithm: store counts on insert, then just read them back on queries.
+        </p>
+    </div>
+
+    <!-- ======================= Deep dive modal shell (shared) ======================= -->
+    <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+        <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+            <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+            <h2 id="deep-dive-title">&nbsp;</h2>
+            <div class="deep-dive-body"></div>
+        </div>
+    </div>
+
+</main>
+</body>
+
+</html>

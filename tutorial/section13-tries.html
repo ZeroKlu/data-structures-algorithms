@@ -916,8 +916,1895 @@ class PrefixTrie:
 
     <hr>
 
-    <!-- ======================= 13.5 When to Reach for a Trie ======================= -->
-    <h2>13.5 When to Use a Trie vs Other Structures</h2>
+    
+    <hr>
+
+    <!-- ======================= 13.5 Autocomplete ======================= -->
+    <h2>
+        13.5 Autocomplete with a Trie
+        <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s13-autocomplete">
+            Dig deeper
+        </button>
+    
+        <button type="button" class="deep-dive-trigger inline secondary" data-deep-id="understand-s13-ex3">
+            Understand the algorithm
+        </button>
+</h2>
+    <p>
+        A classic trie use case is <strong>autocomplete</strong>: given a prefix like <code>"th"</code>,
+        list words that start with that prefix (e.g., <code>the</code>, <code>then</code>, <code>their</code>).
+    </p>
+
+    <div class="callout">
+        <strong>Two-step pattern:</strong>
+        (1) <strong>Walk</strong> the trie to the node for the prefix. (2) <strong>Enumerate</strong>
+        all words in that node’s subtree (usually via DFS), stopping after <code>K</code> results.
+    </div>
+
+    <h3 class="subhead">Algorithm sketch</h3>
+    <ol class="bullet-tight">
+        <li><strong>Find the prefix node</strong> by following characters from the root.</li>
+        <li><strong>Depth-first search</strong> from that node, building a buffer of characters.</li>
+        <li>Every time you hit an <em>end-of-word</em> node, emit the current buffer as a suggestion.</li>
+        <li>Stop after <code>K</code> suggestions (for UI responsiveness).</li>
+    </ol>
+
+<pre><code class="language-python">def autocomplete(prefix, K):
+    node = walk(prefix)          # O(len(prefix))
+    if node is None: return []
+
+    results = []
+    buf = list(prefix)
+
+    def dfs(n):
+        if len(results) == K: return
+        if n.is_end: results.append("".join(buf))
+        for letter in 'a'..'z':
+            if n.child[letter]:
+                buf.append(letter)
+                dfs(n.child[letter])
+                buf.pop()
+
+    dfs(node)
+    return results</code></pre>
+
+
+    <div class="code-example" data-example="s13-ex3">
+        <div class="code-example-header">
+            <div class="code-example-title">
+                <span class="label">Example 3</span>
+                <span class="meta">Autocomplete suggestions from a dictionary-backed trie</span>
+            </div>
+            <button type="button" class="copy-button" aria-label="Copy code">
+                Copy
+            </button>
+        </div>
+
+        <div class="tab-bar">
+            <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+            <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+            <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+            <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+            <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+            <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+        </div>
+
+        <!-- C -->
+        <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;ctype.h&gt;
+
+#define ALPHABET_SIZE 26
+#define WORD_MAX 128
+#define DEFAULT_LIMIT 20
+
+typedef struct TrieNode {
+    struct TrieNode *children[ALPHABET_SIZE];
+    int isEndOfWord;
+} TrieNode;
+
+TrieNode *createNode(void) {
+    return (TrieNode *)calloc(1, sizeof(TrieNode));
+}
+
+int charIndex(char c) {
+    if (c &lt; &#x27;a&#x27; || c &gt; &#x27;z&#x27;) return -1;
+    return c - &#x27;a&#x27;;
+}
+
+/* Insert a word; reject the entire word if any char is not a-z (case-insensitive). */
+void trieInsert(TrieNode *root, const char *word) {
+    TrieNode *current = root;
+    for (int i = 0; word[i]; i++) {
+        char c = tolower((unsigned char)word[i]);
+        int idx = charIndex(c);
+        if (idx == -1) return;
+        if (!current-&gt;children[idx]) current-&gt;children[idx] = createNode();
+        current = current-&gt;children[idx];
+    }
+    current-&gt;isEndOfWord = 1;
+}
+
+/* Walk down the trie for a prefix; returns node or NULL (invalid char or missing path). */
+TrieNode *trieWalk(TrieNode *root, const char *prefix) {
+    TrieNode *current = root;
+    for (int i = 0; prefix[i]; i++) {
+        char c = tolower((unsigned char)prefix[i]);
+        int idx = charIndex(c);
+        if (idx == -1 || !current-&gt;children[idx]) return NULL;
+        current = current-&gt;children[idx];
+    }
+    return current;
+}
+
+/* Depth-first enumeration of words under a node. */
+void dfsCollect(TrieNode *node,
+                char *buffer,
+                int depth,
+                int limit,
+                int *emitted) {
+    if (!node || *emitted &gt;= limit) return;
+
+    if (node-&gt;isEndOfWord) {
+        buffer[depth] = &#x27;\0&#x27;;
+        printf(&quot;%s\n&quot;, buffer);
+        (*emitted)++;
+        if (*emitted &gt;= limit) return;
+    }
+
+    for (int i = 0; i &lt; ALPHABET_SIZE; i++) {
+        if (node-&gt;children[i]) {
+            buffer[depth] = (char)(&#x27;a&#x27; + i);
+            dfsCollect(node-&gt;children[i], buffer, depth + 1, limit, emitted);
+            if (*emitted &gt;= limit) return;
+        }
+    }
+}
+
+/*
+ * Print up to `limit` autocomplete suggestions for `prefix`.
+ * Suggestions are returned in lexicographic order due to DFS over children a..z.
+ */
+void trieAutocomplete(TrieNode *root, const char *prefix, int limit) {
+    TrieNode *start = trieWalk(root, prefix);
+    if (!start) return;
+
+    char buffer[WORD_MAX];
+    // seed the buffer with the prefix (lowercased)
+    int depth = 0;
+    for (; prefix[depth] &amp;&amp; depth &lt; WORD_MAX - 1; depth++) {
+        buffer[depth] = (char)tolower((unsigned char)prefix[depth]);
+    }
+
+    int emitted = 0;
+    dfsCollect(start, buffer, depth, limit, &amp;emitted);
+}
+
+void freeTrie(TrieNode *node) {
+    if (!node) return;
+    for (int i = 0; i &lt; ALPHABET_SIZE; i++) freeTrie(node-&gt;children[i]);
+    free(node);
+}
+
+int loadDictionary(TrieNode *root, const char *path) {
+    FILE *fp = fopen(path, &quot;r&quot;);
+    if (!fp) {
+        perror(&quot;Failed to open dictionary&quot;);
+        return 0;
+    }
+
+    char buffer[WORD_MAX];
+    int count = 0;
+
+    while (fgets(buffer, sizeof(buffer), fp)) {
+        buffer[strcspn(buffer, &quot;\r\n&quot;)] = &#x27;\0&#x27;;
+        if (!buffer[0]) continue;
+        trieInsert(root, buffer);
+        count++;
+    }
+
+    fclose(fp);
+    return count;
+}
+
+static int parseIntOrDefault(const char *s, int def) {
+    if (!s || !*s) return def;
+    char *end = NULL;
+    long v = strtol(s, &amp;end, 10);
+    if (end == s || v &lt;= 0 || v &gt; 1000000) return def;
+    return (int)v;
+}
+
+int main(int argc, char **argv) {
+    TrieNode *trie = createNode();
+
+    const char *dictPath = (argc &gt; 1) ? argv[1] : &quot;..\\data\\words.txt&quot;;
+    const char *prefix   = (argc &gt; 2) ? argv[2] : &quot;th&quot;;
+    int limit            = (argc &gt; 3) ? parseIntOrDefault(argv[3], DEFAULT_LIMIT) : DEFAULT_LIMIT;
+
+    int loaded = loadDictionary(trie, dictPath);
+    printf(&quot;Loaded %d words from %s\n&quot;, loaded, dictPath);
+
+    printf(&quot;\nAutocomplete(\&quot;%s\&quot;) [limit=%d]:\n&quot;, prefix, limit);
+    trieAutocomplete(trie, prefix, limit);
+
+    freeTrie(trie);
+    return 0;
+}
+</code></pre>
+        </div>
+
+        <!-- C++ -->
+        <div class="code-panel" data-lang-panel="cpp">
+<pre><code class="language-cpp">
+#include &lt;array&gt;
+#include &lt;cctype&gt;
+#include &lt;fstream&gt;
+#include &lt;iostream&gt;
+#include &lt;memory&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+
+class Trie {
+public:
+    Trie() : root(std::make_unique&lt;Node&gt;()) {}
+
+    void insert(const std::string&amp; word) {
+        Node* current = root.get();
+        for (unsigned char ch : word) {
+            char c = static_cast&lt;char&gt;(std::tolower(ch));
+            int idx = index(c);
+            if (idx &lt; 0) return;
+            if (!current-&gt;children[idx]) current-&gt;children[idx] = std::make_unique&lt;Node&gt;();
+            current = current-&gt;children[idx].get();
+        }
+        current-&gt;isEnd = true;
+    }
+
+    std::vector&lt;std::string&gt; autocomplete(const std::string&amp; prefix, std::size_t limit) const {
+        const Node* start = walk(prefix);
+        if (!start) return {};
+
+        std::string seed;
+        seed.reserve(prefix.size());
+        for (unsigned char ch : prefix) seed.push_back(static_cast&lt;char&gt;(std::tolower(ch)));
+
+        std::vector&lt;std::string&gt; out;
+        out.reserve(limit);
+        dfsCollect(start, seed, out, limit);
+        return out;
+    }
+
+private:
+    struct Node {
+        std::array&lt;std::unique_ptr&lt;Node&gt;, 26&gt; children{};
+        bool isEnd{false};
+    };
+
+    std::unique_ptr&lt;Node&gt; root;
+
+    static int index(char c) {
+        if (c &lt; &#x27;a&#x27; || c &gt; &#x27;z&#x27;) return -1;
+        return c - &#x27;a&#x27;;
+    }
+
+    const Node* walk(const std::string&amp; s) const {
+        const Node* current = root.get();
+        for (unsigned char ch : s) {
+            char c = static_cast&lt;char&gt;(std::tolower(ch));
+            int idx = index(c);
+            if (idx &lt; 0) return nullptr;
+            const auto&amp; child = current-&gt;children[idx];
+            if (!child) return nullptr;
+            current = child.get();
+        }
+        return current;
+    }
+
+    static void dfsCollect(const Node* node,
+                           std::string&amp; buffer,
+                           std::vector&lt;std::string&gt;&amp; out,
+                           std::size_t limit) {
+        if (!node || out.size() &gt;= limit) return;
+
+        if (node-&gt;isEnd) {
+            out.push_back(buffer);
+            if (out.size() &gt;= limit) return;
+        }
+
+        for (int i = 0; i &lt; 26; i++) {
+            if (node-&gt;children[i]) {
+                buffer.push_back(static_cast&lt;char&gt;(&#x27;a&#x27; + i));
+                dfsCollect(node-&gt;children[i].get(), buffer, out, limit);
+                buffer.pop_back();
+                if (out.size() &gt;= limit) return;
+            }
+        }
+    }
+};
+
+static int loadDictionary(Trie&amp; trie, const std::string&amp; path) {
+    std::ifstream in(path);
+    if (!in) {
+        std::cerr &lt;&lt; &quot;Failed to open dictionary: &quot; &lt;&lt; path &lt;&lt; &quot;\n&quot;;
+        return 0;
+    }
+    int count = 0;
+    std::string line;
+    while (std::getline(in, line)) {
+        if (!line.empty() &amp;&amp; line.back() == &#x27;\r&#x27;) line.pop_back();
+        if (line.empty()) continue;
+        trie.insert(line);
+        count++;
+    }
+    return count;
+}
+
+static std::size_t parseLimit(const char* s, std::size_t def) {
+    if (!s || !*s) return def;
+    try {
+        std::size_t v = static_cast&lt;std::size_t&gt;(std::stoul(s));
+        return v == 0 ? def : v;
+    } catch (...) {
+        return def;
+    }
+}
+
+int main(int argc, char** argv) {
+    Trie trie;
+
+    const std::string dictPath = (argc &gt; 1) ? argv[1] : &quot;..\\data\\words.txt&quot;;
+    const std::string prefix   = (argc &gt; 2) ? argv[2] : &quot;th&quot;;
+    const std::size_t limit    = (argc &gt; 3) ? parseLimit(argv[3], 20) : 20;
+
+    int loaded = loadDictionary(trie, dictPath);
+    std::cout &lt;&lt; &quot;Loaded &quot; &lt;&lt; loaded &lt;&lt; &quot; words from &quot; &lt;&lt; dictPath &lt;&lt; &quot;\n\n&quot;;
+
+    std::cout &lt;&lt; &quot;Autocomplete(\&quot;&quot; &lt;&lt; prefix &lt;&lt; &quot;\&quot;) [limit=&quot; &lt;&lt; limit &lt;&lt; &quot;]\n&quot;;
+    auto results = trie.autocomplete(prefix, limit);
+    for (const auto&amp; w : results) std::cout &lt;&lt; w &lt;&lt; &quot;\n&quot;;
+
+    return 0;
+}
+</code></pre>
+        </div>
+
+        <!-- Java -->
+        <div class="code-panel" data-lang-panel="java">
+<pre><code class="language-java">package code_samples.section13.example_3_autocomplete;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class trie_autocomplete {
+
+    private static final int ALPHABET_SIZE = 26;
+    private static final int WORD_MAX = 128;
+
+    private static class TrieNode {
+        TrieNode[] children = new TrieNode[ALPHABET_SIZE];
+        boolean isEndOfWord = false;
+    }
+
+    private final TrieNode root = new TrieNode();
+
+    private static int index(char c) {
+        if (c &lt; &#x27;a&#x27; || c &gt; &#x27;z&#x27;) return -1;
+        return c - &#x27;a&#x27;;
+    }
+
+    public void insert(String word) {
+        TrieNode current = root;
+        for (int i = 0; i &lt; word.length(); i++) {
+            char c = Character.toLowerCase(word.charAt(i));
+            int idx = index(c);
+            if (idx &lt; 0) return;
+            if (current.children[idx] == null) current.children[idx] = new TrieNode();
+            current = current.children[idx];
+        }
+        current.isEndOfWord = true;
+    }
+
+    private TrieNode walk(String prefix) {
+        TrieNode current = root;
+        for (int i = 0; i &lt; prefix.length(); i++) {
+            char c = Character.toLowerCase(prefix.charAt(i));
+            int idx = index(c);
+            if (idx &lt; 0) return null;
+            if (current.children[idx] == null) return null;
+            current = current.children[idx];
+        }
+        return current;
+    }
+
+    public ArrayList&lt;String&gt; autocomplete(String prefix, int limit) {
+        TrieNode start = walk(prefix);
+        ArrayList&lt;String&gt; out = new ArrayList&lt;&gt;();
+        if (start == null) return out;
+
+        StringBuilder buf = new StringBuilder(prefix.length() + 16);
+        for (int i = 0; i &lt; prefix.length(); i++) buf.append(Character.toLowerCase(prefix.charAt(i)));
+
+        dfsCollect(start, buf, out, limit);
+        return out;
+    }
+
+    private void dfsCollect(TrieNode node, StringBuilder buf, ArrayList&lt;String&gt; out, int limit) {
+        if (node == null || out.size() &gt;= limit) return;
+
+        if (node.isEndOfWord) {
+            out.add(buf.toString());
+            if (out.size() &gt;= limit) return;
+        }
+
+        for (int i = 0; i &lt; ALPHABET_SIZE; i++) {
+            if (node.children[i] != null) {
+                buf.append((char)(&#x27;a&#x27; + i));
+                dfsCollect(node.children[i], buf, out, limit);
+                buf.deleteCharAt(buf.length() - 1);
+                if (out.size() &gt;= limit) return;
+            }
+        }
+    }
+
+    private static int loadDictionary(trie_autocomplete trie, String path) {
+        int count = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                trie.insert(line);
+                count++;
+            }
+        } catch (IOException e) {
+            System.err.println(&quot;Failed to open dictionary: &quot; + path);
+            System.err.println(e.getMessage());
+            return 0;
+        }
+        return count;
+    }
+
+    private static int parseIntOrDefault(String s, int def) {
+        try {
+            int v = Integer.parseInt(s);
+            return v &gt; 0 ? v : def;
+        } catch (Exception e) {
+            return def;
+        }
+    }
+
+    public static void main(String[] args) {
+        trie_autocomplete trie = new trie_autocomplete();
+
+        String dictPath = (args.length &gt; 0) ? args[0] : &quot;..\\data\\words.txt&quot;;
+        String prefix   = (args.length &gt; 1) ? args[1] : &quot;th&quot;;
+        int limit       = (args.length &gt; 2) ? parseIntOrDefault(args[2], 20) : 20;
+
+        int loaded = loadDictionary(trie, dictPath);
+        System.out.println(&quot;Loaded &quot; + loaded + &quot; words from &quot; + dictPath);
+        System.out.println();
+
+        System.out.println(&quot;Autocomplete(\&quot;&quot; + prefix + &quot;\&quot;) [limit=&quot; + limit + &quot;]&quot;);
+        for (String w : trie.autocomplete(prefix, limit)) {
+            System.out.println(w);
+        }
+    }
+}
+</code></pre>
+        </div>
+
+        <!-- JavaScript -->
+        <div class="code-panel" data-lang-panel="js">
+<pre><code class="language-javascript">/**
+ * Trie Autocomplete (Dictionary-backed)
+ * Default dictionary path: ..\data\words.txt (override via CLI arg 1)
+ * Usage: node trie_autocomplete_dict.js [dictPath] [prefix] [limit]
+ */
+
+const fs = require(&quot;fs&quot;);
+const path = require(&quot;path&quot;);
+
+class TrieNode {
+  constructor() {
+    this.children = new Array(26).fill(null);
+    this.isEndOfWord = false;
+  }
+}
+
+class Trie {
+  constructor() {
+    this.root = new TrieNode();
+  }
+
+  static _index(ch) {
+    if (ch &lt; &quot;a&quot; || ch &gt; &quot;z&quot;) return -1;
+    return ch.charCodeAt(0) - &quot;a&quot;.charCodeAt(0);
+  }
+
+  insert(word) {
+    let current = this.root;
+    for (let i = 0; i &lt; word.length; i++) {
+      const c = word[i].toLowerCase();
+      const idx = Trie._index(c);
+      if (idx &lt; 0) return;
+      if (!current.children[idx]) current.children[idx] = new TrieNode();
+      current = current.children[idx];
+    }
+    current.isEndOfWord = true;
+  }
+
+  _walk(prefix) {
+    let current = this.root;
+    for (let i = 0; i &lt; prefix.length; i++) {
+      const c = prefix[i].toLowerCase();
+      const idx = Trie._index(c);
+      if (idx &lt; 0) return null;
+      if (!current.children[idx]) return null;
+      current = current.children[idx];
+    }
+    return current;
+  }
+
+  autocomplete(prefix, limit) {
+    const start = this._walk(prefix);
+    if (!start) return [];
+
+    const seed = prefix.toLowerCase();
+    const out = [];
+    const buf = seed.split(&quot;&quot;);
+
+    const dfs = (node) =&gt; {
+      if (!node || out.length &gt;= limit) return;
+      if (node.isEndOfWord) {
+        out.push(buf.join(&quot;&quot;));
+        if (out.length &gt;= limit) return;
+      }
+      for (let i = 0; i &lt; 26; i++) {
+        const child = node.children[i];
+        if (child) {
+          buf.push(String.fromCharCode(&quot;a&quot;.charCodeAt(0) + i));
+          dfs(child);
+          buf.pop();
+          if (out.length &gt;= limit) return;
+        }
+      }
+    };
+
+    dfs(start);
+    return out;
+  }
+}
+
+function loadDictionary(trie, dictPath) {
+  let text;
+  try {
+    text = fs.readFileSync(dictPath, &quot;utf8&quot;);
+  } catch (err) {
+    console.error(`Failed to open dictionary: ${dictPath}`);
+    console.error(String(err.message || err));
+    return 0;
+  }
+
+  const lines = text.split(/\r?\n/);
+  let count = 0;
+  for (const line of lines) {
+    const w = line.trim();
+    if (!w) continue;
+    trie.insert(w);
+    count++;
+  }
+  return count;
+}
+
+function parseLimit(s, def) {
+  const v = Number.parseInt(s, 10);
+  return Number.isFinite(v) &amp;&amp; v &gt; 0 ? v : def;
+}
+
+function main() {
+  const trie = new Trie();
+
+  const dictPath = process.argv[2] || &quot;..\\data\\words.txt&quot;;
+  const prefix = process.argv[3] || &quot;th&quot;;
+  const limit = process.argv[4] ? parseLimit(process.argv[4], 20) : 20;
+
+  const loaded = loadDictionary(trie, dictPath);
+  console.log(`Loaded ${loaded} words from ${dictPath}\n`);
+
+  console.log(`Autocomplete(&quot;${prefix}&quot;) [limit=${limit}]`);
+  for (const w of trie.autocomplete(prefix, limit)) console.log(w);
+
+  console.log(`\nWorking directory = ${process.cwd()}`);
+  console.log(`Resolved dictionary path = ${path.resolve(dictPath)}`);
+}
+
+main();
+</code></pre>
+        </div>
+
+        <!-- C# -->
+        <div class="code-panel" data-lang-panel="cs">
+<pre><code class="language-csharp">using System;
+using System.Collections.Generic;
+using System.IO;
+
+// Trie Autocomplete (top-level, dotnet-script friendly)
+
+const int ALPHABET_SIZE = 26;
+
+class TrieNode
+{
+    public TrieNode[] Children = new TrieNode[ALPHABET_SIZE];
+    public bool IsEndOfWord = false;
+}
+
+TrieNode root = new TrieNode();
+
+int Index(char c) =&gt; (c &gt;= &#x27;a&#x27; &amp;&amp; c &lt;= &#x27;z&#x27;) ? (c - &#x27;a&#x27;) : -1;
+
+void Insert(string word)
+{
+    TrieNode current = root;
+    foreach (char raw in word)
+    {
+        char c = char.ToLowerInvariant(raw);
+        int idx = Index(c);
+        if (idx &lt; 0) return;
+        if (current.Children[idx] == null) current.Children[idx] = new TrieNode();
+        current = current.Children[idx];
+    }
+    current.IsEndOfWord = true;
+}
+
+TrieNode Walk(string prefix)
+{
+    TrieNode current = root;
+    foreach (char raw in prefix)
+    {
+        char c = char.ToLowerInvariant(raw);
+        int idx = Index(c);
+        if (idx &lt; 0) return null;
+        if (current.Children[idx] == null) return null;
+        current = current.Children[idx];
+    }
+    return current;
+}
+
+void DfsCollect(TrieNode node, List&lt;string&gt; outWords, char[] buffer, int depth, int limit)
+{
+    if (node == null || outWords.Count &gt;= limit) return;
+
+    if (node.IsEndOfWord)
+    {
+        outWords.Add(new string(buffer, 0, depth));
+        if (outWords.Count &gt;= limit) return;
+    }
+
+    for (int i = 0; i &lt; ALPHABET_SIZE; i++)
+    {
+        if (node.Children[i] != null)
+        {
+            buffer[depth] = (char)(&#x27;a&#x27; + i);
+            DfsCollect(node.Children[i], outWords, buffer, depth + 1, limit);
+            if (outWords.Count &gt;= limit) return;
+        }
+    }
+}
+
+List&lt;string&gt; Autocomplete(string prefix, int limit)
+{
+    TrieNode start = Walk(prefix);
+    if (start == null) return new List&lt;string&gt;();
+
+    var outWords = new List&lt;string&gt;(limit);
+    char[] buffer = new char[256];
+
+    int depth = 0;
+    foreach (char raw in prefix)
+    {
+        if (depth &gt;= buffer.Length) break;
+        buffer[depth++] = char.ToLowerInvariant(raw);
+    }
+
+    DfsCollect(start, outWords, buffer, depth, limit);
+    return outWords;
+}
+
+int LoadDictionary(string path)
+{
+    int count = 0;
+    try
+    {
+        foreach (var line in File.ReadLines(path))
+        {
+            var w = line.Trim();
+            if (w.Length == 0) continue;
+            Insert(w);
+            count++;
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.Error.WriteLine($&quot;Failed to open dictionary: {path}&quot;);
+        Console.Error.WriteLine(ex.Message);
+        return 0;
+    }
+    return count;
+}
+
+int ParseIntOrDefault(string s, int def)
+{
+    if (string.IsNullOrWhiteSpace(s)) return def;
+    return int.TryParse(s, out int v) &amp;&amp; v &gt; 0 ? v : def;
+}
+
+// -------------------- Main --------------------
+// Usage: dotnet script .\trie_autocomplete.cs [dictPath] [prefix] [limit]
+
+string dictPath = (Args.Count &gt; 0) ? Args[0] : @&quot;..\data\words.txt&quot;;
+string prefix   = (Args.Count &gt; 1) ? Args[1] : &quot;th&quot;;
+int limit       = (Args.Count &gt; 2) ? ParseIntOrDefault(Args[2], 20) : 20;
+
+int loaded = LoadDictionary(dictPath);
+Console.WriteLine($&quot;Loaded {loaded} words from {dictPath}\n&quot;);
+
+Console.WriteLine($&quot;Autocomplete(\&quot;{prefix}\&quot;) [limit={limit}]&quot;);
+foreach (var w in Autocomplete(prefix, limit))
+    Console.WriteLine(w);
+
+Console.WriteLine();
+Console.WriteLine($&quot;Working directory = {Directory.GetCurrentDirectory()}&quot;);
+Console.WriteLine($&quot;Resolved dictionary path = {Path.GetFullPath(dictPath)}&quot;);
+</code></pre>
+        </div>
+
+        <!-- Python -->
+        <div class="code-panel" data-lang-panel="py">
+<pre><code class="language-python"># trie_autocomplete.py
+# Trie Autocomplete (Dictionary-backed)
+# Usage: python trie_autocomplete.py [dictPath] [prefix] [limit]
+
+import os
+import sys
+from typing import List, Optional
+
+ALPHABET_SIZE = 26
+
+
+class TrieNode:
+    __slots__ = (&quot;children&quot;, &quot;is_end&quot;)
+
+    def __init__(self):
+        self.children = [None] * ALPHABET_SIZE
+        self.is_end = False
+
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    @staticmethod
+    def _index(c: str) -&gt; int:
+        return ord(c) - ord(&quot;a&quot;) if &quot;a&quot; &lt;= c &lt;= &quot;z&quot; else -1
+
+    def insert(self, word: str) -&gt; None:
+        current = self.root
+        for ch in word:
+            c = ch.lower()
+            idx = self._index(c)
+            if idx &lt; 0:
+                return
+            if current.children[idx] is None:
+                current.children[idx] = TrieNode()
+            current = current.children[idx]
+        current.is_end = True
+
+    def _walk(self, prefix: str) -&gt; Optional[TrieNode]:
+        current = self.root
+        for ch in prefix:
+            c = ch.lower()
+            idx = self._index(c)
+            if idx &lt; 0:
+                return None
+            nxt = current.children[idx]
+            if nxt is None:
+                return None
+            current = nxt
+        return current
+
+    def autocomplete(self, prefix: str, limit: int) -&gt; List[str]:
+        start = self._walk(prefix)
+        if start is None:
+            return []
+
+        prefix_lc = prefix.lower()
+        buf = list(prefix_lc)
+        out: List[str] = []
+
+        def dfs(node: TrieNode) -&gt; None:
+            if node is None or len(out) &gt;= limit:
+                return
+            if node.is_end:
+                out.append(&quot;&quot;.join(buf))
+                if len(out) &gt;= limit:
+                    return
+            for i in range(ALPHABET_SIZE):
+                child = node.children[i]
+                if child is not None:
+                    buf.append(chr(ord(&quot;a&quot;) + i))
+                    dfs(child)
+                    buf.pop()
+                    if len(out) &gt;= limit:
+                        return
+
+        dfs(start)
+        return out
+
+
+def load_dictionary(trie: Trie, path: str) -&gt; int:
+    count = 0
+    try:
+        with open(path, &quot;r&quot;, encoding=&quot;utf-8&quot;) as f:
+            for line in f:
+                w = line.strip()
+                if not w:
+                    continue
+                trie.insert(w)
+                count += 1
+    except OSError as e:
+        print(f&quot;Failed to open dictionary: {path}&quot;, file=sys.stderr)
+        print(str(e), file=sys.stderr)
+        return 0
+    return count
+
+
+def parse_int_or_default(s: str, default: int) -&gt; int:
+    try:
+        v = int(s)
+        return v if v &gt; 0 else default
+    except Exception:
+        return default
+
+
+def main() -&gt; None:
+    trie = Trie()
+
+    dict_path = sys.argv[1] if len(sys.argv) &gt; 1 else r&quot;..\data\words.txt&quot;
+    prefix = sys.argv[2] if len(sys.argv) &gt; 2 else &quot;th&quot;
+    limit = parse_int_or_default(sys.argv[3], 20) if len(sys.argv) &gt; 3 else 20
+
+    loaded = load_dictionary(trie, dict_path)
+    print(f&quot;Loaded {loaded} words from {dict_path}\n&quot;)
+
+    print(f&#x27;Autocomplete(&quot;{prefix}&quot;) [limit={limit}]&#x27;)
+    for w in trie.autocomplete(prefix, limit):
+        print(w)
+
+    print(&quot;\nWorking directory =&quot;, os.getcwd())
+    print(&quot;Resolved dictionary path =&quot;, os.path.abspath(dict_path))
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+        </div>
+
+    </div>
+
+
+
+    <div class="complexity-note">
+        Finding the prefix node is <strong>O(P)</strong> where <code>P</code> is prefix length.
+        Enumeration is proportional to the size of the explored subtree; with a limit <code>K</code>,
+        you typically stop early. Worst case can still be large if many words share the prefix.
+    </div>
+
+    <hr>
+
+    <!-- ======================= 13.6 Frequency-ranked Autocomplete ======================= -->
+    <h2>
+        13.6 Frequency-ranked Autocomplete
+        <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s13-ranked-autocomplete">
+            Dig deeper
+        </button>
+    
+        <button type="button" class="deep-dive-trigger inline secondary" data-deep-id="understand-s13-ex4">
+            Understand the algorithm
+        </button>
+</h2>
+    <p>
+        Basic autocomplete returns suggestions in a structural order (often lexicographic).
+        Real systems usually return the <strong>most likely</strong> results first. To do that, store
+        a <strong>frequency</strong> (or score) for each complete word and rank suggestions by that score.
+    </p>
+
+    <ul class="bullet-tight">
+        <li>
+            The <strong>dictionary</strong> file (e.g., <code>..\\data\\words.txt</code>) defines what words are valid.
+        </li>
+        <li>
+            A <strong>frequency</strong> / usage file (e.g., <code>..\\data\\frequency.txt</code>) simulates what users
+            type more often. Each occurrence bumps a word’s frequency.
+        </li>
+    </ul>
+
+    <h3 class="subhead">Two common ranking approaches</h3>
+    <ul>
+        <li>
+            <strong>Collect then sort:</strong> enumerate all words under the prefix, then sort by
+            (frequency ↓, word ↑). Simple, but can be slow if the subtree is huge.
+        </li>
+        <li>
+            <strong>Top-K min-heap:</strong> maintain a heap of size <code>K</code> while traversing.
+            This avoids storing/sorting everything—great when only a small number of suggestions is needed.
+        </li>
+    </ul>
+
+<pre><code class="language-python">def ranked_autocomplete(prefix, K):
+    node = walk(prefix)
+    if node is None: return []
+
+    heap = MinHeap(max_size=K)   # keep the "worst" item at the top
+
+    def dfs(n):
+        if n.is_end:
+            heap.consider((n.freq, current_word))
+        for child in n.children:
+            dfs(child)
+
+    dfs(node)
+    return heap.items_sorted_by(freq_desc_then_word_asc)</code></pre>
+
+
+    <div class="code-example" data-example="s13-ex4">
+        <div class="code-example-header">
+            <div class="code-example-title">
+                <span class="label">Example 4</span>
+                <span class="meta">Frequency-ranked autocomplete using a frequency (usage) file</span>
+            </div>
+            <button type="button" class="copy-button" aria-label="Copy code">
+                Copy
+            </button>
+        </div>
+
+        <div class="tab-bar">
+            <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+            <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+            <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+            <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+            <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+            <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+        </div>
+
+        <!-- C -->
+        <div class="code-panel" data-lang-panel="c">
+<pre><code class="language-c">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;ctype.h&gt;
+
+#define ALPHABET_SIZE 26
+#define WORD_MAX 128
+#define DEFAULT_LIMIT 20
+
+typedef struct TrieNode {
+    struct TrieNode *children[ALPHABET_SIZE];
+    int isEndOfWord;
+    int frequency;              // frequency for this complete word (only meaningful if isEndOfWord=1)
+} TrieNode;
+
+static TrieNode *createNode(void) {
+    return (TrieNode *)calloc(1, sizeof(TrieNode));
+}
+
+static int charIndex(char c) {
+    if (c &lt; &#x27;a&#x27; || c &gt; &#x27;z&#x27;) return -1;
+    return c - &#x27;a&#x27;;
+}
+
+/*
+ * Insert a word.
+ * If `bumpFrequency` is non-zero, increments the terminal node&#x27;s frequency.
+ * Rejects the entire word if any char is not a-z (case-insensitive).
+ */
+static void trieInsert(TrieNode *root, const char *word, int bumpFrequency) {
+    TrieNode *current = root;
+    for (int i = 0; word[i]; i++) {
+        char c = (char)tolower((unsigned char)word[i]);
+        int idx = charIndex(c);
+        if (idx == -1) return;
+        if (!current-&gt;children[idx]) current-&gt;children[idx] = createNode();
+        current = current-&gt;children[idx];
+    }
+    current-&gt;isEndOfWord = 1;
+    if (bumpFrequency) current-&gt;frequency += 1;
+}
+
+/* Walk down the trie for a prefix; returns node or NULL (invalid char or missing path). */
+static TrieNode *trieWalk(TrieNode *root, const char *prefix) {
+    TrieNode *current = root;
+    for (int i = 0; prefix[i]; i++) {
+        char c = (char)tolower((unsigned char)prefix[i]);
+        int idx = charIndex(c);
+        if (idx == -1 || !current-&gt;children[idx]) return NULL;
+        current = current-&gt;children[idx];
+    }
+    return current;
+}
+
+/* -------- Top-K min-heap (by frequency, then reverse-lex so we can pop &quot;worst&quot;) -------- */
+
+typedef struct Suggestion {
+    char word[WORD_MAX];
+    int frequency;
+} Suggestion;
+
+/*
+ * &quot;Worse&quot; means: lower frequency, or same frequency and lexicographically larger.
+ * We keep a min-heap where the root is the worst item among the current top-K.
+ */
+static int isWorseThan(const Suggestion *a, const Suggestion *b) {
+    if (a-&gt;frequency != b-&gt;frequency) return a-&gt;frequency &lt; b-&gt;frequency;
+    return strcmp(a-&gt;word, b-&gt;word) &gt; 0;
+}
+
+static void heapSwap(Suggestion *a, Suggestion *b) {
+    Suggestion tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
+static void heapSiftUp(Suggestion *heap, int idx) {
+    while (idx &gt; 0) {
+        int parent = (idx - 1) / 2;
+        if (!isWorseThan(&amp;heap[idx], &amp;heap[parent])) break;
+        heapSwap(&amp;heap[idx], &amp;heap[parent]);
+        idx = parent;
+    }
+}
+
+static void heapSiftDown(Suggestion *heap, int size, int idx) {
+    for (;;) {
+        int left = idx * 2 + 1;
+        int right = left + 1;
+        int smallest = idx;
+
+        if (left &lt; size &amp;&amp; isWorseThan(&amp;heap[left], &amp;heap[smallest])) smallest = left;
+        if (right &lt; size &amp;&amp; isWorseThan(&amp;heap[right], &amp;heap[smallest])) smallest = right;
+
+        if (smallest == idx) break;
+        heapSwap(&amp;heap[idx], &amp;heap[smallest]);
+        idx = smallest;
+    }
+}
+
+/* If heap not full, push. If full and candidate is better than root, replace root. */
+static void heapConsider(Suggestion *heap, int *size, int capacity, const Suggestion *cand) {
+    if (capacity &lt;= 0) return;
+
+    if (*size &lt; capacity) {
+        heap[*size] = *cand;
+        heapSiftUp(heap, *size);
+        (*size)++;
+        return;
+    }
+
+    // root is the &quot;worst&quot; among the current top-K
+    if (isWorseThan(&amp;heap[0], cand)) {
+        heap[0] = *cand;
+        heapSiftDown(heap, *size, 0);
+    }
+}
+
+static int betterForOutput(const void *pa, const void *pb) {
+    const Suggestion *a = (const Suggestion *)pa;
+    const Suggestion *b = (const Suggestion *)pb;
+    // Sort best-first: higher frequency first, then lexicographically smaller
+    if (a-&gt;frequency != b-&gt;frequency) return (b-&gt;frequency - a-&gt;frequency);
+    return strcmp(a-&gt;word, b-&gt;word);
+}
+
+/* Depth-first traversal collecting top-K suggestions (by frequency). */
+static void dfsRanked(TrieNode *node,
+                      char *buffer,
+                      int depth,
+                      Suggestion *heap,
+                      int *heapSize,
+                      int limit) {
+    if (!node) return;
+
+    if (node-&gt;isEndOfWord) {
+        buffer[depth] = &#x27;\0&#x27;;
+        Suggestion s;
+        strncpy(s.word, buffer, WORD_MAX - 1);
+        s.word[WORD_MAX - 1] = &#x27;\0&#x27;;
+        s.frequency = node-&gt;frequency;
+        heapConsider(heap, heapSize, limit, &amp;s);
+    }
+
+    for (int i = 0; i &lt; ALPHABET_SIZE; i++) {
+        if (node-&gt;children[i]) {
+            buffer[depth] = (char)(&#x27;a&#x27; + i);
+            dfsRanked(node-&gt;children[i], buffer, depth + 1, heap, heapSize, limit);
+        }
+    }
+}
+
+/*
+ * Ranked autocomplete:
+ * - Collect up to `limit` best matches under the prefix, ranked by frequency desc, then word asc.
+ * - Prints each suggestion with its frequency.
+ */
+static void trieAutocompleteRanked(TrieNode *root, const char *prefix, int limit) {
+    TrieNode *start = trieWalk(root, prefix);
+    if (!start || limit &lt;= 0) return;
+
+    char buffer[WORD_MAX];
+    int depth = 0;
+    for (; prefix[depth] &amp;&amp; depth &lt; WORD_MAX - 1; depth++) {
+        buffer[depth] = (char)tolower((unsigned char)prefix[depth]);
+    }
+
+    Suggestion *heap = (Suggestion *)malloc(sizeof(Suggestion) * (size_t)limit);
+    int heapSize = 0;
+
+    dfsRanked(start, buffer, depth, heap, &amp;heapSize, limit);
+
+    qsort(heap, (size_t)heapSize, sizeof(Suggestion), betterForOutput);
+
+    for (int i = 0; i &lt; heapSize; i++) {
+        printf(&quot;%s\t(freq=%d)\n&quot;, heap[i].word, heap[i].frequency);
+    }
+
+    free(heap);
+}
+
+static void freeTrie(TrieNode *node) {
+    if (!node) return;
+    for (int i = 0; i &lt; ALPHABET_SIZE; i++) freeTrie(node-&gt;children[i]);
+    free(node);
+}
+
+/*
+ * Load dictionary: inserts every word and sets baseline frequency=1 for each inserted word.
+ * (If the dictionary contains duplicates, frequency increases accordingly.)
+ */
+static int loadDictionary(TrieNode *root, const char *path) {
+    FILE *fp = fopen(path, &quot;r&quot;);
+    if (!fp) {
+        perror(&quot;Failed to open dictionary&quot;);
+        return 0;
+    }
+
+    char buffer[WORD_MAX];
+    int count = 0;
+
+    while (fgets(buffer, sizeof(buffer), fp)) {
+        buffer[strcspn(buffer, &quot;\r\n&quot;)] = &#x27;\0&#x27;;
+        if (!buffer[0]) continue;
+        trieInsert(root, buffer, 1);
+        count++;
+    }
+
+    fclose(fp);
+    return count;
+}
+
+/*
+ * OPTIONAL: load a &quot;usage&quot; file where each line is a word the user typed.
+ * Each occurrence bumps that word&#x27;s frequency (and creates it if missing).
+ */
+static int loadUsageFile(TrieNode *root, const char *path) {
+    FILE *fp = fopen(path, &quot;r&quot;);
+    if (!fp) {
+        perror(&quot;Failed to open usage file&quot;);
+        return 0;
+    }
+
+    char buffer[WORD_MAX];
+    int count = 0;
+
+    while (fgets(buffer, sizeof(buffer), fp)) {
+        buffer[strcspn(buffer, &quot;\r\n&quot;)] = &#x27;\0&#x27;;
+        if (!buffer[0]) continue;
+        trieInsert(root, buffer, 1);
+        count++;
+    }
+
+    fclose(fp);
+    return count;
+}
+
+static int parseIntOrDefault(const char *s, int def) {
+    if (!s || !*s) return def;
+    char *end = NULL;
+    long v = strtol(s, &amp;end, 10);
+    if (end == s || v &lt;= 0 || v &gt; 1000000) return def;
+    return (int)v;
+}
+
+int main(int argc, char **argv) {
+    TrieNode *trie = createNode();
+
+    const char *dictPath = (argc &gt; 1) ? argv[1] : &quot;..\\data\\words.txt&quot;;
+    const char *prefix   = (argc &gt; 2) ? argv[2] : &quot;ab&quot;;
+    int limit            = (argc &gt; 3) ? parseIntOrDefault(argv[3], DEFAULT_LIMIT) : DEFAULT_LIMIT;
+
+    int loaded = loadDictionary(trie, dictPath);
+    printf(&quot;Loaded %d words from %s\n&quot;, loaded, dictPath);
+
+    // Optional 4th arg: usage file
+    if (argc &gt; 4) {
+        int used = loadUsageFile(trie, argv[4]);
+        printf(&quot;Loaded %d usage events from %s\n&quot;, used, argv[4]);
+    }
+
+    printf(&quot;\nRanked Autocomplete(\&quot;%s\&quot;) [limit=%d]:\n&quot;, prefix, limit);
+    trieAutocompleteRanked(trie, prefix, limit);
+
+    freeTrie(trie);
+    return 0;
+}
+</code></pre>
+        </div>
+
+        <!-- C++ -->
+        <div class="code-panel" data-lang-panel="cpp">
+<pre><code class="language-cpp">// trie_autocomplete_ranked.cpp
+// Build: g++ -std=c++17 -O2 -Wall -Wextra trie_autocomplete_ranked.cpp -o trie_autocomplete_ranked
+// Run (defaults): ./trie_autocomplete_ranked
+// Optional args: [dictPath] [freqPath] [prefix] [limit]
+
+#include &lt;algorithm&gt;   // &lt;-- for std::sort
+#include &lt;array&gt;
+#include &lt;cctype&gt;
+#include &lt;fstream&gt;
+#include &lt;iostream&gt;
+#include &lt;memory&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+
+class Trie {
+public:
+    Trie() : root(std::make_unique&lt;Node&gt;()) {}
+
+    void insert(const std::string&amp; word) {
+        Node* cur = root.get();
+        for (unsigned char ch : word) {
+            char c = static_cast&lt;char&gt;(std::tolower(ch));
+            int i = idx(c);
+            if (i &lt; 0) return;
+            if (!cur-&gt;children[i]) cur-&gt;children[i] = std::make_unique&lt;Node&gt;();
+            cur = cur-&gt;children[i].get();
+        }
+        cur-&gt;isEnd = true;
+        cur-&gt;frequency++;
+    }
+
+    std::vector&lt;std::pair&lt;std::string,int&gt;&gt;
+    autocompleteRanked(const std::string&amp; prefix, std::size_t limit) const {
+        const Node* start = walk(prefix);
+        if (!start || limit == 0) return {};
+
+        std::vector&lt;std::pair&lt;std::string,int&gt;&gt; all;
+        std::string buf;
+        buf.reserve(prefix.size() + 32);
+        for (unsigned char ch : prefix) buf.push_back(static_cast&lt;char&gt;(std::tolower(ch)));
+
+        dfs(start, buf, all);
+
+        std::sort(all.begin(), all.end(),
+            [](const auto&amp; a, const auto&amp; b) {
+                if (a.second != b.second) return a.second &gt; b.second; // freq desc
+                return a.first &lt; b.first; // word asc
+            });
+
+        if (all.size() &gt; limit) all.resize(limit);
+        return all;
+    }
+
+private:
+    struct Node {
+        std::array&lt;std::unique_ptr&lt;Node&gt;,26&gt; children{};
+        bool isEnd{false};
+        int frequency{0};
+    };
+
+    std::unique_ptr&lt;Node&gt; root;
+
+    static int idx(char c) { return (c &gt;= &#x27;a&#x27; &amp;&amp; c &lt;= &#x27;z&#x27;) ? (c - &#x27;a&#x27;) : -1; }
+
+    const Node* walk(const std::string&amp; s) const {
+        const Node* cur = root.get();
+        for (unsigned char ch : s) {
+            char c = static_cast&lt;char&gt;(std::tolower(ch));
+            int i = idx(c);
+            if (i &lt; 0 || !cur-&gt;children[i]) return nullptr;
+            cur = cur-&gt;children[i].get();
+        }
+        return cur;
+    }
+
+    static void dfs(const Node* node,
+                    std::string&amp; buf,
+                    std::vector&lt;std::pair&lt;std::string,int&gt;&gt;&amp; out) {
+        if (node-&gt;isEnd) out.emplace_back(buf, node-&gt;frequency);
+        for (int i = 0; i &lt; 26; i++) {
+            if (node-&gt;children[i]) {
+                buf.push_back(static_cast&lt;char&gt;(&#x27;a&#x27; + i));
+                dfs(node-&gt;children[i].get(), buf, out);
+                buf.pop_back();
+            }
+        }
+    }
+};
+
+static void loadFile(Trie&amp; t, const std::string&amp; path) {
+    std::ifstream in(path);
+    if (!in) {
+        std::cerr &lt;&lt; &quot;Failed to open file: &quot; &lt;&lt; path &lt;&lt; &quot;\n&quot;;
+        return;
+    }
+    std::string w;
+    while (std::getline(in, w)) {
+        if (!w.empty() &amp;&amp; w.back() == &#x27;\r&#x27;) w.pop_back();
+        if (w.empty()) continue;
+        t.insert(w);
+    }
+}
+
+static std::size_t parseLimit(const char* s, std::size_t def) {
+    if (!s || !*s) return def;
+    try {
+        auto v = static_cast&lt;std::size_t&gt;(std::stoul(s));
+        return v == 0 ? def : v;
+    } catch (...) {
+        return def;
+    }
+}
+
+int main(int argc, char** argv) {
+    Trie trie;
+
+    const std::string dictPath = (argc &gt; 1) ? argv[1] : &quot;..\\data\\words.txt&quot;;
+    const std::string freqPath = (argc &gt; 2) ? argv[2] : &quot;..\\data\\frequency.txt&quot;;
+    const std::string prefix   = (argc &gt; 3) ? argv[3] : &quot;th&quot;;
+    const std::size_t limit    = (argc &gt; 4) ? parseLimit(argv[4], 20) : 20;
+
+    loadFile(trie, dictPath);
+    loadFile(trie, freqPath);
+
+    std::cout &lt;&lt; &quot;Ranked Autocomplete(\&quot;&quot; &lt;&lt; prefix &lt;&lt; &quot;\&quot;) [limit=&quot; &lt;&lt; limit &lt;&lt; &quot;]\n&quot;;
+    for (const auto&amp; [w, f] : trie.autocompleteRanked(prefix, limit)) {
+        std::cout &lt;&lt; w &lt;&lt; &quot;\t(freq=&quot; &lt;&lt; f &lt;&lt; &quot;)\n&quot;;
+    }
+
+    return 0;
+}
+</code></pre>
+        </div>
+
+        <!-- Java -->
+        <div class="code-panel" data-lang-panel="java">
+<pre><code class="language-java">package code_samples.section13.example_4_frequency_ranked;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
+
+public class trie_autocomplete_ranked {
+
+    private static final int ALPHABET_SIZE = 26;
+
+    private static class Node {
+        Node[] children = new Node[ALPHABET_SIZE];
+        boolean isEnd = false;
+        int frequency = 0;
+    }
+
+    private final Node root = new Node();
+
+    private static int idx(char c) {
+        return (c &gt;= &#x27;a&#x27; &amp;&amp; c &lt;= &#x27;z&#x27;) ? (c - &#x27;a&#x27;) : -1;
+    }
+
+    // Insert bumps terminal frequency; rejects word if any char not a-z
+    public void insert(String word) {
+        Node cur = root;
+        for (int k = 0; k &lt; word.length(); k++) {
+            char ch = Character.toLowerCase(word.charAt(k));
+            int i = idx(ch);
+            if (i &lt; 0) return;
+            if (cur.children[i] == null) cur.children[i] = new Node();
+            cur = cur.children[i];
+        }
+        cur.isEnd = true;
+        cur.frequency++;
+    }
+
+    private Node walk(String prefix) {
+        Node cur = root;
+        for (int k = 0; k &lt; prefix.length(); k++) {
+            char ch = Character.toLowerCase(prefix.charAt(k));
+            int i = idx(ch);
+            if (i &lt; 0 || cur.children[i] == null) return null;
+            cur = cur.children[i];
+        }
+        return cur;
+    }
+
+    public ArrayList&lt;Result&gt; autocompleteRanked(String prefix, int limit) {
+        Node start = walk(prefix);
+        ArrayList&lt;Result&gt; all = new ArrayList&lt;&gt;();
+        if (start == null || limit &lt;= 0) return all;
+
+        StringBuilder buf = new StringBuilder(prefix.length() + 32);
+        for (int k = 0; k &lt; prefix.length(); k++) buf.append(Character.toLowerCase(prefix.charAt(k)));
+
+        dfs(start, buf, all);
+
+        all.sort(Comparator
+                .comparingInt((Result r) -&gt; r.freq).reversed()
+                .thenComparing(r -&gt; r.word));
+
+        if (all.size() &gt; limit) return new ArrayList&lt;&gt;(all.subList(0, limit));
+        return all;
+    }
+
+    private void dfs(Node node, StringBuilder buf, ArrayList&lt;Result&gt; out) {
+        if (node.isEnd) out.add(new Result(buf.toString(), node.frequency));
+        for (int i = 0; i &lt; ALPHABET_SIZE; i++) {
+            if (node.children[i] != null) {
+                buf.append((char)(&#x27;a&#x27; + i));
+                dfs(node.children[i], buf, out);
+                buf.deleteCharAt(buf.length() - 1);
+            }
+        }
+    }
+
+    public static class Result {
+        public final String word;
+        public final int freq;
+        public Result(String w, int f) { word = w; freq = f; }
+    }
+
+    private static void loadFile(trie_autocomplete_ranked trie, String path) throws IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (!line.isEmpty()) trie.insert(line);
+            }
+        }
+    }
+
+    private static int parseIntOrDefault(String s, int def) {
+        try {
+            int v = Integer.parseInt(s);
+            return v &gt; 0 ? v : def;
+        } catch (Exception e) {
+            return def;
+        }
+    }
+
+    // Usage: java ... trie_autocomplete_ranked [dictPath] [freqPath] [prefix] [limit]
+    public static void main(String[] args) throws Exception {
+        String dictPath = (args.length &gt; 0) ? args[0] : &quot;..\\data\\words.txt&quot;;
+        String freqPath = (args.length &gt; 1) ? args[1] : &quot;..\\data\\frequency.txt&quot;;
+        String prefix   = (args.length &gt; 2) ? args[2] : &quot;th&quot;;
+        int limit       = (args.length &gt; 3) ? parseIntOrDefault(args[3], 20) : 20;
+
+        trie_autocomplete_ranked trie = new trie_autocomplete_ranked();
+        loadFile(trie, dictPath);
+        loadFile(trie, freqPath);
+
+        System.out.println(&quot;Ranked Autocomplete(\&quot;&quot; + prefix + &quot;\&quot;) [limit=&quot; + limit + &quot;]&quot;);
+        for (Result r : trie.autocompleteRanked(prefix, limit)) {
+            System.out.println(r.word + &quot;\t(freq=&quot; + r.freq + &quot;)&quot;);
+        }
+    }
+}
+</code></pre>
+        </div>
+
+        <!-- JavaScript -->
+        <div class="code-panel" data-lang-panel="js">
+<pre><code class="language-javascript">/**
+ * Frequency-ranked autocomplete (dictionary + frequency usage)
+ * Usage: node trie_autocomplete_ranked.js [dictPath] [freqPath] [prefix] [limit]
+ * Defaults: ..\data\words.txt  ..\data\frequency.txt  &quot;th&quot;  20
+ *
+ * Ranking: frequency DESC, then word ASC
+ */
+const fs = require(&quot;fs&quot;);
+const path = require(&quot;path&quot;);
+
+class Node {
+  constructor() {
+    this.children = new Array(26).fill(null);
+    this.isEnd = false;
+    this.freq = 0;
+  }
+}
+
+class Trie {
+  constructor() {
+    this.root = new Node();
+  }
+  static idx(ch) {
+    return ch &gt;= &quot;a&quot; &amp;&amp; ch &lt;= &quot;z&quot; ? ch.charCodeAt(0) - 97 : -1;
+  }
+  insert(word) {
+    let cur = this.root;
+    for (const raw of word) {
+      const ch = raw.toLowerCase();
+      const i = Trie.idx(ch);
+      if (i &lt; 0) return; // reject word
+      if (!cur.children[i]) cur.children[i] = new Node();
+      cur = cur.children[i];
+    }
+    cur.isEnd = true;
+    cur.freq++;
+  }
+  walk(prefix) {
+    let cur = this.root;
+    for (const raw of prefix) {
+      const ch = raw.toLowerCase();
+      const i = Trie.idx(ch);
+      if (i &lt; 0 || !cur.children[i]) return null;
+      cur = cur.children[i];
+    }
+    return cur;
+  }
+  autocompleteRanked(prefix, limit) {
+    const start = this.walk(prefix);
+    if (!start || limit &lt;= 0) return [];
+    const buf = prefix.toLowerCase().split(&quot;&quot;);
+    const all = [];
+
+    const dfs = (node) =&gt; {
+      if (node.isEnd) all.push([buf.join(&quot;&quot;), node.freq]);
+      for (let i = 0; i &lt; 26; i++) {
+        const child = node.children[i];
+        if (child) {
+          buf.push(String.fromCharCode(97 + i));
+          dfs(child);
+          buf.pop();
+        }
+      }
+    };
+
+    dfs(start);
+    all.sort((a, b) =&gt; (b[1] - a[1]) || a[0].localeCompare(b[0]));
+    return all.slice(0, limit);
+  }
+}
+
+function loadFile(trie, p) {
+  const text = fs.readFileSync(p, &quot;utf8&quot;);
+  for (const line of text.split(/\r?\n/)) {
+    const w = line.trim();
+    if (w) trie.insert(w);
+  }
+}
+
+function parseLimit(s, def) {
+  const v = Number.parseInt(s, 10);
+  return Number.isFinite(v) &amp;&amp; v &gt; 0 ? v : def;
+}
+
+function main() {
+  const dictPath = process.argv[2] || &quot;..\\data\\words.txt&quot;;
+  const freqPath = process.argv[3] || &quot;..\\data\\frequency.txt&quot;;
+  const prefix = process.argv[4] || &quot;th&quot;;
+  const limit = process.argv[5] ? parseLimit(process.argv[5], 20) : 20;
+
+  const trie = new Trie();
+  loadFile(trie, dictPath);
+  loadFile(trie, freqPath);
+
+  console.log(`Ranked Autocomplete(&quot;${prefix}&quot;) [limit=${limit}]`);
+  for (const [w, f] of trie.autocompleteRanked(prefix, limit)) {
+    console.log(`${w}\t(freq=${f})`);
+  }
+
+  console.log(`\nWorking directory = ${process.cwd()}`);
+  console.log(`Resolved dictionary path = ${path.resolve(dictPath)}`);
+  console.log(`Resolved frequency path  = ${path.resolve(freqPath)}`);
+}
+
+main();
+</code></pre>
+        </div>
+
+        <!-- C# -->
+        <div class="code-panel" data-lang-panel="cs">
+<pre><code class="language-csharp">// trie_autocomplete_ranked.cs
+// Run: dotnet script .\trie_autocomplete_ranked.cs
+// Optional args: [dictPath] [freqPath] [prefix] [limit]
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+const int ALPHABET_SIZE = 26;
+
+class Node
+{
+    public Node[] Children = new Node[ALPHABET_SIZE];
+    public int Frequency = 0;
+    public bool IsEnd = false;
+}
+
+Node root = new();
+
+int Idx(char c) =&gt; (c &gt;= &#x27;a&#x27; &amp;&amp; c &lt;= &#x27;z&#x27;) ? (c - &#x27;a&#x27;) : -1;
+
+// Insert (bump frequency at terminal). Reject word if any char not a-z.
+void Insert(string word)
+{
+    var cur = root;
+    foreach (char raw in word)
+    {
+        char ch = char.ToLowerInvariant(raw);
+        int i = Idx(ch);
+        if (i &lt; 0) return;
+        cur.Children[i] ??= new Node();
+        cur = cur.Children[i];
+    }
+    cur.IsEnd = true;
+    cur.Frequency++;
+}
+
+void LoadFile(string path)
+{
+    foreach (var line in File.ReadLines(path))
+    {
+        var w = line.Trim();
+        if (w.Length == 0) continue;
+        Insert(w);
+    }
+}
+
+List&lt;(string word, int freq)&gt; AutocompleteRanked(string prefix, int limit)
+{
+    if (limit &lt;= 0) return new();
+
+    // Walk to prefix node
+    var cur = root;
+    foreach (char raw in prefix)
+    {
+        char ch = char.ToLowerInvariant(raw);
+        int i = Idx(ch);
+        if (i &lt; 0 || cur.Children[i] == null) return new();
+        cur = cur.Children[i];
+    }
+
+    var results = new List&lt;(string word, int freq)&gt;();
+
+    // Dynamic buffer avoids out-of-bounds during DFS
+    var buf = new List&lt;char&gt;(prefix.Length + 32);
+    foreach (char raw in prefix) buf.Add(char.ToLowerInvariant(raw));
+
+    void Dfs(Node node)
+    {
+        if (node == null) return;
+
+        if (node.IsEnd)
+            results.Add((new string(buf.ToArray()), node.Frequency));
+
+        for (int i = 0; i &lt; ALPHABET_SIZE; i++)
+        {
+            var child = node.Children[i];
+            if (child != null)
+            {
+                buf.Add((char)(&#x27;a&#x27; + i));
+                Dfs(child);
+                buf.RemoveAt(buf.Count - 1);
+            }
+        }
+    }
+
+    Dfs(cur);
+
+    results.Sort((a, b) =&gt;
+    {
+        int freqCmp = b.freq.CompareTo(a.freq); // frequency desc
+        if (freqCmp != 0) return freqCmp;
+        return string.CompareOrdinal(a.word, b.word); // word asc
+    });
+
+    if (results.Count &gt; limit) results.RemoveRange(limit, results.Count - limit);
+    return results;
+}
+
+// -------------------- Main --------------------
+// Defaults:
+string dictPath = (Args.Count &gt; 0) ? Args[0] : @&quot;..\data\words.txt&quot;;
+string freqPath = (Args.Count &gt; 1) ? Args[1] : @&quot;..\data\frequency.txt&quot;;
+string prefix   = (Args.Count &gt; 2) ? Args[2] : &quot;th&quot;;
+int limit        = (Args.Count &gt; 3 &amp;&amp; int.TryParse(Args[3], out int v) &amp;&amp; v &gt; 0) ? v : 20;
+
+LoadFile(dictPath);
+LoadFile(freqPath);
+
+Console.WriteLine($&quot;Ranked Autocomplete(\&quot;{prefix}\&quot;) [limit={limit}]&quot;);
+foreach (var (word, freq) in AutocompleteRanked(prefix, limit))
+    Console.WriteLine($&quot;{word}\t(freq={freq})&quot;);
+
+Console.WriteLine();
+Console.WriteLine($&quot;Working directory = {Directory.GetCurrentDirectory()}&quot;);
+Console.WriteLine($&quot;Resolved dictionary path = {Path.GetFullPath(dictPath)}&quot;);
+Console.WriteLine($&quot;Resolved frequency path  = {Path.GetFullPath(freqPath)}&quot;);
+</code></pre>
+        </div>
+
+        <!-- Python -->
+        <div class="code-panel" data-lang-panel="py">
+<pre><code class="language-python"># trie_autocomplete_ranked.py
+# Frequency-ranked autocomplete (Dictionary-backed)
+# Usage: python trie_autocomplete_ranked.py [dictPath] [prefix] [limit] [usagePath]
+#
+# Ranking: frequency desc, then word asc
+
+import os
+import sys
+from dataclasses import dataclass
+from typing import List, Optional, Tuple
+
+ALPHABET_SIZE = 26
+
+
+class TrieNode:
+    __slots__ = (&quot;children&quot;, &quot;is_end&quot;, &quot;frequency&quot;)
+
+    def __init__(self):
+        self.children = [None] * ALPHABET_SIZE
+        self.is_end = False
+        self.frequency = 0  # meaningful only if is_end
+
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    @staticmethod
+    def _index(c: str) -&gt; int:
+        return ord(c) - ord(&quot;a&quot;) if &quot;a&quot; &lt;= c &lt;= &quot;z&quot; else -1
+
+    def insert(self, word: str, bump_frequency: bool = True) -&gt; None:
+        current = self.root
+        for ch in word:
+            c = ch.lower()
+            idx = self._index(c)
+            if idx &lt; 0:
+                return
+            if current.children[idx] is None:
+                current.children[idx] = TrieNode()
+            current = current.children[idx]
+        current.is_end = True
+        if bump_frequency:
+            current.frequency += 1
+
+    def _walk(self, prefix: str) -&gt; Optional[TrieNode]:
+        current = self.root
+        for ch in prefix:
+            c = ch.lower()
+            idx = self._index(c)
+            if idx &lt; 0:
+                return None
+            nxt = current.children[idx]
+            if nxt is None:
+                return None
+            current = nxt
+        return current
+
+    def autocomplete_ranked(self, prefix: str, limit: int) -&gt; List[Tuple[str, int]]:
+        start = self._walk(prefix)
+        if start is None or limit &lt;= 0:
+            return []
+
+        prefix_lc = prefix.lower()
+        buf = list(prefix_lc)
+        out: List[Tuple[str, int]] = []
+
+        def dfs(node: TrieNode) -&gt; None:
+            if node is None:
+                return
+            if node.is_end:
+                out.append((&quot;&quot;.join(buf), node.frequency))
+            for i in range(ALPHABET_SIZE):
+                child = node.children[i]
+                if child is not None:
+                    buf.append(chr(ord(&quot;a&quot;) + i))
+                    dfs(child)
+                    buf.pop()
+
+        dfs(start)
+
+        out.sort(key=lambda t: (-t[1], t[0]))
+        return out[:limit]
+
+
+def load_file(trie: Trie, path: str) -&gt; int:
+    count = 0
+    try:
+        with open(path, &quot;r&quot;, encoding=&quot;utf-8&quot;) as f:
+            for line in f:
+                w = line.strip()
+                if not w:
+                    continue
+                trie.insert(w, bump_frequency=True)
+                count += 1
+    except OSError as e:
+        print(f&quot;Failed to open file: {path}&quot;, file=sys.stderr)
+        print(str(e), file=sys.stderr)
+        return 0
+    return count
+
+
+def parse_int_or_default(s: str, default: int) -&gt; int:
+    try:
+        v = int(s)
+        return v if v &gt; 0 else default
+    except Exception:
+        return default
+
+
+def main() -&gt; None:
+    trie = Trie()
+
+    dict_path = sys.argv[1] if len(sys.argv) &gt; 1 else r&quot;..\data\words.txt&quot;
+    prefix = sys.argv[2] if len(sys.argv) &gt; 2 else &quot;ab&quot;
+    limit = parse_int_or_default(sys.argv[3], 20) if len(sys.argv) &gt; 3 else 20
+    usage_path = sys.argv[4] if len(sys.argv) &gt; 4 else None
+
+    loaded = load_file(trie, dict_path)
+    print(f&quot;Loaded {loaded} words from {dict_path}&quot;)
+
+    if usage_path:
+        used = load_file(trie, usage_path)
+        print(f&quot;Loaded {used} usage events from {usage_path}&quot;)
+
+    print(f&#x27;\nRanked Autocomplete(&quot;{prefix}&quot;) [limit={limit}]&#x27;)
+    for word, freq in trie.autocomplete_ranked(prefix, limit):
+        print(f&quot;{word}\t(freq={freq})&quot;)
+
+    print(&quot;\nWorking directory =&quot;, os.getcwd())
+    print(&quot;Resolved dictionary path =&quot;, os.path.abspath(dict_path))
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+        </div>
+
+    </div>
+
+
+
+    <div class="callout">
+        <strong>Teaching tip:</strong> using prefix <code>"th"</code> works well because many English words share
+        that prefix, and frequencies make the “best” suggestions stand out quickly.
+    </div>
+
+    <div class="complexity-note">
+        Walking to the prefix is <strong>O(P)</strong>. Ranking cost depends on the strategy:
+        sorting all matches is <strong>O(M log M)</strong> for <code>M</code> matches, while a Top-K heap is
+        <strong>O(M log K)</strong>.
+    </div>
+
+<!-- ======================= 13.7 When to Reach for a Trie ======================= -->
+    <h2>13.7 When to Use a Trie vs Other Structures</h2>
     <ul>
         <li>
             You need fast <strong>prefix queries</strong> (e.g., autocomplete, word games):
@@ -1137,13 +3024,126 @@ class PrefixTrie:
         </p>
     </div>
 
-    <!-- ======================= Deep dive modal shell (shared) ======================= -->
+    
+    <div class="deep-dive-template" id="deep-dive-s13-autocomplete"
+         data-title="Autocomplete: why DFS works and when it hurts" hidden>
+        <p>
+            Once you’ve found the node for a prefix, all valid completions live in that node’s subtree.
+            A depth-first search is a simple way to enumerate them.
+        </p>
+        <ul>
+            <li>
+                If you traverse children in <code>'a'..'z'</code> order, your suggestions come out
+                lexicographically.
+            </li>
+            <li>
+                In real UIs you almost always cap results at <code>K</code> to keep response times stable.
+            </li>
+            <li>
+                The worst case happens when the prefix is very short (like <code>"a"</code>) and the subtree
+                contains huge numbers of words.
+            </li>
+        </ul>
+        <p>
+            Common optimizations include storing precomputed “top suggestions” at each node or using
+            frequency-ranked traversal strategies.
+        </p>
+    </div>
+
+    <div class="deep-dive-template" id="deep-dive-s13-ranked-autocomplete"
+         data-title="Frequency-ranked autocomplete: what to store in the trie" hidden>
+        <p>
+            To rank suggestions, you need a score for each word—frequency is the simplest version.
+            Store it on the terminal node for each word (where <code>isEnd</code> is true).
+        </p>
+        <ul>
+            <li>
+                A “usage” file can simulate real behavior: each line is a word a user typed, so inserting
+                those lines increments terminal frequencies.
+            </li>
+            <li>
+                For Top-K, a min-heap of size <code>K</code> lets you keep only the best candidates while
+                traversing the subtree.
+            </li>
+            <li>
+                Tie-breakers matter: a common, predictable rule is
+                <em>frequency descending</em>, then <em>alphabetical</em>.
+            </li>
+        </ul>
+    </div>
+
+<!-- ======================= Deep dive modal shell (shared) ======================= -->
     <div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
         <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
             <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
             <h2 id="deep-dive-title">&nbsp;</h2>
             <div class="deep-dive-body"></div>
         </div>
+    </div>
+
+
+
+    <div class="deep-dive-template" id="understand-s13-ex3"
+         data-title="Step-by-step: autocomplete with a trie" hidden>
+        <p>
+            Autocomplete is a two-step process: <strong>find the prefix node</strong>, then <strong>enumerate words</strong>
+            below it.
+        </p>
+        <ol>
+            <li>
+                <strong>Walk the prefix</strong> (e.g., <code>"th"</code>): starting at the root, follow each character edge.
+                If any edge is missing, there are no suggestions.
+            </li>
+            <li>
+                You now sit at the node that represents the prefix. Every word in its subtree starts with that prefix.
+            </li>
+            <li>
+                Run a <strong>DFS</strong> (or BFS) from that node. Maintain a buffer holding the current word.
+                <ul>
+                    <li>When you reach a node marked <em>end-of-word</em>, output the buffer as a suggestion.</li>
+                    <li>When you traverse to a child, append the child’s character; when you return, pop it.</li>
+                </ul>
+            </li>
+            <li>
+                Stop after <code>K</code> suggestions so you don’t traverse an enormous subtree.
+            </li>
+        </ol>
+        <p>
+            The walk is <strong>O(P)</strong> for prefix length <code>P</code>. Enumeration depends on how many nodes you visit;
+            with a limit <code>K</code>, you typically stop early.
+        </p>
+    </div>
+
+
+    <div class="deep-dive-template" id="understand-s13-ex4"
+         data-title="Step-by-step: frequency-ranked autocomplete" hidden>
+        <p>
+            Frequency-ranked autocomplete adds a <strong>scoring signal</strong> (often usage frequency) so suggestions are ordered
+            by what users are most likely to want.
+        </p>
+        <ol>
+            <li>
+                Load the <strong>dictionary</strong> (valid words) into the trie. This defines what can be suggested.
+            </li>
+            <li>
+                Load a <strong>frequency/usage</strong> file (e.g., <code>..\\data\\frequency.txt</code>) where each line is a word
+                the user typed. Each occurrence increments that word’s terminal node frequency.
+            </li>
+            <li>
+                For a prefix, walk to the prefix node (same as basic autocomplete).
+            </li>
+            <li>
+                Enumerate words under that node and <strong>rank</strong> them:
+                <ul>
+                    <li><strong>Simple:</strong> collect all matches and sort by <code>(-freq, word)</code>.</li>
+                    <li><strong>More scalable:</strong> maintain a <strong>Top-K min-heap</strong> so ranking is <code>O(M log K)</code>
+                        instead of <code>O(M log M)</code>, where <code>M</code> is the number of matches.</li>
+                </ul>
+            </li>
+        </ol>
+        <p>
+            This is a realistic separation: dictionary = <em>possible</em> words, frequency = <em>likely</em> words.
+        </p>
     </div>
 
 </main>
