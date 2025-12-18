@@ -29,7 +29,7 @@ void vec_free(VecInt *v) {
 }
 
 // ===============================
-// Queue for Kahn’s algorithm
+// Queue for Kahn's algorithm
 // ===============================
 typedef struct {
     int *data;
@@ -59,7 +59,7 @@ void queue_free(Queue *q) {
 }
 
 // ===============================
-// Topological Sort (Kahn’s Algorithm)
+// Topological Sort (Kahn's Algorithm)
 // Returns length of result array in *outSize
 // Returns NULL if cycle exists
 // ===============================
@@ -83,7 +83,7 @@ int* topoSortKahn(int n, VecInt *adj, int *outSize) {
         if (indeg[u] == 0)
             enqueue(&q, u);
 
-    // Kahn’s BFS
+    // Kahn's BFS
     while (!queue_empty(&q)) {
         int u = dequeue(&q);
         order[idx++] = u;

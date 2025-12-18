@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Section 12A - Search Algorithms</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css">
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tab logic, highlight init, prefs, etc.) -->
+    <script src="js/site.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="index.html">← Back to Index</a>
+        </div>
+
+        <div class="kicker">Section 12A</div>
+        <h1>Search Algorithms</h1>
+        <p class="tagline">
+            Learn the most common search techniques for arrays and why sorted data changes everything.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr>
+
+
+        <!-- ========================= Review - Big-O ========================= -->
+        <h2>
+            REVIEW - What Big-O Complexity Means
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s12a-big-o">
+                Dig deeper
+            </button>
+            <button type="button" class="deep-dive-trigger secondary" data-deep-id="understand-s12a-big-o">
+                Understand Big-O
+            </button>
+        </h2>
+        <p>
+            Big-O notation describes how the running time (or memory usage) of an algorithm grows as
+            the input size <code>n</code> grows. It ignores constant factors and focuses on the <em>shape</em> of growth.
+        </p>
+        <ul class="bullet-tight">
+            <li><strong>O(1)</strong> - constant time.</li>
+            <li><strong>O(log n)</strong> - logarithmic (divide the work in half each step).</li>
+            <li><strong>O(n)</strong> - linear (scan once).</li>
+            <li><strong>O(n log n)</strong> - typical “fast” comparison sorting.</li>
+            <li><strong>O(n²)</strong> - simple nested-loop algorithms.</li>
+        </ul>
+
+        <hr>
+
+        <h2>
+            Example 1 - Linear Search (O(n))
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s12a-linear">
+                Dig deeper
+            </button>
+            <button type="button" class="deep-dive-trigger inline secondary" data-deep-id="understand-s12a-linear">
+                Understand the algorithm
+            </button>
+        </h2>
+        <p>Linear search checks each element one by one until it finds the target (or reaches the end).</p>
+        
+        <div class="code-example" data-example="s12a-ex1-linear">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 1</span>
+                    <span class="meta">Linear search returning the index or -1</span>
+                </div>
+                <button type="button" class="copy-button" aria-label="Copy code">
+                    Copy
+                </button>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C - linear search
+int linear_search(const int* arr, int n, int target) {
+    for (int i = 0; i &lt; n; i++) {
+        if (arr[i] == target) return i;
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++ - linear search
+#include &lt;vector&gt;
+int linearSearch(const std::vector&lt;int&gt;&amp; arr, int target) {
+    for (int i = 0; i &lt; (int)arr.size(); i++) {
+        if (arr[i] == target) return i;
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java - linear search
+int linearSearch(int[] arr, int target) {
+    for (int i = 0; i &lt; arr.length; i++) {
+        if (arr[i] == target) return i;
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript - linear search
+function linearSearch(arr, target) {
+    for (let i = 0; i &lt; arr.length; i++) {
+        if (arr[i] === target) return i;
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C# - linear search
+int LinearSearch(int[] arr, int target) {
+    for (int i = 0; i &lt; arr.Length; i++) {
+        if (arr[i] == target) return i;
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python - linear search
+from typing import List
+
+def linear_search(arr: List[int], target: int) -&gt; int:
+    for i, v in enumerate(arr):
+        if v == target:
+            return i
+    return -1</code></pre>
+            </div>
+
+        </div>
+        <div class="complexity-note">
+            Time: <strong>O(n)</strong> worst case. &nbsp;|&nbsp; Extra space: <strong>O(1)</strong>.
+        </div>
+
+        <hr>
+
+        <h2>
+            Example 2 - Binary Search (O(log n))
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s12a-binary">
+                Dig deeper
+            </button>
+            <button type="button" class="deep-dive-trigger inline secondary" data-deep-id="understand-s12a-binary">
+                Understand the algorithm
+            </button>
+        </h2>
+        <p>Binary search works on a <strong>sorted</strong> array by repeatedly halving the search range.</p>
+        
+        <div class="code-example" data-example="s12a-ex2-binary">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 2</span>
+                    <span class="meta">Binary search on a sorted array</span>
+                </div>
+                <button type="button" class="copy-button" aria-label="Copy code">
+                    Copy
+                </button>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C - binary search (iterative)
+int binary_search(const int* arr, int n, int target) {
+    int lo = 0, hi = n - 1;
+    while (lo &lt;= hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] == target) return mid;
+        if (arr[mid] &lt; target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++ - binary search
+#include &lt;vector&gt;
+int binarySearch(const std::vector&lt;int&gt;&amp; arr, int target) {
+    int lo = 0, hi = (int)arr.size() - 1;
+    while (lo &lt;= hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] == target) return mid;
+        if (arr[mid] &lt; target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java - binary search
+int binarySearch(int[] arr, int target) {
+    int lo = 0, hi = arr.length - 1;
+    while (lo &lt;= hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] == target) return mid;
+        if (arr[mid] &lt; target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript - binary search
+function binarySearch(arr, target) {
+    let lo = 0, hi = arr.length - 1;
+    while (lo &lt;= hi) {
+        const mid = Math.floor(lo + (hi - lo) / 2);
+        if (arr[mid] === target) return mid;
+        if (arr[mid] &lt; target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C# - binary search
+int BinarySearch(int[] arr, int target) {
+    int lo = 0, hi = arr.Length - 1;
+    while (lo &lt;= hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] == target) return mid;
+        if (arr[mid] &lt; target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python - binary search
+from typing import List
+
+def binary_search(arr: List[int], target: int) -&gt; int:
+    lo, hi = 0, len(arr) - 1
+    while lo &lt;= hi:
+        mid = lo + (hi - lo) // 2
+        if arr[mid] == target:
+            return mid
+        if arr[mid] &lt; target:
+            lo = mid + 1
+        else:
+            hi = mid - 1
+    return -1</code></pre>
+            </div>
+
+        </div>
+        <div class="complexity-note">
+            Time: <strong>O(log n)</strong>. &nbsp;|&nbsp; Extra space: <strong>O(1)</strong>.
+        </div>
+
+        <hr>
+
+        <h2>
+            Example 3 - Jump Search (O(√n))
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s12a-jump">
+                Dig deeper
+            </button>
+            <button type="button" class="deep-dive-trigger inline secondary" data-deep-id="understand-s12a-jump">
+                Understand the algorithm
+            </button>
+        </h2>
+        <p>Jump search skips ahead in blocks of size <code>√n</code> in a sorted array, then does a short linear scan inside the block where the target could be.</p>
+        
+        <div class="code-example" data-example="s12a-ex3-jump">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 3</span>
+                    <span class="meta">Jump search on a sorted array</span>
+                </div>
+                <button type="button" class="copy-button" aria-label="Copy code">
+                    Copy
+                </button>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C - jump search (sorted array)
+#include &lt;math.h&gt;
+
+int jump_search(const int* arr, int n, int target) {
+    int step = (int)sqrt((double)n);
+    int prev = 0;
+
+    while (prev &lt; n &amp;&amp; arr[(prev + step &lt; n ? prev + step : n) - 1] &lt; target) {
+        prev += step;
+        if (prev &gt;= n) return -1;
+    }
+
+    int end = prev + step;
+    if (end &gt; n) end = n;
+
+    for (int i = prev; i &lt; end; i++) {
+        if (arr[i] == target) return i;
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++ - jump search (sorted vector)
+#include &lt;cmath&gt;
+#include &lt;vector&gt;
+
+int jumpSearch(const std::vector&lt;int&gt;&amp; arr, int target) {
+    int n = (int)arr.size();
+    int step = (int)std::sqrt((double)n);
+    int prev = 0;
+
+    while (prev &lt; n &amp;&amp; arr[std::min(prev + step, n) - 1] &lt; target) {
+        prev += step;
+        if (prev &gt;= n) return -1;
+    }
+
+    int end = std::min(prev + step, n);
+    for (int i = prev; i &lt; end; i++) {
+        if (arr[i] == target) return i;
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java - jump search (sorted array)
+int jumpSearch(int[] arr, int target) {
+    int n = arr.length;
+    int step = (int)Math.sqrt(n);
+    int prev = 0;
+
+    while (prev &lt; n &amp;&amp; arr[Math.min(prev + step, n) - 1] &lt; target) {
+        prev += step;
+        if (prev &gt;= n) return -1;
+    }
+
+    int end = Math.min(prev + step, n);
+    for (int i = prev; i &lt; end; i++) {
+        if (arr[i] == target) return i;
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript - jump search (sorted array)
+function jumpSearch(arr, target) {
+    const n = arr.length;
+    const step = Math.floor(Math.sqrt(n));
+    let prev = 0;
+
+    while (prev &lt; n &amp;&amp; arr[Math.min(prev + step, n) - 1] &lt; target) {
+        prev += step;
+        if (prev &gt;= n) return -1;
+    }
+
+    const end = Math.min(prev + step, n);
+    for (let i = prev; i &lt; end; i++) {
+        if (arr[i] === target) return i;
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C# - jump search (sorted array)
+using System;
+
+int JumpSearch(int[] arr, int target) {
+    int n = arr.Length;
+    int step = (int)Math.Sqrt(n);
+    int prev = 0;
+
+    while (prev &lt; n &amp;&amp; arr[Math.Min(prev + step, n) - 1] &lt; target) {
+        prev += step;
+        if (prev &gt;= n) return -1;
+    }
+
+    int end = Math.Min(prev + step, n);
+    for (int i = prev; i &lt; end; i++) {
+        if (arr[i] == target) return i;
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python - jump search (sorted list)
+import math
+from typing import List
+
+def jump_search(arr: List[int], target: int) -&gt; int:
+    n = len(arr)
+    step = int(math.sqrt(n))
+    prev = 0
+
+    while prev &lt; n and arr[min(prev + step, n) - 1] &lt; target:
+        prev += step
+        if prev &gt;= n:
+            return -1
+
+    end = min(prev + step, n)
+    for i in range(prev, end):
+        if arr[i] == target:
+            return i
+    return -1</code></pre>
+            </div>
+
+        </div>
+        <div class="complexity-note">
+            Time: <strong>O(√n)</strong> worst case. &nbsp;|&nbsp; Extra space: <strong>O(1)</strong>.
+        </div>
+
+        <hr>
+
+        <h2>
+            Example 4 - Interpolation Search (Average O(log log n))
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s12a-interp">
+                Dig deeper
+            </button>
+            <button type="button" class="deep-dive-trigger inline secondary" data-deep-id="understand-s12a-interp">
+                Understand the algorithm
+            </button>
+        </h2>
+        <p>Interpolation search estimates where the target should be in a sorted array (like “searching in a phone book”). It works best when values are roughly uniformly distributed.</p>
+        
+        <div class="code-example" data-example="s12a-ex4-interp">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 4</span>
+                    <span class="meta">Interpolation search on a sorted, numeric array</span>
+                </div>
+                <button type="button" class="copy-button" aria-label="Copy code">
+                    Copy
+                </button>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C - interpolation search (sorted, roughly uniform values)
+int interpolation_search(const int* arr, int n, int target) {
+    int lo = 0, hi = n - 1;
+
+    while (lo &lt;= hi &amp;&amp; target &gt;= arr[lo] &amp;&amp; target &lt;= arr[hi]) {
+        if (arr[hi] == arr[lo]) {
+            return (arr[lo] == target) ? lo : -1;
+        }
+
+        int pos = lo + (int)((double)(hi - lo) * (target - arr[lo]) / (arr[hi] - arr[lo]));
+
+        if (pos &lt; lo || pos &gt; hi) return -1;
+        if (arr[pos] == target) return pos;
+        if (arr[pos] &lt; target) lo = pos + 1;
+        else hi = pos - 1;
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++ - interpolation search
+#include &lt;vector&gt;
+
+int interpolationSearch(const std::vector&lt;int&gt;&amp; arr, int target) {
+    int lo = 0, hi = (int)arr.size() - 1;
+
+    while (lo &lt;= hi &amp;&amp; target &gt;= arr[lo] &amp;&amp; target &lt;= arr[hi]) {
+        if (arr[hi] == arr[lo]) return (arr[lo] == target) ? lo : -1;
+
+        int pos = lo + (int)((double)(hi - lo) * (target - arr[lo]) / (arr[hi] - arr[lo]));
+
+        if (pos &lt; lo || pos &gt; hi) return -1;
+        if (arr[pos] == target) return pos;
+        if (arr[pos] &lt; target) lo = pos + 1;
+        else hi = pos - 1;
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java - interpolation search
+int interpolationSearch(int[] arr, int target) {
+    int lo = 0, hi = arr.length - 1;
+
+    while (lo &lt;= hi &amp;&amp; target &gt;= arr[lo] &amp;&amp; target &lt;= arr[hi]) {
+        if (arr[hi] == arr[lo]) return (arr[lo] == target) ? lo : -1;
+
+        int pos = lo + (int)((double)(hi - lo) * (target - arr[lo]) / (arr[hi] - arr[lo]));
+
+        if (pos &lt; lo || pos &gt; hi) return -1;
+        if (arr[pos] == target) return pos;
+        if (arr[pos] &lt; target) lo = pos + 1;
+        else hi = pos - 1;
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript - interpolation search
+function interpolationSearch(arr, target) {
+    let lo = 0, hi = arr.length - 1;
+
+    while (lo &lt;= hi &amp;&amp; target &gt;= arr[lo] &amp;&amp; target &lt;= arr[hi]) {
+        if (arr[hi] === arr[lo]) return (arr[lo] === target) ? lo : -1;
+
+        const pos = lo + Math.floor((hi - lo) * (target - arr[lo]) / (arr[hi] - arr[lo]));
+
+        if (pos &lt; lo || pos &gt; hi) return -1;
+        if (arr[pos] === target) return pos;
+        if (arr[pos] &lt; target) lo = pos + 1;
+        else hi = pos - 1;
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C# - interpolation search
+int InterpolationSearch(int[] arr, int target) {
+    int lo = 0, hi = arr.Length - 1;
+
+    while (lo &lt;= hi &amp;&amp; target &gt;= arr[lo] &amp;&amp; target &lt;= arr[hi]) {
+        if (arr[hi] == arr[lo]) return (arr[lo] == target) ? lo : -1;
+
+        int pos = lo + (int)((double)(hi - lo) * (target - arr[lo]) / (arr[hi] - arr[lo]));
+
+        if (pos &lt; lo || pos &gt; hi) return -1;
+        if (arr[pos] == target) return pos;
+        if (arr[pos] &lt; target) lo = pos + 1;
+        else hi = pos - 1;
+    }
+    return -1;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python - interpolation search
+from typing import List
+
+def interpolation_search(arr: List[int], target: int) -&gt; int:
+    lo, hi = 0, len(arr) - 1
+
+    while lo &lt;= hi and target &gt;= arr[lo] and target &lt;= arr[hi]:
+        if arr[hi] == arr[lo]:
+            return lo if arr[lo] == target else -1
+
+        pos = lo + int((hi - lo) * (target - arr[lo]) / (arr[hi] - arr[lo]))
+
+        if pos &lt; lo or pos &gt; hi:
+            return -1
+        if arr[pos] == target:
+            return pos
+        if arr[pos] &lt; target:
+            lo = pos + 1
+        else:
+            hi = pos - 1
+
+    return -1</code></pre>
+            </div>
+
+        </div>
+        <div class="complexity-note">
+            Average time (uniform data): <strong>O(log log n)</strong>. Worst case: <strong>O(n)</strong>. &nbsp;|&nbsp; Extra space: <strong>O(1)</strong>.
+        </div>
+
+        <hr>
+
+        <h2>
+            Example 5 - Exponential Search (O(log n))
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s12a-expo">
+                Dig deeper
+            </button>
+            <button type="button" class="deep-dive-trigger inline secondary" data-deep-id="understand-s12a-expo">
+                Understand the algorithm
+            </button>
+        </h2>
+        <p>Exponential search quickly finds a search range by doubling the bound (1, 2, 4, 8, ...), then runs binary search within that range. Useful when you don't know the array size in advance (or for unbounded search).</p>
+        
+        <div class="code-example" data-example="s12a-ex5-expo">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 5</span>
+                    <span class="meta">Exponential search: range-doubling + binary search</span>
+                </div>
+                <button type="button" class="copy-button" aria-label="Copy code">
+                    Copy
+                </button>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C - exponential search (sorted array)
+static int binary_search_range(const int* arr, int lo, int hi, int target) {
+    while (lo &lt;= hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] == target) return mid;
+        if (arr[mid] &lt; target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}
+
+int exponential_search(const int* arr, int n, int target) {
+    if (n == 0) return -1;
+    if (arr[0] == target) return 0;
+
+    int bound = 1;
+    while (bound &lt; n &amp;&amp; arr[bound] &lt; target) bound *= 2;
+
+    int lo = bound / 2;
+    int hi = (bound &lt; n) ? bound : (n - 1);
+    return binary_search_range(arr, lo, hi, target);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++ - exponential search
+#include &lt;vector&gt;
+static int binaryRange(const std::vector&lt;int&gt;&amp; arr, int lo, int hi, int target) {
+    while (lo &lt;= hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] == target) return mid;
+        if (arr[mid] &lt; target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}
+
+int exponentialSearch(const std::vector&lt;int&gt;&amp; arr, int target) {
+    int n = (int)arr.size();
+    if (n == 0) return -1;
+    if (arr[0] == target) return 0;
+
+    int bound = 1;
+    while (bound &lt; n &amp;&amp; arr[bound] &lt; target) bound *= 2;
+
+    int lo = bound / 2;
+    int hi = std::min(bound, n - 1);
+    return binaryRange(arr, lo, hi, target);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java - exponential search
+private int binaryRange(int[] arr, int lo, int hi, int target) {
+    while (lo &lt;= hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] == target) return mid;
+        if (arr[mid] &lt; target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}
+
+int exponentialSearch(int[] arr, int target) {
+    int n = arr.length;
+    if (n == 0) return -1;
+    if (arr[0] == target) return 0;
+
+    int bound = 1;
+    while (bound &lt; n &amp;&amp; arr[bound] &lt; target) bound *= 2;
+
+    int lo = bound / 2;
+    int hi = Math.min(bound, n - 1);
+    return binaryRange(arr, lo, hi, target);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript - exponential search
+function binaryRange(arr, lo, hi, target) {
+    while (lo &lt;= hi) {
+        const mid = Math.floor(lo + (hi - lo) / 2);
+        if (arr[mid] === target) return mid;
+        if (arr[mid] &lt; target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}
+
+function exponentialSearch(arr, target) {
+    const n = arr.length;
+    if (n === 0) return -1;
+    if (arr[0] === target) return 0;
+
+    let bound = 1;
+    while (bound &lt; n &amp;&amp; arr[bound] &lt; target) bound *= 2;
+
+    const lo = Math.floor(bound / 2);
+    const hi = Math.min(bound, n - 1);
+    return binaryRange(arr, lo, hi, target);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C# - exponential search
+int BinaryRange(int[] arr, int lo, int hi, int target) {
+    while (lo &lt;= hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] == target) return mid;
+        if (arr[mid] &lt; target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}
+
+int ExponentialSearch(int[] arr, int target) {
+    int n = arr.Length;
+    if (n == 0) return -1;
+    if (arr[0] == target) return 0;
+
+    int bound = 1;
+    while (bound &lt; n &amp;&amp; arr[bound] &lt; target) bound *= 2;
+
+    int lo = bound / 2;
+    int hi = Math.Min(bound, n - 1);
+    return BinaryRange(arr, lo, hi, target);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python - exponential search
+from typing import List
+
+def _binary_range(arr: List[int], lo: int, hi: int, target: int) -&gt; int:
+    while lo &lt;= hi:
+        mid = lo + (hi - lo) // 2
+        if arr[mid] == target:
+            return mid
+        if arr[mid] &lt; target:
+            lo = mid + 1
+        else:
+            hi = mid - 1
+    return -1
+
+def exponential_search(arr: List[int], target: int) -&gt; int:
+    n = len(arr)
+    if n == 0:
+        return -1
+    if arr[0] == target:
+        return 0
+
+    bound = 1
+    while bound &lt; n and arr[bound] &lt; target:
+        bound *= 2
+
+    lo = bound // 2
+    hi = min(bound, n - 1)
+    return _binary_range(arr, lo, hi, target)</code></pre>
+            </div>
+
+        </div>
+        <div class="complexity-note">
+            Time: <strong>O(log n)</strong>. &nbsp;|&nbsp; Extra space: <strong>O(1)</strong>.
+        </div>
+
+        <hr>
+
+        <hr>
+
+        <div class="top-nav">
+            <a href="index.html">
+                ← Back to Index
+            </a>
+        </div>
+
+        <!-- ======================= Understand templates ======================= -->
+
+        <div class="deep-dive-template" id="understand-s12a-big-o"
+            data-title="Understanding Big-O and why it matters" hidden>
+            <p>Big-O describes how cost grows as <code>n</code> grows. Ask: if <code>n</code> doubles, does time double (O(n)), grow a little (O(log n)), or quadruple (O(n²))?</p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s12a-big-o"
+            data-title="Big-O as a growth-rate tool" hidden>
+            <p>Big-O ignores constants and lower-order terms. <code>12n + 50</code> is still O(n). <code>n² + n</code> is O(n²). This helps compare algorithms at large scale.</p>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s12a-linear"
+            data-title="Linear search: step-by-step" hidden>
+            <ol><li>Start at index 0.</li><li>Compare each element to the target.</li><li>Stop when found, or return -1 after the last element.</li></ol><p><strong>Key idea:</strong> in the worst case you check every element → O(n).</p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s12a-linear"
+            data-title="When linear search is the right tool" hidden>
+            <ul><li>Unsorted data and only a few searches.</li><li>Very small arrays.</li><li>Streaming data where you can't jump to the middle.</li></ul>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s12a-binary"
+            data-title="Binary search: step-by-step" hidden>
+            <ol><li>Pick the middle element.</li><li>If it's too small, search right half; too big, search left half.</li><li>Repeat until found or range is empty.</li></ol><p><strong>Requirement:</strong> the array must be sorted.</p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s12a-binary"
+            data-title="Why binary search is O(log n)" hidden>
+            <p>Each comparison halves the remaining range. After <code>k</code> steps, you have about <code>n / 2^k</code> items left. Set that to 1: <code>2^k ≈ n</code> → <code>k ≈ log₂ n</code>.</p>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s12a-jump"
+            data-title="Jump search: how it works" hidden>
+            <ol><li>Choose step size <code>m = ⌊√n⌋</code>.</li><li>Jump by <code>m</code> until you pass the target.</li><li>Linear scan within the last block.</li></ol><p><strong>Tradeoff:</strong> fewer comparisons than linear search, but still simpler than binary search.</p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s12a-jump"
+            data-title="Choosing the jump size" hidden>
+            <p>With block size <code>m</code>, you do about <code>n/m</code> jumps and up to <code>m</code> scans. Minimized near <code>m = √n</code>, giving O(√n).</p>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s12a-interp"
+            data-title="Interpolation search intuition" hidden>
+            <p>Instead of always checking the midpoint, we estimate where the target should land based on values:</p><pre><code>pos = lo + (hi-lo) * (target-a[lo]) / (a[hi]-a[lo])</code></pre><p>Works best when values are roughly uniform.</p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s12a-interp"
+            data-title="When interpolation search is (and isn't) good" hidden>
+            <ul><li><strong>Good:</strong> uniformly distributed numeric keys (average O(log log n)).</li><li><strong>Bad:</strong> clustered/skewed data; worst case degrades to O(n).</li></ul>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s12a-expo"
+            data-title="Exponential search: the two phases" hidden>
+            <ol><li><strong>Range finding:</strong> check indices 1,2,4,8… until you pass the target.</li><li><strong>Binary search:</strong> run binary search inside that bounded range.</li></ol>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s12a-expo"
+            data-title="Why exponential search is useful" hidden>
+            <p>Exponential search is handy for “unbounded” or unknown-length structures (or when the target is near the start). Range finding is O(log i) where <code>i</code> is the target index.</p>
+        </div>
+
+
+<div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title">&nbsp;</h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
+    </main>
+</body>
+
+</html>

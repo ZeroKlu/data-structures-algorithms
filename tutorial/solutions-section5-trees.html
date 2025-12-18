@@ -1673,7 +1673,7 @@ class Codec:
         <div class="deep-dive-template" id="understand-s5p2"
             data-title="Step-by-step: Height and balance of a binary tree" hidden>
             <p>
-                A tree is height-balanced if every node’s left and right subtrees differ in height by at most 1,
+                A tree is height-balanced if every node's left and right subtrees differ in height by at most 1,
                 and <em>both</em> subtrees are themselves balanced.
                 We can compute height and balance together in a single bottom-up pass.
             </p>
@@ -1759,7 +1759,7 @@ class Codec:
                     <p>
                         It is not sufficient to only check that <code>node.left.val &lt; node.val</code>
                         and <code>node.right.val &gt; node.val</code>.
-                        A violation can happen deeper in the subtree relative to an ancestor’s value.
+                        A violation can happen deeper in the subtree relative to an ancestor's value.
                     </p>
                 </li>
                 <li>
@@ -1769,7 +1769,7 @@ class Codec:
                             For each node, we keep track of the minimum exclusive bound <code>low</code> and maximum
                             exclusive bound <code>high</code>.
                         </li>
-                        <li>The node’s value must satisfy <code>low &lt; node.val &lt; high</code>.</li>
+                        <li>The node's value must satisfy <code>low &lt; node.val &lt; high</code>.</li>
                     </ul>
                 </li>
                 <li>
@@ -1799,7 +1799,7 @@ class Codec:
                 <li>
                     <strong>Why this guarantees correctness:</strong>
                     <p>
-                        Every node’s value is checked against all relevant constraints coming from its ancestors
+                        Every node's value is checked against all relevant constraints coming from its ancestors
                         via the (low, high) bounds. If any node violates the global BST ordering,
                         it will violate its local range and cause the whole check to fail.
                     </p>
@@ -1890,7 +1890,7 @@ class Codec:
                     </ul>
                     <p>
                         This means if we know two target values <code>p</code> and <code>q</code>,
-                        we can compare them directly to the current node’s value to decide which direction to move.
+                        we can compare them directly to the current node's value to decide which direction to move.
                     </p>
                 </li>
                 <li>
@@ -1952,7 +1952,7 @@ class Codec:
                 <li>
                     <strong>What information we must preserve:</strong>
                     <p>
-                        It’s not enough to preserve just the node values; we must also preserve the tree’s <em>shape</em>.
+                        It's not enough to preserve just the node values; we must also preserve the tree's <em>shape</em>.
                         Two different shapes can have the same values in different places.
                     </p>
                 </li>

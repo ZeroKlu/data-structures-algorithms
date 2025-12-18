@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Section 12B - Sorting Algorithms</title>
+
+    <!-- Site styles -->
+    <link rel="stylesheet" href="css/site.css">
+
+    <!-- Highlight.js theme (initial, can be changed via selector) -->
+    <link id="hljs-theme" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- highlight.js core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- highlight.js languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Site scripts (tab logic, highlight init, prefs, etc.) -->
+    <script src="js/site.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" href="img/icon.svg" type="image/svg+xml" sizes="any">
+</head>
+
+<body>
+    <main>
+        <div class="top-nav">
+            <a href="index.html">← Back to Index</a>
+        </div>
+
+        <div class="kicker">Section 12B</div>
+        <h1>Sorting Algorithms</h1>
+        <p class="tagline">
+            Compare simple O(n²) sorts to the O(n log n) algorithms used in real systems.
+        </p>
+
+        <div class="theme-picker">
+            <label for="theme-select">Syntax theme:</label>
+            <select id="theme-select">
+                <option value="atom-one-dark">Dark</option>
+                <option value="far">Blue</option>
+                <option value="atom-one-light">Light</option>
+            </select>
+        </div>
+
+        <hr>
+
+
+        <!-- ========================= Review - Big-O ========================= -->
+        <h2>
+            REVIEW - What Big-O Complexity Means
+            <button type="button" class="deep-dive-trigger" data-deep-id="deep-dive-s12b-big-o">
+                Dig deeper
+            </button>
+            <button type="button" class="deep-dive-trigger secondary" data-deep-id="understand-s12b-big-o">
+                Understand Big-O
+            </button>
+        </h2>
+        <p>
+            Big-O notation describes how the running time (or memory usage) of an algorithm grows as
+            the input size <code>n</code> grows. It ignores constant factors and focuses on the <em>shape</em> of growth.
+        </p>
+        <ul class="bullet-tight">
+            <li><strong>O(1)</strong> - constant time.</li>
+            <li><strong>O(log n)</strong> - logarithmic (divide the work in half each step).</li>
+            <li><strong>O(n)</strong> - linear (scan once).</li>
+            <li><strong>O(n log n)</strong> - typical “fast” comparison sorting.</li>
+            <li><strong>O(n²)</strong> - simple nested-loop algorithms.</li>
+        </ul>
+
+        <hr>
+
+        <h2>
+            Example 1 - Insertion Sort (O(n²) worst, O(n) best)
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s12b-insertion">
+                Dig deeper
+            </button>
+            <button type="button" class="deep-dive-trigger inline secondary" data-deep-id="understand-s12b-insertion">
+                Understand the algorithm
+            </button>
+        </h2>
+        <p>Insertion sort builds a sorted prefix one element at a time by inserting the next item into its correct position.</p>
+        
+        <div class="code-example" data-example="s12b-ex1-insertion">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 1</span>
+                    <span class="meta">Insertion sort in-place</span>
+                </div>
+                <button type="button" class="copy-button" aria-label="Copy code">
+                    Copy
+                </button>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C - insertion sort (in-place)
+void insertion_sort(int* arr, int n) {
+    for (int i = 1; i &lt; n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j &gt;= 0 &amp;&amp; arr[j] &gt; key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++ - insertion sort
+#include &lt;vector&gt;
+void insertionSort(std::vector&lt;int&gt;&amp; arr) {
+    for (int i = 1; i &lt; (int)arr.size(); i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j &gt;= 0 &amp;&amp; arr[j] &gt; key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java - insertion sort
+void insertionSort(int[] arr) {
+    for (int i = 1; i &lt; arr.length; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j &gt;= 0 &amp;&amp; arr[j] &gt; key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript - insertion sort (in-place)
+function insertionSort(arr) {
+    for (let i = 1; i &lt; arr.length; i++) {
+        const key = arr[i];
+        let j = i - 1;
+        while (j &gt;= 0 &amp;&amp; arr[j] &gt; key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C# - insertion sort
+void InsertionSort(int[] arr) {
+    for (int i = 1; i &lt; arr.Length; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j &gt;= 0 &amp;&amp; arr[j] &gt; key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python - insertion sort (in-place)
+from typing import List
+
+def insertion_sort(arr: List[int]) -&gt; None:
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+        while j &gt;= 0 and arr[j] &gt; key:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key</code></pre>
+            </div>
+
+        </div>
+        <div class="complexity-note">
+            Worst time: <strong>O(n²)</strong>. Best (already sorted): <strong>O(n)</strong>. &nbsp;|&nbsp; Extra space: <strong>O(1)</strong>.
+        </div>
+
+        <hr>
+
+        <h2>
+            Example 2 - Selection Sort (O(n²))
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s12b-selection">
+                Dig deeper
+            </button>
+            <button type="button" class="deep-dive-trigger inline secondary" data-deep-id="understand-s12b-selection">
+                Understand the algorithm
+            </button>
+        </h2>
+        <p>Selection sort repeatedly selects the smallest remaining element and swaps it into the next position.</p>
+        
+        <div class="code-example" data-example="s12b-ex2-selection">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 2</span>
+                    <span class="meta">Selection sort in-place</span>
+                </div>
+                <button type="button" class="copy-button" aria-label="Copy code">
+                    Copy
+                </button>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C - selection sort
+void selection_sort(int* arr, int n) {
+    for (int i = 0; i &lt; n; i++) {
+        int min_idx = i;
+        for (int j = i + 1; j &lt; n; j++) {
+            if (arr[j] &lt; arr[min_idx]) min_idx = j;
+        }
+        int tmp = arr[i]; arr[i] = arr[min_idx]; arr[min_idx] = tmp;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++ - selection sort
+#include &lt;vector&gt;
+#include &lt;utility&gt;
+
+void selectionSort(std::vector&lt;int&gt;&amp; arr) {
+    int n = (int)arr.size();
+    for (int i = 0; i &lt; n; i++) {
+        int minIdx = i;
+        for (int j = i + 1; j &lt; n; j++) {
+            if (arr[j] &lt; arr[minIdx]) minIdx = j;
+        }
+        std::swap(arr[i], arr[minIdx]);
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java - selection sort
+void selectionSort(int[] arr) {
+    int n = arr.length;
+    for (int i = 0; i &lt; n; i++) {
+        int minIdx = i;
+        for (int j = i + 1; j &lt; n; j++) {
+            if (arr[j] &lt; arr[minIdx]) minIdx = j;
+        }
+        int tmp = arr[i]; arr[i] = arr[minIdx]; arr[minIdx] = tmp;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript - selection sort
+function selectionSort(arr) {
+    const n = arr.length;
+    for (let i = 0; i &lt; n; i++) {
+        let minIdx = i;
+        for (let j = i + 1; j &lt; n; j++) {
+            if (arr[j] &lt; arr[minIdx]) minIdx = j;
+        }
+        [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C# - selection sort
+void SelectionSort(int[] arr) {
+    int n = arr.Length;
+    for (int i = 0; i &lt; n; i++) {
+        int minIdx = i;
+        for (int j = i + 1; j &lt; n; j++) {
+            if (arr[j] &lt; arr[minIdx]) minIdx = j;
+        }
+        (arr[i], arr[minIdx]) = (arr[minIdx], arr[i]);
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python - selection sort
+from typing import List
+
+def selection_sort(arr: List[int]) -&gt; None:
+    n = len(arr)
+    for i in range(n):
+        min_idx = i
+        for j in range(i + 1, n):
+            if arr[j] &lt; arr[min_idx]:
+                min_idx = j
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]</code></pre>
+            </div>
+
+        </div>
+        <div class="complexity-note">
+            Time: <strong>O(n²)</strong>. &nbsp;|&nbsp; Extra space: <strong>O(1)</strong>.
+        </div>
+
+        <hr>
+
+        <h2>
+            Example 3 - Bubble Sort (O(n²))
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s12b-bubble">
+                Dig deeper
+            </button>
+            <button type="button" class="deep-dive-trigger inline secondary" data-deep-id="understand-s12b-bubble">
+                Understand the algorithm
+            </button>
+        </h2>
+        <p>Bubble sort swaps adjacent out-of-order pairs, “bubbling” larger elements to the end. With an early-exit flag, it can finish quickly on nearly sorted input.</p>
+        
+        <div class="code-example" data-example="s12b-ex3-bubble">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 3</span>
+                    <span class="meta">Bubble sort with early exit</span>
+                </div>
+                <button type="button" class="copy-button" aria-label="Copy code">
+                    Copy
+                </button>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C - bubble sort (early exit)
+#include &lt;stdbool.h&gt;
+
+void bubble_sort(int* arr, int n) {
+    bool swapped = true;
+    while (swapped) {
+        swapped = false;
+        for (int i = 1; i &lt; n; i++) {
+            if (arr[i - 1] &gt; arr[i]) {
+                int tmp = arr[i - 1]; arr[i - 1] = arr[i]; arr[i] = tmp;
+                swapped = true;
+            }
+        }
+        n--;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++ - bubble sort (early exit)
+#include &lt;vector&gt;
+#include &lt;utility&gt;
+
+void bubbleSort(std::vector&lt;int&gt;&amp; arr) {
+    int n = (int)arr.size();
+    bool swapped = true;
+    while (swapped) {
+        swapped = false;
+        for (int i = 1; i &lt; n; i++) {
+            if (arr[i - 1] &gt; arr[i]) {
+                std::swap(arr[i - 1], arr[i]);
+                swapped = true;
+            }
+        }
+        n--;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java - bubble sort (early exit)
+void bubbleSort(int[] arr) {
+    int n = arr.length;
+    boolean swapped = true;
+    while (swapped) {
+        swapped = false;
+        for (int i = 1; i &lt; n; i++) {
+            if (arr[i - 1] &gt; arr[i]) {
+                int tmp = arr[i - 1]; arr[i - 1] = arr[i]; arr[i] = tmp;
+                swapped = true;
+            }
+        }
+        n--;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript - bubble sort (early exit)
+function bubbleSort(arr) {
+    let n = arr.length;
+    let swapped = true;
+    while (swapped) {
+        swapped = false;
+        for (let i = 1; i &lt; n; i++) {
+            if (arr[i - 1] &gt; arr[i]) {
+                [arr[i - 1], arr[i]] = [arr[i], arr[i - 1]];
+                swapped = true;
+            }
+        }
+        n--;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C# - bubble sort (early exit)
+void BubbleSort(int[] arr) {
+    int n = arr.Length;
+    bool swapped = true;
+    while (swapped) {
+        swapped = false;
+        for (int i = 1; i &lt; n; i++) {
+            if (arr[i - 1] &gt; arr[i]) {
+                (arr[i - 1], arr[i]) = (arr[i], arr[i - 1]);
+                swapped = true;
+            }
+        }
+        n--;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python - bubble sort (early exit)
+from typing import List
+
+def bubble_sort(arr: List[int]) -&gt; None:
+    n = len(arr)
+    swapped = True
+    while swapped:
+        swapped = False
+        for i in range(1, n):
+            if arr[i - 1] &gt; arr[i]:
+                arr[i - 1], arr[i] = arr[i], arr[i - 1]
+                swapped = True
+        n -= 1</code></pre>
+            </div>
+
+        </div>
+        <div class="complexity-note">
+            Worst time: <strong>O(n²)</strong>. Best (already sorted + early exit): <strong>O(n)</strong>. &nbsp;|&nbsp; Extra space: <strong>O(1)</strong>.
+        </div>
+
+        <hr>
+
+        <h2>
+            Example 4 - Merge Sort (O(n log n))
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s12b-merge">
+                Dig deeper
+            </button>
+            <button type="button" class="deep-dive-trigger inline secondary" data-deep-id="understand-s12b-merge">
+                Understand the algorithm
+            </button>
+        </h2>
+        <p>Merge sort uses divide-and-conquer: split the array, sort the halves, then merge the two sorted halves.</p>
+        
+        <div class="code-example" data-example="s12b-ex4-merge">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 4</span>
+                    <span class="meta">Merge sort using temporary storage</span>
+                </div>
+                <button type="button" class="copy-button" aria-label="Copy code">
+                    Copy
+                </button>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C - merge sort (uses temp array)
+#include &lt;stdlib.h&gt;
+
+static void merge(int* a, int* tmp, int left, int mid, int right) {
+    int i = left, j = mid, k = left;
+    while (i &lt; mid &amp;&amp; j &lt; right) tmp[k++] = (a[i] &lt;= a[j]) ? a[i++] : a[j++];
+    while (i &lt; mid)  tmp[k++] = a[i++];
+    while (j &lt; right) tmp[k++] = a[j++];
+    for (int p = left; p &lt; right; p++) a[p] = tmp[p];
+}
+
+static void merge_sort_rec(int* a, int* tmp, int left, int right) {
+    if (right - left &lt;= 1) return;
+    int mid = left + (right - left) / 2;
+    merge_sort_rec(a, tmp, left, mid);
+    merge_sort_rec(a, tmp, mid, right);
+    merge(a, tmp, left, mid, right);
+}
+
+void merge_sort(int* a, int n) {
+    int* tmp = (int*)malloc(sizeof(int) * n);
+    merge_sort_rec(a, tmp, 0, n);
+    free(tmp);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++ - merge sort
+#include &lt;vector&gt;
+
+static void merge(std::vector&lt;int&gt;&amp; a, std::vector&lt;int&gt;&amp; tmp, int left, int mid, int right) {
+    int i = left, j = mid, k = left;
+    while (i &lt; mid &amp;&amp; j &lt; right) tmp[k++] = (a[i] &lt;= a[j]) ? a[i++] : a[j++];
+    while (i &lt; mid)  tmp[k++] = a[i++];
+    while (j &lt; right) tmp[k++] = a[j++];
+    for (int p = left; p &lt; right; p++) a[p] = tmp[p];
+}
+
+static void mergeSortRec(std::vector&lt;int&gt;&amp; a, std::vector&lt;int&gt;&amp; tmp, int left, int right) {
+    if (right - left &lt;= 1) return;
+    int mid = left + (right - left) / 2;
+    mergeSortRec(a, tmp, left, mid);
+    mergeSortRec(a, tmp, mid, right);
+    merge(a, tmp, left, mid, right);
+}
+
+void mergeSort(std::vector&lt;int&gt;&amp; a) {
+    std::vector&lt;int&gt; tmp(a.size());
+    mergeSortRec(a, tmp, 0, (int)a.size());
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java - merge sort
+void mergeSort(int[] a) {
+    int[] tmp = new int[a.length];
+    mergeSortRec(a, tmp, 0, a.length);
+}
+
+void mergeSortRec(int[] a, int[] tmp, int left, int right) {
+    if (right - left &lt;= 1) return;
+    int mid = left + (right - left) / 2;
+    mergeSortRec(a, tmp, left, mid);
+    mergeSortRec(a, tmp, mid, right);
+    merge(a, tmp, left, mid, right);
+}
+
+void merge(int[] a, int[] tmp, int left, int mid, int right) {
+    int i = left, j = mid, k = left;
+    while (i &lt; mid &amp;&amp; j &lt; right) tmp[k++] = (a[i] &lt;= a[j]) ? a[i++] : a[j++];
+    while (i &lt; mid)  tmp[k++] = a[i++];
+    while (j &lt; right) tmp[k++] = a[j++];
+    for (int p = left; p &lt; right; p++) a[p] = tmp[p];
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript - merge sort (returns new array)
+function mergeSort(arr) {
+    if (arr.length &lt;= 1) return arr.slice();
+    const mid = Math.floor(arr.length / 2);
+    const left = mergeSort(arr.slice(0, mid));
+    const right = mergeSort(arr.slice(mid));
+    return merge(left, right);
+}
+function merge(left, right) {
+    const out = [];
+    let i = 0, j = 0;
+    while (i &lt; left.length &amp;&amp; j &lt; right.length) {
+        if (left[i] &lt;= right[j]) out.push(left[i++]);
+        else out.push(right[j++]);
+    }
+    return out.concat(left.slice(i)).concat(right.slice(j));
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C# - merge sort
+void MergeSort(int[] a) {
+    int[] tmp = new int[a.Length];
+    MergeSortRec(a, tmp, 0, a.Length);
+}
+
+void MergeSortRec(int[] a, int[] tmp, int left, int right) {
+    if (right - left &lt;= 1) return;
+    int mid = left + (right - left) / 2;
+    MergeSortRec(a, tmp, left, mid);
+    MergeSortRec(a, tmp, mid, right);
+    Merge(a, tmp, left, mid, right);
+}
+
+void Merge(int[] a, int[] tmp, int left, int mid, int right) {
+    int i = left, j = mid, k = left;
+    while (i &lt; mid &amp;&amp; j &lt; right) tmp[k++] = (a[i] &lt;= a[j]) ? a[i++] : a[j++];
+    while (i &lt; mid)  tmp[k++] = a[i++];
+    while (j &lt; right) tmp[k++] = a[j++];
+    for (int p = left; p &lt; right; p++) a[p] = tmp[p];
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python - merge sort (returns new list)
+from typing import List
+
+def merge_sort(arr: List[int]) -&gt; List[int]:
+    if len(arr) &lt;= 1:
+        return arr[:]
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+    return _merge(left, right)
+
+def _merge(left: List[int], right: List[int]) -&gt; List[int]:
+    out: List[int] = []
+    i = j = 0
+    while i &lt; len(left) and j &lt; len(right):
+        if left[i] &lt;= right[j]:
+            out.append(left[i]); i += 1
+        else:
+            out.append(right[j]); j += 1
+    out.extend(left[i:]); out.extend(right[j:])
+    return out</code></pre>
+            </div>
+
+        </div>
+        <div class="complexity-note">
+            Time: <strong>O(n log n)</strong>. &nbsp;|&nbsp; Extra space: <strong>O(n)</strong>.
+        </div>
+
+        <hr>
+
+        <h2>
+            Example 5 - Quick Sort (Average O(n log n))
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s12b-quick">
+                Dig deeper
+            </button>
+            <button type="button" class="deep-dive-trigger inline secondary" data-deep-id="understand-s12b-quick">
+                Understand the algorithm
+            </button>
+        </h2>
+        <p>Quicksort partitions the array around a pivot so that smaller items go left and larger items go right, then recursively sorts both sides.</p>
+        
+        <div class="code-example" data-example="s12b-ex5-quick">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 5</span>
+                    <span class="meta">Quicksort (Lomuto partition)</span>
+                </div>
+                <button type="button" class="copy-button" aria-label="Copy code">
+                    Copy
+                </button>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C - quicksort (Lomuto partition)
+static void swap(int* a, int* b) { int t=*a; *a=*b; *b=t; }
+
+static int partition(int* arr, int lo, int hi) {
+    int pivot = arr[hi];
+    int i = lo;
+    for (int j = lo; j &lt; hi; j++) {
+        if (arr[j] &lt;= pivot) {
+            swap(&amp;arr[i], &amp;arr[j]);
+            i++;
+        }
+    }
+    swap(&amp;arr[i], &amp;arr[hi]);
+    return i;
+}
+
+void quick_sort(int* arr, int lo, int hi) {
+    if (lo &gt;= hi) return;
+    int p = partition(arr, lo, hi);
+    quick_sort(arr, lo, p - 1);
+    quick_sort(arr, p + 1, hi);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++ - quicksort (Lomuto partition)
+#include &lt;vector&gt;
+#include &lt;utility&gt;
+
+static int partition(std::vector&lt;int&gt;&amp; a, int lo, int hi) {
+    int pivot = a[hi];
+    int i = lo;
+    for (int j = lo; j &lt; hi; j++) {
+        if (a[j] &lt;= pivot) {
+            std::swap(a[i], a[j]);
+            i++;
+        }
+    }
+    std::swap(a[i], a[hi]);
+    return i;
+}
+
+void quickSort(std::vector&lt;int&gt;&amp; a, int lo, int hi) {
+    if (lo &gt;= hi) return;
+    int p = partition(a, lo, hi);
+    quickSort(a, lo, p - 1);
+    quickSort(a, p + 1, hi);
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java - quicksort (Lomuto partition)
+void quickSort(int[] a, int lo, int hi) {
+    if (lo &gt;= hi) return;
+    int p = partition(a, lo, hi);
+    quickSort(a, lo, p - 1);
+    quickSort(a, p + 1, hi);
+}
+
+int partition(int[] a, int lo, int hi) {
+    int pivot = a[hi];
+    int i = lo;
+    for (int j = lo; j &lt; hi; j++) {
+        if (a[j] &lt;= pivot) {
+            int tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+            i++;
+        }
+    }
+    int tmp = a[i]; a[i] = a[hi]; a[hi] = tmp;
+    return i;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript - quicksort (in-place, Lomuto)
+function quickSort(a, lo = 0, hi = a.length - 1) {
+    if (lo &gt;= hi) return;
+    const p = partition(a, lo, hi);
+    quickSort(a, lo, p - 1);
+    quickSort(a, p + 1, hi);
+}
+
+function partition(a, lo, hi) {
+    const pivot = a[hi];
+    let i = lo;
+    for (let j = lo; j &lt; hi; j++) {
+        if (a[j] &lt;= pivot) {
+            [a[i], a[j]] = [a[j], a[i]];
+            i++;
+        }
+    }
+    [a[i], a[hi]] = [a[hi], a[i]];
+    return i;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C# - quicksort (Lomuto partition)
+void QuickSort(int[] a, int lo, int hi) {
+    if (lo &gt;= hi) return;
+    int p = Partition(a, lo, hi);
+    QuickSort(a, lo, p - 1);
+    QuickSort(a, p + 1, hi);
+}
+
+int Partition(int[] a, int lo, int hi) {
+    int pivot = a[hi];
+    int i = lo;
+    for (int j = lo; j &lt; hi; j++) {
+        if (a[j] &lt;= pivot) {
+            (a[i], a[j]) = (a[j], a[i]);
+            i++;
+        }
+    }
+    (a[i], a[hi]) = (a[hi], a[i]);
+    return i;
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python - quicksort (in-place, Lomuto)
+from typing import List
+
+def quick_sort(a: List[int], lo: int = 0, hi: int | None = None) -&gt; None:
+    if hi is None:
+        hi = len(a) - 1
+    if lo &gt;= hi:
+        return
+    p = _partition(a, lo, hi)
+    quick_sort(a, lo, p - 1)
+    quick_sort(a, p + 1, hi)
+
+def _partition(a: List[int], lo: int, hi: int) -&gt; int:
+    pivot = a[hi]
+    i = lo
+    for j in range(lo, hi):
+        if a[j] &lt;= pivot:
+            a[i], a[j] = a[j], a[i]
+            i += 1
+    a[i], a[hi] = a[hi], a[i]
+    return i</code></pre>
+            </div>
+
+        </div>
+        <div class="complexity-note">
+            Average time: <strong>O(n log n)</strong>. Worst case: <strong>O(n²)</strong> (bad pivots). &nbsp;|&nbsp; Extra space: <strong>O(log n)</strong> recursion average.
+        </div>
+
+        <hr>
+
+        <h2>
+            Example 6 - Heap Sort (O(n log n))
+            <button type="button" class="deep-dive-trigger inline" data-deep-id="deep-dive-s12b-heap">
+                Dig deeper
+            </button>
+            <button type="button" class="deep-dive-trigger inline secondary" data-deep-id="understand-s12b-heap">
+                Understand the algorithm
+            </button>
+        </h2>
+        <p>Heapsort builds a max-heap, then repeatedly swaps the max element to the end and restores the heap property.</p>
+        
+        <div class="code-example" data-example="s12b-ex6-heap">
+            <div class="code-example-header">
+                <div class="code-example-title">
+                    <span class="label">Example 6</span>
+                    <span class="meta">Heapsort via max-heap</span>
+                </div>
+                <button type="button" class="copy-button" aria-label="Copy code">
+                    Copy
+                </button>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-button active" data-lang="c"><span class="dot"></span>C</button>
+                <button class="tab-button" data-lang="cpp"><span class="dot"></span>C++</button>
+                <button class="tab-button" data-lang="java"><span class="dot"></span>Java</button>
+                <button class="tab-button" data-lang="js"><span class="dot"></span>JavaScript</button>
+                <button class="tab-button" data-lang="cs"><span class="dot"></span>C#</button>
+                <button class="tab-button" data-lang="py"><span class="dot"></span>Python</button>
+            </div>
+
+            <div class="code-panel" data-lang-panel="c">
+                <pre><code class="language-c">// C - heapsort (max-heap)
+static void swap(int* a, int* b) { int t=*a; *a=*b; *b=t; }
+
+static void sift_down(int* a, int n, int i) {
+    while (1) {
+        int left = 2*i + 1, right = 2*i + 2;
+        int largest = i;
+
+        if (left &lt; n &amp;&amp; a[left] &gt; a[largest]) largest = left;
+        if (right &lt; n &amp;&amp; a[right] &gt; a[largest]) largest = right;
+
+        if (largest == i) break;
+        swap(&amp;a[i], &amp;a[largest]);
+        i = largest;
+    }
+}
+
+void heap_sort(int* a, int n) {
+    for (int i = n/2 - 1; i &gt;= 0; i--) sift_down(a, n, i);
+    for (int end = n - 1; end &gt; 0; end--) {
+        swap(&amp;a[0], &amp;a[end]);
+        sift_down(a, end, 0);
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cpp">
+                <pre><code class="language-cpp">// C++ - heapsort (max-heap)
+#include &lt;vector&gt;
+#include &lt;utility&gt;
+
+static void siftDown(std::vector&lt;int&gt;&amp; a, int n, int i) {
+    while (true) {
+        int left = 2*i + 1, right = 2*i + 2;
+        int largest = i;
+
+        if (left &lt; n &amp;&amp; a[left] &gt; a[largest]) largest = left;
+        if (right &lt; n &amp;&amp; a[right] &gt; a[largest]) largest = right;
+
+        if (largest == i) break;
+        std::swap(a[i], a[largest]);
+        i = largest;
+    }
+}
+
+void heapSort(std::vector&lt;int&gt;&amp; a) {
+    int n = (int)a.size();
+    for (int i = n/2 - 1; i &gt;= 0; i--) siftDown(a, n, i);
+    for (int end = n - 1; end &gt; 0; end--) {
+        std::swap(a[0], a[end]);
+        siftDown(a, end, 0);
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="java">
+                <pre><code class="language-java">// Java - heapsort (max-heap)
+void heapSort(int[] a) {
+    int n = a.length;
+    for (int i = n/2 - 1; i &gt;= 0; i--) siftDown(a, n, i);
+    for (int end = n - 1; end &gt; 0; end--) {
+        int tmp = a[0]; a[0] = a[end]; a[end] = tmp;
+        siftDown(a, end, 0);
+    }
+}
+
+void siftDown(int[] a, int n, int i) {
+    while (true) {
+        int left = 2*i + 1, right = 2*i + 2;
+        int largest = i;
+        if (left &lt; n &amp;&amp; a[left] &gt; a[largest]) largest = left;
+        if (right &lt; n &amp;&amp; a[right] &gt; a[largest]) largest = right;
+        if (largest == i) return;
+        int tmp = a[i]; a[i] = a[largest]; a[largest] = tmp;
+        i = largest;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="js">
+                <pre><code class="language-javascript">// JavaScript - heapsort (max-heap)
+function heapSort(a) {
+    const n = a.length;
+
+    for (let i = Math.floor(n/2) - 1; i &gt;= 0; i--) siftDown(a, n, i);
+
+    for (let end = n - 1; end &gt; 0; end--) {
+        [a[0], a[end]] = [a[end], a[0]];
+        siftDown(a, end, 0);
+    }
+}
+
+function siftDown(a, n, i) {
+    while (true) {
+        const left = 2*i + 1, right = 2*i + 2;
+        let largest = i;
+
+        if (left &lt; n &amp;&amp; a[left] &gt; a[largest]) largest = left;
+        if (right &lt; n &amp;&amp; a[right] &gt; a[largest]) largest = right;
+
+        if (largest === i) return;
+        [a[i], a[largest]] = [a[largest], a[i]];
+        i = largest;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="cs">
+                <pre><code class="language-csharp">// C# - heapsort (max-heap)
+void HeapSort(int[] a) {
+    int n = a.Length;
+    for (int i = n/2 - 1; i &gt;= 0; i--) SiftDown(a, n, i);
+
+    for (int end = n - 1; end &gt; 0; end--) {
+        (a[0], a[end]) = (a[end], a[0]);
+        SiftDown(a, end, 0);
+    }
+}
+
+void SiftDown(int[] a, int n, int i) {
+    while (true) {
+        int left = 2*i + 1, right = 2*i + 2;
+        int largest = i;
+
+        if (left &lt; n &amp;&amp; a[left] &gt; a[largest]) largest = left;
+        if (right &lt; n &amp;&amp; a[right] &gt; a[largest]) largest = right;
+
+        if (largest == i) return;
+        (a[i], a[largest]) = (a[largest], a[i]);
+        i = largest;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" data-lang-panel="py">
+                <pre><code class="language-python"># Python - heapsort (max-heap)
+from typing import List
+
+def heap_sort(a: List[int]) -&gt; None:
+    n = len(a)
+
+    def sift_down(n: int, i: int) -&gt; None:
+        while True:
+            left, right = 2*i + 1, 2*i + 2
+            largest = i
+            if left &lt; n and a[left] &gt; a[largest]:
+                largest = left
+            if right &lt; n and a[right] &gt; a[largest]:
+                largest = right
+            if largest == i:
+                return
+            a[i], a[largest] = a[largest], a[i]
+            i = largest
+
+    for i in range(n//2 - 1, -1, -1):
+        sift_down(n, i)
+
+    for end in range(n - 1, 0, -1):
+        a[0], a[end] = a[end], a[0]
+        sift_down(end, 0)</code></pre>
+            </div>
+
+        </div>
+        <div class="complexity-note">
+            Time: <strong>O(n log n)</strong>. &nbsp;|&nbsp; Extra space: <strong>O(1)</strong>.
+        </div>
+
+        <hr>
+
+        <hr>
+
+        <div class="top-nav">
+            <a href="index.html">
+                ← Back to Index
+            </a>
+        </div>
+
+        <!-- ======================= Understand templates ======================= -->
+
+        <div class="deep-dive-template" id="understand-s12b-big-o"
+            data-title="Understanding Big-O and why it matters" hidden>
+            <p>Sorting and searching often differ mainly by growth rate. For large <code>n</code>, O(n log n) sorts are dramatically faster than O(n²) sorts.</p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s12b-big-o"
+            data-title="Big-O and sorting" hidden>
+            <p>Comparison-based sorting has a lower bound of Ω(n log n) comparisons in the worst case, which is why fast general-purpose sorts cluster around n log n.</p>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s12b-insertion"
+            data-title="Insertion sort: what's happening" hidden>
+            <ol><li>Treat index 0 as a sorted prefix.</li><li>Take the next element (key).</li><li>Shift larger elements right until the insertion spot is found.</li><li>Place the key there.</li></ol><p><strong>Why it's useful:</strong> great for small arrays and nearly-sorted data.</p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s12b-insertion"
+            data-title="Insertion sort vs. selection/bubble" hidden>
+            <ul><li>Insertion often wins on nearly-sorted input (few shifts).</li><li>Selection does a fixed number of comparisons no matter what.</li><li>Many real libraries use insertion sort as a small-array “base case”.</li></ul>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s12b-selection"
+            data-title="Selection sort: step-by-step" hidden>
+            <p>For each position <code>i</code>, find the smallest element in <code>i..n-1</code> and swap it into place. Two loops → O(n²).</p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s12b-selection"
+            data-title="Why selection sort does ~n²/2 comparisons" hidden>
+            <p>The inner loop runs <code>n-1</code>, then <code>n-2</code>, …, down to 1: <code>n(n-1)/2</code> comparisons.</p>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s12b-bubble"
+            data-title="Bubble sort: what early-exit changes" hidden>
+            <p>Bubble sort swaps adjacent inversions. If a full pass makes no swaps, the array is already sorted and you can stop early (best case O(n)).</p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s12b-bubble"
+            data-title="When bubble sort is okay" hidden>
+            <ul><li>Teaching and visualization.</li><li>Very small inputs.</li><li>Detecting “already sorted” with early exit (still rarely used in production).</li></ul>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s12b-merge"
+            data-title="Merge sort: the recursion picture" hidden>
+            <p>Split until subarrays of size 1, then merge sorted halves back together. There are O(log n) levels, and each level merges O(n) total work → O(n log n).</p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s12b-merge"
+            data-title="Why merge sort needs extra space" hidden>
+            <p>Merging typically needs a temporary array to hold merged results, which is why merge sort uses O(n) extra space (in these implementations).</p>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s12b-quick"
+            data-title="Quicksort: partitioning intuition" hidden>
+            <p>Partition arr around a pivot so everything ≤ pivot is left and everything &gt; pivot is right. Then sort each side. Average O(n log n) comes from balanced partitions.</p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s12b-quick"
+            data-title="Avoiding quicksort worst case" hidden>
+            <ul><li>Randomized pivot selection.</li><li>Median-of-three pivot.</li><li>Switch to heapsort if recursion gets too deep (introsort).</li></ul>
+        </div>
+
+        <div class="deep-dive-template" id="understand-s12b-heap"
+            data-title="Heapsort: two phases" hidden>
+            <ol><li><strong>Heapify:</strong> turn the array into a max-heap.</li><li><strong>Extract:</strong> swap max with end, shrink heap, sift down.</li></ol><p>Each extract is O(log n), repeated n times → O(n log n).</p>
+        </div>
+
+        <div class="deep-dive-template" id="deep-dive-s12b-heap"
+            data-title="Why heapsort is O(1) extra space" hidden>
+            <p>The heap is stored directly in the array. Aside from a few variables, no extra arrays are needed, so extra space stays O(1).</p>
+        </div>
+
+
+<div class="deep-dive-backdrop" id="deep-dive-backdrop" aria-hidden="true">
+            <div class="deep-dive-modal" role="dialog" aria-modal="true" aria-labelledby="deep-dive-title">
+                <button type="button" class="deep-dive-close" aria-label="Close">&times;</button>
+                <h2 id="deep-dive-title">&nbsp;</h2>
+                <div class="deep-dive-body"></div>
+            </div>
+        </div>
+
+    </main>
+</body>
+
+</html>

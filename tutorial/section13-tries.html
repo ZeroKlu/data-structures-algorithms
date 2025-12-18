@@ -938,7 +938,7 @@ class PrefixTrie:
     <div class="callout">
         <strong>Two-step pattern:</strong>
         (1) <strong>Walk</strong> the trie to the node for the prefix. (2) <strong>Enumerate</strong>
-        all words in that node’s subtree (usually via DFS), stopping after <code>K</code> results.
+        all words in that node's subtree (usually via DFS), stopping after <code>K</code> results.
     </div>
 
     <h3 class="subhead">Algorithm sketch</h3>
@@ -1830,7 +1830,7 @@ if __name__ == &quot;__main__&quot;:
         </li>
         <li>
             A <strong>frequency</strong> / usage file (e.g., <code>..\\data\\frequency.txt</code>) simulates what users
-            type more often. Each occurrence bumps a word’s frequency.
+            type more often. Each occurrence bumps a word's frequency.
         </li>
     </ul>
 
@@ -3028,7 +3028,7 @@ if __name__ == &quot;__main__&quot;:
     <div class="deep-dive-template" id="deep-dive-s13-autocomplete"
          data-title="Autocomplete: why DFS works and when it hurts" hidden>
         <p>
-            Once you’ve found the node for a prefix, all valid completions live in that node’s subtree.
+            Once you've found the node for a prefix, all valid completions live in that node's subtree.
             A depth-first search is a simple way to enumerate them.
         </p>
         <ul>
@@ -3101,11 +3101,11 @@ if __name__ == &quot;__main__&quot;:
                 Run a <strong>DFS</strong> (or BFS) from that node. Maintain a buffer holding the current word.
                 <ul>
                     <li>When you reach a node marked <em>end-of-word</em>, output the buffer as a suggestion.</li>
-                    <li>When you traverse to a child, append the child’s character; when you return, pop it.</li>
+                    <li>When you traverse to a child, append the child's character; when you return, pop it.</li>
                 </ul>
             </li>
             <li>
-                Stop after <code>K</code> suggestions so you don’t traverse an enormous subtree.
+                Stop after <code>K</code> suggestions so you don't traverse an enormous subtree.
             </li>
         </ol>
         <p>
@@ -3127,7 +3127,7 @@ if __name__ == &quot;__main__&quot;:
             </li>
             <li>
                 Load a <strong>frequency/usage</strong> file (e.g., <code>..\\data\\frequency.txt</code>) where each line is a word
-                the user typed. Each occurrence increments that word’s terminal node frequency.
+                the user typed. Each occurrence increments that word's terminal node frequency.
             </li>
             <li>
                 For a prefix, walk to the prefix node (same as basic autocomplete).

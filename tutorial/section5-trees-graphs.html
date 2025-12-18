@@ -929,7 +929,7 @@ def shortest_distances(start: int, graph: List[List[int]]) -&gt; List[int]:
         <div class="deep-dive-template" id="deep-dive-s5-ex1"
             data-title="Tree shapes, height, and recursion depth" hidden>
             <p>
-                The recursion depth of a tree traversal is tied directly to the tree’s height:
+                The recursion depth of a tree traversal is tied directly to the tree's height:
             </p>
             <ul>
                 <li>A <strong>balanced</strong> binary tree with <code>n</code> nodes has height <code>O(log n)</code>,
@@ -964,7 +964,7 @@ def shortest_distances(start: int, graph: List[List[int]]) -&gt; List[int]:
                 This makes it ideal for:
             </p>
             <ul>
-                <li>Computing the tree’s <strong>minimum depth</strong> or <strong>maximum width</strong>.</li>
+                <li>Computing the tree's <strong>minimum depth</strong> or <strong>maximum width</strong>.</li>
                 <li>Printing nodes level by level, which is helpful for debugging.</li>
                 <li>Problems that talk about “first time you reach this node” or “closest leaf”.</li>
             </ul>
@@ -989,7 +989,7 @@ def shortest_distances(start: int, graph: List[List[int]]) -&gt; List[int]:
                 <li>Perform <strong>topological sort</strong> in DAGs by recording nodes in postorder.</li>
             </ul>
             <p>
-                In interviews, you’ll often convert recursion to an explicit stack to avoid stack limits or to
+                In interviews, you'll often convert recursion to an explicit stack to avoid stack limits or to
                 gain more control over the traversal order, but the underlying idea remains the same.
             </p>
         </div>
@@ -1001,7 +1001,7 @@ def shortest_distances(start: int, graph: List[List[int]]) -&gt; List[int]:
             </p>
             <ul>
                 <li>You discover nodes in order of increasing distance from the start.</li>
-                <li>When you first visit a node, you know you’ve found a shortest path to it.</li>
+                <li>When you first visit a node, you know you've found a shortest path to it.</li>
             </ul>
             <p>
                 Enhancements commonly used in problems:
@@ -1014,7 +1014,7 @@ def shortest_distances(start: int, graph: List[List[int]]) -&gt; List[int]:
             </ul>
             <p>
                 When edges have different positive weights, plain BFS is no longer correct and you need
-                Dijkstra’s algorithm or one of its variants instead.
+                Dijkstra's algorithm or one of its variants instead.
             </p>
         </div>
 

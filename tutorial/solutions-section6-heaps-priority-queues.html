@@ -1550,7 +1550,7 @@ class KthLargest:
                                 <li>Find the smallest among the three.</li>
                                 <li>
                                     If one of the children is smaller than the current node, swap with the
-                                    smallest child and continue from that child’s index.
+                                    smallest child and continue from that child's index.
                                 </li>
                                 <li>Stop when no child is smaller or you are at a leaf.</li>
                             </ol>
@@ -1653,7 +1653,7 @@ class KthLargest:
                     <strong>Why we go from bottom up:</strong>
                     <ul>
                         <li>
-                            When we call <code>heapify</code> on a node, we assume its children’s subtrees
+                            When we call <code>heapify</code> on a node, we assume its children's subtrees
                             are already valid heaps.
                         </li>
                         <li>
@@ -1697,7 +1697,7 @@ class KthLargest:
                     <ul>
                         <li><code>n &lt;= 1</code>: the array is already a heap.</li>
                         <li>
-                            Make sure <code>start = n/2 - 1</code> uses integer division so you don’t
+                            Make sure <code>start = n/2 - 1</code> uses integer division so you don't
                             get fractional indices.
                         </li>
                     </ul>
@@ -1709,7 +1709,7 @@ class KthLargest:
             data-title="Step-by-step: Using a max-heap of size k to find k smallest elements" hidden>
             <p>
                 We want the <strong>k smallest</strong> elements from an array of size <code>n</code>,
-                but we don’t need them fully sorted. A <strong>max-heap of size k</strong> lets us keep
+                but we don't need them fully sorted. A <strong>max-heap of size k</strong> lets us keep
                 only the useful candidates.
             </p>
 
@@ -1736,12 +1736,12 @@ class KthLargest:
                     <ol>
                         <li>
                             If the heap has fewer than <code>k</code> elements, just push <code>x</code>.
-                            We haven’t even collected k candidates yet.
+                            We haven't even collected k candidates yet.
                         </li>
                         <li>
                             Otherwise, compare <code>x</code> to the heap root:
                             <ul>
-                                <li>If <code>x</code> is <strong>smaller</strong> than the root, it’s better.</li>
+                                <li>If <code>x</code> is <strong>smaller</strong> than the root, it's better.</li>
                                 <li>Pop the root (the current worst candidate) and push <code>x</code>.</li>
                                 <li>If <code>x</code> is larger or equal, we ignore it.</li>
                             </ul>
@@ -1774,7 +1774,7 @@ class KthLargest:
                     <p>
                         We are trying to keep the smallest elements. The one we most want to discard is the
                         <em>largest</em> among the kept elements, so that should be at the top of the heap.
-                        That’s exactly what a max-heap gives us.
+                        That's exactly what a max-heap gives us.
                     </p>
                 </li>
 
@@ -1908,7 +1908,7 @@ class KthLargest:
                             Otherwise, compare <code>val</code> to the heap root
                             (<code>heap[0]</code> in array-based min-heap):
                             <ul>
-                                <li>If <code>val</code> is ≤ root, it’s not in the top k; ignore it.</li>
+                                <li>If <code>val</code> is ≤ root, it's not in the top k; ignore it.</li>
                                 <li>
                                     If <code>val</code> is &gt; root, pop the root (old kth largest) and
                                     push <code>val</code> (new better candidate).

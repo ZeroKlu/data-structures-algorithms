@@ -1395,7 +1395,7 @@ def count_unique_pairs(nums: List[int], target: int) -&gt; int:
                                 <li>Let <code>x = nums[i]</code>.</li>
                                 <li>Compute <code>need = target - x</code>.</li>
                                 <li>
-                                    If <code>need</code> is already in <code>index_of</code>, we’ve found a solution:
+                                    If <code>need</code> is already in <code>index_of</code>, we've found a solution:
                                     <code>(index_of[need], i)</code>.
                                 </li>
                                 <li>Otherwise, store <code>index_of[x] = i</code> and move on.</li>
