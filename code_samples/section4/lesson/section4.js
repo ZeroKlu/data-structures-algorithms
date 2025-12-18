@@ -1,12 +1,17 @@
+// Defines a stack of integers
 class IntStack {
+    // Constructor
     constructor() {
+        // The data stored in the stack
         this.data = [];
     }
 
+    // Pushes a value onto the stack
     push(value) {
         this.data.push(value);
     }
 
+    // Pops a value off the stack
     pop() {
         if (this.data.length === 0) {
             throw new Error("stack underflow");
@@ -14,21 +19,28 @@ class IntStack {
         return this.data.pop();
     }
 
+    // Checks if the stack is empty
     isEmpty() {
         return this.data.length === 0;
     }
 }
 
+// Defines a queue of integers
 class IntQueue {
+    // Constructor
     constructor() {
+        // The data stored in the queue
         this.data = [];
+        // The head of the queue
         this.head = 0; // for O(1) dequeue
     }
 
+    // Adds a value to the queue
     enqueue(value) {
         this.data.push(value);
     }
 
+    // Removes a value from the queue
     dequeue() {
         if (this.head >= this.data.length) {
             throw new Error("queue underflow");
@@ -38,17 +50,20 @@ class IntQueue {
         return value;
     }
 
+    // Checks if the queue is empty
     isEmpty() {
         return this.head >= this.data.length;
     }
 }
 
+// Check if two parentheses are matching
 function isMatching(open, close) {
     return (open === "(" && close === ")") ||
            (open === "[" && close === "]") ||
            (open === "{" && close === "}");
 }
 
+// Check if a string of parentheses is valid
 function isValidParentheses(s) {
     const stack = [];
     for (const c of s) {
@@ -63,21 +78,37 @@ function isValidParentheses(s) {
     return stack.length === 0;
 }
 
+/**
+ * This function implements the Breadth-first search algorithm.
+ * It starts from a given node and explores all the connected nodes in a graph.
+ * The graph is represented by an adjacency list.
+ *
+ * @param start: The starting node for the BFS traversal.
+ * @param graph: The adjacency list representing the graph.
+ */
 function bfs(start, graph) {
     const n = graph.length;
     const visited = new Array(n).fill(false);
     const queue = [];
 
+    // Mark the start node as visited and enqueue it
     visited[start] = true;
     queue.push(start);
 
+    // Print the BFS traversal starting from the start node
+    console.log("BFS starting from " + start + ":");
+
     let head = 0;
     while (head < queue.length) {
+        // Dequeue a node from the queue and print it
         const node = queue[head++];
-        console.log(node);
+        console.log("  visiting " + node);
 
+        // Look at all possible neighbors of 'node'
         for (const neighbor of graph[node]) {
+            // If there's an edge from node to neighbor and neighbor is not visited
             if (!visited[neighbor]) {
+                // Mark the neighbor as visited and enqueue it
                 visited[neighbor] = true;
                 queue.push(neighbor);
             }

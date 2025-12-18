@@ -61,19 +61,32 @@ def is_valid_parentheses(s: str) -> bool:
     return not stack
 
 def bfs(start: int, graph: list[list[int]]) -> None:
-    """Breadth-first search."""
+    """
+    This function implements the Breadth-first search algorithm.
+    It starts from a given node and explores all the connected nodes in a graph.
+    The graph is represented by an adjacency list.
+    """
     n = len(graph)
     visited = [False] * n
     queue: deque[int] = deque()
 
+    # Mark the start node as visited and enqueue it
     visited[start] = True
     queue.append(start)
 
+    # Print the BFS traversal starting from the start node
+    print("BFS starting from", start, ":")
+
     while queue:
+        # Dequeue a node from the queue and print it
         node = queue.popleft()
-        print(node)
+        print("  visiting", node)
+
+        # Look at all possible neighbors of 'node'
         for neighbor in graph[node]:
+            # If there's an edge from node to neighbor and neighbor is not visited
             if not visited[neighbor]:
+                # Mark the neighbor as visited and enqueue it
                 visited[neighbor] = True
                 queue.append(neighbor)
 

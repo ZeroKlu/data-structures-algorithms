@@ -5,12 +5,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class section4 {
+    // Check if two parentheses are matching
     boolean isMatching(char open, char close) {
         return (open == '(' && close == ')') ||
             (open == '[' && close == ']') ||
             (open == '{' && close == '}');
     }
 
+    // Check if a string of parentheses is valid
     boolean isValidParentheses(String s) {
         java.util.Deque<Character> stack = new java.util.ArrayDeque<>();
         for (char c : s.toCharArray()) {
@@ -25,20 +27,36 @@ public class section4 {
         return stack.isEmpty();
     }
 
+    /**
+     * This function implements the Breadth-first search algorithm.
+     * It starts from a given node and explores all the connected nodes in a graph.
+     * The graph is represented by an adjacency list.
+     *
+     * @param start: The starting node for the BFS traversal.
+     * @param graph: The adjacency list representing the graph.
+     */
     void bfs(int start, java.util.List<java.util.List<Integer>> graph) {
         int n = graph.size();
         boolean[] visited = new boolean[n];
         java.util.Queue<Integer> queue = new java.util.ArrayDeque<>();
 
+        // Mark the start node as visited and enqueue it
         visited[start] = true;
         queue.add(start);
 
-        while (!queue.isEmpty()) {
-            int node = queue.remove();
-            System.out.println(node);
+        // Print the BFS traversal starting from the start node
+        System.out.println("BFS starting from " + start + ":");
 
+        while (!queue.isEmpty()) {
+            // Dequeue a node from the queue and print it
+            int node = queue.poll();
+            System.out.println("  visiting " + node);
+
+            // Look at all possible neighbors of 'node'
             for (int neighbor : graph.get(node)) {
+                // If there's an edge from node to neighbor and neighbor is not visited
                 if (!visited[neighbor]) {
+                    // Mark the neighbor as visited and enqueue it
                     visited[neighbor] = true;
                     queue.add(neighbor);
                 }

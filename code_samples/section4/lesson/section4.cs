@@ -1,9 +1,11 @@
+// Check if two parentheses are matching
 static bool IsMatching(char open, char close) {
     return (open == '(' && close == ')') ||
            (open == '[' && close == ']') ||
            (open == '{' && close == '}');
 }
 
+// Check if a string of parentheses is valid
 static bool IsValidParentheses(string s) {
     var stack = new System.Collections.Generic.Stack<char>();
     foreach (var c in s) {
@@ -18,20 +20,36 @@ static bool IsValidParentheses(string s) {
     return stack.Count == 0;
 }
 
+/**
+ * This function implements the Breadth-first search algorithm.
+ * It starts from a given node and explores all the connected nodes in a graph.
+ * The graph is represented by an adjacency list.
+ *
+ * @param start: The starting node for the BFS traversal.
+ * @param graph: The adjacency list representing the graph.
+ */
 static void Bfs(int start, System.Collections.Generic.List<System.Collections.Generic.List<int>> graph) {
     int n = graph.Count;
     var visited = new bool[n];
     var queue = new System.Collections.Generic.Queue<int>();
 
+    // Mark the start node as visited and enqueue it
     visited[start] = true;
     queue.Enqueue(start);
 
-    while (queue.Count > 0) {
-        int node = queue.Dequeue();
-        System.Console.WriteLine(node);
+    // Print the BFS traversal starting from the start node
+    Console.WriteLine("BFS starting from " + start + ":");
 
+    while (queue.Count > 0) {
+        // Dequeue a node from the queue and print it
+        int node = queue.Dequeue();
+        Console.WriteLine("  visiting " + node);
+
+        // Look at all possible neighbors of 'node'
         foreach (var neighbor in graph[node]) {
+            // If there's an edge from node to neighbor and neighbor is not visited
             if (!visited[neighbor]) {
+                // Mark the neighbor as visited and enqueue it
                 visited[neighbor] = true;
                 queue.Enqueue(neighbor);
             }
@@ -110,14 +128,18 @@ Bfs(0, graph);
 System.Console.WriteLine();
 System.Console.WriteLine("==== ALL TESTS COMPLETE ====");
 
+#pragma warning disable CA1050 // Declare types in namespaces
+// Defines a stack of integers
 public class IntStack {
-    private readonly System.Collections.Generic.List<int> _data
-        = new System.Collections.Generic.List<int>();
+    // The stack is implemented as a list
+    private readonly System.Collections.Generic.List<int> _data = [];
 
+    // Add value to the stack
     public void Push(int value) {
         _data.Add(value);
     }
 
+    // Remove value from the stack
     public int Pop() {
         if (_data.Count == 0) {
             throw new System.InvalidOperationException("stack underflow");
@@ -128,19 +150,23 @@ public class IntStack {
         return value;
     }
 
+    // Check if the stack is empty
     public bool IsEmpty() {
         return _data.Count == 0;
     }
 }
 
+// Defines a queue of integers
 public class IntQueue {
-    private readonly System.Collections.Generic.Queue<int> _queue
-        = new System.Collections.Generic.Queue<int>();
+    // The queue is implemented as a queue
+    private readonly System.Collections.Generic.Queue<int> _queue = [];
 
+    // Add value to the queue
     public void Enqueue(int value) {
         _queue.Enqueue(value);
     }
 
+    // Remove value from the queue
     public int Dequeue() {
         if (_queue.Count == 0) {
             throw new System.InvalidOperationException("queue underflow");
@@ -148,7 +174,9 @@ public class IntQueue {
         return _queue.Dequeue();
     }
 
+    // Check if the queue is empty
     public bool IsEmpty() {
         return _queue.Count == 0;
     }
 }
+#pragma warning restore CA1050 // Declare types in namespaces

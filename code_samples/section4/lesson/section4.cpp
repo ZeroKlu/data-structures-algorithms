@@ -5,12 +5,15 @@
 #include <string>
 #include <iostream>
 
+// Defines a stack of integers
 class IntStack {
 public:
+    // Add value to the stack
     void push(int value) {
         data_.push_back(value);
     }
 
+    // Remove value from the stack
     int pop() {
         if (data_.empty()) {
             throw std::runtime_error("stack underflow");
@@ -20,20 +23,25 @@ public:
         return value;
     }
 
+    // Check if the stack is empty
     bool empty() const {
         return data_.empty();
     }
 
 private:
+    // The data stored in the stack
     std::vector<int> data_;
 };
 
+// Defines a queue of integers
 class IntQueue {
 public:
+    // Add value to the queue
     void enqueue(int value) {
         q_.push(value);
     }
 
+    // Remove value from the queue
     int dequeue() {
         if (q_.empty()) {
             throw std::runtime_error("queue underflow");
@@ -43,20 +51,24 @@ public:
         return value;
     }
 
+    // Check if the queue is empty
     bool empty() const {
         return q_.empty();
     }
 
 private:
+    // The data stored in the queue
     std::queue<int> q_;
 };
 
+// Check if two parentheses are matching
 bool isMatching(char open, char close) {
     return (open == '(' && close == ')') ||
            (open == '[' && close == ']') ||
            (open == '{' && close == '}');
 }
 
+// Check if a string of parentheses is valid
 bool isValidParentheses(const std::string& s) {
     std::stack<char> st;
     for (char c : s) {
@@ -72,21 +84,37 @@ bool isValidParentheses(const std::string& s) {
     return st.empty();
 }
 
+/**
+ * This function implements the Breadth-first search algorithm.
+ * It starts from a given node and explores all the connected nodes in a graph.
+ * The graph is represented by an adjacency list.
+ *
+ * @param start: The starting node for the BFS traversal.
+ * @param graph: The adjacency list representing the graph.
+ */
 void bfs(int start, const std::vector<std::vector<int>>& graph) {
     int n = (int)graph.size();
     std::vector<bool> visited(n, false);
     std::queue<int> q;
 
+    // Mark the start node as visited and enqueue it
     visited[start] = true;
     q.push(start);
 
+    // Print the BFS traversal starting from the start node
+    std::cout << "BFS starting from " << start << ":\n";
+
     while (!q.empty()) {
+        // Dequeue a node from the queue and print it
         int node = q.front();
         q.pop();
-        std::cout << node << std::endl;
+        std::cout << "  visiting " << node << "\n";
 
+        // Look at all possible neighbors of 'node'
         for (int neighbor : graph[node]) {
+            // If there's an edge from node to neighbor and neighbor is not visited
             if (!visited[neighbor]) {
+                // Mark the neighbor as visited and enqueue it
                 visited[neighbor] = true;
                 q.push(neighbor);
             }
