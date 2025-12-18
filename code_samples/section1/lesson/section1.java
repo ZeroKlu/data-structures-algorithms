@@ -1,11 +1,13 @@
 public class section1 {
-    public static void ex1(int[] arr) {
+    // Print each element of an array
+    public static void printArrayElements(int[] arr) {
         for (int x : arr) {
             System.out.println(x);
         }
     }
 
-    public static void ex2(int[] arr) {
+    // Print all pairs of elements of an array
+    public static void printElementPairs(int[] arr) {
         for (int i = 0; i < arr.length; i++) {
             for (int j = i; j < arr.length; j++) {
                 System.out.println(arr[i] + ", " + arr[j]);
@@ -13,13 +15,15 @@ public class section1 {
         }
     }
 
-    public static void ex3(int[] arr) {
+    // Print the first and last elements of an array
+    public static void printFirstAndLast(int[] arr) {
         if (arr.length > 0) {
             System.out.println(arr[0] + " " + arr[arr.length - 1]);
         }
     }
 
-    public static void ex4(int[] arr) {
+    // Print each element of an array twice
+    public static void printArrayTwice(int[] arr) {
         for (int x : arr) {
             System.out.println(x);
         }
@@ -28,7 +32,8 @@ public class section1 {
         }
     }
 
-    public static int[] ex5(int[] arr) {
+    // Multiply each element of an array by 2
+    public static int[] doubleArrayElements(int[] arr) {
         int[] res = new int[arr.length];
         for (int i = 0; i < arr.length; i++) {
             res[i] = arr[i] * 2;
@@ -40,19 +45,19 @@ public class section1 {
         int[] arr = { 1, 2, 3, 4, 5 };
 
         System.out.println("Ex 1:");
-        ex1(arr);
+        printArrayElements(arr);
 
         System.out.println("\nEx 2:");
-        ex2(arr);
+        printElementPairs(arr);
 
         System.out.println("\nEx 3:");
-        ex3(arr);
+        printFirstAndLast(arr);
 
         System.out.println("\nEx 4:");
-        ex4(arr);
+        printArrayTwice(arr);
 
         System.out.println("\nEx 5:");
-        int[] res = ex5(arr);
+        int[] res = doubleArrayElements(arr);
         for (int x : res) {
             System.out.println(x);
         }

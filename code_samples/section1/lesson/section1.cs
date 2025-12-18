@@ -1,4 +1,5 @@
-static void Ex1(int[] arr)
+// Print each element of an array
+static void PrintArrayElements(int[] arr)
 {
     foreach (var x in arr)
     {
@@ -6,7 +7,8 @@ static void Ex1(int[] arr)
     }
 }
 
-static void Ex2(int[] arr)
+// Print all pairs of elements of an array
+static void PrintElementPairs(int[] arr)
 {
     for (int i = 0; i < arr.Length; i++)
     {
@@ -17,7 +19,8 @@ static void Ex2(int[] arr)
     }
 }
 
-static void Ex3(int[] arr)
+// Print the first and last elements of an array
+static void PrintFirstAndLast(int[] arr)
 {
     if (arr.Length > 0)
     {
@@ -25,7 +28,8 @@ static void Ex3(int[] arr)
     }
 }
 
-static void Ex4(int[] arr)
+// Print all elements of an array twice
+static void PrintArrayTwice(int[] arr)
 {
     foreach (var x in arr)
     {
@@ -37,7 +41,8 @@ static void Ex4(int[] arr)
     }
 }
 
-static int[] Ex5(int[] arr)
+// Double each element of an array
+static int[] DoubleArrayElements(int[] arr)
 {
     return arr.Select(x => x * 2).ToArray();
 }
@@ -45,19 +50,19 @@ static int[] Ex5(int[] arr)
 int[] arr = [1, 2, 3, 4, 5];
 
 Console.WriteLine("Ex 1:");
-Ex1(arr);
+PrintArrayElements(arr);
 
 Console.WriteLine("\nEx 2:");
-Ex2(arr);
+PrintElementPairs(arr);
 
 Console.WriteLine("\nEx 3:");
-Ex3(arr);
+PrintFirstAndLast(arr);
 
 Console.WriteLine("\nEx 4:");
-Ex4(arr);
+PrintArrayTwice(arr);
 
 Console.WriteLine("\nEx 5:");
-int[] res = Ex5(arr);
+int[] res = DoubleArrayElements(arr);
 foreach (var x in res)
 {
     Console.WriteLine(x);

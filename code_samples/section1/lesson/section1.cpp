@@ -2,12 +2,14 @@
 #include <vector>
 using namespace std;
 
+// Print each element of an array
 void ex1(const vector<int>& arr) {
     for (int x : arr) {
         cout << x << endl;
     }
 }
 
+// Print all pairs of elements of an array
 void ex2(const vector<int>& arr) {
     for (int i = 0; i < arr.size(); i++) {
         for (int j = i; j < arr.size(); j++) {
@@ -16,12 +18,14 @@ void ex2(const vector<int>& arr) {
     }
 }
 
+// Print the first and last elements of an array
 void ex3(const vector<int>& arr) {
     if (!arr.empty()) {
         cout << arr.front() << " " << arr.back() << endl;
     }
 }
 
+// Print each element of an array twice
 void ex4(const vector<int>& arr) {
     for (int x : arr) {
         cout << x << endl;
@@ -31,6 +35,7 @@ void ex4(const vector<int>& arr) {
     }
 }
 
+// Double each element of an array
 vector<int> ex5(const vector<int>& arr) {
     vector<int> res;
     res.reserve(arr.size());

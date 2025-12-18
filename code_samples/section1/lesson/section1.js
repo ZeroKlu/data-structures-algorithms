@@ -1,10 +1,12 @@
-function ex1(arr) {
+// Print each element of an array
+function printArrayElements(arr) {
     for (const x of arr) {
         console.log(x);
     }
 }
 
-function ex2(arr) {
+// Print all pairs of elements
+function printElementPairs(arr) {
     for (let i = 0; i < arr.length; i++) {
         for (let j = i; j < arr.length; j++) {
             console.log(arr[i], arr[j]);
@@ -12,13 +14,15 @@ function ex2(arr) {
     }
 }
 
-function ex3(arr) {
+// Print the first and last elements
+function printFirstAndLast(arr) {
     if (arr.length > 0) {
         console.log(arr[0], arr[arr.length - 1]);
     }
 }
 
-function ex4(arr) {
+// Print each element of an array twice
+function printArrayTwice(arr) {
     for (const x of arr) {
         console.log(x);
     }
@@ -27,26 +31,27 @@ function ex4(arr) {
     }
 }
 
-function ex5(arr) {
+// Double each element
+function doubleArrayElements(arr) {
     return arr.map(x => x * 2);
 }
 
 const arr = [1, 2, 3, 4, 5];
 
 console.log("Ex 1:");
-ex1(arr);
+printArrayElements(arr);
 
 console.log("\nEx 2:");
-ex2(arr);
+printElementPairs(arr);
 
 console.log("\nEx 3:");
-ex3(arr);
+printFirstAndLast(arr);
 
 console.log("\nEx 4:");
-ex4(arr);
+printArrayTwice(arr);
 
 console.log("\nEx 5:");
-const res = ex5(arr);
+const res = doubleArrayElements(arr);
 for (const x of res) {
     console.log(x);
 }
