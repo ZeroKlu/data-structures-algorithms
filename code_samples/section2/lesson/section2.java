@@ -1,6 +1,7 @@
 package code_samples.section2.lesson;
 
 public class section2 {
+    // Calculate the sum of the elements in an array
     public static int sumArray(int[] arr) {
         int sum = 0;
         for (int x : arr) {
@@ -9,6 +10,7 @@ public class section2 {
         return sum;
     }
 
+    // Reverse the elements in an array
     public static void reverseArray(int[] arr) {
         int left = 0;
         int right = arr.length - 1;
@@ -21,6 +23,7 @@ public class section2 {
         }
     }
 
+    // Check if there is a pair of elements in an array that sum to a given value
     public static boolean hasPairWithSum(int[] arr, int target) {
         int left = 0;
         int right = arr.length - 1;
@@ -37,6 +40,7 @@ public class section2 {
         return false;
     }
 
+    // Reverse a string
     public static String reverseString(String s) {
         StringBuilder sb = new StringBuilder(s);
         sb.reverse();

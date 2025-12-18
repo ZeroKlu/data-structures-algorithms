@@ -37,9 +37,13 @@ def reverse_string(s: str) -> str:
     return s[::-1]
 
 lst = [1, 2, 3, 4, 5]
+
 print("Sum of array:", sum_array(lst))
+
 reverse_array(lst)
 print("Reversed array:", lst)
 reverse_array(lst)
+
 print("Has pair with sum 9:", has_pair_with_sum(lst, 9))
+
 print("Reversed string:", reverse_string("hello"))

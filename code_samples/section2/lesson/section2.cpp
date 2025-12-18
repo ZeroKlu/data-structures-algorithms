@@ -4,6 +4,7 @@
 #include <string>
 using namespace std;
 
+// Calculate the sum of the elements in an array
 int sumArray(const std::vector<int>& arr) {
     int sum = 0;
     for (int x : arr) {
@@ -12,6 +13,7 @@ int sumArray(const std::vector<int>& arr) {
     return sum;
 }
 
+// Reverse the elements in an array
 void reverseArray(std::vector<int>& arr) {
     int left = 0;
     int right = (int)arr.size() - 1;
@@ -22,6 +24,7 @@ void reverseArray(std::vector<int>& arr) {
     }
 }
 
+// Check if an array has a pair with a given sum
 bool hasPairWithSum(const std::vector<int>& arr, int target) {
     int left = 0;
     int right = (int)arr.size() - 1;
@@ -38,6 +41,7 @@ bool hasPairWithSum(const std::vector<int>& arr, int target) {
     return false;
 }
 
+// Reverse a string
 std::string reverseString(const std::string& s) {
     std::string result = s;
     int left = 0;

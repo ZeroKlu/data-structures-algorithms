@@ -2,7 +2,8 @@
 #include <stdbool.h>
 #include <string.h>
 
-int sum_array(int arr[], int n) {
+// Calculate the sum of an array
+int sumArray(int arr[], int n) {
     int sum = 0;
     for (int i = 0; i < n; i++) {
         sum += arr[i];
@@ -10,7 +11,8 @@ int sum_array(int arr[], int n) {
     return sum;
 }
 
-void reverse_array(int arr[], int n) {
+// Reverse an array
+void reverseArray(int arr[], int n) {
     int left = 0;
     int right = n - 1;
     while (left < right) {
@@ -22,7 +24,8 @@ void reverse_array(int arr[], int n) {
     }
 }
 
-bool has_pair_with_sum(int arr[], int n, int target) {
+// Check if an array has a pair with a given sum
+bool hasPairWithSum(int arr[], int n, int target) {
     int left = 0;
     int right = n - 1;
     while (left < right) {
@@ -38,7 +41,8 @@ bool has_pair_with_sum(int arr[], int n, int target) {
     return false;
 }
 
-void reverse_string(char* s) {
+// Reverse a string
+void reverseString(char* s) {
     int left = 0;
     int right = (int)strlen(s) - 1;
     while (left < right) {
@@ -54,20 +58,20 @@ int main() {
     int arr[] = {1, 2, 3, 4, 5};
     int n = sizeof(arr) / sizeof(arr[0]);
 
-    printf("Sum of array: %d\n", sum_array(arr, n));
+    printf("Sum of array: %d\n", sumArray(arr, n));
 
-    reverse_array(arr, n);
+    reverseArray(arr, n);
     printf("Reversed array: ");
     for (int i = 0; i < n; i++) {
         printf("%d ", arr[i]);
     }
     printf("\n");
-    reverse_array(arr, n);
+    reverseArray(arr, n);
 
-    printf("Has pair with sum 9: %s\n", has_pair_with_sum(arr, n, 9) ? "true" : "false");
+    printf("Has pair with sum 9: %s\n", hasPairWithSum(arr, n, 9) ? "true" : "false");
 
     char s[] = "hello world";
-    reverse_string(s);
+    reverseString(s);
     printf("Reversed string: %s\n", s);
 
     return 0;
