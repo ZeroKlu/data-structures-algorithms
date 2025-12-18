@@ -3,6 +3,7 @@
         "aabb",
         "aabbc",
         "aabbcc",
+        "aard",
         "abcabcabc",
         "abcabcbb",
         "adjac",
@@ -13,6 +14,7 @@
         "bruteforce",
         "cand",
         "CLRS",
+        "cmath",
         "collapsibles",
         "cout",
         "cstdlib",
@@ -52,6 +54,7 @@
         "Monokai",
         "multibyte",
         "myqueue",
+        "notaword",
         "nums",
         "parenthesization",
         "popleft",
@@ -81,7 +84,8 @@
         "subproblems",
         "Timebox",
         "topo",
-        "uthash"
+        "uthash",
+        "Wextra"
     ],
     "files.associations": {
         ".fantomasignore": "ignore",

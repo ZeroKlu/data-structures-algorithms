@@ -3,6 +3,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "trie_prefix_count",
+            "request": "launch",
+            "mainClass": "code_samples.section13.example_2_prefix_counting.trie_prefix_count",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
+            "name": "trie_insert_search",
+            "request": "launch",
+            "mainClass": "code_samples.section13.example_1_insert_and_search.trie_insert_search",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
             "name": "heap_sort",
             "request": "launch",
             "mainClass": "code_samples.section12.example_11_heap_sort.heap_sort",
