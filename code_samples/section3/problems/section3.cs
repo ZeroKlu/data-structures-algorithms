@@ -1,21 +1,25 @@
 #nullable enable
 
+// Inserts a new node at the head
 static ListNode InsertHead(ListNode? head, int x) {
     return new ListNode(x, head);
 }
 
+// Inserts a new node after a given node
 static void InsertAfter(ListNode? p, int x) {
     if (p == null) return;
     var node = new ListNode(x, p.Next);
     p.Next = node;
 }
 
+// Deletes the node after a given node
 static void DeleteAfter(ListNode? p) {
     if (p == null || p.Next == null) return;
     var doomed = p.Next;
     p.Next = doomed.Next;
 }
 
+// Reverses a linked list
 static ListNode? ReverseList(ListNode? head) {
     ListNode? prev = null;
     ListNode? curr = head;
@@ -29,6 +33,7 @@ static ListNode? ReverseList(ListNode? head) {
     return prev;
 }
 
+// Checks if a linked list has a cycle
 static bool HasCycle(ListNode? head) {
     if (head == null) return false;
     var slow = head;
@@ -41,6 +46,7 @@ static bool HasCycle(ListNode? head) {
     return false;
 }
 
+// Finds the middle node of a linked list
 static ListNode? MiddleNode(ListNode? head) {
     var slow = head;
     var fast = head;
@@ -52,6 +58,7 @@ static ListNode? MiddleNode(ListNode? head) {
     return slow;
 }
 
+// Merges two sorted linked lists
 static ListNode? MergeTwoLists(ListNode? l1, ListNode? l2) {
     var dummy = new ListNode(0);
     var tail = dummy;
@@ -74,6 +81,7 @@ static ListNode? MergeTwoLists(ListNode? l1, ListNode? l2) {
     return dummy.Next;
 }
 
+// Removes the nth node from the end of a linked list
 static ListNode? RemoveNthFromEnd(ListNode? head, int n) {
     var dummy = new ListNode(0) { Next = head };
     var fast = dummy;
@@ -96,6 +104,7 @@ static ListNode? RemoveNthFromEnd(ListNode? head, int n) {
     return dummy.Next;
 }
 
+// Prints a linked list
 static void PrintList(ListNode? head) {
     var current = head;
     Console.WriteLine();

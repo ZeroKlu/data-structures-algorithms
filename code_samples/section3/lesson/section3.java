@@ -1,10 +1,12 @@
 package code_samples.section3.lesson;
 
 public class section3 {
+    // Pushes a new node to the front of the list
     public static ListNode pushFront(ListNode head, int value) {
         return new ListNode(value, head);
     }
 
+    // Prints a linked list
     public static void printList(ListNode head) {
         ListNode current = head;
         System.out.println();
@@ -14,6 +16,7 @@ public class section3 {
         }
     }
 
+    // Reverses a linked list
     public static ListNode reverseList(ListNode head) {
         ListNode prev = null;
         ListNode current = head;
@@ -26,6 +29,7 @@ public class section3 {
         return prev;
     }
 
+    // Prints a linked list recursively
     public static void printListRecursive(ListNode head) {
         if (head == null) {
             return;

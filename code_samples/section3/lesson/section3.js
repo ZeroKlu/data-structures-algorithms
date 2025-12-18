@@ -1,14 +1,20 @@
+// Definition for singly-linked list node.
 class ListNode {
     constructor(value, next = null) {
+        // Node value
         this.value = value;
+
+        // Reference to next node
         this.next = next;
     }
 }
 
+// Add a node to the front of the list
 function pushFront(head, value) {
     return new ListNode(value, head);
 }
 
+// Print the list
 function printList(head) {
     let current = head;
     while (current !== null) {
@@ -17,6 +23,7 @@ function printList(head) {
     }
 }
 
+// Reverse the list
 function reverseList(head) {
     let prev = null;
     let current = head;
@@ -29,6 +36,7 @@ function reverseList(head) {
     return prev;
 }
 
+// Print the list recursively
 function printListRecursive(head) {
     if (head === null) {
         return;

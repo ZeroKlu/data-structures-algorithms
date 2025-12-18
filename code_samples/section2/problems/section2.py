@@ -10,7 +10,7 @@ def reverse_array(arr: list[int]) -> None:
         j -= 1
 
 def two_sum_bruteforce(nums: list[int], target: int) -> bool:
-    """Brute force O(n^2)"""
+    """Check for pair of elements that sum to target - Brute force O(n^2)"""
     n = len(nums)
     for i in range(n):
         for j in range(i + 1, n):
@@ -19,7 +19,7 @@ def two_sum_bruteforce(nums: list[int], target: int) -> bool:
     return False
 
 def two_sum_hash(nums: list[int], target: int) -> bool:
-    """Hash table O(n)"""
+    """Check for pair of elements that sum to target - Hash table O(n)"""
     seen: set[int] = set()
     for x in nums:
         need = target - x
@@ -29,7 +29,7 @@ def two_sum_hash(nums: list[int], target: int) -> bool:
     return False
 
 def move_zeroes(nums: list[int]) -> None:
-    """Move zeroes to the end."""
+    """Move zeroes to the end. O(n)"""
     write = 0
     #pylint: disable=consider-using-enumerate
     for read in range(len(nums)):
@@ -41,7 +41,7 @@ def move_zeroes(nums: list[int]) -> None:
         write += 1
 
 def is_anagram(s: str, t: str) -> bool:
-    """Check if two strings are anagrams."""
+    """Check if two strings are anagrams. O(n)"""
     if len(s) != len(t):
         return False
     freq = [0] * 26
@@ -51,7 +51,7 @@ def is_anagram(s: str, t: str) -> bool:
     return all(f == 0 for f in freq)
 
 def length_of_longest_substring(s: str) -> int:
-    """Find the length of the longest substring without repeating characters."""
+    """Find the length of the longest substring without repeating characters. O(n)"""
     last_pos: dict[str, int] = {}
     left = 0
     best = 0
@@ -64,7 +64,7 @@ def length_of_longest_substring(s: str) -> int:
     return best
 
 def rotate(nums: list[int], k: int) -> None:
-    """Rotate the array k positions."""
+    """Rotate the array k positions. O(n)"""
     n = len(nums)
     if n == 0:
         return
@@ -77,7 +77,7 @@ def rotate(nums: list[int], k: int) -> None:
     reverse_range(nums, k, n - 1)
 
 def reverse_range(nums: list[int], n: int, r: int) -> None:
-    """Reverse a range of the array."""
+    """Reverse a range of the array. O(n)"""
     while n < r:
         nums[n], nums[r] = nums[r], nums[n]
         n += 1

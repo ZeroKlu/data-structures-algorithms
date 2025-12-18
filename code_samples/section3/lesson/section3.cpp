@@ -1,16 +1,24 @@
 #include <iostream>
 
+// Singly Linked List Node
 struct Node {
+    // Node value
     int value;
+
+    // Pointer to next node
     Node* next;
+
+    // Constructor
     Node(int v, Node* n = nullptr) : value(v), next(n) {}
 };
 
+// Pushes a new node to the front of the list
 Node* pushFront(Node* head, int value) {
     Node* newNode = new Node(value, head);
     return newNode;
 }
 
+// Prints the list
 void printList(Node* head) {
     Node* current = head;
     std::cout << std::endl;
@@ -20,6 +28,7 @@ void printList(Node* head) {
     }
 }
 
+// Reverses the list
 Node* reverseList(Node* head) {
     Node* prev = nullptr;
     Node* current = head;
@@ -32,6 +41,7 @@ Node* reverseList(Node* head) {
     return prev;
 }
 
+// Prints the list recursively
 void printListRecursive(Node* head) {
     if (head == nullptr) return;
     std::cout << head->value;

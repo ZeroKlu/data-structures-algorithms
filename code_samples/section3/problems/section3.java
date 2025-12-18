@@ -24,6 +24,7 @@ public class section3 {
         // In Java, garbage collector reclaims doomed
     }
 
+    // Reverse a linked list
     public static ListNode reverseList(ListNode head) {
         ListNode prev = null;
         ListNode curr = head;
@@ -37,6 +38,7 @@ public class section3 {
         return prev;
     }
 
+    // Check if a linked list has a cycle
     public static boolean hasCycle(ListNode head) {
         if (head == null) return false;
         ListNode slow = head;
@@ -49,6 +51,7 @@ public class section3 {
         return false;
     }
 
+    // Find the middle node
     public static ListNode middleNode(ListNode head) {
         ListNode slow = head;
         ListNode fast = head;
@@ -60,6 +63,7 @@ public class section3 {
         return slow;
     }
 
+    // Merge two sorted linked lists
     public static ListNode mergeTwoLists(ListNode l1, ListNode l2) {
         ListNode dummy = new ListNode(0);
         ListNode tail = dummy;
@@ -82,6 +86,7 @@ public class section3 {
         return dummy.next;
     }
 
+    // Remove nth node from end
     public static ListNode removeNthFromEnd(ListNode head, int n) {
         ListNode dummy = new ListNode(0);
         dummy.next = head;
@@ -105,6 +110,7 @@ public class section3 {
         return dummy.next;
     }
 
+    // Print a linked list
     public static void printList(ListNode head) {
         ListNode current = head;
         System.out.println();

@@ -1,9 +1,15 @@
 #include <cstdlib>
 #include <iostream>
 
+// Linked List node
 struct ListNode {
+    // Node value
     int val;
+
+    // Pointer to next node
     ListNode* next;
+
+    // Constructor
     ListNode(int v) : val(v), next(nullptr) {}
 };
 
@@ -30,6 +36,7 @@ void deleteAfter(ListNode* p) {
     delete doomed;
 }
 
+// Reverse a linked list
 ListNode* reverseList(ListNode* head) {
     ListNode* prev = nullptr;
     ListNode* curr = head;
@@ -43,6 +50,7 @@ ListNode* reverseList(ListNode* head) {
     return prev;
 }
 
+// Check if a linked list has a cycle
 bool hasCycle(ListNode* head) {
     if (!head) return false;
     ListNode* slow = head;
@@ -56,6 +64,7 @@ bool hasCycle(ListNode* head) {
     return false;
 }
 
+// Find the middle of a linked list
 ListNode* middleNode(ListNode* head) {
     ListNode* slow = head;
     ListNode* fast = head;
@@ -67,6 +76,7 @@ ListNode* middleNode(ListNode* head) {
     return slow;
 }
 
+// Merge two sorted linked lists
 ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
     ListNode dummy(0);
     ListNode* tail = &dummy;
@@ -89,6 +99,7 @@ ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
     return dummy.next;
 }
 
+// Remove the nth node from the end of a linked list
 ListNode* removeNthFromEnd(ListNode* head, int n) {
     ListNode dummy(0);
     dummy.next = head;

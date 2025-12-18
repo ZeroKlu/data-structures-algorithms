@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class section2 {
+    // Reverse an array O(n)
     public static void reverseArray(int[] arr) {
         int i = 0;
         int j = arr.length - 1;
@@ -16,8 +17,8 @@ public class section2 {
         }
     }
 
-    public static // Brute force O(n^2)
-    boolean twoSumBruteforce(int[] nums, int target) {
+    // Check for pair of elements that sum to target - Brute force O(n^2)
+    public static boolean twoSumBruteforce(int[] nums, int target) {
         int n = nums.length;
         for (int i = 0; i < n; i++) {
             for (int j = i + 1; j < n; j++) {
@@ -29,7 +30,7 @@ public class section2 {
         return false;
     }
 
-    // Hash-based O(n) expected
+    // Check for pair of elements that sum to target - Hash-based O(n) expected
     public static boolean twoSumHash(int[] nums, int target) {
         Set<Integer> seen = new HashSet<>();
         for (int x : nums) {
@@ -42,6 +43,7 @@ public class section2 {
         return false;
     }
 
+    // Move zeroes to the end - O(n)
     public static void moveZeroes(int[] nums) {
         int write = 0;
         for (int read = 0; read < nums.length; read++) {
@@ -56,6 +58,7 @@ public class section2 {
         }
     }
 
+    // Check if two strings are anagrams - O(n)
     public static boolean isAnagram(String s, String t) {
         if (s.length() != t.length())
             return false;
@@ -71,6 +74,7 @@ public class section2 {
         return true;
     }
 
+    // Find the length of the longest substring without repeating characters - O(n)
     public static int lengthOfLongestSubstring(String s) {
         int[] lastPos = new int[128];
         for (int i = 0; i < 128; i++)
@@ -91,6 +95,7 @@ public class section2 {
         return best;
     }
 
+    // Rotate an array - O(n)
     public static void rotate(int[] nums, int k) {
         int n = nums.length;
         if (n == 0)
@@ -104,6 +109,7 @@ public class section2 {
         reverseRange(nums, k, n - 1);
     }
 
+    // Reverse a range of an array - O(n)
     public static void reverseRange(int[] nums, int l, int r) {
         while (l < r) {
             int tmp = nums[l];

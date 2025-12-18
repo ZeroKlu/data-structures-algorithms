@@ -1,6 +1,10 @@
+// Definition for singly-linked list node.
 class ListNode {
     constructor(val, next = null) {
+        // Node value
         this.val = val;
+
+        // Reference to next node
         this.next = next;
     }
 }
@@ -11,12 +15,14 @@ function insertHead(head, x) {
     return node;
 }
 
+// Insert after p: no return
 function insertAfter(p, x) {
     if (!p) return;
     const node = new ListNode(x, p.next);
     p.next = node;
 }
 
+// Delete after p: no return
 function deleteAfter(p) {
     if (!p || !p.next) return;
     const doomed = p.next;
@@ -24,6 +30,7 @@ function deleteAfter(p) {
     // doomed is now unreachable and will be GCed
 }
 
+// Reverse the list
 function reverseList(head) {
     let prev = null;
     let curr = head;
@@ -37,6 +44,7 @@ function reverseList(head) {
     return prev;
 }
 
+// Check if the list has a cycle
 function hasCycle(head) {
     if (!head) return false;
     let slow = head;
@@ -49,6 +57,7 @@ function hasCycle(head) {
     return false;
 }
 
+// Find the middle of the list
 function middleNode(head) {
     let slow = head;
     let fast = head;
@@ -60,6 +69,7 @@ function middleNode(head) {
     return slow;
 }
 
+// Merge two sorted lists
 function mergeTwoLists(l1, l2) {
     const dummy = new ListNode(0);
     let tail = dummy;
@@ -82,6 +92,7 @@ function mergeTwoLists(l1, l2) {
     return dummy.next;
 }
 
+// Remove the nth node from the end
 function removeNthFromEnd(head, n) {
     const dummy = new ListNode(0, head);
     let fast = dummy;
@@ -104,6 +115,7 @@ function removeNthFromEnd(head, n) {
     return dummy.next;
 }
 
+// Print the list
 function printList(head) {
     let current = head;
     while (current !== null) {

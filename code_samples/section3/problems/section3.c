@@ -2,12 +2,17 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+// Linked list node
 typedef struct ListNode {
+    // Node value
     int val;
+
+    // Pointer to next node
     struct ListNode* next;
 } ListNode;
 
-void print_list(ListNode* head) {
+// Prints a linked list
+void printList(ListNode* head) {
     ListNode* current = head;
     printf("\n");
     while (current != NULL) {
@@ -17,7 +22,7 @@ void print_list(ListNode* head) {
 }
 
 // Insert at head: head pointer is updated via pointer-to-pointer
-void insert_head(ListNode** head, int x) {
+void insertHead(ListNode** head, int x) {
     ListNode* node = (ListNode*)malloc(sizeof(ListNode));
     node->val = x;
     node->next = *head;
@@ -25,7 +30,7 @@ void insert_head(ListNode** head, int x) {
 }
 
 // Insert after node p (if p is non-NULL)
-void insert_after(ListNode* p, int x) {
+void insertAfter(ListNode* p, int x) {
     if (!p) return;
     ListNode* node = (ListNode*)malloc(sizeof(ListNode));
     node->val = x;
@@ -34,14 +39,15 @@ void insert_after(ListNode* p, int x) {
 }
 
 // Delete node immediately after p (if it exists)
-void delete_after(ListNode* p) {
+void deleteAfter(ListNode* p) {
     if (!p || !p->next) return;
     ListNode* doomed = p->next;
     p->next = doomed->next;
     free(doomed);
 }
 
-ListNode* reverse_list(ListNode* head) {
+// Reverse a linked list
+ListNode* reverseList(ListNode* head) {
     ListNode* prev = NULL;
     ListNode* curr = head;
 
@@ -54,7 +60,8 @@ ListNode* reverse_list(ListNode* head) {
     return prev;
 }
 
-bool has_cycle(ListNode* head) {
+// Check if a linked list has a cycle
+bool hasCycle(ListNode* head) {
     if (head == NULL) return false;
     ListNode* slow = head;
     ListNode* fast = head;
@@ -66,7 +73,8 @@ bool has_cycle(ListNode* head) {
     return false;
 }
 
-ListNode* middle_node(ListNode* head) {
+// Find the middle of a linked list
+ListNode* middleNode(ListNode* head) {
     ListNode* slow = head;
     ListNode* fast = head;
 
@@ -77,7 +85,8 @@ ListNode* middle_node(ListNode* head) {
     return slow;
 }
 
-ListNode* merge_two_lists(ListNode* l1, ListNode* l2) {
+// Merge two sorted linked lists
+ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
     ListNode dummy;
     dummy.next = NULL;
     ListNode* tail = &dummy;
@@ -100,7 +109,8 @@ ListNode* merge_two_lists(ListNode* l1, ListNode* l2) {
     return dummy.next;
 }
 
-ListNode* remove_nth_from_end(ListNode* head, int n) {
+// Remove the nth node from the end of a linked list
+ListNode* removeNthFromEnd(ListNode* head, int n) {
     ListNode dummy;
     dummy.val = 0;
     dummy.next = head;
@@ -128,11 +138,11 @@ ListNode* remove_nth_from_end(ListNode* head, int n) {
 
 int main() {
     ListNode* head = NULL;
-    insert_head(&head, 5);
-    insert_head(&head, 4);
-    insert_head(&head, 3);
-    insert_head(&head, 2);
-    insert_head(&head, 1);
+    insertHead(&head, 5);
+    insertHead(&head, 4);
+    insertHead(&head, 3);
+    insertHead(&head, 2);
+    insertHead(&head, 1);
 
     // Insert 7 at the end
     ListNode* tail = head;
@@ -140,27 +150,27 @@ int main() {
         tail = tail->next;
     }
 
-    insert_after(tail, 6);
+    insertAfter(tail, 6);
     
-    print_list(head);
+    printList(head);
 
-    delete_after(tail);
+    deleteAfter(tail);
 
-    print_list(head);
+    printList(head);
 
-    head = reverse_list(head);
+    head = reverseList(head);
 
-    print_list(head);
+    printList(head);
 
-    printf("\nHas cycle: %s", has_cycle(head) ? "true" : "false");
+    printf("\nHas cycle: %s", hasCycle(head) ? "true" : "false");
 
     ListNode* cycle = NULL;
-    insert_head(&cycle, 4);
-    insert_head(&cycle, 3);
-    insert_head(&cycle, 2);
-    insert_head(&cycle, 1);
+    insertHead(&cycle, 4);
+    insertHead(&cycle, 3);
+    insertHead(&cycle, 2);
+    insertHead(&cycle, 1);
 
-    print_list(cycle);
+    printList(cycle);
 
     // Get pointers to the nodes we want
     ListNode* p = cycle->next->next;          // node 3
@@ -169,30 +179,30 @@ int main() {
     // Create the cycle
     q->next = p; // 4→3
 
-    printf("\nHas cycle: %s", has_cycle(cycle) ? "true" : "false");
+    printf("\nHas cycle: %s", hasCycle(cycle) ? "true" : "false");
 
-    head = reverse_list(head);
+    head = reverseList(head);
 
-    print_list(head);
-    ListNode* mid = middle_node(head);
+    printList(head);
+    ListNode* mid = middleNode(head);
 
     if (mid != NULL) {
         printf("\nMiddle node value: %d", mid->val);
     }
 
     ListNode* more = NULL;
-    insert_head(&more, 8);
-    insert_head(&more, 7);
-    insert_head(&more, 6);
+    insertHead(&more, 8);
+    insertHead(&more, 7);
+    insertHead(&more, 6);
 
-    print_list(more);
+    printList(more);
 
-    ListNode* merged = merge_two_lists(head, more);
-    print_list(merged);
+    ListNode* merged = mergeTwoLists(head, more);
+    printList(merged);
 
     // Remove 7
-    merged = remove_nth_from_end(merged, 2);
-    print_list(merged);
+    merged = removeNthFromEnd(merged, 2);
+    printList(merged);
 
     return 0;
 }

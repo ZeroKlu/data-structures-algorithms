@@ -1,3 +1,4 @@
+// Reverse an array
 static void ReverseArray(int[] arr) {
     int i = 0;
     int j = arr.Length - 1;
@@ -15,7 +16,7 @@ static void ReverseArray(int[] arr) {
     }
 }
 
-// Brute force O(n^2)
+// Check if two numbers sum to target. - Brute force O(n^2)
 static bool TwoSumBruteforce(int[] nums, int target) {
     int n = nums.Length;
     for (int i = 0; i < n; i++) {
@@ -28,7 +29,7 @@ static bool TwoSumBruteforce(int[] nums, int target) {
     return false;
 }
 
-// Hash-based O(n) expected
+// Check if two numbers sum to target. - Hash-based O(n) expected
 static bool TwoSumHash(int[] nums, int target) {
     var seen = new HashSet<int>();
     foreach (int x in nums) {
@@ -41,6 +42,7 @@ static bool TwoSumHash(int[] nums, int target) {
     return false;
 }
 
+// Move zeroes to the end of an array - O(n)
 static void MoveZeroes(int[] nums) {
     int write = 0;
     for (int read = 0; read < nums.Length; read++) {
@@ -55,6 +57,7 @@ static void MoveZeroes(int[] nums) {
     }
 }
 
+// Check if two strings are anagrams - O(n)
 static bool IsAnagram(string s, string t) {
     if (s.Length != t.Length) return false;
     var freq = new int[26];
@@ -68,6 +71,7 @@ static bool IsAnagram(string s, string t) {
     return true;
 }
 
+// Find the length of the longest substring without repeating characters - O(n)
 static int LengthOfLongestSubstring(string s) {
     var lastPos = new Dictionary<char, int>();
     int best = 0;
@@ -85,6 +89,7 @@ static int LengthOfLongestSubstring(string s) {
     return best;
 }
 
+// Rotate an array - O(n)
 static void Rotate(int[] nums, int k) {
     int n = nums.Length;
     if (n == 0) return;
@@ -96,6 +101,7 @@ static void Rotate(int[] nums, int k) {
     ReverseRange(nums, k, n - 1);
 }
 
+// Reverse a range of an array
 static void ReverseRange(int[] nums, int l, int r) {
     while (l < r) {
         // Old way requires a temp variable
@@ -103,7 +109,7 @@ static void ReverseRange(int[] nums, int l, int r) {
         // nums[l] = nums[r];
         // nums[r] = tmp;
 
-        // In C# 10 and later, we can swap using a tuple
+        // In C# 10 and later, we can swap values using a tuple
         (nums[r], nums[l]) = (nums[l], nums[r]);
 
         l++;

@@ -4,6 +4,7 @@
 #include <vector>
 using namespace std;
 
+// Reverse an array O(n)
 void reverseArray(vector<int>& arr) {
     int i = 0;
     int j = (int)arr.size() - 1;
@@ -16,6 +17,7 @@ void reverseArray(vector<int>& arr) {
     }
 }
 
+// Check for pair of elements that sum to target - Brute force O(n^2)
 bool twoSumBruteforce(const vector<int>& nums, int target) {
     int n = (int)nums.size();
     for (int i = 0; i < n; i++) {
@@ -26,7 +28,7 @@ bool twoSumBruteforce(const vector<int>& nums, int target) {
     return false;
 }
 
-// Hash-based O(n) expected
+// Check for pair of elements that sum to target - Hash-based O(n) expected
 bool twoSumHash(const vector<int>& nums, int target) {
     unordered_set<int> seen;
     for (int x : nums) {
@@ -37,6 +39,7 @@ bool twoSumHash(const vector<int>& nums, int target) {
     return false;
 }
 
+// Move zeroes to the end
 void moveZeroes(vector<int>& nums) {
     int write = 0;
     for (int read = 0; read < (int)nums.size(); read++) {
@@ -51,6 +54,7 @@ void moveZeroes(vector<int>& nums) {
     }
 }
 
+// Check if two strings are anagrams of each other - O(n)
 bool isAnagram(const string& s, const string& t) {
     if (s.size() != t.size()) return false;
     int freq[26] = {0};
@@ -64,6 +68,7 @@ bool isAnagram(const string& s, const string& t) {
     return true;
 }
 
+// Find the length of the longest substring without repeating characters
 int lengthOfLongestSubstring(const string& s) {
     vector<int> last_pos(128, -1);
     int best = 0;
@@ -80,6 +85,7 @@ int lengthOfLongestSubstring(const string& s) {
     return best;
 }
 
+// Reverse a range of an array - O(n)
 static void reverseRange(vector<int>& nums, int l, int r) {
     while (l < r) {
         int tmp = nums[l];
@@ -90,6 +96,7 @@ static void reverseRange(vector<int>& nums, int l, int r) {
     }
 }
 
+// Rotate an array - O(n)
 void rotate(vector<int>& nums, int k) {
     int n = (int)nums.size();
     if (n == 0) return;

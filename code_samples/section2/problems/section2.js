@@ -1,3 +1,4 @@
+// Reverse an array O(n)
 function reverseArray(arr) {
     let i = 0;
     let j = arr.length - 1;
@@ -10,7 +11,7 @@ function reverseArray(arr) {
     }
 }
 
-// Brute force O(n^2)
+// Check for pair of elements that sum to target - Brute force O(n^2)
 function twoSumBruteforce(nums, target) {
     const n = nums.length;
     for (let i = 0; i < n; i++) {
@@ -23,7 +24,7 @@ function twoSumBruteforce(nums, target) {
     return false;
 }
 
-// Hash-based O(n) expected
+// Check for pair of elements that sum to target - Hash-based O(n) expected
 function twoSumHash(nums, target) {
     const seen = new Set();
     for (const x of nums) {
@@ -36,6 +37,7 @@ function twoSumHash(nums, target) {
     return false;
 }
 
+// Move zeroes to the end - O(n)
 function moveZeroes(nums) {
     let write = 0;
     for (let read = 0; read < nums.length; read++) {
@@ -50,6 +52,7 @@ function moveZeroes(nums) {
     }
 }
 
+// Check if two strings are anagrams - O(n)
 function isAnagram(s, t) {
     if (s.length !== t.length) return false;
     const freq = new Array(26).fill(0);
@@ -63,6 +66,7 @@ function isAnagram(s, t) {
     return true;
 }
 
+// Find the length of the longest substring without repeating characters - O(n)
 function lengthOfLongestSubstring(s) {
     const lastPos = new Map();
     let best = 0;
@@ -80,6 +84,7 @@ function lengthOfLongestSubstring(s) {
     return best;
 }
 
+// Rotate an array O(n)
 function rotate(nums, k) {
     const n = nums.length;
     if (n === 0) return;
@@ -91,6 +96,7 @@ function rotate(nums, k) {
     reverseRange(nums, k, n - 1);
 }
 
+// Reverse a range of an array - O(n)
 function reverseRange(nums, l, r) {
     while (l < r) {
         const tmp = nums[l];
