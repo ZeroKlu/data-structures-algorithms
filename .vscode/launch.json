@@ -3,6 +3,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "trie_autocomplete_ranked",
+            "request": "launch",
+            "mainClass": "code_samples.section13.example_4_frequency_ranked.trie_autocomplete_ranked",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
+            "name": "trie_autocomplete",
+            "request": "launch",
+            "mainClass": "code_samples.section13.example_3_auto_complete.trie_autocomplete",
+            "projectName": "data-structures-algorithms_76b8ffa0"
+        },
+        {
+            "type": "java",
             "name": "trie_prefix_count",
             "request": "launch",
             "mainClass": "code_samples.section13.example_2_prefix_counting.trie_prefix_count",
