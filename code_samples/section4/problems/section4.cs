@@ -1,5 +1,6 @@
 #nullable enable
 
+// Check if a string of parentheses is valid
 static bool IsValid(string s) {
     var stack = new Stack<char>();
     var match = new Dictionary<char, char> {
@@ -22,6 +23,7 @@ static bool IsValid(string s) {
     return stack.Count == 0;
 }
 
+// Find the next greater element for each element
 static int[] NextGreaterElements(int[] nums) {
     int n = nums.Length;
     int[] ans = new int[n];
@@ -40,6 +42,7 @@ static int[] NextGreaterElements(int[] nums) {
     return ans;
 }
 
+// Calculate number of days temperature will continue to rise
 static int[] DailyTemperatures(int[] temps) {
     int n = temps.Length;
     int[] ans = new int[n];
@@ -55,6 +58,7 @@ static int[] DailyTemperatures(int[] temps) {
     return ans;
 }
 
+// Level order traversal - returns 2D array
 static IList<IList<int>> LevelOrder(TreeNode? root) {
     var result = new List<IList<int>>();
     if (root == null) return result;
@@ -76,9 +80,10 @@ static IList<IList<int>> LevelOrder(TreeNode? root) {
     return result;
 }
 
+// Calculate max sliding window
 static int[] MaxSlidingWindow(int[] nums, int k) {
     int n = nums.Length;
-    if (n == 0 || k == 0) return System.Array.Empty<int>();
+    if (n == 0 || k == 0) return [];
 
     var result = new int[n - k + 1];
     var dq = new LinkedList<int>(); // indices
@@ -190,10 +195,14 @@ Console.WriteLine($"max window size {k}: " + string.Join(" ", msw));
 Console.WriteLine();
 Console.WriteLine("==== ALL TESTS COMPLETE ====");
 
+// Defines a queue of integers
 class MyQueue {
-    private Stack<int> _in = new Stack<int>();
-    private Stack<int> _out = new Stack<int>();
+    // Optimize enqueue and dequeue by using two stacks
+    // in = input, out = output
+    private Stack<int> _in = new();
+    private Stack<int> _out = new();
 
+    // Move all elements from in to out
     private void MoveInToOut() {
         if (_out.Count == 0) {
             while (_in.Count > 0) {
@@ -202,28 +211,38 @@ class MyQueue {
         }
     }
 
+    // Add value to the queue
     public void Enqueue(int x) {
         _in.Push(x);
     }
 
+    // Remove value from the queue
     public int Dequeue() {
         MoveInToOut();
         return _out.Pop();
     }
 
+    // Get the value at the front of the queue
     public int Front() {
         MoveInToOut();
         return _out.Peek();
     }
 
+    // Check if the queue is empty
     public bool Empty() {
         return _in.Count == 0 && _out.Count == 0;
     }
 }
 
+// Defines a binary tree node
 class TreeNode(int val)
 {
+    // Value of the node
     public int Val = val;
+
+    // Reference to left child node
     public TreeNode? Left;
+
+    // Reference to right child node
     public TreeNode? Right;
 }

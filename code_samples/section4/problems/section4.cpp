@@ -7,6 +7,7 @@
 
 using namespace std;
 
+// Check if parentheses are valid
 bool isValid(const string& s) {
     stack<char> st;
     for (char c : s) {
@@ -26,9 +27,13 @@ bool isValid(const string& s) {
     return st.empty();
 }
 
+// Define an integer queue
 class MyQueue {
+    // Optimize enqueue and dequeue by using two stacks
+    // in = input, out = output
     stack<int> in, out;
 
+    // Move all elements from in to out
     void moveInToOut() {
         if (out.empty()) {
             while (!in.empty()) {
@@ -39,10 +44,12 @@ class MyQueue {
     }
 
 public:
+    // Add value to the queue
     void enqueue(int x) {
         in.push(x);
     }
 
+    // Remove value from the queue
     int dequeue() {
         moveInToOut();
         int v = out.top();
@@ -50,16 +57,29 @@ public:
         return v;
     }
 
+    // Get the value at the front
     int front() {
         moveInToOut();
         return out.top();
     }
 
+    // Check if the queue is empty
     bool empty() const {
         return in.empty() && out.empty();
     }
 };
 
+/**
+ * This function takes a vector of integers and returns a vector of the next greater element for each element in the input vector.
+ * The input vector is represented by the reference `nums`, and the length of the vector is `n`.
+ * The function uses a stack to keep track of the elements in the input vector from right to left.
+ * The function iterates over the input vector from right to left, and for each element, it finds the next greater element in the stack.
+ * If the stack is empty, the next greater element is -1.
+ * The function returns a vector of the next greater element for each element in the input vector.
+ *
+ * @param nums: A reference to the input vector of integers.
+ * @return: A vector of the next greater element for each element in the input vector.
+ */
 vector<int> nextGreaterElements(const vector<int>& nums) {
     int n = (int)nums.size();
     vector<int> ans(n, -1);
@@ -76,6 +96,16 @@ vector<int> nextGreaterElements(const vector<int>& nums) {
     return ans;
 }
 
+/**
+ * This function takes a vector of daily temperatures and returns a vector of the number of days the temperature will continue to rise after each day.
+ * The input vector is represented by the reference `temps`, and the length of the vector is `n`.
+ * The function uses a stack to keep track of the indices of the elements in the input vector from left to right.
+ * The function iterates over the input vector from left to right, and for each element, it finds the number of days the temperature will continue to rise after that day.
+ * The function returns a vector of the number of days the temperature will continue to rise after each day.
+ *
+ * @param temps: A reference to the input vector of daily temperatures.
+ * @return: A vector of the number of days the temperature will continue to rise after each day.
+ */
 vector<int> dailyTemperatures(const vector<int>& temps) {
     int n = (int)temps.size();
     vector<int> ans(n, 0);
@@ -92,13 +122,33 @@ vector<int> dailyTemperatures(const vector<int>& temps) {
     return ans;
 }
 
+// Definition for a binary tree node.
 struct TreeNode {
+    // Node value
     int val;
+
+    //Pointer to left child
     TreeNode *left;
+
+    // Pointer to right child
     TreeNode *right;
+
+    // Constructor
     TreeNode(int v) : val(v), left(nullptr), right(nullptr) {}
 };
 
+/**
+ * This function performs a level-order traversal of a binary tree and returns the result as a 2D vector.
+ * The input is the root of the binary tree, and the function returns a 2D vector of the level-order traversal.
+ * The function uses a queue to perform the level-order traversal.
+ * The function iterates over the queue until it is empty, and for each node in the queue, it dequeues the node,
+ * adds its value to the current level, and enqueues its left and right children (if they exist).
+ * The function stores the current level in the result vector.
+ * The function returns the result vector.
+ *
+ * @param root: A pointer to the root of the binary tree.
+ * @return: A 2D vector of the level-order traversal.
+ */
 vector<vector<int>> levelOrder(TreeNode *root) {
     vector<vector<int>> result;
     if (!root) return result;
@@ -122,6 +172,19 @@ vector<vector<int>> levelOrder(TreeNode *root) {
     return result;
 }
 
+/**
+ * This function takes a vector of integers and the size of the sliding window,
+ * and returns a vector of the maximum values of each window.
+ * The input vector is represented by the reference `nums`, and the length of the vector is `n`.
+ * The size of the sliding window is `k`.
+ * The function uses a deque to keep track of the indices of the elements in the window.
+ * The function iterates over the input vector and for each element, it updates the deque to only contain the indices of the elements in the window.
+ * The function returns a vector of the maximum values of each window.
+ *
+ * @param nums: A reference to the input vector of integers.
+ * @param k: The size of the sliding window.
+ * @return: A vector of the maximum values of each window.
+ */
 vector<int> maxSlidingWindow(const vector<int>& nums, int k) {
     int n = (int)nums.size();
     vector<int> result;

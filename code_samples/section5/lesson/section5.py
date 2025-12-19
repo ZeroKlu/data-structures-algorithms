@@ -2,6 +2,8 @@
 
 from collections import deque
 
+#pylint: disable=too-few-public-methods
+
 class TreeNode:
     """Tree node."""
     def __init__(self, value: int, left: "TreeNode | None" = None,

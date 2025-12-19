@@ -3,12 +3,29 @@
 #include <vector>
 #include <limits>
 
+// Definition for a binary tree node.
 struct TreeNode {
+    // Node value
     int value;
+
+    // Pointer to left child
     TreeNode* left;
+
+    // Pointer to right child
     TreeNode* right;
+
+    // Constructor
     TreeNode(int v) : value(v), left(nullptr), right(nullptr) {}
 };
+
+/**
+ * Preorder traversal of a binary tree.
+ * 
+ * Given a binary tree, performs a preorder traversal
+ * and prints each node value to the console.
+ * 
+ * @param root The root of the binary tree to traverse.
+ */
 
 void preorder(TreeNode* root) {
     if (!root) return;
@@ -17,6 +34,14 @@ void preorder(TreeNode* root) {
     preorder(root->right);
 }
 
+/**
+ * Level order traversal of a binary tree.
+ * 
+ * Given a binary tree, performs a level order traversal
+ * and prints each node value to the console.
+ * 
+ * @param root The root of the binary tree to traverse.
+ */
 void levelOrder(TreeNode* root) {
     if (!root) return;
     std::queue<TreeNode*> q;
@@ -31,6 +56,14 @@ void levelOrder(TreeNode* root) {
     }
 }
 
+/**
+ * @brief Performs a depth-first search on a graph starting from a given node.
+ * 
+ * @param node The node to start the search from.
+ * @param graph The graph to search.
+ * @param visited A boolean vector to keep track of visited nodes.
+ */
+
 void dfs_util(int node, const std::vector<std::vector<int>>& graph,
               std::vector<bool>& visited) {
     visited[node] = true;
@@ -42,12 +75,36 @@ void dfs_util(int node, const std::vector<std::vector<int>>& graph,
     }
 }
 
+/**
+ * @brief Performs a depth-first search on a graph starting from a given node.
+ * 
+ * This function performs a depth-first search on a graph starting from a given node.
+ * It marks each visited node in the visited vector and prints the node value
+ * to the console.
+ * 
+ * @param start The node to start the search from.
+ * @param graph The graph to search.
+ */
 void dfs(int start, const std::vector<std::vector<int>>& graph) {
     int n = (int)graph.size();
     std::vector<bool> visited(n, false);
     dfs_util(start, graph, visited);
 }
 
+/**
+ * @brief Calculates the shortest distances from a given node in a graph.
+ * 
+ * This function calculates the shortest distances from a given node in a graph.
+ * It uses a breadth-first search to traverse the graph and keep track of the
+ * shortest distances to each node. The function returns a vector of integers
+ * representing the shortest distances from the start node to each node in the
+ * graph.
+ * 
+ * @param start The node to start the search from.
+ * @param graph The graph to search.
+ * @return A vector of integers representing the shortest distances from the start
+ * node to each node in the graph.
+ */
 std::vector<int> shortestDistances(int start,
     const std::vector<std::vector<int>>& graph) {
     int n = (int)graph.size();

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+// Check if a string of parentheses is valid
 bool isValid(const char *s) {
     int n = (int)strlen(s);
     char stack[10000];
@@ -25,27 +26,56 @@ bool isValid(const char *s) {
     return top == -1;
 }
 
+// Define a stack of integers
 typedef struct {
+    // array of integers (stack)
     int data[10000];
+
+    // index of next free slot
     int top;
 } Stack;
 
-void stackInit(Stack *s) { s->top = -1; }
-bool stackEmpty(Stack *s) { return s->top < 0; }
-void stackPush(Stack *s, int x) { s->data[++s->top] = x; }
-int stackPop(Stack *s) { return s->data[s->top--]; }
-int stackPeek(Stack *s) { return s->data[s->top]; }
+// Initialize the stack
+void stackInit(Stack *s) {
+    s->top = -1;
+}
 
+// Check if the stack is empty
+bool stackEmpty(Stack *s) {
+    return s->top < 0;
+}
+
+// Add value to the stack
+void stackPush(Stack *s, int x) {
+    s->data[++s->top] = x;
+}
+
+// Remove value from the stack
+int stackPop(Stack *s) {
+    return s->data[s->top--];
+}
+
+int stackPeek(Stack *s) {
+    return s->data[s->top];
+}
+
+// Define a queue of integers
 typedef struct {
+    // Optimize enqueue and dequeue by using two stacks
+    // array of integers (queue-in)
     Stack in;
+
+    // array of integers (queue-out)
     Stack out;
 } MyQueue;
 
+// Initialize the queue
 void myQueueInit(MyQueue *q) {
     stackInit(&q->in);
     stackInit(&q->out);
 }
 
+// Move all elements from in to out
 static void moveInToOut(MyQueue *q) {
     if (stackEmpty(&q->out)) {
         while (!stackEmpty(&q->in)) {
@@ -54,70 +84,122 @@ static void moveInToOut(MyQueue *q) {
     }
 }
 
+// Add value to the queue
 void enqueue(MyQueue *q, int x) {
     stackPush(&q->in, x);
 }
 
+// Remove value from the queue
 int dequeue(MyQueue *q) {
     moveInToOut(q);
     return stackPop(&q->out);
 }
 
+// Get the value at the front of the queue
 int front(MyQueue *q) {
     moveInToOut(q);
     return stackPeek(&q->out);
 }
 
+// Check if the queue is empty
 bool empty(MyQueue *q) {
     return stackEmpty(&q->in) && stackEmpty(&q->out);
 }
 
-int* nextGreaterElements(const int *nums, int n) {
-    int *ans = (int*)malloc(sizeof(int) * n);
-    int *stack = (int*)malloc(sizeof(int) * n);
-    int top = -1;
 
+/**
+ * This function takes an array of integers and returns an array of the next greater element for each element in the input array.
+ * The input array is represented by the pointer `nums`, and the length of the array is `n`.
+ * The function uses two arrays: `ans` to store the next greater element for each element in the input array, and `stack` to store the elements of the input array.
+ * The function uses a stack to keep track of the elements in the input array from left to right.
+ * The function iterates over the input array from right to left, and for each element, it finds the next greater element in the stack.
+ * If the stack is empty, the next greater element is -1.
+ * The function returns the array of next greater elements.
+ *
+ * @param nums: A pointer to the input array of integers.
+ * @param n: The length of the input array.
+ * @return: A pointer to the array of next greater elements.
+ */
+int* nextGreaterElements(const int *nums, int n) {
+    int *ans = (int*)malloc(sizeof(int) * n); // Allocate memory for the output array
+    int *stack = (int*)malloc(sizeof(int) * n); // Allocate memory for the stack
+    int top = -1; // Initialize the stack
+
+    // Iterate over the input array from right to left
     for (int i = n - 1; i >= 0; i--) {
-        int x = nums[i];
+        int x = nums[i]; // Get the current element
+
+        // Pop elements from the stack until the top of the stack is smaller than the current element
         while (top >= 0 && stack[top] <= x) {
             top--;
         }
+
+        // Set the next greater element for the current element
         ans[i] = (top >= 0) ? stack[top] : -1;
+
+        // Push the current element onto the stack
         stack[++top] = x;
     }
 
-    free(stack);
-    return ans;
+    free(stack); // Free the memory used by the stack
+    return ans; // Return the array of next greater elements
 }
 
+/**
+ * This function takes an array of daily temperatures and returns an array of the number of days the temperature will continue to rise after each day.
+ * The input array is represented by the pointer `temps`, and the length of the array is `n`.
+ * The function uses two arrays: `ans` to store the number of days the temperature will continue to rise after each day, and `stack` to store the indices of the elements in the input array.
+ * The function uses a stack to keep track of the indices of the elements in the input array from left to right.
+ * The function iterates over the input array from left to right, and for each element, it finds the number of days the temperature will continue to rise after that day.
+ * The function returns the array of the number of days the temperature will continue to rise after each day.
+ *
+ * @param temps: A pointer to the input array of daily temperatures.
+ * @param n: The length of the input array.
+ * @return: A pointer to the array of the number of days the temperature will continue to rise after each day.
+ */
 int* dailyTemperatures(const int *temps, int n) {
-    int *ans = (int*)calloc(n, sizeof(int));
-    int *stack = (int*)malloc(sizeof(int) * n);
-    int top = -1;
+    int *ans = (int*)calloc(n, sizeof(int)); // Allocate memory for the output array
+    int *stack = (int*)malloc(sizeof(int) * n); // Allocate memory for the stack
+    int top = -1; // Initialize the stack
 
+    // Iterate over the input array from left to right
     for (int i = 0; i < n; i++) {
         while (top >= 0 && temps[i] > temps[stack[top]]) {
-            int idx = stack[top--];
-            ans[idx] = i - idx;
+            int idx = stack[top--]; // Get the index of the top element of the stack
+            ans[idx] = i - idx; // Set the number of days the temperature will continue to rise after the top element
         }
-        stack[++top] = i;
+        stack[++top] = i; // Push the current index onto the stack
     }
 
-    free(stack);
-    return ans;
+    free(stack); // Free the memory used by the stack
+    return ans; // Return the array of the number of days the temperature will continue to rise after each day
 }
 
 // A minimal tree node definition and BFS outline.
 // In a real program you would implement a proper queue.
 typedef struct TreeNode {
+    // Node value
     int val;
+
+    // Pointer to left child
     struct TreeNode *left;
+
+    // Pointer to right child
     struct TreeNode *right;
 } TreeNode;
 
 // For brevity, this shows the BFS structure using an array queue.
-#include <stdlib.h>
 
+/**
+ * This function performs a level-order traversal of a binary tree and returns the result as a 2D array.
+ * The input is the root of the binary tree, and the function returns a pointer to the 2D array of the level-order traversal.
+ * The function also returns the size of the 2D array and the sizes of each column.
+ *
+ * @param root: A pointer to the root of the binary tree.
+ * @param returnSize: A pointer to an integer to store the size of the 2D array.
+ * @param returnColumnSizes: A pointer to an array of integers to store the sizes of each column.
+ * @return: A pointer to the 2D array of the level-order traversal.
+ */
 int** levelOrder(TreeNode *root, int *returnSize, int **returnColumnSizes) {
     if (!root) {
         *returnSize = 0;
@@ -125,45 +207,59 @@ int** levelOrder(TreeNode *root, int *returnSize, int **returnColumnSizes) {
         return NULL;
     }
 
-    TreeNode **queue = (TreeNode**)malloc(sizeof(TreeNode*) * 10000);
-    int head = 0, tail = 0;
-    queue[tail++] = root;
+    TreeNode **queue = (TreeNode**)malloc(sizeof(TreeNode*) * 10000); // Allocate memory for the queue
+    int head = 0, tail = 0; // Initialize the head and tail of the queue
+    queue[tail++] = root; // Enqueue the root node
 
-    int capacity = 1000;
-    int **result = (int**)malloc(sizeof(int*) * capacity);
-    int *colSizes = (int*)malloc(sizeof(int) * capacity);
-    int levels = 0;
+    int capacity = 1000; // Initialize the capacity of the result array
+    int **result = (int**)malloc(sizeof(int*) * capacity); // Allocate memory for the result array
+    int *colSizes = (int*)malloc(sizeof(int) * capacity); // Allocate memory for the column sizes array
+    int levels = 0; // Initialize the number of levels
 
     while (head < tail) {
-        int levelSize = tail - head;
-        int *level = (int*)malloc(sizeof(int) * levelSize);
+        int levelSize = tail - head; // Get the size of the current level
+        int *level = (int*)malloc(sizeof(int) * levelSize); // Allocate memory for the current level
         for (int i = 0; i < levelSize; i++) {
-            TreeNode *node = queue[head++];
-            level[i] = node->val;
-            if (node->left) queue[tail++] = node->left;
-            if (node->right) queue[tail++] = node->right;
+            TreeNode *node = queue[head++]; // Dequeue a node from the queue
+            level[i] = node->val; // Set the value of the current level
+            if (node->left) queue[tail++] = node->left; // Enqueue the left child of the node
+            if (node->right) queue[tail++] = node->right; // Enqueue the right child of the node
         }
-        result[levels] = level;
-        colSizes[levels] = levelSize;
-        levels++;
+        result[levels] = level; // Store the current level in the result array
+        colSizes[levels] = levelSize; // Store the size of the current level in the column sizes array
+        levels++; // Increment the number of levels
     }
 
-    *returnSize = levels;
-    *returnColumnSizes = colSizes;
-    free(queue);
-    return result;
+    *returnSize = levels; // Store the number of levels in the returnSize variable
+    *returnColumnSizes = colSizes; // Store the column sizes array in the returnColumnSizes variable
+    free(queue); // Free the memory used by the queue
+    return result; // Return the result array
 }
 
 // Returns array of length n - k + 1.
+/**
+ * This function takes an array of integers, the length of the array, and the size of the sliding window,
+ * and returns an array of the maximum values of each window.
+ * The input array is represented by the pointer `nums`, and the length of the array is `n`.
+ * The size of the sliding window is `k`.
+ * The function uses a deque to keep track of the indices of the elements in the window.
+ * The function iterates over the input array and for each element, it updates the deque to only contain the indices of the elements in the window.
+ * The function returns an array of the maximum values of each window.
+ *
+ * @param nums: A pointer to the input array of integers.
+ * @param n: The length of the input array.
+ * @param k: The size of the sliding window.
+ * @return: A pointer to the array of the maximum values of each window.
+ */
 int* maxSlidingWindow(const int *nums, int n, int k) {
     if (n == 0 || k == 0) return NULL;
 
-    int outLen = n - k + 1;
-    int *result = (int*)malloc(sizeof(int) * outLen);
-    int *dequeIdx = (int*)malloc(sizeof(int) * n);
-    int front = 0, back = 0; // [front, back)
+    int outLen = n - k + 1; // Calculate the length of the output array
+    int *result = (int*)malloc(sizeof(int) * outLen); // Allocate memory for the output array
+    int *dequeIdx = (int*)malloc(sizeof(int) * n); // Allocate memory for the deque
+    int front = 0, back = 0; // Initialize the front and back of the deque
 
-    int outPos = 0;
+    int outPos = 0; // Initialize the output position
     for (int i = 0; i < n; i++) {
         // Remove indices out of this window
         while (front < back && dequeIdx[front] <= i - k) {
@@ -173,15 +269,15 @@ int* maxSlidingWindow(const int *nums, int n, int k) {
         while (front < back && nums[dequeIdx[back - 1]] <= nums[i]) {
             back--;
         }
-        dequeIdx[back++] = i;
+        dequeIdx[back++] = i; // Add the current index to the deque
 
         if (i >= k - 1) {
-            result[outPos++] = nums[dequeIdx[front]];
+            result[outPos++] = nums[dequeIdx[front]]; // Store the maximum value of the current window in the output array
         }
     }
 
-    free(dequeIdx);
-    return result;
+    free(dequeIdx); // Free the memory used by the deque
+    return result; // Return the output array
 }
 
 int main() {

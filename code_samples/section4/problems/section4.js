@@ -1,3 +1,4 @@
+// Check if a string of parentheses is valid
 function isValid(s) {
     const stack = [];
     const match = {
@@ -17,8 +18,11 @@ function isValid(s) {
     return stack.length === 0;
 }
 
+// Define a queue of integers
 class MyQueue {
     constructor() {
+        // Optimize enqueue and dequeue by using two stacks
+        // _in: input stack, _out: output stack
         this._in = [];
         this._out = [];
     }
@@ -31,25 +35,30 @@ class MyQueue {
         }
     }
 
+    // Add value to the queue
     enqueue(x) {
         this._in.push(x);
     }
 
+    // Remove value from the queue
     dequeue() {
         this._moveInToOut();
         return this._out.pop();
     }
 
+    // Get the value at the front
     front() {
         this._moveInToOut();
         return this._out[this._out.length - 1];
     }
 
+    // Check if the queue is empty
     empty() {
         return this._in.length === 0 && this._out.length === 0;
     }
 }
 
+// Next greater element for each element
 function nextGreaterElements(nums) {
     const n = nums.length;
     const ans = new Array(n).fill(-1);
@@ -66,6 +75,7 @@ function nextGreaterElements(nums) {
     return ans;
 }
 
+// Calculate number of days temperature will continue to rise
 function dailyTemperatures(temps) {
     const n = temps.length;
     const ans = new Array(n).fill(0);
@@ -81,6 +91,7 @@ function dailyTemperatures(temps) {
     return ans;
 }
 
+// Level order traversal - returns 2D array
 function levelOrder(root) {
     const result = [];
     if (!root) return result;
@@ -102,6 +113,7 @@ function levelOrder(root) {
     return result;
 }
 
+// Sliding window maximum
 function maxSlidingWindow(nums, k) {
     const n = nums.length;
     if (n === 0 || k === 0) return [];

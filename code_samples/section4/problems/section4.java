@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class section4 {
+    // Check if a string of parentheses is valid
     public static boolean isValid(String s) {
         Deque<Character> stack = new ArrayDeque<>();
         for (char c : s.toCharArray()) {
@@ -26,6 +27,7 @@ public class section4 {
         return stack.isEmpty();
     }
 
+    // Next greater element for each element
     int[] nextGreaterElements(int[] nums) {
         int n = nums.length;
         int[] ans = new int[n];
@@ -43,6 +45,7 @@ public class section4 {
         return ans;
     }
 
+    // Calculate number of days temperature will continue to rise
     int[] dailyTemperatures(int[] temps) {
         int n = temps.length;
         int[] ans = new int[n];
@@ -58,6 +61,7 @@ public class section4 {
         return ans;
     }
 
+    // Level order traversal - returns 2D array
     List<List<Integer>> levelOrder(TreeNode root) {
         List<List<Integer>> result = new ArrayList<>();
         if (root == null) return result;
@@ -79,6 +83,7 @@ public class section4 {
         return result;
     }
 
+    // Sliding window maximum
     int[] maxSlidingWindow(int[] nums, int k) {
         int n = nums.length;
         if (n == 0 || k == 0) return new int[0];
