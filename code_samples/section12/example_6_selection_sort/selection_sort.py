@@ -1,4 +1,4 @@
-"""Example 6 – Selection Sort with step counting and file tests."""
+"""Example 6 - Selection Sort with step counting and file tests."""
 
 from pathlib import Path
 import os

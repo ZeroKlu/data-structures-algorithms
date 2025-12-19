@@ -1,4 +1,4 @@
-"""Lesson 6 – Exponential Search (with step counting and file-based tests)."""
+"""Lesson 6 - Exponential Search (with step counting and file-based tests)."""
 
 from __future__ import annotations
 import os

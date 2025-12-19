@@ -57,7 +57,7 @@ edge_list = [
     [1, 2],
     [2, 3]
 ]
-run_test("Single chain 0–1–2–3", num, edge_list, expected=1)
+run_test("Single chain 0-1-2-3", num, edge_list, expected=1)
 
 
 # ===========================

@@ -24,7 +24,7 @@ int charIndex(char c) {
 /*
  * Insert a word.
  * Each node on the path increments prefixCount.
- * Rejects the entire word if any char is not a–z.
+ * Rejects the entire word if any char is not a-z.
  */
 void trieInsert(TrieNode *root, const char *word) {
     TrieNode *current = root;
