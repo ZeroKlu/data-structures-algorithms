@@ -1,6 +1,8 @@
 """Problem 5.2 - Check Balanced Binary Tree"""
 from typing import Optional, Tuple
 
+#pylint: disable=too-few-public-methods
+
 class TreeNode:
     """Model for a binary tree node."""
     def __init__(self, val: int = 0,

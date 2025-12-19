@@ -2,6 +2,8 @@
 
 from typing import List, Optional
 
+#pylint: disable=too-few-public-methods
+
 class TreeNode:
     """Model for a binary tree node."""
     def __init__(self, val: int = 0,

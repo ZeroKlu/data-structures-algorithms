@@ -1,20 +1,44 @@
 package code_samples.section5.problems.problem5_4;
 
+// ==========================
+// TREE NODE DEFINITION
+// ==========================
+
+// Represents a single node in a binary tree
 class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
+    int val;         // Value stored in this node
+    TreeNode left;   // Reference to left child (null if none)
+    TreeNode right;  // Reference to right child (null if none)
+
+    // Constructor initializes the node value
     TreeNode(int v) { val = v; }
 }
 
 public class problem5_4 {
 
+    // ==========================
+    // HAS PATH SUM (ROOT-TO-LEAF)
+    // ==========================
+
+    // Returns true if there exists a ROOT-to-LEAF path such that
+    // the sum of the node values along the path equals targetSum.
+    //
+    // Important:
+    // - The path must end at a leaf node (a node with no children).
     boolean hasPathSum(TreeNode root, int targetSum) {
+        // Base case: empty subtree has no valid path
         if (root == null) return false;
+
+        // If this is a leaf node, check whether its value matches the remaining sum
         if (root.left == null && root.right == null) {
             return root.val == targetSum;
         }
+
+        // Subtract current node's value from the target sum
         int remaining = targetSum - root.val;
+
+        // Recursively check left and right subtrees
+        // If either subtree has a valid path, return true
         return hasPathSum(root.left, remaining) ||
                hasPathSum(root.right, remaining);
     }
@@ -23,25 +47,40 @@ public class problem5_4 {
        Helpers for testing
        ------------------------------------------------------- */
 
+    // Convenience function to create a new node
     private TreeNode node(int v) {
         return new TreeNode(v);
     }
 
+    // Number of spaces to indent per tree level (for sideways printing)
     private static final int INDENT = 4;
 
+    // Prints the tree sideways for visualization:
+    // - Right subtree appears above the node
+    // - Left subtree appears below the node
     private void printTree(TreeNode root) {
         System.out.println("Tree (sideways, right is up):");
         printTreeImpl(root, 0);
         System.out.println();
     }
 
+    // Recursive helper for sideways tree printing
     private void printTreeImpl(TreeNode root, int indent) {
+        // Base case: nothing to print
         if (root == null) return;
+
+        // Print right subtree first (appears "up")
         printTreeImpl(root.right, indent + INDENT);
+
+        // Print current node with indentation based on depth
         System.out.println(" ".repeat(indent) + root.val);
+
+        // Print left subtree last (appears "down")
         printTreeImpl(root.left, indent + INDENT);
     }
 
+    // Runs a labeled test case:
+    // prints the tree, target sum, and result of hasPathSum
     private void testCase(String label, TreeNode root, int target) {
         System.out.println("==== " + label + " ====");
         printTree(root);
@@ -58,10 +97,10 @@ public class problem5_4 {
 
         problem5_4 p = new problem5_4();
 
-        // 1) Empty tree
+        // 1) Empty tree (should always be false)
         TreeNode empty = null;
 
-        // 2) Single node
+        // 2) Single node tree
         TreeNode single = p.node(7);
 
         // 3) Test tree:
@@ -86,14 +125,23 @@ public class problem5_4 {
         t.right.right.right = p.node(1);
 
         // Run test cases
+
+        // Empty tree
         p.testCase("Empty tree", empty, 10);
+
+        // Single node tests
         p.testCase("Single node (7 == 7 → true)", single, 7);
         p.testCase("Single node (7 != 10 → false)", single, 10);
 
-        p.testCase("Large tree (has path sum 22 → true)", t, 22); // 5+4+11+2
-        p.testCase("Large tree (has path sum 26 → true)", t, 26); // 5+8+13
-        p.testCase("Large tree (has path sum 18 → true)", t, 18); // 5+8+4+1
-        p.testCase("Large tree (no path sum == 5 → false)", t, 5); // 5 is not a leaf
+        // Root-to-leaf path sums in t:
+        // 5 + 4 + 11 + 2 = 22
+        // 5 + 8 + 13     = 26
+        // 5 + 8 + 4 + 1  = 18
+        p.testCase("Large tree (has path sum 22 → true)", t, 22);
+        p.testCase("Large tree (has path sum 26 → true)", t, 26);
+        p.testCase("Large tree (has path sum 18 → true)", t, 18);
 
+        // This should be false because 5 is not a leaf node
+        p.testCase("Large tree (no path sum == 5 → false)", t, 5);
     }
 }
