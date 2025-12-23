@@ -17,6 +17,9 @@
     * Hash Tables
     * Dynamic Programming
     * Advanced DP Patterns
+    * Graph Algorithms
+    * Sorting & Searching
+    * Trie Data Structure
 * Languages:
     * C
     * C++
@@ -27,7 +30,13 @@
 
 ### Who is this for?
 
-* Developers comfortable with at least one of the following: C, C++, Java, Python, JavaScript, C#
+* Developers comfortable with at least one of the following:
+    * C
+    * C++
+    * Java
+    * Python
+    * JavaScript
+    * C#
 * Students interested in learning data structures and algorithms
 
 ### How to use this repo?
