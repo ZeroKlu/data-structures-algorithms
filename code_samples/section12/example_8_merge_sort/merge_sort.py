@@ -47,7 +47,15 @@ def merge_sort(arr: list[int]) -> list[int]:
 
 
 def _merge(left: list[int], right: list[int]) -> list[int]:
-    """Merge two sorted lists using global step counters."""
+    """
+    Merge two sorted lists using global step counters.
+
+    comparisons:
+        counts comparisons of left[i] <= right[j]
+
+    writes:
+        counts writes into result (append / extend elements)
+    """
     global comparisons, writes
     result: list[int] = []
     i = j = 0
@@ -55,11 +63,11 @@ def _merge(left: list[int], right: list[int]) -> list[int]:
     while i < len(left) and j < len(right):
         comparisons += 1   # compare left[i] <= right[j]
         if left[i] <= right[j]:
-            result.append(left[i])   # write
+            result.append(left[i])
             writes += 1
             i += 1
         else:
-            result.append(right[j])  # write
+            result.append(right[j])
             writes += 1
             j += 1
 
@@ -95,12 +103,14 @@ def load_file(file_name: str) -> list[int]:
 
     # explicit backup path for your environment
     desktop = os.path.join(os.path.expanduser("~"), "Desktop")
-    path2 = os.path.join(desktop,
+    path2 = os.path.join(
+        desktop,
         "data-structures-algorithms",
         "code_samples",
         "section12",
         "data",
-        file_name)
+        file_name
+    )
 
     print(f"Relative path not found, trying explicit path: {path2}")
 
@@ -116,8 +126,7 @@ def read_int_file(full_path: str) -> list[int]:
         print(f"Reading file: {full_path}")
         with open(full_path, "r", encoding="utf-8") as f:
             text = f.read()
-        nums = [int(x) for x in text.split()]
-        return nums
+        return [int(x) for x in text.split()]
     except Exception as ex:
         print(f"Error reading: {full_path}")
         print(ex)

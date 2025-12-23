@@ -6,7 +6,7 @@
 //   ordered.txt    - sorted ascending
 //
 // Each file should contain integers separated by whitespace.
-
+//
 // Compile (Windows, gcc example):
 //   gcc -std=c17 -O2 insertion_sort.c -o insertion_sort
 //
