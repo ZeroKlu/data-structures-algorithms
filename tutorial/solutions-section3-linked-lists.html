@@ -71,7 +71,7 @@
             <p>
                 We assume the node definition:
             </p>
-<pre><code class="language-c">typedef struct ListNode {
+            <pre><code class="language-c">typedef struct ListNode {
     int val;
     struct ListNode* next;
 } ListNode;</code></pre>
@@ -95,8 +95,7 @@
                         <span class="label">Problem 1</span>
                         <span class="meta">Insert-head, insert-after, delete-after</span>
                     </div>
-                    <button type="button" class="deep-dive-trigger"
-                        data-deep-id="understand-s3p1">
+                    <button type="button" class="deep-dive-trigger" data-deep-id="understand-s3p1">
                         Understand the Algorithm
                     </button>
                     <button type="button" class="copy-button" aria-label="Copy code">
@@ -115,7 +114,7 @@
 
                 <!-- C -->
                 <div class="code-panel" data-lang-panel="c">
-<pre><code class="language-c">// C
+                    <pre><code class="language-c">// C
 #include &lt;stdlib.h&gt;
 
 typedef struct ListNode {
@@ -151,7 +150,7 @@ void delete_after(ListNode* p) {
 
                 <!-- C++ -->
                 <div class="code-panel hidden" data-lang-panel="cpp">
-<pre><code class="language-cpp">// C++
+                    <pre><code class="language-cpp">// C++
 #include &lt;cstdlib&gt;
 
 struct ListNode {
@@ -186,7 +185,7 @@ void deleteAfter(ListNode* p) {
 
                 <!-- Java -->
                 <div class="code-panel hidden" data-lang-panel="java">
-<pre><code class="language-java">// Java
+                    <pre><code class="language-java">// Java
 class ListNode {
     int val;
     ListNode next;
@@ -219,7 +218,7 @@ void deleteAfter(ListNode p) {
 
                 <!-- JavaScript -->
                 <div class="code-panel hidden" data-lang-panel="js">
-<pre><code class="language-javascript">// JavaScript
+                    <pre><code class="language-javascript">// JavaScript
 class ListNode {
     constructor(val, next = null) {
         this.val = val;
@@ -249,7 +248,7 @@ function deleteAfter(p) {
 
                 <!-- C# -->
                 <div class="code-panel hidden" data-lang-panel="cs">
-<pre><code class="language-csharp">// C#
+                    <pre><code class="language-csharp">// C#
 class ListNode {
     public int Val;
     public ListNode? Next;
@@ -278,7 +277,7 @@ void DeleteAfter(ListNode? p) {
 
                 <!-- Python -->
                 <div class="code-panel hidden" data-lang-panel="py">
-<pre><code class="language-python"># Python
+                    <pre><code class="language-python"># Python
 from typing import Optional
 
 class ListNode:
@@ -329,8 +328,7 @@ def delete_after(p: Optional[ListNode]) -&gt; None:
                         <span class="label">Problem 2</span>
                         <span class="meta">Iterative in-place reversal</span>
                     </div>
-                    <button type="button" class="deep-dive-trigger"
-                        data-deep-id="understand-s3p2">
+                    <button type="button" class="deep-dive-trigger" data-deep-id="understand-s3p2">
                         Understand the Algorithm
                     </button>
                     <button type="button" class="copy-button" aria-label="Copy code">
@@ -349,7 +347,7 @@ def delete_after(p: Optional[ListNode]) -&gt; None:
 
                 <!-- C -->
                 <div class="code-panel" data-lang-panel="c">
-<pre><code class="language-c">// C
+                    <pre><code class="language-c">// C
 typedef struct ListNode {
     int val;
     struct ListNode* next;
@@ -371,7 +369,7 @@ ListNode* reverse_list(ListNode* head) {
 
                 <!-- C++ -->
                 <div class="code-panel hidden" data-lang-panel="cpp">
-<pre><code class="language-cpp">// C++
+                    <pre><code class="language-cpp">// C++
 struct ListNode {
     int val;
     ListNode* next;
@@ -394,7 +392,7 @@ ListNode* reverseList(ListNode* head) {
 
                 <!-- Java -->
                 <div class="code-panel hidden" data-lang-panel="java">
-<pre><code class="language-java">// Java
+                    <pre><code class="language-java">// Java
 class ListNode {
     int val;
     ListNode next;
@@ -417,7 +415,7 @@ ListNode reverseList(ListNode head) {
 
                 <!-- JavaScript -->
                 <div class="code-panel hidden" data-lang-panel="js">
-<pre><code class="language-javascript">// JavaScript
+                    <pre><code class="language-javascript">// JavaScript
 class ListNode {
     constructor(val, next = null) {
         this.val = val;
@@ -441,7 +439,7 @@ function reverseList(head) {
 
                 <!-- C# -->
                 <div class="code-panel hidden" data-lang-panel="cs">
-<pre><code class="language-csharp">// C#
+                    <pre><code class="language-csharp">// C#
 class ListNode {
     public int Val;
     public ListNode? Next;
@@ -464,7 +462,7 @@ ListNode? ReverseList(ListNode? head) {
 
                 <!-- Python -->
                 <div class="code-panel hidden" data-lang-panel="py">
-<pre><code class="language-python"># Python
+                    <pre><code class="language-python"># Python
 from typing import Optional
 
 class ListNode:
@@ -511,8 +509,7 @@ def reverse_list(head: Optional[ListNode]) -&gt; Optional[ListNode]:
                         <span class="label">Problem 3</span>
                         <span class="meta">Floyd&apos;s cycle detection</span>
                     </div>
-                    <button type="button" class="deep-dive-trigger"
-                        data-deep-id="understand-s3p3">
+                    <button type="button" class="deep-dive-trigger" data-deep-id="understand-s3p3">
                         Understand the Algorithm
                     </button>
                     <button type="button" class="copy-button" aria-label="Copy code">
@@ -531,7 +528,7 @@ def reverse_list(head: Optional[ListNode]) -&gt; Optional[ListNode]:
 
                 <!-- C -->
                 <div class="code-panel" data-lang-panel="c">
-<pre><code class="language-c">// C
+                    <pre><code class="language-c">// C
 #include &lt;stdbool.h&gt;
 
 typedef struct ListNode {
@@ -554,7 +551,7 @@ bool has_cycle(ListNode* head) {
 
                 <!-- C++ -->
                 <div class="code-panel hidden" data-lang-panel="cpp">
-<pre><code class="language-cpp">// C++
+                    <pre><code class="language-cpp">// C++
 struct ListNode {
     int val;
     ListNode* next;
@@ -577,7 +574,7 @@ bool hasCycle(ListNode* head) {
 
                 <!-- Java -->
                 <div class="code-panel hidden" data-lang-panel="java">
-<pre><code class="language-java">// Java
+                    <pre><code class="language-java">// Java
 class ListNode {
     int val;
     ListNode next;
@@ -599,7 +596,7 @@ boolean hasCycle(ListNode head) {
 
                 <!-- JavaScript -->
                 <div class="code-panel hidden" data-lang-panel="js">
-<pre><code class="language-javascript">// JavaScript
+                    <pre><code class="language-javascript">// JavaScript
 class ListNode {
     constructor(val, next = null) {
         this.val = val;
@@ -622,7 +619,7 @@ function hasCycle(head) {
 
                 <!-- C# -->
                 <div class="code-panel hidden" data-lang-panel="cs">
-<pre><code class="language-csharp">// C#
+                    <pre><code class="language-csharp">// C#
 class ListNode {
     public int Val;
     public ListNode? Next;
@@ -644,7 +641,7 @@ bool HasCycle(ListNode? head) {
 
                 <!-- Python -->
                 <div class="code-panel hidden" data-lang-panel="py">
-<pre><code class="language-python"># Python
+                    <pre><code class="language-python"># Python
 from typing import Optional
 
 class ListNode:
@@ -693,8 +690,7 @@ def has_cycle(head: Optional[ListNode]) -&gt; bool:
                         <span class="label">Problem 4</span>
                         <span class="meta">Slow/fast pointers to find middle</span>
                     </div>
-                    <button type="button" class="deep-dive-trigger"
-                        data-deep-id="understand-s3p4">
+                    <button type="button" class="deep-dive-trigger" data-deep-id="understand-s3p4">
                         Understand the Algorithm
                     </button>
                     <button type="button" class="copy-button" aria-label="Copy code">
@@ -713,7 +709,7 @@ def has_cycle(head: Optional[ListNode]) -&gt; bool:
 
                 <!-- C -->
                 <div class="code-panel" data-lang-panel="c">
-<pre><code class="language-c">// C
+                    <pre><code class="language-c">// C
 typedef struct ListNode {
     int val;
     struct ListNode* next;
@@ -733,7 +729,7 @@ ListNode* middle_node(ListNode* head) {
 
                 <!-- C++ -->
                 <div class="code-panel hidden" data-lang-panel="cpp">
-<pre><code class="language-cpp">// C++
+                    <pre><code class="language-cpp">// C++
 struct ListNode {
     int val;
     ListNode* next;
@@ -754,7 +750,7 @@ ListNode* middleNode(ListNode* head) {
 
                 <!-- Java -->
                 <div class="code-panel hidden" data-lang-panel="java">
-<pre><code class="language-java">// Java
+                    <pre><code class="language-java">// Java
 class ListNode {
     int val;
     ListNode next;
@@ -775,7 +771,7 @@ ListNode middleNode(ListNode head) {
 
                 <!-- JavaScript -->
                 <div class="code-panel hidden" data-lang-panel="js">
-<pre><code class="language-javascript">// JavaScript
+                    <pre><code class="language-javascript">// JavaScript
 class ListNode {
     constructor(val, next = null) {
         this.val = val;
@@ -797,7 +793,7 @@ function middleNode(head) {
 
                 <!-- C# -->
                 <div class="code-panel hidden" data-lang-panel="cs">
-<pre><code class="language-csharp">// C#
+                    <pre><code class="language-csharp">// C#
 class ListNode {
     public int Val;
     public ListNode? Next;
@@ -818,7 +814,7 @@ ListNode? MiddleNode(ListNode? head) {
 
                 <!-- Python -->
                 <div class="code-panel hidden" data-lang-panel="py">
-<pre><code class="language-python"># Python
+                    <pre><code class="language-python"># Python
 from typing import Optional
 
 class ListNode:
@@ -863,8 +859,7 @@ def middle_node(head: Optional[ListNode]) -&gt; Optional[ListNode]:
                         <span class="label">Problem 5</span>
                         <span class="meta">Dummy head plus tail pointer</span>
                     </div>
-                    <button type="button" class="deep-dive-trigger"
-                        data-deep-id="understand-s3p5">
+                    <button type="button" class="deep-dive-trigger" data-deep-id="understand-s3p5">
                         Understand the Algorithm
                     </button>
                     <button type="button" class="copy-button" aria-label="Copy code">
@@ -883,7 +878,7 @@ def middle_node(head: Optional[ListNode]) -&gt; Optional[ListNode]:
 
                 <!-- C -->
                 <div class="code-panel" data-lang-panel="c">
-<pre><code class="language-c">// C
+                    <pre><code class="language-c">// C
 typedef struct ListNode {
     int val;
     struct ListNode* next;
@@ -915,7 +910,7 @@ ListNode* merge_two_lists(ListNode* l1, ListNode* l2) {
 
                 <!-- C++ -->
                 <div class="code-panel hidden" data-lang-panel="cpp">
-<pre><code class="language-cpp">// C++
+                    <pre><code class="language-cpp">// C++
 struct ListNode {
     int val;
     ListNode* next;
@@ -947,7 +942,7 @@ ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
 
                 <!-- Java -->
                 <div class="code-panel hidden" data-lang-panel="java">
-<pre><code class="language-java">// Java
+                    <pre><code class="language-java">// Java
 class ListNode {
     int val;
     ListNode next;
@@ -979,7 +974,7 @@ ListNode mergeTwoLists(ListNode l1, ListNode l2) {
 
                 <!-- JavaScript -->
                 <div class="code-panel hidden" data-lang-panel="js">
-<pre><code class="language-javascript">// JavaScript
+                    <pre><code class="language-javascript">// JavaScript
 class ListNode {
     constructor(val, next = null) {
         this.val = val;
@@ -1012,7 +1007,7 @@ function mergeTwoLists(l1, l2) {
 
                 <!-- C# -->
                 <div class="code-panel hidden" data-lang-panel="cs">
-<pre><code class="language-csharp">// C#
+                    <pre><code class="language-csharp">// C#
 class ListNode {
     public int Val;
     public ListNode? Next;
@@ -1044,7 +1039,7 @@ ListNode? MergeTwoLists(ListNode? l1, ListNode? l2) {
 
                 <!-- Python -->
                 <div class="code-panel hidden" data-lang-panel="py">
-<pre><code class="language-python"># Python
+                    <pre><code class="language-python"># Python
 from typing import Optional
 
 class ListNode:
@@ -1105,8 +1100,7 @@ def merge_two_lists(l1: Optional[ListNode],
                         <span class="label">Problem 6</span>
                         <span class="meta">One-pass two-pointer removal</span>
                     </div>
-                    <button type="button" class="deep-dive-trigger"
-                        data-deep-id="understand-s3p6">
+                    <button type="button" class="deep-dive-trigger" data-deep-id="understand-s3p6">
                         Understand the Algorithm
                     </button>
                     <button type="button" class="copy-button" aria-label="Copy code">
@@ -1125,7 +1119,7 @@ def merge_two_lists(l1: Optional[ListNode],
 
                 <!-- C -->
                 <div class="code-panel" data-lang-panel="c">
-<pre><code class="language-c">// C
+                    <pre><code class="language-c">// C
 typedef struct ListNode {
     int val;
     struct ListNode* next;
@@ -1160,7 +1154,7 @@ ListNode* remove_nth_from_end(ListNode* head, int n) {
 
                 <!-- C++ -->
                 <div class="code-panel hidden" data-lang-panel="cpp">
-<pre><code class="language-cpp">// C++
+                    <pre><code class="language-cpp">// C++
 struct ListNode {
     int val;
     ListNode* next;
@@ -1193,7 +1187,7 @@ ListNode* removeNthFromEnd(ListNode* head, int n) {
 
                 <!-- Java -->
                 <div class="code-panel hidden" data-lang-panel="java">
-<pre><code class="language-java">// Java
+                    <pre><code class="language-java">// Java
 class ListNode {
     int val;
     ListNode next;
@@ -1226,7 +1220,7 @@ ListNode removeNthFromEnd(ListNode head, int n) {
 
                 <!-- JavaScript -->
                 <div class="code-panel hidden" data-lang-panel="js">
-<pre><code class="language-javascript">// JavaScript
+                    <pre><code class="language-javascript">// JavaScript
 class ListNode {
     constructor(val, next = null) {
         this.val = val;
@@ -1259,7 +1253,7 @@ function removeNthFromEnd(head, n) {
 
                 <!-- C# -->
                 <div class="code-panel hidden" data-lang-panel="cs">
-<pre><code class="language-csharp">// C#
+                    <pre><code class="language-csharp">// C#
 class ListNode {
     public int Val;
     public ListNode? Next;
@@ -1291,7 +1285,7 @@ ListNode? RemoveNthFromEnd(ListNode? head, int n) {
 
                 <!-- Python -->
                 <div class="code-panel hidden" data-lang-panel="py">
-<pre><code class="language-python"># Python
+                    <pre><code class="language-python"># Python
 from typing import Optional
 
 class ListNode:
@@ -1343,428 +1337,309 @@ def remove_nth_from_end(head: Optional[ListNode], n: int) -&gt; Optional[ListNod
         <div class="deep-dive-template" id="understand-s3p1"
             data-title="Step-by-step: Basic singly linked list operations" hidden>
             <p>
-                These three operations all rely on the same core idea: once you have a pointer to the right place in
-                the list, you only need to change a couple of <code>next</code> pointers, regardless of the list
-                length.
+                All three operations are <strong>O(1)</strong> because you already have a pointer to the place you want
+                to
+                modify. That means you don’t search the list — you only <strong>rewire one or two <code>next</code>
+                    pointers</strong>.
             </p>
-            <h3>1. Insert at head</h3>
+
+            <h3>Core rule: don’t lose the rest of the list</h3>
+            <p>
+                Any time you overwrite a <code>next</code> pointer, first save (or reuse) the pointer that leads to the
+                rest of
+                the chain. Most bugs happen when you accidentally “drop” the only reference to the remainder.
+            </p>
+
+            <h3>1) Insert at head</h3>
+            <p><strong>Goal:</strong> turn <code>head → ...</code> into <code>new → head → ...</code>.</p>
             <ol>
+                <li><strong>Create a new node</strong> and set <code>node.val = x</code>.</li>
                 <li>
-                    <strong>Allocate a new node:</strong>
-                    <p>
-                        Create a new node and store the value <code>x</code> in its <code>val</code> field.
+                    <strong>Point the new node at the old head</strong>:
+                    <code>node.next = head</code>.
+                    <p class="small">
+                        This preserves the original list by keeping a reference to its first node.
                     </p>
                 </li>
                 <li>
-                    <strong>Point new node at the old head:</strong>
-                    <p>
-                        Set <code>node-&gt;next = *head</code> (or <code>node.next = head</code> in higher-level
-                        languages). This chains the new node in front of the old list.
-                    </p>
-                </li>
-                <li>
-                    <strong>Update head pointer:</strong>
-                    <p>
-                        Change <code>*head</code> (or return value) so that it now points to the new node. The new node
-                        becomes the first element.
+                    <strong>Update head to the new node</strong>.
+                    <p class="small">
+                        In C this requires a pointer-to-pointer (<code>ListNode**</code>) or returning the new head.
                     </p>
                 </li>
             </ol>
-            <h3>2. Insert after a given node p</h3>
+
+            <h3>2) Insert after a given node <code>p</code></h3>
+            <p><strong>Goal:</strong> change <code>p → oldNext</code> into <code>p → node → oldNext</code>.</p>
             <ol>
+                <li><strong>Validate <code>p</code></strong>. If <code>p</code> is null, there’s no insertion point.
+                </li>
+                <li><strong>Create the new node</strong> with value <code>x</code>.</li>
                 <li>
-                    <strong>Check that p is not null:</strong>
-                    <p>
-                        If <code>p</code> is <code>NULL</code> / <code>null</code>, there is no valid &quot;after&quot;
-                        position, so we simply do nothing.
+                    <strong>Wire the new node to the remainder first</strong>:
+                    <code>node.next = p.next</code>.
+                    <p class="small">
+                        This step prevents losing the tail of the list when you update <code>p.next</code>.
+                    </p>
+                </li>
+                <li><strong>Complete the splice</strong>: set <code>p.next = node</code>.</li>
+            </ol>
+
+            <h3>3) Delete the node immediately after <code>p</code></h3>
+            <p><strong>Goal:</strong> bypass the next node: <code>p → doomed → after</code> becomes
+                <code>p → after</code>.</p>
+            <ol>
+                <li><strong>Validate pointers</strong>: if <code>p</code> is null or <code>p.next</code> is null, there
+                    is nothing to delete.</li>
+                <li><strong>Save the node to remove</strong>: <code>doomed = p.next</code>.</li>
+                <li>
+                    <strong>Bypass it</strong>:
+                    <code>p.next = doomed.next</code>.
+                    <p class="small">
+                        After this line, the list no longer references <code>doomed</code>.
                     </p>
                 </li>
                 <li>
-                    <strong>Create the new node:</strong>
-                    <p>
-                        Allocate and fill a node with value <code>x</code>.
-                    </p>
-                </li>
-                <li>
-                    <strong>Link new node into the chain:</strong>
+                    <strong>Free / drop the node</strong>:
                     <ul>
-                        <li>First, have it point to what used to come after <code>p</code>:
-                            <code>node-&gt;next = p-&gt;next</code>.
-                        </li>
-                        <li>Then redirect <code>p</code> to point to this new node:
-                            <code>p-&gt;next = node</code>.
-                        </li>
+                        <li>C/C++: <code>free(doomed)</code> / <code>delete doomed</code></li>
+                        <li>GC languages: letting it become unreachable is enough</li>
                     </ul>
-                    <p>
-                        The list around <code>p</code> goes from <code>p → oldNext</code> to
-                        <code>p → node → oldNext</code>.
-                    </p>
                 </li>
             </ol>
-            <h3>3. Delete the node after p</h3>
-            <ol>
-                <li>
-                    <strong>Check that there is something to delete:</strong>
-                    <p>
-                        If <code>p</code> is <code>NULL</code> or <code>p-&gt;next</code> is <code>NULL</code>, there is
-                        no node after <code>p</code>, so we return early.
-                    </p>
-                </li>
-                <li>
-                    <strong>Bypass the node to delete:</strong>
-                    <p>
-                        Let <code>doomed = p-&gt;next</code>. Then set
-                        <code>p-&gt;next = doomed-&gt;next</code>. The list now jumps directly from
-                        <code>p</code> to the node after <code>doomed</code>.
-                    </p>
-                </li>
-                <li>
-                    <strong>Free or drop the node:</strong>
-                    <p>
-                        In manual-memory languages (like C/C++), call <code>free(doomed)</code> or <code>delete</code>.
-                        In GC languages, simply losing all references to <code>doomed</code> is enough.
-                    </p>
-                </li>
-                <li>
-                    <strong>Why it&apos;s O(1):</strong>
-                    <p>
-                        None of these operations walk the list from the head. They only modify local pointers, so they
-                        all run in constant time, independent of the list size.
-                    </p>
-                </li>
-            </ol>
+
+            <h3>Why all three are O(1)</h3>
+            <p>
+                None of these operations require traversal from the head. You only touch a constant number of nodes and
+                pointers.
+            </p>
         </div>
 
         <div class="deep-dive-template" id="understand-s3p2"
             data-title="Step-by-step: Reverse a singly linked list in-place" hidden>
             <p>
-                The goal is to take a list like <code>1 → 2 → 3 → 4 → null</code> and turn it into
-                <code>4 → 3 → 2 → 1 → null</code> by only changing <code>next</code> pointers, using constant extra
-                space.
+                Reversing a list means flipping every <code>next</code> pointer so it points backward.
+                The challenge is doing that without losing your only reference to the remaining nodes.
             </p>
+
+            <h3>The invariant (the thing you keep true)</h3>
+            <ul>
+                <li><code>prev</code> is the head of the <strong>already-reversed</strong> prefix.</li>
+                <li><code>curr</code> is the head of the <strong>not-yet-processed</strong> suffix.</li>
+            </ul>
+
+            <h3>Why we need three pointers</h3>
+            <p>
+                The moment you do <code>curr.next = prev</code>, the original forward link is gone.
+                So you must save it first in <code>nxt</code>.
+            </p>
+
+            <h3>Loop steps</h3>
             <ol>
-                <li>
-                    <strong>Track three pointers:</strong>
-                    <ul>
-                        <li><code>prev</code>: the head of the already-reversed part (initially <code>null</code>).</li>
-                        <li><code>curr</code>: the node we are currently processing (starts at <code>head</code>).</li>
-                        <li><code>nxt</code>: a temporary pointer to remember <code>curr-&gt;next</code>.</li>
-                    </ul>
-                </li>
-                <li>
-                    <strong>Loop while curr is not null:</strong>
-                    <p>
-                        At each step, we &quot;move&quot; <code>curr</code> from the original list into the front of
-                        the reversed list.
-                    </p>
-                </li>
-                <li>
-                    <strong>Step-by-step inside the loop:</strong>
-                    <ol>
-                        <li>
-                            <strong>Save the next node:</strong>
-                            <p>
-                                <code>nxt = curr-&gt;next</code> keeps track of where to continue in the original list.
-                            </p>
-                        </li>
-                        <li>
-                            <strong>Reverse the link:</strong>
-                            <p>
-                                Set <code>curr-&gt;next = prev</code>. Now <code>curr</code> points backward toward the
-                                partially reversed list.
-                            </p>
-                        </li>
-                        <li>
-                            <strong>Advance prev:</strong>
-                            <p>
-                                Move <code>prev</code> forward: <code>prev = curr</code>. The reversed list has grown
-                                by one node.
-                            </p>
-                        </li>
-                        <li>
-                            <strong>Advance curr:</strong>
-                            <p>
-                                Continue the scan with <code>curr = nxt</code>, the next node from the original list.
-                            </p>
-                        </li>
-                    </ol>
-                </li>
-                <li>
-                    <strong>End of the loop:</strong>
-                    <p>
-                        When <code>curr</code> becomes <code>null</code>, we have visited every node. The pointer
-                        <code>prev</code> now points to the new head of the fully reversed list.
-                    </p>
-                </li>
-                <li>
-                    <strong>Why pointers don&apos;t get lost:</strong>
-                    <p>
-                        We always save <code>curr-&gt;next</code> in <code>nxt</code> before overwriting it. That means
-                        we never lose access to the remainder of the list while reversing links.
-                    </p>
-                </li>
-                <li>
-                    <strong>Time and space:</strong>
-                    <p>
-                        Every node&apos;s <code>next</code> pointer is changed exactly once, so the time is
-                        O(n). We only use a few extra pointers, so the space is O(1).
-                    </p>
-                </li>
+                <li><strong>Save the remainder</strong>: <code>nxt = curr.next</code></li>
+                <li><strong>Reverse the link</strong>: <code>curr.next = prev</code></li>
+                <li><strong>Advance the reversed prefix</strong>: <code>prev = curr</code></li>
+                <li><strong>Advance into the remainder</strong>: <code>curr = nxt</code></li>
             </ol>
+
+            <h3>Finish</h3>
+            <p>
+                When <code>curr</code> becomes null, you’ve processed every node. <code>prev</code> is now the new head.
+            </p>
+
+            <h3>Complexity</h3>
+            <ul>
+                <li><strong>Time:</strong> O(n) — each node is visited once.</li>
+                <li><strong>Extra space:</strong> O(1) — only a few pointers are used.</li>
+            </ul>
+
+            <h3>Common bug to watch for</h3>
+            <p>
+                Forgetting to save <code>curr.next</code> before overwriting it causes the rest of the list to be lost.
+            </p>
         </div>
 
         <div class="deep-dive-template" id="understand-s3p3"
             data-title="Step-by-step: Detect a cycle with Floyd's tortoise and hare" hidden>
             <p>
-                Floyd&apos;s cycle detection algorithm uses two pointers moving at different speeds to determine
-                whether a linked list loops back on itself.
+                Floyd’s algorithm uses two pointers moving at different speeds to detect whether the list loops.
+                It meets the requirement of <strong>O(1)</strong> extra space.
             </p>
+
+            <h3>Pointer rules</h3>
+            <ul>
+                <li><code>slow</code> moves 1 step per loop: <code>slow = slow.next</code></li>
+                <li><code>fast</code> moves 2 steps per loop: <code>fast = fast.next.next</code></li>
+            </ul>
+
+            <h3>Stopping cases</h3>
             <ol>
                 <li>
-                    <strong>Initialize pointers:</strong>
-                    <p>
-                        Set both <code>slow</code> and <code>fast</code> to <code>head</code>. If the list is empty,
-                        there is no cycle.
+                    <strong>No cycle:</strong> if <code>fast</code> hits null, the list has an end, so no cycle.
+                    <p class="small">
+                        In code you check <code>fast != null && fast.next != null</code> before advancing two steps.
                     </p>
                 </li>
                 <li>
-                    <strong>Movement rule:</strong>
-                    <ul>
-                        <li><code>slow</code> moves one step: <code>slow = slow-&gt;next</code>.</li>
-                        <li>
-                            <code>fast</code> moves two steps:
-                            <code>fast = fast-&gt;next-&gt;next</code> (or the equivalent in your language).
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <strong>Check for &quot;no cycle&quot;:</strong>
-                    <p>
-                        On each iteration, if <code>fast</code> hits <code>null</code> or
-                        <code>fast-&gt;next</code> is <code>null</code>, we know there is a tail node and therefore
-                        no cycle. We can safely return <code>false</code>.
-                    </p>
-                </li>
-                <li>
-                    <strong>Check for a meeting point:</strong>
-                    <p>
-                        If the list has a cycle, then the faster pointer will eventually &quot;lap&quot; the slower
-                        one and they will point to the same node at some iteration. When
-                        <code>slow == fast</code>, we return <code>true</code>.
-                    </p>
-                </li>
-                <li>
-                    <strong>Why do they meet if there is a cycle?</strong>
-                    <p>
-                        Think of nodes inside the cycle as positions on a circle. Both pointers enter the circle and
-                        then continue moving around it. In each step, <code>fast</code> moves one node more than
-                        <code>slow</code>. That means the distance between them (modulo the cycle length) shrinks by 1
-                        each iteration. Eventually that distance becomes 0, so they land on the same node.
-                    </p>
-                </li>
-                <li>
-                    <strong>Complexity:</strong>
-                    <p>
-                        Neither pointer visits more than a constant multiple of the list length before we either hit
-                        the tail or detect the cycle, so the runtime is O(n). Only a couple of pointers are used, so
-                        the space is O(1).
-                    </p>
+                    <strong>Cycle exists:</strong> if <code>slow == fast</code> at any point, they have met inside a
+                    loop.
                 </li>
             </ol>
+
+            <h3>Why they meet (intuition)</h3>
+            <p>
+                Once both pointers are inside the cycle, think of the cycle as a circle. Each loop iteration,
+                <code>fast</code> gains one node of distance on <code>slow</code>. Gaining 1 repeatedly on a finite
+                circle
+                guarantees landing on the same node eventually.
+            </p>
+
+            <h3>Complexity</h3>
+            <ul>
+                <li><strong>Time:</strong> O(n) — in the worst case, pointers traverse a constant multiple of the list
+                    length.</li>
+                <li><strong>Extra space:</strong> O(1) — only two pointers.</li>
+            </ul>
         </div>
 
         <div class="deep-dive-template" id="understand-s3p4"
             data-title="Step-by-step: Find the middle node with slow/fast pointers" hidden>
             <p>
-                This pattern is very similar to cycle detection but used to locate the middle of the list instead.
+                This uses the same slow/fast idea as cycle detection, but instead of looking for a meeting point,
+                you stop when the fast pointer reaches the end.
             </p>
-            <ol>
-                <li>
-                    <strong>Initialize pointers:</strong>
-                    <p>
-                        Set <code>slow = head</code> and <code>fast = head</code>. If the list is empty, the middle is
-                        just <code>null</code>.
-                    </p>
-                </li>
-                <li>
-                    <strong>Advance at different speeds:</strong>
-                    <ul>
-                        <li><code>slow</code> moves one node per step: <code>slow = slow-&gt;next</code>.</li>
-                        <li><code>fast</code> moves two nodes per step: <code>fast = fast-&gt;next-&gt;next</code>.</li>
-                    </ul>
-                </li>
-                <li>
-                    <strong>Stopping condition:</strong>
-                    <p>
-                        Continue while <code>fast</code> and <code>fast-&gt;next</code> are not <code>null</code>.
-                        When that condition fails, <code>fast</code> has reached (or passed) the end of the list.
-                    </p>
-                </li>
-                <li>
-                    <strong>Where is slow when we stop?</strong>
-                    <p>
-                        Since <code>fast</code> moves twice as quickly, by the time <code>fast</code> traverses the
-                        entire list, <code>slow</code> has traversed about half of it. That&apos;s exactly the middle
-                        node for odd lengths.
-                    </p>
-                </li>
-                <li>
-                    <strong>Even-length lists convention:</strong>
-                    <p>
-                        For an even number of nodes, there are two &quot;middle&quot; positions. With this loop
-                        condition, <code>slow</code> ends up pointing to the <em>second</em> middle, which matches the
-                        common LeetCode-style convention.
-                    </p>
-                </li>
-                <li>
-                    <strong>Complexity:</strong>
-                    <p>
-                        Both pointers move forward only, so this is still a single pass over the list with O(n) time
-                        and O(1) extra space.
-                    </p>
-                </li>
-            </ol>
+
+            <h3>Pointer rules</h3>
+            <ul>
+                <li><code>slow</code> moves 1 step</li>
+                <li><code>fast</code> moves 2 steps</li>
+            </ul>
+
+            <h3>Why slow ends at the middle</h3>
+            <p>
+                For every 2 nodes <code>fast</code> advances, <code>slow</code> advances 1. So when <code>fast</code>
+                has covered the whole list, <code>slow</code> has covered half.
+            </p>
+
+            <h3>Even-length convention (return the second middle)</h3>
+            <p>
+                With the standard loop condition <code>while (fast != null && fast.next != null)</code>,
+                <code>slow</code> lands on the <strong>second</strong> middle node in an even-length list
+                (e.g., 1→2→3→4 returns 3). This matches many interview/LeetCode conventions.
+            </p>
+
+            <h3>Complexity</h3>
+            <ul>
+                <li><strong>Time:</strong> O(n)</li>
+                <li><strong>Extra space:</strong> O(1)</li>
+            </ul>
         </div>
 
-        <div class="deep-dive-template" id="understand-s3p5"
-            data-title="Step-by-step: Merge two sorted linked lists" hidden>
+        <div class="deep-dive-template" id="understand-s3p5" data-title="Step-by-step: Merge two sorted linked lists"
+            hidden>
             <p>
-                The idea is similar to merging two sorted arrays, but we relink existing nodes instead of allocating
-                new ones.
+                This is the linked-list version of the merge step in merge sort. You repeatedly take the smaller
+                front element and append it to the merged list.
             </p>
+
+            <h3>Why a dummy head helps</h3>
+            <p>
+                A <strong>dummy</strong> node removes special cases for the first insertion. You always append to
+                <code>tail.next</code> and move <code>tail</code> forward.
+            </p>
+
+            <h3>Algorithm</h3>
             <ol>
+                <li><strong>Initialize</strong> <code>dummy</code> and set <code>tail = dummy</code>.</li>
+                <li><strong>Walk</strong> two pointers <code>a = l1</code> and <code>b = l2</code>.</li>
                 <li>
-                    <strong>Use a dummy head:</strong>
-                    <p>
-                        Create a <code>dummy</code> node whose <code>next</code> will become the head of the merged
-                        list. Maintain a <code>tail</code> pointer that always points to the last node of the merged
-                        list so far.
-                    </p>
-                </li>
-                <li>
-                    <strong>Set up two cursors:</strong>
-                    <p>
-                        Let <code>a = l1</code> and <code>b = l2</code>. These walk down each input list. Initially,
-                        <code>tail</code> points to <code>dummy</code>.
-                    </p>
-                </li>
-                <li>
-                    <strong>Walk both lists while neither is empty:</strong>
+                    While both are non-null:
                     <ul>
-                        <li>
-                            At each step, compare <code>a-&gt;val</code> and <code>b-&gt;val</code>.
-                        </li>
-                        <li>
-                            Attach the smaller node to <code>tail-&gt;next</code> and advance that list&apos;s cursor
-                            (<code>a</code> or <code>b</code>).
-                        </li>
-                        <li>
-                            Move <code>tail</code> forward to the node you just attached.
-                        </li>
+                        <li>Compare <code>a.val</code> and <code>b.val</code>.</li>
+                        <li>Attach the smaller node to <code>tail.next</code>.</li>
+                        <li>Advance whichever list you took from.</li>
+                        <li>Advance <code>tail</code>.</li>
                     </ul>
-                    <p>
-                        This preserves sorted order because you always choose the smallest remaining head element.
-                    </p>
                 </li>
                 <li>
-                    <strong>Attach the remainder:</strong>
-                    <p>
-                        When one list runs out (<code>a == null</code> or <code>b == null</code>), the other list
-                        still has nodes left, and they are already sorted. You can simply set
-                        <code>tail-&gt;next</code> to the non-null list (<code>a</code> or <code>b</code>).
-                    </p>
+                    <strong>Attach the remainder</strong>:
+                    whichever list is not finished is already sorted, so append it directly.
                 </li>
-                <li>
-                    <strong>Return the merged head:</strong>
-                    <p>
-                        The real head of the merged list is <code>dummy.next</code>, since <code>dummy</code> itself
-                        was only a convenience node.
-                    </p>
-                </li>
-                <li>
-                    <strong>Why this reuses nodes:</strong>
-                    <p>
-                        We never allocate new list nodes in the merge; we only change <code>next</code> pointers. This
-                        makes the algorithm memory-efficient and keeps the original nodes intact.
-                    </p>
-                </li>
-                <li>
-                    <strong>Runtime:</strong>
-                    <p>
-                        Each node from both input lists is processed exactly once, so the time is
-                        O(n + m), and the extra space (beyond a couple of pointers) is O(1).
-                    </p>
-                </li>
+                <li><strong>Return</strong> <code>dummy.next</code> as the real head.</li>
             </ol>
+
+            <h3>Invariants</h3>
+            <ul>
+                <li>The list starting at <code>dummy.next</code> is always sorted.</li>
+                <li><code>tail</code> always points to the last node of the merged list.</li>
+            </ul>
+
+            <h3>Complexity</h3>
+            <ul>
+                <li><strong>Time:</strong> O(n + m) — each node from both lists is used once.</li>
+                <li><strong>Extra space:</strong> O(1) — reuses nodes; dummy is constant overhead.</li>
+            </ul>
         </div>
 
         <div class="deep-dive-template" id="understand-s3p6"
             data-title="Step-by-step: Remove the N-th node from the end in one pass" hidden>
             <p>
-                The trick is to avoid computing the list length explicitly by using two pointers with a fixed gap of
-                <code>n</code> nodes between them.
+                The trick is to create a fixed gap of <code>n</code> nodes between two pointers. When the fast pointer
+                hits the end, the slow pointer is positioned just before the node to remove.
             </p>
+
+            <h3>Why a dummy head is important</h3>
+            <p>
+                If the node to remove is the original head, you need a way to “remove head” cleanly.
+                A <code>dummy</code> node means you always remove <code>slow.next</code>, even when the real head
+                changes.
+            </p>
+
+            <h3>Algorithm</h3>
             <ol>
+                <li><strong>Create</strong> <code>dummy → head</code>. Set <code>fast = dummy</code>,
+                    <code>slow = dummy</code>.</li>
                 <li>
-                    <strong>Use a dummy head:</strong>
-                    <p>
-                        Create a <code>dummy</code> node that points to the original <code>head</code>. This makes it
-                        easy to remove the first real node if needed (for example, when removing the N-th from end and
-                        N is the list length).
+                    <strong>Advance fast</strong> by <code>n + 1</code> steps.
+                    <p class="small">
+                        After this, there is a gap of exactly <code>n</code> nodes between <code>slow</code> and
+                        <code>fast</code>.
                     </p>
                 </li>
                 <li>
-                    <strong>Initialize two pointers:</strong>
-                    <p>
-                        Set <code>fast = dummy</code> and <code>slow = dummy</code>. Both start before the real list.
+                    <strong>Move both</strong> until <code>fast</code> becomes null.
+                    <p class="small">
+                        Now <code>slow</code> is immediately before the target node.
                     </p>
                 </li>
                 <li>
-                    <strong>Advance fast by n + 1 steps:</strong>
-                    <ul>
-                        <li>
-                            Move <code>fast</code> forward <code>n + 1</code> times. If it becomes <code>null</code>
-                            before you finish, then <code>n</code> was larger than the list length, and you can
-                            handle that as an error or return the original head.
-                        </li>
-                        <li>
-                            After this, there is a gap of exactly <code>n</code> nodes between <code>slow</code> and
-                            <code>fast</code>.
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <strong>Move both pointers together:</strong>
-                    <p>
-                        While <code>fast</code> is not <code>null</code>, advance both
-                        <code>fast = fast-&gt;next</code> and <code>slow = slow-&gt;next</code>. Because of the gap,
-                        when <code>fast</code> hits the end, <code>slow</code> will be just <em>before</em> the node we
-                        want to remove.
+                    <strong>Remove</strong> <code>slow.next</code> by bypassing it:
+                    <code>slow.next = slow.next.next</code>.
+                    <p class="small">
+                        In C/C++, free/delete the removed node.
                     </p>
                 </li>
-                <li>
-                    <strong>Remove slow-&gt;next:</strong>
-                    <p>
-                        Let <code>doomed = slow-&gt;next</code>. Then set <code>slow-&gt;next = doomed-&gt;next</code>.
-                        This bypasses the target node, effectively deleting it from the list. In manual-memory
-                        languages, free or delete <code>doomed</code>.
-                    </p>
-                </li>
-                <li>
-                    <strong>Return new head:</strong>
-                    <p>
-                        The new list head is <code>dummy.next</code>. This works even if the original head node was
-                        removed.
-                    </p>
-                </li>
-                <li>
-                    <strong>Why it&apos;s one pass:</strong>
-                    <p>
-                        Each pointer only walks the list once. We never restart from the beginning, so the algorithm
-                        runs in O(n) time with O(1) extra space.
-                    </p>
-                </li>
+                <li><strong>Return</strong> <code>dummy.next</code>.</li>
             </ol>
+
+            <h3>Invariants</h3>
+            <ul>
+                <li>The gap between <code>fast</code> and <code>slow</code> stays constant after setup.</li>
+                <li>When <code>fast</code> is null, <code>slow</code> is just before the node to delete.</li>
+            </ul>
+
+            <h3>Complexity</h3>
+            <ul>
+                <li><strong>Time:</strong> O(n) — one pass.</li>
+                <li><strong>Extra space:</strong> O(1) — a few pointers plus a dummy node.</li>
+            </ul>
+
+            <h3>Common edge cases</h3>
+            <ul>
+                <li><code>n</code> equals list length → remove the head</li>
+                <li>single-node list</li>
+                <li><code>n</code> larger than list length (if you choose to guard against it)</li>
+            </ul>
         </div>
 
         <!-- ======================= Modal shell reused by all buttons ======================= -->

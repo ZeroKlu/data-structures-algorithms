@@ -79,8 +79,7 @@
                         <span class="label">Problem 1</span>
                         <span class="meta">Two-pointer in-place reversal</span>
                     </div>
-                    <button type="button" class="deep-dive-trigger"
-                        data-deep-id="understand-s2p1">
+                    <button type="button" class="deep-dive-trigger" data-deep-id="understand-s2p1">
                         Understand the Algorithm
                     </button>
                     <button type="button" class="copy-button" aria-label="Copy code">
@@ -99,7 +98,7 @@
 
                 <!-- C -->
                 <div class="code-panel" data-lang-panel="c">
-<pre><code class="language-c">// C
+                    <pre><code class="language-c">// C
 #include &lt;stddef.h&gt;
 
 void reverse_array(int *arr, size_t n) {
@@ -118,7 +117,7 @@ void reverse_array(int *arr, size_t n) {
 
                 <!-- C++ -->
                 <div class="code-panel hidden" data-lang-panel="cpp">
-<pre><code class="language-cpp">// C++
+                    <pre><code class="language-cpp">// C++
 #include &lt;vector&gt;
 using namespace std;
 
@@ -137,7 +136,7 @@ void reverseArray(vector&lt;int&gt;&amp; arr) {
 
                 <!-- Java -->
                 <div class="code-panel hidden" data-lang-panel="java">
-<pre><code class="language-java">// Java
+                    <pre><code class="language-java">// Java
 void reverseArray(int[] arr) {
     int i = 0;
     int j = arr.length - 1;
@@ -153,7 +152,7 @@ void reverseArray(int[] arr) {
 
                 <!-- JavaScript -->
                 <div class="code-panel hidden" data-lang-panel="js">
-<pre><code class="language-javascript">// JavaScript
+                    <pre><code class="language-javascript">// JavaScript
 function reverseArray(arr) {
     let i = 0;
     let j = arr.length - 1;
@@ -169,7 +168,7 @@ function reverseArray(arr) {
 
                 <!-- C# -->
                 <div class="code-panel hidden" data-lang-panel="cs">
-<pre><code class="language-csharp">// C#
+                    <pre><code class="language-csharp">// C#
 void ReverseArray(int[] arr) {
     int i = 0;
     int j = arr.Length - 1;
@@ -185,7 +184,7 @@ void ReverseArray(int[] arr) {
 
                 <!-- Python -->
                 <div class="code-panel hidden" data-lang-panel="py">
-<pre><code class="language-python"># Python
+                    <pre><code class="language-python"># Python
 from typing import List
 
 def reverse_array(arr: List[int]) -&gt; None:
@@ -222,8 +221,7 @@ def reverse_array(arr: List[int]) -&gt; None:
                         <span class="label">Problem 2</span>
                         <span class="meta">Compare O(n²) vs. O(n) with hashing</span>
                     </div>
-                    <button type="button" class="deep-dive-trigger"
-                        data-deep-id="understand-s2p2">
+                    <button type="button" class="deep-dive-trigger" data-deep-id="understand-s2p2">
                         Understand the Algorithm
                     </button>
                     <button type="button" class="copy-button" aria-label="Copy code">
@@ -242,7 +240,7 @@ def reverse_array(arr: List[int]) -&gt; None:
 
                 <!-- C -->
                 <div class="code-panel" data-lang-panel="c">
-<pre><code class="language-c">// C
+                    <pre><code class="language-c">// C
 #include &lt;stdbool.h&gt;
 
 // Brute force O(n^2)
@@ -264,7 +262,7 @@ bool two_sum_bruteforce(const int *nums, int n, int target) {
 
                 <!-- C++ -->
                 <div class="code-panel hidden" data-lang-panel="cpp">
-<pre><code class="language-cpp">// C++
+                    <pre><code class="language-cpp">// C++
 #include &lt;vector&gt;
 #include &lt;unordered_set&gt;
 using namespace std;
@@ -294,7 +292,7 @@ bool twoSumHash(const vector&lt;int&gt;&amp; nums, int target) {
 
                 <!-- Java -->
                 <div class="code-panel hidden" data-lang-panel="java">
-<pre><code class="language-java">// Java
+                    <pre><code class="language-java">// Java
 import java.util.HashSet;
 import java.util.Set;
 
@@ -327,7 +325,7 @@ boolean twoSumHash(int[] nums, int target) {
 
                 <!-- JavaScript -->
                 <div class="code-panel hidden" data-lang-panel="js">
-<pre><code class="language-javascript">// JavaScript
+                    <pre><code class="language-javascript">// JavaScript
 
 // Brute force O(n^2)
 function twoSumBruteforce(nums, target) {
@@ -358,7 +356,7 @@ function twoSumHash(nums, target) {
 
                 <!-- C# -->
                 <div class="code-panel hidden" data-lang-panel="cs">
-<pre><code class="language-csharp">// C#
+                    <pre><code class="language-csharp">// C#
 using System.Collections.Generic;
 
 // Brute force O(n^2)
@@ -390,7 +388,7 @@ bool TwoSumHash(int[] nums, int target) {
 
                 <!-- Python -->
                 <div class="code-panel hidden" data-lang-panel="py">
-<pre><code class="language-python"># Python
+                    <pre><code class="language-python"># Python
 from typing import List
 
 def two_sum_bruteforce(nums: List[int], target: int) -&gt; bool:
@@ -412,8 +410,10 @@ def two_sum_hash(nums: List[int], target: int) -&gt; bool:
                 </div>
 
                 <div class="complexity-note">
-                    Brute force: examine all pairs → <strong>O(n²)</strong> time, <strong>O(1)</strong> space. &nbsp;|&nbsp;
-                    Hash-based: scan once with a set → expected <strong>O(n)</strong> time, <strong>O(n)</strong> extra space.
+                    Brute force: examine all pairs → <strong>O(n²)</strong> time, <strong>O(1)</strong> space.
+                    &nbsp;|&nbsp;
+                    Hash-based: scan once with a set → expected <strong>O(n)</strong> time, <strong>O(n)</strong> extra
+                    space.
                 </div>
             </div>
         </section>
@@ -437,8 +437,7 @@ def two_sum_hash(nums: List[int], target: int) -&gt; bool:
                         <span class="label">Problem 3</span>
                         <span class="meta">Stable compaction of non-zeros</span>
                     </div>
-                    <button type="button" class="deep-dive-trigger"
-                        data-deep-id="understand-s2p3">
+                    <button type="button" class="deep-dive-trigger" data-deep-id="understand-s2p3">
                         Understand the Algorithm
                     </button>
                     <button type="button" class="copy-button" aria-label="Copy code">
@@ -457,7 +456,7 @@ def two_sum_hash(nums: List[int], target: int) -&gt; bool:
 
                 <!-- C -->
                 <div class="code-panel" data-lang-panel="c">
-<pre><code class="language-c">// C
+                    <pre><code class="language-c">// C
 #include &lt;stddef.h&gt;
 
 void move_zeroes(int *nums, size_t n) {
@@ -478,7 +477,7 @@ void move_zeroes(int *nums, size_t n) {
 
                 <!-- C++ -->
                 <div class="code-panel hidden" data-lang-panel="cpp">
-<pre><code class="language-cpp">// C++
+                    <pre><code class="language-cpp">// C++
 #include &lt;vector&gt;
 using namespace std;
 
@@ -499,7 +498,7 @@ void moveZeroes(vector&lt;int&gt;&amp; nums) {
 
                 <!-- Java -->
                 <div class="code-panel hidden" data-lang-panel="java">
-<pre><code class="language-java">// Java
+                    <pre><code class="language-java">// Java
 void moveZeroes(int[] nums) {
     int write = 0;
     for (int read = 0; read &lt; nums.length; read++) {
@@ -517,7 +516,7 @@ void moveZeroes(int[] nums) {
 
                 <!-- JavaScript -->
                 <div class="code-panel hidden" data-lang-panel="js">
-<pre><code class="language-javascript">// JavaScript
+                    <pre><code class="language-javascript">// JavaScript
 function moveZeroes(nums) {
     let write = 0;
     for (let read = 0; read &lt; nums.length; read++) {
@@ -535,7 +534,7 @@ function moveZeroes(nums) {
 
                 <!-- C# -->
                 <div class="code-panel hidden" data-lang-panel="cs">
-<pre><code class="language-csharp">// C#
+                    <pre><code class="language-csharp">// C#
 void MoveZeroes(int[] nums) {
     int write = 0;
     for (int read = 0; read &lt; nums.Length; read++) {
@@ -553,7 +552,7 @@ void MoveZeroes(int[] nums) {
 
                 <!-- Python -->
                 <div class="code-panel hidden" data-lang-panel="py">
-<pre><code class="language-python"># Python
+                    <pre><code class="language-python"># Python
 from typing import List
 
 def move_zeroes(nums: List[int]) -&gt; None:
@@ -593,8 +592,7 @@ def move_zeroes(nums: List[int]) -&gt; None:
                         <span class="label">Problem 4</span>
                         <span class="meta">Frequency counting with fixed alphabet</span>
                     </div>
-                    <button type="button" class="deep-dive-trigger"
-                        data-deep-id="understand-s2p4">
+                    <button type="button" class="deep-dive-trigger" data-deep-id="understand-s2p4">
                         Understand the Algorithm
                     </button>
                     <button type="button" class="copy-button" aria-label="Copy code">
@@ -613,7 +611,7 @@ def move_zeroes(nums: List[int]) -&gt; None:
 
                 <!-- C -->
                 <div class="code-panel" data-lang-panel="c">
-<pre><code class="language-c">// C
+                    <pre><code class="language-c">// C
 #include &lt;stdbool.h&gt;
 #include &lt;string.h&gt;
 
@@ -634,7 +632,7 @@ bool is_anagram(const char *s, const char *t) {
 
                 <!-- C++ -->
                 <div class="code-panel hidden" data-lang-panel="cpp">
-<pre><code class="language-cpp">// C++
+                    <pre><code class="language-cpp">// C++
 #include &lt;string&gt;
 using namespace std;
 
@@ -654,7 +652,7 @@ bool isAnagram(const string&amp; s, const string&amp; t) {
 
                 <!-- Java -->
                 <div class="code-panel hidden" data-lang-panel="java">
-<pre><code class="language-java">// Java
+                    <pre><code class="language-java">// Java
 boolean isAnagram(String s, String t) {
     if (s.length() != t.length()) return false;
     int[] freq = new int[26];
@@ -671,7 +669,7 @@ boolean isAnagram(String s, String t) {
 
                 <!-- JavaScript -->
                 <div class="code-panel hidden" data-lang-panel="js">
-<pre><code class="language-javascript">// JavaScript
+                    <pre><code class="language-javascript">// JavaScript
 function isAnagram(s, t) {
     if (s.length !== t.length) return false;
     const freq = new Array(26).fill(0);
@@ -688,7 +686,7 @@ function isAnagram(s, t) {
 
                 <!-- C# -->
                 <div class="code-panel hidden" data-lang-panel="cs">
-<pre><code class="language-csharp">// C#
+                    <pre><code class="language-csharp">// C#
 bool IsAnagram(string s, string t) {
     if (s.Length != t.Length) return false;
     var freq = new int[26];
@@ -705,7 +703,7 @@ bool IsAnagram(string s, string t) {
 
                 <!-- Python -->
                 <div class="code-panel hidden" data-lang-panel="py">
-<pre><code class="language-python"># Python
+                    <pre><code class="language-python"># Python
 def is_anagram(s: str, t: str) -&gt; bool:
     if len(s) != len(t):
         return False
@@ -743,8 +741,7 @@ def is_anagram(s: str, t: str) -&gt; bool:
                         <span class="label">Problem 5</span>
                         <span class="meta">Sliding window with last-seen indices</span>
                     </div>
-                    <button type="button" class="deep-dive-trigger"
-                        data-deep-id="understand-s2p5">
+                    <button type="button" class="deep-dive-trigger" data-deep-id="understand-s2p5">
                         Understand the Algorithm
                     </button>
                     <button type="button" class="copy-button" aria-label="Copy code">
@@ -763,7 +760,7 @@ def is_anagram(s: str, t: str) -&gt; bool:
 
                 <!-- C -->
                 <div class="code-panel" data-lang-panel="c">
-<pre><code class="language-c">// C
+                    <pre><code class="language-c">// C
 #include &lt;string.h&gt;
 
 // Assume ASCII (0-127). Initialize last_pos to -1.
@@ -788,7 +785,7 @@ int length_of_longest_substring(const char *s) {
 
                 <!-- C++ -->
                 <div class="code-panel hidden" data-lang-panel="cpp">
-<pre><code class="language-cpp">// C++
+                    <pre><code class="language-cpp">// C++
 #include &lt;string&gt;
 #include &lt;vector&gt;
 using namespace std;
@@ -812,7 +809,7 @@ int lengthOfLongestSubstring(const string&amp; s) {
 
                 <!-- Java -->
                 <div class="code-panel hidden" data-lang-panel="java">
-<pre><code class="language-java">// Java
+                    <pre><code class="language-java">// Java
 int lengthOfLongestSubstring(String s) {
     int[] lastPos = new int[128];
     for (int i = 0; i &lt; 128; i++) lastPos[i] = -1;
@@ -834,7 +831,7 @@ int lengthOfLongestSubstring(String s) {
 
                 <!-- JavaScript -->
                 <div class="code-panel hidden" data-lang-panel="js">
-<pre><code class="language-javascript">// JavaScript
+                    <pre><code class="language-javascript">// JavaScript
 function lengthOfLongestSubstring(s) {
     const lastPos = new Map();
     let best = 0;
@@ -855,7 +852,7 @@ function lengthOfLongestSubstring(s) {
 
                 <!-- C# -->
                 <div class="code-panel hidden" data-lang-panel="cs">
-<pre><code class="language-csharp">// C#
+                    <pre><code class="language-csharp">// C#
 using System.Collections.Generic;
 
 int LengthOfLongestSubstring(string s) {
@@ -878,7 +875,7 @@ int LengthOfLongestSubstring(string s) {
 
                 <!-- Python -->
                 <div class="code-panel hidden" data-lang-panel="py">
-<pre><code class="language-python"># Python
+                    <pre><code class="language-python"># Python
 def length_of_longest_substring(s: str) -&gt; int:
     last_pos: dict[str, int] = {}
     left = 0
@@ -920,8 +917,7 @@ def length_of_longest_substring(s: str) -&gt; int:
                         <span class="label">Problem 6</span>
                         <span class="meta">Three-reverse rotation trick</span>
                     </div>
-                    <button type="button" class="deep-dive-trigger"
-                        data-deep-id="understand-s2p6">
+                    <button type="button" class="deep-dive-trigger" data-deep-id="understand-s2p6">
                         Understand the Algorithm
                     </button>
                     <button type="button" class="copy-button" aria-label="Copy code">
@@ -940,7 +936,7 @@ def length_of_longest_substring(s: str) -&gt; int:
 
                 <!-- C -->
                 <div class="code-panel" data-lang-panel="c">
-<pre><code class="language-c">// C
+                    <pre><code class="language-c">// C
 #include &lt;stddef.h&gt;
 
 static void reverse_range(int *nums, size_t l, size_t r) {
@@ -966,7 +962,7 @@ void rotate_array(int *nums, size_t n, size_t k) {
 
                 <!-- C++ -->
                 <div class="code-panel hidden" data-lang-panel="cpp">
-<pre><code class="language-cpp">// C++
+                    <pre><code class="language-cpp">// C++
 #include &lt;vector&gt;
 using namespace std;
 
@@ -994,7 +990,7 @@ void rotate(vector&lt;int&gt;&amp; nums, int k) {
 
                 <!-- Java -->
                 <div class="code-panel hidden" data-lang-panel="java">
-<pre><code class="language-java">// Java
+                    <pre><code class="language-java">// Java
 void rotate(int[] nums, int k) {
     int n = nums.length;
     if (n == 0) return;
@@ -1019,7 +1015,7 @@ void reverseRange(int[] nums, int l, int r) {
 
                 <!-- JavaScript -->
                 <div class="code-panel hidden" data-lang-panel="js">
-<pre><code class="language-javascript">// JavaScript
+                    <pre><code class="language-javascript">// JavaScript
 function rotate(nums, k) {
     const n = nums.length;
     if (n === 0) return;
@@ -1044,7 +1040,7 @@ function reverseRange(nums, l, r) {
 
                 <!-- C# -->
                 <div class="code-panel hidden" data-lang-panel="cs">
-<pre><code class="language-csharp">// C#
+                    <pre><code class="language-csharp">// C#
 void Rotate(int[] nums, int k) {
     int n = nums.Length;
     if (n == 0) return;
@@ -1069,7 +1065,7 @@ void ReverseRange(int[] nums, int l, int r) {
 
                 <!-- Python -->
                 <div class="code-panel hidden" data-lang-panel="py">
-<pre><code class="language-python"># Python
+                    <pre><code class="language-python"># Python
 from typing import List
 
 def rotate(nums: List[int], k: int) -&gt; None:
@@ -1110,11 +1106,15 @@ def reverse_range(nums: List[int], l: int, r: int) -&gt; None:
 
         <!-- ======================= Understand-the-algorithm templates ======================= -->
 
-        <div class="deep-dive-template" id="understand-s2p1"
-            data-title="Step-by-step: Reverse an array in-place" hidden>
+        <div class="deep-dive-template" id="understand-s2p1" data-title="Step-by-step: Reverse an array in-place"
+            hidden>
             <p>
                 The core idea is to swap symmetric elements from the two ends of the array until the pointers meet
                 in the middle.
+            </p>
+            <p>
+                <strong>Invariant:</strong> after each swap, everything outside the current <code>[i, j]</code> range
+                (indices <code>&lt; i</code> and <code>&gt; j</code>) is already in its final reversed position.
             </p>
             <ol>
                 <li>
@@ -1165,6 +1165,7 @@ def reverse_range(nums: List[int], l: int, r: int) -&gt; None:
                 This solution compares two strategies for checking whether any pair sums to a target:
                 a simple double loop and a faster hash-based approach.
             </p>
+
             <h3>1. Brute-force O(n²)</h3>
             <ol>
                 <li>
@@ -1189,6 +1190,7 @@ def reverse_range(nums: List[int], l: int, r: int) -&gt; None:
                     </p>
                 </li>
             </ol>
+
             <h3>2. Hash-based O(n) expected</h3>
             <ol>
                 <li>
@@ -1211,11 +1213,25 @@ def reverse_range(nums: List[int], l: int, r: int) -&gt; None:
                     </ul>
                 </li>
                 <li>
+                    <strong>Why we don&apos;t reuse the same element:</strong>
+                    <p>
+                        Because we check for <code>need</code> <em>before</em> inserting <code>x</code>,
+                        the pair always uses two distinct indices: the partner was seen earlier at a different position.
+                    </p>
+                </li>
+                <li>
                     <strong>Why the set works:</strong>
                     <p>
                         The set is effectively remembering all values we have seen so far. When we see
                         <code>x</code>, we check if its partner <code>target - x</code> has shown up earlier.
                         Hash set operations are expected O(1), so the whole scan is O(n) on average.
+                    </p>
+                </li>
+                <li>
+                    <strong>Expected vs. worst-case:</strong>
+                    <p>
+                        In interviews, we usually quote the <em>expected</em> time of hashing. In pathological cases,
+                        hash lookups can degrade, but the standard analysis is expected O(n).
                     </p>
                 </li>
                 <li>
@@ -1226,6 +1242,7 @@ def reverse_range(nums: List[int], l: int, r: int) -&gt; None:
                     </p>
                 </li>
             </ol>
+
             <p>
                 In interviews, it is useful to start with the brute-force idea, then improve it by explaining how
                 hashing cuts the search from &quot;all pairs&quot; to a single linear scan.
@@ -1260,13 +1277,20 @@ def reverse_range(nums: List[int], l: int, r: int) -&gt; None:
                     </ul>
                     <p>
                         After this pass, indices <code>[0 .. write-1]</code> hold all non-zero values in order.
-                        Indices <code>[write .. n-1]</code> are either leftover values or zeros that we still need to overwrite.
+                        Indices <code>[write .. n-1]</code> are either leftover values or zeros that we still need to
+                        overwrite.
+                    </p>
+                    <p>
+                        <em>Note:</em> if <code>write == read</code>, the assignment writes the value back to the same
+                        spot.
+                        It&apos;s redundant but harmless and doesn&apos;t change the O(n) complexity.
                     </p>
                 </li>
                 <li>
                     <strong>Second pass - fill remaining with zeros:</strong>
                     <p>
-                        While <code>write &lt; n</code>, set <code>nums[write] = 0</code> and increment <code>write</code>.
+                        While <code>write &lt; n</code>, set <code>nums[write] = 0</code> and increment
+                        <code>write</code>.
                         This overwrites any garbage or old values with zeros.
                     </p>
                 </li>
@@ -1293,6 +1317,10 @@ def reverse_range(nums: List[int], l: int, r: int) -&gt; None:
                 Two strings are anagrams if they use the same characters with the same frequencies, just in a
                 different order. With only lowercase a-z, a fixed-size frequency array is enough.
             </p>
+            <p>
+                <em>Constraint note:</em> this approach relies on the assumption of lowercase English letters.
+                For a general Unicode alphabet, you&apos;d typically use a hash map keyed by character.
+            </p>
             <ol>
                 <li>
                     <strong>Length check:</strong>
@@ -1312,8 +1340,10 @@ def reverse_range(nums: List[int], l: int, r: int) -&gt; None:
                     <strong>Single pass over both strings:</strong>
                     <ul>
                         <li>For each position <code>i</code>:</li>
-                        <li>Increment <code>freq[s[i] - 'a']</code> (we saw one more of that letter in <code>s</code>).</li>
-                        <li>Decrement <code>freq[t[i] - 'a']</code> (we saw one more of that letter in <code>t</code>).</li>
+                        <li>Increment <code>freq[s[i] - 'a']</code> (we saw one more of that letter in <code>s</code>).
+                        </li>
+                        <li>Decrement <code>freq[t[i] - 'a']</code> (we saw one more of that letter in <code>t</code>).
+                        </li>
                     </ul>
                     <p>
                         Doing this in lockstep means matching characters in <code>s</code> and <code>t</code>
@@ -1341,8 +1371,8 @@ def reverse_range(nums: List[int], l: int, r: int) -&gt; None:
         <div class="deep-dive-template" id="understand-s2p5"
             data-title="Step-by-step: Longest substring without repeating characters" hidden>
             <p>
-                We maintain a sliding window of characters that contains no duplicates, and expand/contract it as we
-                scan the string.
+                We maintain a sliding window of characters that contains no duplicates, and scan the string once.
+                When we detect a repeat, we <em>jump</em> the left edge forward to restore the no-duplicates condition.
             </p>
             <ol>
                 <li>
@@ -1371,13 +1401,19 @@ def reverse_range(nums: List[int], l: int, r: int) -&gt; None:
                             the current window <code>[left, right]</code>.
                         </li>
                         <li>
-                            To remove the duplicate, we move <code>left</code> to one position after that old index:
-                            <code>left = last_pos[ch] + 1</code>.
+                            If <code>last_pos[ch] &lt; left</code>, the previous occurrence is <em>outside</em> the
+                            window
+                            and can be ignored.
                         </li>
                         <li>
-                            This &quot;cuts off&quot; the part of the window that contained the previous <code>ch</code>.
+                            To remove a duplicate inside the window, we move <code>left</code> to one position after
+                            that old index: <code>left = last_pos[ch] + 1</code>.
                         </li>
                     </ul>
+                    <p>
+                        Important: we don&apos;t move <code>left</code> one step at a time; we <em>jump</em> it forward
+                        to the first valid position. This is a big reason the algorithm stays linear.
+                    </p>
                 </li>
                 <li>
                     <strong>Update last seen position:</strong>
@@ -1396,7 +1432,8 @@ def reverse_range(nums: List[int], l: int, r: int) -&gt; None:
                 <li>
                     <strong>Why it is linear time:</strong>
                     <p>
-                        Each index moves forward at most once: <code>right</code> increases from 0 to <code>n - 1</code>,
+                        Each index moves forward at most once: <code>right</code> increases from 0 to
+                        <code>n - 1</code>,
                         and <code>left</code> only ever moves forward when duplicates are found. So the total work
                         is O(n), not O(n²).
                     </p>
@@ -1447,6 +1484,15 @@ def reverse_range(nums: List[int], l: int, r: int) -&gt; None:
                         Call <code>reverse_range(nums, k, n - 1)</code>.
                         This fixes the order of the remaining part of the array so that it matches the original
                         first <code>n - k</code> elements.
+                    </p>
+                </li>
+                <li>
+                    <strong>Quick example:</strong>
+                    <p>
+                        <code>[1,2,3,4,5,6,7], k=3</code><br>
+                        Reverse all → <code>[7,6,5,4,3,2,1]</code><br>
+                        Reverse first 3 → <code>[5,6,7,4,3,2,1]</code><br>
+                        Reverse remaining → <code>[5,6,7,1,2,3,4]</code>
                     </p>
                 </li>
                 <li>
